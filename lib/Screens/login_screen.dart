@@ -6,6 +6,12 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return MaterialApp(
+      home: Scaffold(
+        body: Center(
+          child: Text('Hello!'),
+        ),
+      ),
+    );
   }
 }

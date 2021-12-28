@@ -2,10 +2,16 @@ import 'package:flutter/material.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
-  static const id = '/profile_page';
+  static const id = '/profile';
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return MaterialApp(
+      home: Scaffold(
+        body: Center(
+          child: Text('Hello!'),
+        ),
+      ),
+    );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:amber/Screens/home_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'Screens/profile_screen.dart';
@@ -43,7 +44,8 @@ class MyApp extends StatelessWidget {
       initialRoute: LoginScreen.id,
       routes: {
         LoginScreen.id: (context) => LoginScreen(),
-        ProfilePage.id: (context) => ProfilePage()
+        ProfilePage.id: (context) => ProfilePage(),
+        HomePage.id: (context) => HomePage()
       },
     );
   }
