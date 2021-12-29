@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_login/flutter_login.dart';
 
 class AuthenticationHelper {
@@ -28,9 +29,9 @@ class AuthenticationHelper {
     }
   }
 
-  static Future<String?> recoverPassword(String name) async {
-    return Future.delayed(Duration(milliseconds: 2250)).then((_) {
-      return null;
+  static Future<String?> recoverPassword(String email) async {
+    return Future.delayed(Duration(milliseconds: 2250)).then((_) async{
+     await _auth.sendPasswordResetEmail(email: email);
     });
   }
 

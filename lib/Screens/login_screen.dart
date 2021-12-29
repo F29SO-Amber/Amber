@@ -13,6 +13,7 @@ class LoginScreen extends StatelessWidget {
       logo: const AssetImage('assets/logo.png'),
       onLogin: AuthenticationHelper.authUser,
       onSignup: AuthenticationHelper.signupUser,
+      onRecoverPassword: AuthenticationHelper.recoverPassword,
       loginAfterSignUp: false,
       theme: LoginTheme(
         primaryColor: Color(0xffFFBF00),
@@ -36,7 +37,7 @@ class LoginScreen extends StatelessWidget {
       onSubmitAnimationCompleted: () {
         Navigator.pushReplacementNamed(context, ProfilePage.id);
       },
-      onRecoverPassword: (String) {},
+      // onRecoverPassword: (String) {},
     );
   }
 }
