@@ -1,10 +1,11 @@
-import 'package:amber/Screens/home_screen.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'Screens/profile_screen.dart';
-import 'constants.dart';
-import 'firebase_options.dart';
-import 'Screens/login_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+
+import 'package:amber/Screens/profile_screen.dart';
+import 'package:amber/Screens/login_screen.dart';
+import 'package:amber/Screens/home_screen.dart';
+import 'package:amber/firebase_options.dart';
+import 'package:amber/constants.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
