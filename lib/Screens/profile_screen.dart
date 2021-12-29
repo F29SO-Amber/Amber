@@ -9,7 +9,10 @@ class ProfilePage extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         body: Center(
-          child: Text('Hello!'),
+          child: GestureDetector(
+            child: Text('Sign out!!'),
+            onTap: () {},
+          ),
         ),
       ),
     );

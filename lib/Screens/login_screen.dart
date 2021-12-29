@@ -1,43 +1,42 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:amber/Screens/profile_screen.dart';
+import 'package:amber/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 
 class LoginScreen extends StatelessWidget {
   static const id = '/auth';
-  final _auth = FirebaseAuth.instance;
-
-  Future<String?> _authUser(LoginData data) {
-    return Future.delayed(Duration(milliseconds: 2250)).then((_) async {
-      try {
-        final User = _auth.signInWithEmailAndPassword(
-            email: data.name, password: data.password);
-      } catch (e) {
-        print(e);
-      }
-    });
-  }
-
-  Future<String?> _signupUser(SignupData data) {
-    return Future.delayed(Duration(milliseconds: 2250)).then((_) async {
-      try {
-        final newUser = await _auth.createUserWithEmailAndPassword(
-            email: data.name!, password: data.password!);
-      } catch (e) {
-        print(e);
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     return FlutterLogin(
-      title: 'AMBER',
-      logo: const AssetImage('assets/logo.webp'),
-      onLogin: _authUser,
-      onSignup: _signupUser,
+      title: 'ᗩмвєя',
+      logo: const AssetImage('assets/logo.png'),
+      onLogin: AuthenticationHelper.authUser,
+      onSignup: AuthenticationHelper.signupUser,
       loginAfterSignUp: false,
+      theme: LoginTheme(
+        primaryColor: Color(0xffFFBF00),
+        accentColor: Colors.white,
+        errorColor: Colors.red,
+        buttonStyle: TextStyle(color: Colors.black54),
+        cardTheme: CardTheme(
+          color: Colors.white,
+          elevation: 5,
+          margin: EdgeInsets.only(top: 15),
+          shape: ContinuousRectangleBorder(
+            borderRadius: BorderRadius.circular(100.0),
+          ),
+        ),
+        inputTheme: InputDecorationTheme(
+          filled: true,
+          fillColor: const Color(0xffFFBF00).withOpacity(.2),
+          contentPadding: EdgeInsets.zero,
+        ),
+      ),
+      onSubmitAnimationCompleted: () {
+        Navigator.pushReplacementNamed(context, ProfilePage.id);
+      },
       onRecoverPassword: (String) {},
-      onSubmitAnimationCompleted: () {},
     );
   }
 }
