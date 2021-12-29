@@ -30,14 +30,19 @@ class AuthenticationHelper {
   }
 
   static Future<String?> recoverPassword(String email) async {
-    return Future.delayed(Duration(milliseconds: 2250)).then((_) async{
-     await _auth.sendPasswordResetEmail(email: email);
-    });
+    await _auth.sendPasswordResetEmail(email: email);
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+      return null;
+    } on FirebaseAuthException catch (e) {
+      return e.message;
+    }
   }
 
   static Future<String?> signOutUser() async {
     try {
       await _auth.signOut();
+      return null;
     } on FirebaseAuthException catch (e) {
       return e.message;
     }
