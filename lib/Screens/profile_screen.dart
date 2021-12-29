@@ -1,4 +1,7 @@
+import 'package:amber/authentication.dart';
 import 'package:flutter/material.dart';
+
+import 'login_screen.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -10,8 +13,11 @@ class ProfilePage extends StatelessWidget {
       home: Scaffold(
         body: Center(
           child: GestureDetector(
-            child: Text('Sign out!!'),
-            onTap: () {},
+            child: const Text('Sign out!!'),
+            onTap: () {
+              AuthenticationHelper.signOutUser();
+              Navigator.pushReplacementNamed(context, LoginScreen.id);
+            },
           ),
         ),
       ),

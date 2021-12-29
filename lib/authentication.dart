@@ -1,4 +1,6 @@
+import 'package:amber/Screens/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_login/flutter_login.dart';
 
 class AuthenticationHelper {
@@ -32,5 +34,13 @@ class AuthenticationHelper {
     return Future.delayed(Duration(milliseconds: 2250)).then((_) {
       return null;
     });
+  }
+
+  static Future<String?> signOutUser() async {
+    try {
+      await _auth.signOut();
+    } on FirebaseAuthException catch (e) {
+      return e.message;
+    }
   }
 }
