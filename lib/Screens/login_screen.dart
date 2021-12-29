@@ -25,7 +25,14 @@ class LoginScreen extends StatelessWidget {
       onSubmitAnimationCompleted: () {
         Navigator.pushReplacementNamed(context, ProfilePage.id);
       },
-      // onRecoverPassword: (String) {},
+      userValidator: (value) {
+        // TODO: by John
+        return null;
+      },
+      passwordValidator: (value) {
+        // TODO: by John
+        return null;
+      },
     );
   }
 }
