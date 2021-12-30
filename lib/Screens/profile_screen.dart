@@ -17,10 +17,10 @@ class ProfilePage extends StatelessWidget {
               AuthenticationHelper.signOutUser();
               Navigator.pushReplacementNamed(context, LoginScreen.id);
             },
-              style: ElevatedButton.styleFrom(
+            style: ElevatedButton.styleFrom(
               primary: Colors.amber, // background
               onPrimary: Colors.black, // foreground
-  ),
+            ),
           ),
         ),
       ),

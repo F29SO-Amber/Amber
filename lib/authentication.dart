@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_login/flutter_login.dart';
 
 class AuthenticationHelper {
   static final _auth = FirebaseAuth.instance;
+  static final _firestore = FirebaseFirestore.instance;
 
   static Future<String?> authUser(LoginData data) async {
     try {
@@ -26,6 +28,13 @@ class AuthenticationHelper {
       return null;
     } on FirebaseAuthException catch (e) {
       return e.message;
+    } finally {
+      Map<String, String> map = {};
+      map.addAll({'email': '${data.name}'});
+      data.additionalSignupData?.forEach((key, value) {
+        map.addAll({key: value});
+      });
+      _firestore.collection('users').add(map);
     }
   }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter_login/flutter_login.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:amber/Screens/profile_screen.dart';
 import 'package:amber/authentication.dart';
@@ -24,6 +25,49 @@ class LoginScreen extends StatelessWidget {
       messages: LoginMessages(
         signUpSuccess: "Sign up successful!",
       ),
+      additionalSignupFields: const [
+        UserFormField(
+          keyName: 'username',
+          displayName: 'Username',
+          icon: Icon(FontAwesomeIcons.at),
+        ),
+        UserFormField(
+          keyName: 'name',
+          displayName: 'Name',
+          icon: Icon(FontAwesomeIcons.solidUser),
+        ),
+        UserFormField(
+          keyName: 'account_type',
+          displayName: 'Account Type',
+          icon: Icon(FontAwesomeIcons.artstation),
+        ),
+        UserFormField(
+          keyName: 'dob',
+          displayName: 'Date Of Birth',
+          icon: Icon(FontAwesomeIcons.calendarAlt),
+        ),
+        UserFormField(
+          keyName: 'gender',
+          displayName: 'Gender',
+          icon: Icon(FontAwesomeIcons.atom),
+        ),
+        // UserFormField(
+        //   keyName: 'phone_number',
+        //   icon: const Icon(FontAwesomeIcons.phoneAlt),
+        //   displayName: 'Phone Number',
+        //   userType: LoginUserType.phone,
+        //   fieldValidator: (value) {
+        //     var phoneRegExp = RegExp(
+        //         '^(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}\$');
+        //     if (value != null &&
+        //         value.length < 7 &&
+        //         !phoneRegExp.hasMatch(value)) {
+        //       return "This isn't a valid phone number";
+        //     }
+        //     return null;
+        //   },
+        // ),
+      ],
       onSubmitAnimationCompleted: () {
         Navigator.pushReplacementNamed(context, ProfilePage.id);
       },
@@ -33,14 +77,14 @@ class LoginScreen extends StatelessWidget {
         }
       },
       passwordValidator: (value) {
-        RegExp exp = RegExp(
-            r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
-        if (!exp.hasMatch(value!)) {
-          return "Use Uppercase, Lowercase, Digits and Symbols";
-        }
-        if (value.trim().isEmpty || value.length < 7) {
-          return "Password should have at least 7 characters.";
-        }
+        // RegExp exp = RegExp(
+        //     r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
+        // if (!exp.hasMatch(value!)) {
+        //   return "Use Uppercase, Lowercase, Digits and Symbols";
+        // }
+        // if (value.trim().isEmpty || value.length < 7) {
+        //   return "Password should have at least 7 characters.";
+        // }
       },
     );
   }
