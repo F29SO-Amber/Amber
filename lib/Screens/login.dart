@@ -1,9 +1,10 @@
+import 'package:amber/Screens/navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'package:amber/Screens/profile_screen.dart';
+import 'package:amber/Screens/profile.dart';
 import 'package:amber/authentication.dart';
 import 'package:amber/constants.dart';
 
@@ -69,7 +70,7 @@ class LoginScreen extends StatelessWidget {
         // ),
       ],
       onSubmitAnimationCompleted: () {
-        Navigator.pushReplacementNamed(context, ProfilePage.id);
+        Navigator.pushReplacementNamed(context, ProvidedStylesExample.id);
       },
       userValidator: (value) {
         if (!EmailValidator.validate(value!)) {
