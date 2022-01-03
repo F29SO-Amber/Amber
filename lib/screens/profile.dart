@@ -22,7 +22,8 @@ class _ProfilePageState extends State<ProfilePage> {
           child: const Text('Sign Out'),
           onPressed: () {
             AuthenticationHelper.signOutUser();
-            Navigator.pushReplacementNamed(context, LoginScreen.id);
+            Navigator.of(context, rootNavigator: true).pushReplacement(
+                MaterialPageRoute(builder: (context) => new LoginScreen()));
           },
           style: ElevatedButton.styleFrom(
             primary: Colors.amber, // background

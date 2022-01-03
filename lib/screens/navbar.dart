@@ -10,6 +10,8 @@ import 'package:amber/navigators/publish_page_navigator.dart';
 import 'package:amber/navigators/profile_page_navigator.dart';
 import 'package:amber/navigators/home_page_navigator.dart';
 
+import 'login.dart';
+
 class ConvexAppBarDemo extends StatefulWidget {
   const ConvexAppBarDemo({Key? key}) : super(key: key);
   static const id = '/navbar';
@@ -22,6 +24,7 @@ class _ConvexAppBarDemoState extends State<ConvexAppBarDemo>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   int _selectedIndex = 0;
+
   final List<GlobalKey<NavigatorState>> _navigatorKeys = [
     homePageNavigatorKey,
     discoverNavigatorKey,
