@@ -15,8 +15,8 @@ class ChatsPage extends StatelessWidget {
             .withOpacity(1.0),
         body: Center(
           child: ElevatedButton(
-            child: const Text('Chats'),
-            onPressed: () {},
+            child: const Text('Chat'),
+            onPressed: () {Navigator.pushNamed(context, '/chat2');},
             style: ElevatedButton.styleFrom(
               primary: Colors.amber, // background
               onPrimary: Colors.black, // foreground

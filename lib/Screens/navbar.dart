@@ -1,8 +1,12 @@
 import 'package:amber/Screens/chats.dart';
+import 'package:amber/Screens/chats_nav.dart';
 import 'package:amber/Screens/discover.dart';
+import 'package:amber/Screens/discover_navigator.dart';
 import 'package:amber/Screens/home.dart';
 import 'package:amber/Screens/post.dart';
+import 'package:amber/Screens/post_navigator.dart';
 import 'package:amber/Screens/profile.dart';
+import 'package:amber/Screens/profile_nav.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -41,10 +45,10 @@ class _ConvexAppBarDemoState extends State<ConvexAppBarDemo>
             index: _selectedIndex,
             children: <Widget>[
               HomePageNavigator(),
-              DiscoverPage(),
-              PostPage(),
-              ChatsPage(),
-              ProfilePage(),
+              DiscoverPageNavigator(),
+              PostPageNav(),
+              ChatNav(),
+              ProfilePageNavigator(),
             ],
           ),
         ),

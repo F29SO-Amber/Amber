@@ -16,7 +16,7 @@ class PostPage extends StatelessWidget {
         body: Center(
           child: ElevatedButton(
             child: const Text('Post'),
-            onPressed: () {},
+            onPressed: () { Navigator.pushNamed(context, '/post2');},
             style: ElevatedButton.styleFrom(
               primary: Colors.amber, // background
               onPrimary: Colors.black, // foreground

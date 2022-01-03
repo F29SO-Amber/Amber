@@ -16,7 +16,9 @@ class DiscoverPage extends StatelessWidget {
         body: Center(
           child: ElevatedButton(
             child: const Text('Discover'),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, '/discover2');
+            },
             style: ElevatedButton.styleFrom(
               primary: Colors.amber, // background
               onPrimary: Colors.black, // foreground

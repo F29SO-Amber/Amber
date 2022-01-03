@@ -15,7 +15,7 @@ class ProfilePage extends StatelessWidget {
             .withOpacity(1.0),
         body: Center(
           child: ElevatedButton(
-            child: const Text('Profile'),
+            child: const Text('Sign Out'),
             onPressed: () {
               AuthenticationHelper.signOutUser();
               Navigator.pushReplacementNamed(context, LoginScreen.id);
