@@ -1,13 +1,15 @@
-import 'package:amber/authentication.dart';
 import 'package:flutter/material.dart';
-import 'login.dart';
 import 'dart:math' as math;
 
-class ExtraPage extends StatelessWidget {
-  const ExtraPage({Key? key, required this.pageName}) : super(key: key);
-  static const id = '/extra';
-  final String pageName;
+class ChatsPage extends StatefulWidget {
+  const ChatsPage({Key? key}) : super(key: key);
+  static const id = '/chats';
 
+  @override
+  State<ChatsPage> createState() => _ChatsPageState();
+}
+
+class _ChatsPageState extends State<ChatsPage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -16,8 +18,10 @@ class ExtraPage extends StatelessWidget {
             .withOpacity(1.0),
         body: Center(
           child: ElevatedButton(
-            child: Text(pageName),
-            onPressed: () {},
+            child: const Text('Chat'),
+            onPressed: () {
+              Navigator.pushNamed(context, '/chat2');
+            },
             style: ElevatedButton.styleFrom(
               primary: Colors.amber, // background
               onPrimary: Colors.black, // foreground

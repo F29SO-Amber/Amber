@@ -1,12 +1,18 @@
-import 'package:amber/authentication.dart';
 import 'package:flutter/material.dart';
-import 'login.dart';
 import 'dart:math' as math;
 
-class DiscoverPage extends StatelessWidget {
-  const DiscoverPage({Key? key}) : super(key: key);
-  static const id = '/discover';
+import 'package:amber/authentication.dart';
+import 'package:amber/screens/login.dart';
 
+class ProfilePage extends StatefulWidget {
+  const ProfilePage({Key? key}) : super(key: key);
+  static const id = '/profile';
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -15,9 +21,10 @@ class DiscoverPage extends StatelessWidget {
             .withOpacity(1.0),
         body: Center(
           child: ElevatedButton(
-            child: const Text('Discover'),
+            child: const Text('Sign Out'),
             onPressed: () {
-              Navigator.pushNamed(context, '/discover2');
+              AuthenticationHelper.signOutUser();
+              Navigator.pushReplacementNamed(context, LoginScreen.id);
             },
             style: ElevatedButton.styleFrom(
               primary: Colors.amber, // background

@@ -1,12 +1,15 @@
-import 'package:amber/authentication.dart';
 import 'package:flutter/material.dart';
-import 'login.dart';
 import 'dart:math' as math;
 
-class ProfilePage extends StatelessWidget {
-  const ProfilePage({Key? key}) : super(key: key);
-  static const id = '/profile';
+class PostPage extends StatefulWidget {
+  const PostPage({Key? key}) : super(key: key);
+  static const id = '/post';
 
+  @override
+  State<PostPage> createState() => _PostPageState();
+}
+
+class _PostPageState extends State<PostPage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -15,10 +18,9 @@ class ProfilePage extends StatelessWidget {
             .withOpacity(1.0),
         body: Center(
           child: ElevatedButton(
-            child: const Text('Sign Out'),
+            child: const Text('Post'),
             onPressed: () {
-              AuthenticationHelper.signOutUser();
-              Navigator.pushReplacementNamed(context, LoginScreen.id);
+              Navigator.pushNamed(context, '/post2');
             },
             style: ElevatedButton.styleFrom(
               primary: Colors.amber, // background

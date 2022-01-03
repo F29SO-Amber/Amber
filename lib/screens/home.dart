@@ -1,12 +1,15 @@
-import 'package:amber/authentication.dart';
 import 'package:flutter/material.dart';
-import 'login.dart';
 import 'dart:math' as math;
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
   static const id = '/home';
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

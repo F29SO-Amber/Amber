@@ -1,11 +1,10 @@
-import 'package:amber/authentication.dart';
 import 'package:flutter/material.dart';
-import 'login.dart';
 import 'dart:math' as math;
 
-class PostPage extends StatelessWidget {
-  const PostPage({Key? key}) : super(key: key);
-  static const id = '/post';
+class ExtraPage extends StatelessWidget {
+  const ExtraPage({Key? key, required this.pageName}) : super(key: key);
+  static const id = '/extra';
+  final String pageName;
 
   @override
   Widget build(BuildContext context) {
@@ -15,8 +14,8 @@ class PostPage extends StatelessWidget {
             .withOpacity(1.0),
         body: Center(
           child: ElevatedButton(
-            child: const Text('Post'),
-            onPressed: () { Navigator.pushNamed(context, '/post2');},
+            child: Text(pageName),
+            onPressed: () {},
             style: ElevatedButton.styleFrom(
               primary: Colors.amber, // background
               onPrimary: Colors.black, // foreground

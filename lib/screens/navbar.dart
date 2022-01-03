@@ -1,17 +1,12 @@
-import 'package:amber/Screens/chats.dart';
-import 'package:amber/Screens/chats_nav.dart';
-import 'package:amber/Screens/discover.dart';
-import 'package:amber/Screens/discover_navigator.dart';
-import 'package:amber/Screens/home.dart';
-import 'package:amber/Screens/post.dart';
-import 'package:amber/Screens/post_navigator.dart';
-import 'package:amber/Screens/profile.dart';
-import 'package:amber/Screens/profile_nav.dart';
+import 'package:amber/nav/chats_page_navigator.dart';
+import 'package:amber/nav/discover_page_navigator.dart';
+import 'package:amber/nav/publish_page_navigator.dart';
+import 'package:amber/nav/profile_page_navigator.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'home_page_navigator.dart';
+import '../nav/home_page_navigator.dart';
 
 class ConvexAppBarDemo extends StatefulWidget {
   const ConvexAppBarDemo({Key? key}) : super(key: key);

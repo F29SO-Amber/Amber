@@ -1,8 +1,11 @@
-import 'package:amber/Screens/extra.dart';
-import 'package:amber/Screens/home.dart';
 import 'package:flutter/material.dart';
 
+import 'package:amber/screens/extra.dart';
+import 'package:amber/screens/home.dart';
+
 class HomePageNavigator extends StatefulWidget {
+  const HomePageNavigator({Key? key}) : super(key: key);
+
   @override
   _HomePageNavigatorState createState() => _HomePageNavigatorState();
 }
@@ -16,16 +19,18 @@ class _HomePageNavigatorState extends State<HomePageNavigator> {
       key: homePageNavigatorKey,
       onGenerateRoute: (RouteSettings settings) {
         return MaterialPageRoute(
-            settings: settings,
-            builder: (BuildContext context) {
-              switch (settings.name) {
-                case '/':
-                  return const HomePage();
-                case '/home2':
-                  return const ExtraPage(pageName: 'From Home Page');
-              }
-              return const HomePage();
-            });
+          settings: settings,
+          builder: (BuildContext context) {
+            switch (settings.name) {
+              case '/':
+                return const HomePage();
+              case '/home2':
+                return const ExtraPage(pageName: 'From Home Page');
+              default:
+                return const HomePage();
+            }
+          },
+        );
       },
     );
   }
