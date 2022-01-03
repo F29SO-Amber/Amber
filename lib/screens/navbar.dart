@@ -4,11 +4,11 @@ import 'package:flutter/services.dart';
 
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 
-import 'package:amber/nav/chats_page_navigator.dart';
-import 'package:amber/nav/discover_page_navigator.dart';
-import 'package:amber/nav/publish_page_navigator.dart';
-import 'package:amber/nav/profile_page_navigator.dart';
-import 'package:amber/nav/home_page_navigator.dart';
+import 'package:amber/navigators/chats_page_navigator.dart';
+import 'package:amber/navigators/discover_page_navigator.dart';
+import 'package:amber/navigators/publish_page_navigator.dart';
+import 'package:amber/navigators/profile_page_navigator.dart';
+import 'package:amber/navigators/home_page_navigator.dart';
 
 class ConvexAppBarDemo extends StatefulWidget {
   const ConvexAppBarDemo({Key? key}) : super(key: key);
