@@ -26,10 +26,10 @@ class _ConvexAppBarDemoState extends State<ConvexAppBarDemo>
   late TabController _tabController;
   int _selectedIndex = 0;
   final List<GlobalKey<NavigatorState>> _navigatorKeys = [
-    chatsNavigatorKey,
-    discoverNavigatorKey,
     homePageNavigatorKey,
+    discoverNavigatorKey,
     postNavigatorKey,
+    chatsNavigatorKey,
     profileNavigatorKey,
   ];
 
