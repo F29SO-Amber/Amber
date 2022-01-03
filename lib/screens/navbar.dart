@@ -1,3 +1,4 @@
+import 'package:amber/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -52,7 +53,7 @@ class _ConvexAppBarDemoState extends State<ConvexAppBarDemo>
         child: Scaffold(
           appBar: AppBar(
             title: const Text('ConvexAppBar'),
-            backgroundColor: Colors.amber,
+            backgroundColor: kAppColor,
           ),
           body: SafeArea(
             top: false,

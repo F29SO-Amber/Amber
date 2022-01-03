@@ -51,22 +51,6 @@ class LoginScreen extends StatelessWidget {
           displayName: 'Gender',
           icon: Icon(FontAwesomeIcons.atom),
         ),
-        // UserFormField(
-        //   keyName: 'phone_number',
-        //   icon: const Icon(FontAwesomeIcons.phoneAlt),
-        //   displayName: 'Phone Number',
-        //   userType: LoginUserType.phone,
-        //   fieldValidator: (value) {
-        //     var phoneRegExp = RegExp(
-        //         '^(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}\$');
-        //     if (value != null &&
-        //         value.length < 7 &&
-        //         !phoneRegExp.hasMatch(value)) {
-        //       return "This isn't a valid phone number";
-        //     }
-        //     return null;
-        //   },
-        // ),
       ],
       onSubmitAnimationCompleted: () {
         Navigator.pushReplacementNamed(context, ConvexAppBarDemo.id);

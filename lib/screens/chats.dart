@@ -12,19 +12,17 @@ class ChatsPage extends StatefulWidget {
 class _ChatsPageState extends State<ChatsPage> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        backgroundColor: createRandomColor(),
-        body: Center(
-          child: ElevatedButton(
-            child: const Text('Chat'),
-            onPressed: () {
-              Navigator.pushNamed(context, '/chat2');
-            },
-            style: ElevatedButton.styleFrom(
-              primary: Colors.amber, // background
-              onPrimary: Colors.black, // foreground
-            ),
+    return Scaffold(
+      backgroundColor: createRandomColor(),
+      body: Center(
+        child: ElevatedButton(
+          child: const Text('Chat'),
+          onPressed: () {
+            Navigator.pushNamed(context, '/chat2');
+          },
+          style: ElevatedButton.styleFrom(
+            primary: Colors.amber, // background
+            onPrimary: Colors.black, // foreground
           ),
         ),
       ),

@@ -8,17 +8,15 @@ class ExtraPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        backgroundColor: createRandomColor(),
-        body: Center(
-          child: ElevatedButton(
-            child: Text(pageName),
-            onPressed: () {},
-            style: ElevatedButton.styleFrom(
-              primary: Colors.amber, // background
-              onPrimary: Colors.black, // foreground
-            ),
+    return Scaffold(
+      backgroundColor: createRandomColor(),
+      body: Center(
+        child: ElevatedButton(
+          child: Text(pageName),
+          onPressed: () {},
+          style: ElevatedButton.styleFrom(
+            primary: Colors.amber, // background
+            onPrimary: Colors.black, // foreground
           ),
         ),
       ),

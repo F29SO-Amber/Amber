@@ -15,20 +15,18 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        backgroundColor: createRandomColor(),
-        body: Center(
-          child: ElevatedButton(
-            child: const Text('Sign Out'),
-            onPressed: () {
-              AuthenticationHelper.signOutUser();
-              Navigator.pushReplacementNamed(context, LoginScreen.id);
-            },
-            style: ElevatedButton.styleFrom(
-              primary: Colors.amber, // background
-              onPrimary: Colors.black, // foreground
-            ),
+    return Scaffold(
+      backgroundColor: createRandomColor(),
+      body: Center(
+        child: ElevatedButton(
+          child: const Text('Sign Out'),
+          onPressed: () {
+            AuthenticationHelper.signOutUser();
+            Navigator.pushReplacementNamed(context, LoginScreen.id);
+          },
+          style: ElevatedButton.styleFrom(
+            primary: Colors.amber, // background
+            onPrimary: Colors.black, // foreground
           ),
         ),
       ),
