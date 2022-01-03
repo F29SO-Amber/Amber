@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
+import 'dart:math' as math;
 
 const String kAppName = 'ᗩмвєя';
+const Color kAppColor = Colors.amber;
 
 final LoginTheme kLoginTheme = LoginTheme(
   primaryColor: const Color(0xffFFBF00),
@@ -41,4 +43,9 @@ MaterialColor createMaterialColor(Color color) {
     );
   }
   return MaterialColor(color.value, swatch);
+}
+
+Color createRandomColor() {
+  return Color((math.Random().nextDouble() * 0xFFFFFF).toInt())
+      .withOpacity(1.0);
 }

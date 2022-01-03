@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:amber/screens/extra.dart';
 import 'package:amber/screens/post.dart';
 
-class PostPageNav extends StatefulWidget {
-  const PostPageNav({Key? key}) : super(key: key);
+class PublishPageNavigator extends StatefulWidget {
+  const PublishPageNavigator({Key? key}) : super(key: key);
 
   @override
-  _PostPageNavState createState() => _PostPageNavState();
+  _PublishPageNavigatorState createState() => _PublishPageNavigatorState();
 }
 
 GlobalKey<NavigatorState> postNavigatorKey = GlobalKey<NavigatorState>();
 
-class _PostPageNavState extends State<PostPageNav> {
+class _PublishPageNavigatorState extends State<PublishPageNavigator> {
   @override
   Widget build(BuildContext context) {
     return Navigator(

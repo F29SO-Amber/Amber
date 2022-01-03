@@ -1,12 +1,13 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+
 import 'package:amber/nav/chats_page_navigator.dart';
 import 'package:amber/nav/discover_page_navigator.dart';
 import 'package:amber/nav/publish_page_navigator.dart';
 import 'package:amber/nav/profile_page_navigator.dart';
-import 'package:convex_bottom_bar/convex_bottom_bar.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-
-import '../nav/home_page_navigator.dart';
+import 'package:amber/nav/home_page_navigator.dart';
 
 class ConvexAppBarDemo extends StatefulWidget {
   const ConvexAppBarDemo({Key? key}) : super(key: key);
@@ -57,11 +58,11 @@ class _ConvexAppBarDemoState extends State<ConvexAppBarDemo>
             top: false,
             child: IndexedStack(
               index: _selectedIndex,
-              children: <Widget>[
+              children: const <Widget>[
                 HomePageNavigator(),
                 DiscoverPageNavigator(),
-                PostPageNav(),
-                ChatNav(),
+                PublishPageNavigator(),
+                ChatsPageNavigator(),
                 ProfilePageNavigator(),
               ],
             ),
@@ -74,8 +75,6 @@ class _ConvexAppBarDemoState extends State<ConvexAppBarDemo>
               TabItem<IconData>(icon: Icons.message, title: 'Message'),
               TabItem<IconData>(icon: Icons.people, title: 'Profile'),
             ],
-            // height: 50,
-            // top: -25,
             style: TabStyle.react,
             curve: Curves.bounceInOut,
             backgroundColor: Colors.amber,

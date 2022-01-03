@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:amber/screens/extra.dart';
 import 'package:amber/screens/chats.dart';
 
-class ChatNav extends StatefulWidget {
-  const ChatNav({Key? key}) : super(key: key);
+class ChatsPageNavigator extends StatefulWidget {
+  const ChatsPageNavigator({Key? key}) : super(key: key);
 
   @override
-  _ChatNavState createState() => _ChatNavState();
+  _ChatsPageNavigatorState createState() => _ChatsPageNavigatorState();
 }
 
 GlobalKey<NavigatorState> chatsNavigatorKey = GlobalKey<NavigatorState>();
 
-class _ChatNavState extends State<ChatNav> {
+class _ChatsPageNavigatorState extends State<ChatsPageNavigator> {
   @override
   Widget build(BuildContext context) {
     return Navigator(

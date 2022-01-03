@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
+import 'package:amber/constants.dart';
 
 class ExtraPage extends StatelessWidget {
   const ExtraPage({Key? key, required this.pageName}) : super(key: key);
@@ -10,8 +10,7 @@ class ExtraPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        backgroundColor: Color((math.Random().nextDouble() * 0xFFFFFF).toInt())
-            .withOpacity(1.0),
+        backgroundColor: createRandomColor(),
         body: Center(
           child: ElevatedButton(
             child: Text(pageName),

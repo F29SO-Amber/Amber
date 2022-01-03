@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
+import 'package:amber/constants.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -13,8 +13,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color((math.Random().nextDouble() * 0xFFFFFF).toInt())
-          .withOpacity(1.0),
+      backgroundColor: createRandomColor(),
       body: Center(
         child: ElevatedButton(
           child: const Text('Home'),

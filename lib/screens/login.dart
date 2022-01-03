@@ -4,7 +4,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:amber/screens/navbar.dart';
-import 'package:amber/authentication.dart';
+import 'package:amber/services/authentication.dart';
 import 'package:amber/constants.dart';
 
 class LoginScreen extends StatelessWidget {
