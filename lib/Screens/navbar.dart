@@ -41,6 +41,7 @@ class _ConvexAppBarDemoState extends State<ConvexAppBarDemo>
     } else {
       SystemChannels.platform.invokeMethod<void>('SystemNavigator.pop');
     }
+    throw '';
   }
 
   @override
