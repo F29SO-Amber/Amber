@@ -54,43 +54,41 @@ class _ConvexAppBarDemoState extends State<ConvexAppBarDemo>
   Widget build(BuildContext context) {
     return WillPopScope(
         child: Scaffold(
-          body: Scaffold(
-            appBar: AppBar(
-              title: const Text('ConvexAppBar'),
-              backgroundColor: Colors.amber,
-            ),
-            body: SafeArea(
-              top: false,
-              child: IndexedStack(
-                index: _selectedIndex,
-                children: <Widget>[
-                  HomePageNavigator(),
-                  DiscoverPageNavigator(),
-                  PostPageNav(),
-                  ChatNav(),
-                  ProfilePageNavigator(),
-                ],
-              ),
-            ),
-            bottomNavigationBar: ConvexAppBar(
-              items: const [
-                TabItem<IconData>(icon: Icons.home, title: 'Home'),
-                TabItem<IconData>(icon: Icons.map, title: "Discovery"),
-                TabItem<IconData>(icon: Icons.publish, title: "Publish"),
-                TabItem<IconData>(icon: Icons.message, title: 'Message'),
-                TabItem<IconData>(icon: Icons.people, title: 'Profile'),
+          appBar: AppBar(
+            title: const Text('ConvexAppBar'),
+            backgroundColor: Colors.amber,
+          ),
+          body: SafeArea(
+            top: false,
+            child: IndexedStack(
+              index: _selectedIndex,
+              children: <Widget>[
+                HomePageNavigator(),
+                DiscoverPageNavigator(),
+                PostPageNav(),
+                ChatNav(),
+                ProfilePageNavigator(),
               ],
-              // height: 50,
-              // top: -25,
-              style: TabStyle.react,
-              curve: Curves.bounceInOut,
-              backgroundColor: Colors.amber,
-              gradient: null,
-              controller: _tabController,
-              onTap: (int i) => setState(() {
-                _selectedIndex = i;
-              }),
             ),
+          ),
+          bottomNavigationBar: ConvexAppBar(
+            items: const [
+              TabItem<IconData>(icon: Icons.home, title: 'Home'),
+              TabItem<IconData>(icon: Icons.map, title: "Discovery"),
+              TabItem<IconData>(icon: Icons.publish, title: "Publish"),
+              TabItem<IconData>(icon: Icons.message, title: 'Message'),
+              TabItem<IconData>(icon: Icons.people, title: 'Profile'),
+            ],
+            // height: 50,
+            // top: -25,
+            style: TabStyle.react,
+            curve: Curves.bounceInOut,
+            backgroundColor: Colors.amber,
+            gradient: null,
+            controller: _tabController,
+            onTap: (int i) => setState(() {
+              _selectedIndex = i;
+            }),
           ),
         ),
         onWillPop: _systemBackButtonPressed);

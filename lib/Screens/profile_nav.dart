@@ -1,4 +1,5 @@
 import 'package:amber/Screens/extra.dart';
+import 'package:amber/Screens/login.dart';
 import 'package:amber/Screens/profile.dart';
 import 'package:flutter/material.dart';
 
@@ -23,6 +24,8 @@ class _ProfilePageNavigatorState extends State<ProfilePageNavigator> {
                   return const ProfilePage();
                 case '/home2':
                   return const ExtraPage(pageName: 'From Profile Page');
+                case LoginScreen.id:
+                  return LoginScreen();
               }
               return const ProfilePage();
             });
