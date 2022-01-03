@@ -7,10 +7,13 @@ class PostPageNav extends StatefulWidget {
   _PostPageNavState createState() => _PostPageNavState();
 }
 
+GlobalKey<NavigatorState> postNavigatorKey = GlobalKey<NavigatorState>();
+
 class _PostPageNavState extends State<PostPageNav> {
   @override
   Widget build(BuildContext context) {
     return Navigator(
+      key: postNavigatorKey,
       onGenerateRoute: (RouteSettings settings) {
         return MaterialPageRoute(
             settings: settings,

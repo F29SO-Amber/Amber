@@ -7,10 +7,13 @@ class DiscoverPageNavigator extends StatefulWidget {
   _DiscoverPageNavigatorState createState() => _DiscoverPageNavigatorState();
 }
 
+GlobalKey<NavigatorState> discoverNavigatorKey = GlobalKey<NavigatorState>();
+
 class _DiscoverPageNavigatorState extends State<DiscoverPageNavigator> {
   @override
   Widget build(BuildContext context) {
     return Navigator(
+      key: discoverNavigatorKey,
       onGenerateRoute: (RouteSettings settings) {
         return MaterialPageRoute(
             settings: settings,

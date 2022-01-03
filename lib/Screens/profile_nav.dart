@@ -7,10 +7,13 @@ class ProfilePageNavigator extends StatefulWidget {
   _ProfilePageNavigatorState createState() => _ProfilePageNavigatorState();
 }
 
+GlobalKey<NavigatorState> profileNavigatorKey = GlobalKey<NavigatorState>();
+
 class _ProfilePageNavigatorState extends State<ProfilePageNavigator> {
   @override
   Widget build(BuildContext context) {
     return Navigator(
+      key: profileNavigatorKey,
       onGenerateRoute: (RouteSettings settings) {
         return MaterialPageRoute(
             settings: settings,

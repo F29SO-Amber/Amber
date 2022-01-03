@@ -7,10 +7,13 @@ class HomePageNavigator extends StatefulWidget {
   _HomePageNavigatorState createState() => _HomePageNavigatorState();
 }
 
+GlobalKey<NavigatorState> homePageNavigatorKey = GlobalKey<NavigatorState>();
+
 class _HomePageNavigatorState extends State<HomePageNavigator> {
   @override
   Widget build(BuildContext context) {
     return Navigator(
+      key: homePageNavigatorKey,
       onGenerateRoute: (RouteSettings settings) {
         return MaterialPageRoute(
             settings: settings,
