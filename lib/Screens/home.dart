@@ -9,18 +9,18 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        backgroundColor: Color((math.Random().nextDouble() * 0xFFFFFF).toInt())
-            .withOpacity(1.0),
-        body: Center(
-          child: ElevatedButton(
-            child: const Text('Home'),
-            onPressed: () {},
-            style: ElevatedButton.styleFrom(
-              primary: Colors.amber, // background
-              onPrimary: Colors.black, // foreground
-            ),
+    return Scaffold(
+      backgroundColor: Color((math.Random().nextDouble() * 0xFFFFFF).toInt())
+          .withOpacity(1.0),
+      body: Center(
+        child: ElevatedButton(
+          child: const Text('Home'),
+          onPressed: () {
+            Navigator.pushNamed(context, '/home2');
+          },
+          style: ElevatedButton.styleFrom(
+            primary: Colors.amber, // background
+            onPrimary: Colors.black, // foreground
           ),
         ),
       ),

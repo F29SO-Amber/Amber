@@ -70,7 +70,7 @@ class LoginScreen extends StatelessWidget {
         // ),
       ],
       onSubmitAnimationCompleted: () {
-        Navigator.pushReplacementNamed(context, ProvidedStylesExample.id);
+        Navigator.pushReplacementNamed(context, ConvexAppBarDemo.id);
       },
       userValidator: (value) {
         if (!EmailValidator.validate(value!)) {
