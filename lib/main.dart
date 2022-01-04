@@ -3,6 +3,7 @@ import 'package:amber/screens/discover.dart';
 import 'package:amber/screens/navbar.dart';
 import 'package:amber/screens/post.dart';
 import 'package:amber/screens/login.dart';
+import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
         textSelectionTheme:
             const TextSelectionThemeData(cursorColor: Colors.orange),
       ),
-      initialRoute: LoginScreen.id,
+      initialRoute: ConvexAppBarDemo.id,
       routes: {
         LoginScreen.id: (context) => const LoginScreen(),
         ProfilePage.id: (context) => const ProfilePage(),

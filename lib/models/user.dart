@@ -12,20 +12,20 @@ class Users {
   //final Map followers;
   //final Map following;
 
-  const Users(
-      {required this.dob,
-      required this.gender,
-      required this.accountType,
-      required this.username,
-     // required this.id,
-      //required this.photoURL,
-      //required this.email,
-      required this.name,
-     // required this.followers,
-      //required this.following
-      });
+  const Users({
+    required this.dob,
+    required this.gender,
+    required this.accountType,
+    required this.username,
+    // required this.id,
+    //required this.photoURL,
+    //required this.email,
+    required this.name,
+    // required this.followers,
+    //required this.following
+  });
 
-      factory Users.fromDocument(DocumentSnapshot doc) {
+  factory Users.fromDocument(DocumentSnapshot doc) {
     return Users(
       //email: doc['email'],
       username: doc['username'],
@@ -34,8 +34,8 @@ class Users {
       dob: doc['dob'],
       gender: doc['gender'],
       //photoURL: doc['photoURL'],
-     // followers: doc['followers'],
-     // following: doc['following'],
+      // followers: doc['followers'],
+      // following: doc['following'],
       //id: doc['id'],
     );
   }

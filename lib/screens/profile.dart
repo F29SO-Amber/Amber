@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:amber/constants.dart';
 
@@ -17,31 +15,11 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     backgroundColor: createRandomColor(),
-  //     body: Center(
-  //       child: ElevatedButton(
-  //         child: const Text('Sign Out'),
-  //         onPressed: () {
-  //           AuthenticationHelper.signOutUser();
-  //           Navigator.of(context, rootNavigator: true).pushReplacement(
-  //               MaterialPageRoute(builder: (context) => new LoginScreen()));
-  //         },
-  //         style: ElevatedButton.styleFrom(
-  //           primary: Colors.amber, // background
-  //           onPrimary: Colors.black, // foreground
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          '@username',
+          '@carlosfernandez',
           style: TextStyle(fontSize: 18, color: Colors.white),
         ),
         actions: [
@@ -63,7 +41,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ],
         backgroundColor: kAppColor,
       ),
-      body: Container(
+      body: SizedBox(
         width: MediaQuery.of(context).size.width,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -77,7 +55,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   width: 100.0,
                   decoration: BoxDecoration(
                     image: const DecorationImage(
-                      image: AssetImage('assets/logo.png'),
+                      image: AssetImage('assets/img.png'),
                       fit: BoxFit.fill,
                     ),
                     shape: BoxShape.rectangle,
@@ -88,17 +66,27 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 3.0),
-              child: Text(
-                'Carlos Fernandez',
-                style: GoogleFonts.dmSans(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                  fontStyle: FontStyle.normal,
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Carlos Fernandez ',
+                    style: GoogleFonts.dmSans(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                      fontStyle: FontStyle.normal,
+                    ),
+                  ),
+                  const Icon(
+                    Icons.verified,
+                    color: Colors.amber,
+                    size: 22,
+                  )
+                ],
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.only(top: 3.0, bottom: 15),
               child: Text(
                 'Student',
                 style: GoogleFonts.dmSans(
@@ -122,7 +110,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                     Text(
-                      'Posts',
+                      '   Posts   ',
                       style: GoogleFonts.dmSans(
                         fontSize: 13,
                         color: Colors.black38,
@@ -132,26 +120,28 @@ class _ProfilePageState extends State<ProfilePage> {
                     )
                   ],
                 ),
-                Column(
-                  children: [
-                    Text(
-                      '524',
-                      style: GoogleFonts.dmSans(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500,
-                        fontStyle: FontStyle.normal,
+                Center(
+                  child: Column(
+                    children: [
+                      Text(
+                        '524',
+                        style: GoogleFonts.dmSans(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                          fontStyle: FontStyle.normal,
+                        ),
                       ),
-                    ),
-                    Text(
-                      'Followers',
-                      style: GoogleFonts.dmSans(
-                        fontSize: 13,
-                        color: Colors.black38,
-                        fontWeight: FontWeight.w500,
-                        fontStyle: FontStyle.normal,
-                      ),
-                    )
-                  ],
+                      Text(
+                        'Followers',
+                        style: GoogleFonts.dmSans(
+                          fontSize: 13,
+                          color: Colors.black38,
+                          fontWeight: FontWeight.w500,
+                          fontStyle: FontStyle.normal,
+                        ),
+                      )
+                    ],
+                  ),
                 ),
                 Column(
                   children: [
@@ -176,7 +166,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
               width: 200,
             ),
@@ -185,12 +175,14 @@ class _ProfilePageState extends State<ProfilePage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   ElevatedButton(
-                    child: const Text('   Message   '),
+                    child: const Text('Message'),
                     style: ElevatedButton.styleFrom(
+                      fixedSize:
+                          Size(MediaQuery.of(context).size.width * 0.45, 43),
                       primary: Colors.white, // background
                       onPrimary: Colors.black, // foreground
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30)),
+                          borderRadius: BorderRadius.circular(12)),
                     ),
                     onPressed: () {},
                   ),
@@ -200,48 +192,49 @@ class _ProfilePageState extends State<ProfilePage> {
                   ElevatedButton(
                     child: const Text('    Follow    '),
                     style: ElevatedButton.styleFrom(
-                        primary: Colors.amber, // background
+                        fixedSize:
+                            Size(MediaQuery.of(context).size.width * 0.45, 43),
+                        primary: Colors.amber.shade300, // background
                         onPrimary: Colors.black, // foreground
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30))),
+                            borderRadius: BorderRadius.circular(12))),
                     onPressed: () {},
                   ),
                 ]),
-            SizedBox(
+            const SizedBox(
               height: 20,
               width: 200,
             ),
-            Row(mainAxisAlignment: MainAxisAlignment.center,
-                //crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  SizedBox(
-                    height: 35,
-                    width: 200,
-                    child: TextButton(
-                      child: Icon(Icons.camera_alt),
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.red[100], // background
-                        onPrimary: Colors.black, // foreground
-                      ),
-                      onPressed: () {},
+            Row(
+              // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              //crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                SizedBox(
+                  height: 35,
+                  width: MediaQuery.of(context).size.width * 0.5,
+                  child: TextButton(
+                    child: const Icon(Icons.camera_alt),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.red[100], // background
+                      onPrimary: Colors.black, // foreground
                     ),
+                    onPressed: () {},
                   ),
-                  // SizedBox(
-                  //   width: 10.0,
-                  // ),
-                  SizedBox(
-                    height: 35,
-                    width: 190,
-                    child: TextButton(
-                      child: Icon(Icons.play_arrow_rounded),
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.greenAccent[100], // background
-                        onPrimary: Colors.black, // foreground
-                      ),
-                      onPressed: () {},
+                ),
+                SizedBox(
+                  height: 35,
+                  width: MediaQuery.of(context).size.width * 0.5,
+                  child: TextButton(
+                    child: const Icon(Icons.play_arrow_rounded),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.greenAccent[100], // background
+                      onPrimary: Colors.black, // foreground
                     ),
+                    onPressed: () {},
                   ),
-                ]),
+                ),
+              ],
+            ),
           ],
         ),
       ),
