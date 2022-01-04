@@ -1,51 +1,45 @@
-import 'package:amber/Screens/home_screen.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:amber/screens/chats.dart';
+import 'package:amber/screens/discover.dart';
+import 'package:amber/screens/navbar.dart';
+import 'package:amber/screens/post.dart';
+import 'package:amber/screens/login.dart';
 import 'package:flutter/material.dart';
-import 'Screens/profile_screen.dart';
-import 'firebase_options.dart';
-import 'Screens/login_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+
+import 'package:amber/screens/profile.dart';
+import 'package:amber/screens/home.dart';
+import 'package:amber/firebase_options.dart';
+import 'package:amber/constants.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  MaterialColor createMaterialColor(Color color) {
-    List strengths = <double>[.05];
-    final swatch = <int, Color>{};
-    final int r = color.red, g = color.green, b = color.blue;
-
-    for (int i = 1; i < 10; i++) {
-      strengths.add(0.1 * i);
-    }
-    for (var strength in strengths) {
-      final double ds = 0.5 - strength;
-      swatch[(strength * 1000).round()] = Color.fromRGBO(
-        r + ((ds < 0 ? r : (255 - r)) * ds).round(),
-        g + ((ds < 0 ? g : (255 - g)) * ds).round(),
-        b + ((ds < 0 ? b : (255 - b)) * ds).round(),
-        1,
-      );
-    }
-    return MaterialColor(color.value, swatch);
-  }
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Login Demo',
       theme: ThemeData(
-        primarySwatch: createMaterialColor(Color(0xff9eb7ff)),
-        accentColor: Colors.orange,
-        cursorColor: Colors.orange,
+        colorScheme: ColorScheme.fromSwatch(
+          primarySwatch: createMaterialColor(const Color(0xff9eb7ff)),
+        ).copyWith(secondary: Colors.orange),
+        textSelectionTheme:
+            const TextSelectionThemeData(cursorColor: Colors.orange),
       ),
       initialRoute: LoginScreen.id,
       routes: {
-        LoginScreen.id: (context) => LoginScreen(),
-        ProfilePage.id: (context) => ProfilePage(),
-        HomePage.id: (context) => HomePage()
+        LoginScreen.id: (context) => const LoginScreen(),
+        ProfilePage.id: (context) => const ProfilePage(),
+        ChatsPage.id: (context) => const ChatsPage(),
+        DiscoverPage.id: (context) => const DiscoverPage(),
+        PostPage.id: (context) => const PostPage(),
+        HomePage.id: (context) => const HomePage(),
+        ConvexAppBarDemo.id: (context) => const ConvexAppBarDemo()
       },
     );
   }
