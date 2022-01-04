@@ -1,8 +1,11 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:amber/constants.dart';
 
 import 'package:amber/services/authentication.dart';
 import 'package:amber/screens/login.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -43,7 +46,13 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         actions: [
           GestureDetector(
-            child: const Icon(Icons.logout_outlined),
+            child: const Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Icon(
+                Icons.logout_outlined,
+                color: Colors.white,
+              ),
+            ),
             onTap: () {
               AuthenticationHelper.signOutUser();
               Navigator.of(context, rootNavigator: true).pushReplacement(
@@ -53,6 +62,122 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ],
         backgroundColor: kAppColor,
+      ),
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 30, bottom: 20),
+                child: Container(
+                  height: 100.0,
+                  width: 100.0,
+                  decoration: BoxDecoration(
+                    image: const DecorationImage(
+                      image: AssetImage('assets/logo.png'),
+                      fit: BoxFit.fill,
+                    ),
+                    shape: BoxShape.rectangle,
+                    borderRadius: BorderRadius.circular(33.0),
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 3.0),
+              child: Text(
+                'Carlos Fernandez',
+                style: GoogleFonts.dmSans(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500,
+                  fontStyle: FontStyle.normal,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Text(
+                'Student',
+                style: GoogleFonts.dmSans(
+                  fontSize: 13,
+                  color: Colors.black38,
+                ),
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Column(
+                  children: [
+                    Text(
+                      '140',
+                      style: GoogleFonts.dmSans(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                        fontStyle: FontStyle.normal,
+                      ),
+                    ),
+                    Text(
+                      'Posts',
+                      style: GoogleFonts.dmSans(
+                        fontSize: 13,
+                        color: Colors.black38,
+                        fontWeight: FontWeight.w500,
+                        fontStyle: FontStyle.normal,
+                      ),
+                    )
+                  ],
+                ),
+                Column(
+                  children: [
+                    Text(
+                      '524',
+                      style: GoogleFonts.dmSans(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                        fontStyle: FontStyle.normal,
+                      ),
+                    ),
+                    Text(
+                      'Followers',
+                      style: GoogleFonts.dmSans(
+                        fontSize: 13,
+                        color: Colors.black38,
+                        fontWeight: FontWeight.w500,
+                        fontStyle: FontStyle.normal,
+                      ),
+                    )
+                  ],
+                ),
+                Column(
+                  children: [
+                    Text(
+                      '343',
+                      style: GoogleFonts.dmSans(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                        fontStyle: FontStyle.normal,
+                      ),
+                    ),
+                    Text(
+                      'Following',
+                      style: GoogleFonts.dmSans(
+                        fontSize: 13,
+                        color: Colors.black38,
+                        fontWeight: FontWeight.w500,
+                        fontStyle: FontStyle.normal,
+                      ),
+                    )
+                  ],
+                ),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
