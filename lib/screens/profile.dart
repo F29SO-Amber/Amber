@@ -20,7 +20,8 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: AppBar(
         title: const Text(
           '@carlosfernandez',
-          style: TextStyle(fontSize: 18, color: Colors.white),
+          style: TextStyle(
+              fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
         ),
         actions: [
           GestureDetector(
@@ -73,7 +74,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     'Carlos Fernandez ',
                     style: GoogleFonts.dmSans(
                       fontSize: 20,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.bold,
                       fontStyle: FontStyle.normal,
                     ),
                   ),
@@ -175,7 +176,10 @@ class _ProfilePageState extends State<ProfilePage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   ElevatedButton(
-                    child: const Text('Message'),
+                    child: const Text(
+                      'Message',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                     style: ElevatedButton.styleFrom(
                       fixedSize:
                           Size(MediaQuery.of(context).size.width * 0.45, 43),
@@ -187,7 +191,10 @@ class _ProfilePageState extends State<ProfilePage> {
                     onPressed: () {},
                   ),
                   ElevatedButton(
-                    child: const Text('    Follow    '),
+                    child: const Text(
+                      '    Follow    ',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                     style: ElevatedButton.styleFrom(
                         fixedSize:
                             Size(MediaQuery.of(context).size.width * 0.45, 43),
