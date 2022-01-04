@@ -179,16 +179,13 @@ class _ProfilePageState extends State<ProfilePage> {
                     style: ElevatedButton.styleFrom(
                       fixedSize:
                           Size(MediaQuery.of(context).size.width * 0.45, 43),
-                      primary: Colors.white, // background
+                      primary: Colors.grey[200], // background
                       onPrimary: Colors.black, // foreground
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12)),
                     ),
                     onPressed: () {},
                   ),
-                  // SizedBox(
-                  //   width: 10.0,
-                  // ),
                   ElevatedButton(
                     child: const Text('    Follow    '),
                     style: ElevatedButton.styleFrom(
