@@ -3,9 +3,9 @@ import 'package:flutter_login/flutter_login.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import 'package:amber/constants.dart';
 import 'package:amber/screens/navbar.dart';
 import 'package:amber/services/authentication.dart';
-import 'package:amber/constants.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -22,9 +22,7 @@ class LoginScreen extends StatelessWidget {
       onLogin: AuthenticationHelper.authUser,
       onSignup: AuthenticationHelper.signupUser,
       onRecoverPassword: AuthenticationHelper.recoverPassword,
-      messages: LoginMessages(
-        signUpSuccess: "Sign up successful!",
-      ),
+      messages: LoginMessages(signUpSuccess: "Sign up successful!"),
       additionalSignupFields: const [
         UserFormField(
           keyName: 'username',

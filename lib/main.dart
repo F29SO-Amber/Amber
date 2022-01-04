@@ -1,13 +1,13 @@
-import 'package:amber/Screens/chats.dart';
-import 'package:amber/Screens/discover.dart';
-import 'package:amber/Screens/navbar.dart';
-import 'package:amber/Screens/post.dart';
+import 'package:amber/screens/chats.dart';
+import 'package:amber/screens/discover.dart';
+import 'package:amber/screens/navbar.dart';
+import 'package:amber/screens/post.dart';
+import 'package:amber/screens/login.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-import 'package:amber/Screens/profile.dart';
-import 'package:amber/Screens/login.dart';
-import 'package:amber/Screens/home.dart';
+import 'package:amber/screens/profile.dart';
+import 'package:amber/screens/home.dart';
 import 'package:amber/firebase_options.dart';
 import 'package:amber/constants.dart';
 
@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
         textSelectionTheme:
             const TextSelectionThemeData(cursorColor: Colors.orange),
       ),
-      initialRoute: ConvexAppBarDemo.id,
+      initialRoute: LoginScreen.id,
       routes: {
         LoginScreen.id: (context) => const LoginScreen(),
         ProfilePage.id: (context) => const ProfilePage(),
