@@ -21,7 +21,7 @@ class ConvexAppBarDemo extends StatefulWidget {
 class _ConvexAppBarDemoState extends State<ConvexAppBarDemo>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  int _selectedIndex = 0;
+  int _selectedIndex = 4;
 
   final List<GlobalKey<NavigatorState>> _navigatorKeys = [
     homePageNavigatorKey,
@@ -31,7 +31,7 @@ class _ConvexAppBarDemoState extends State<ConvexAppBarDemo>
     profileNavigatorKey,
   ];
 
-  Future<bool> _systemBackButtonPressed() {
+  Future<bool> _systemBackButtonPressed() async {
     if (_navigatorKeys[_selectedIndex].currentState!.canPop()) {
       _navigatorKeys[_selectedIndex]
           .currentState!
@@ -52,10 +52,10 @@ class _ConvexAppBarDemoState extends State<ConvexAppBarDemo>
   Widget build(BuildContext context) {
     return WillPopScope(
         child: Scaffold(
-          appBar: AppBar(
-            title: const Text('ConvexAppBar'),
-            backgroundColor: kAppColor,
-          ),
+          // appBar: AppBar(
+          //   title: const Text('ConvexAppBar'),
+          //   backgroundColor: kAppColor,
+          // ),
           body: SafeArea(
             top: false,
             child: IndexedStack(
@@ -77,7 +77,8 @@ class _ConvexAppBarDemoState extends State<ConvexAppBarDemo>
               TabItem<IconData>(icon: Icons.message, title: 'Message'),
               TabItem<IconData>(icon: Icons.people, title: 'Profile'),
             ],
-            style: TabStyle.react,
+            style: TabStyle.fixed,
+            initialActiveIndex: 3,
             curve: Curves.bounceInOut,
             backgroundColor: Colors.amber,
             gradient: null,

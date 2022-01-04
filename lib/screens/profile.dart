@@ -14,22 +14,45 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   @override
+  // Widget build(BuildContext context) {
+  //   return Scaffold(
+  //     backgroundColor: createRandomColor(),
+  //     body: Center(
+  //       child: ElevatedButton(
+  //         child: const Text('Sign Out'),
+  //         onPressed: () {
+  //           AuthenticationHelper.signOutUser();
+  //           Navigator.of(context, rootNavigator: true).pushReplacement(
+  //               MaterialPageRoute(builder: (context) => new LoginScreen()));
+  //         },
+  //         style: ElevatedButton.styleFrom(
+  //           primary: Colors.amber, // background
+  //           onPrimary: Colors.black, // foreground
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
+
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: createRandomColor(),
-      body: Center(
-        child: ElevatedButton(
-          child: const Text('Sign Out'),
-          onPressed: () {
-            AuthenticationHelper.signOutUser();
-            Navigator.of(context, rootNavigator: true).pushReplacement(
-                MaterialPageRoute(builder: (context) => new LoginScreen()));
-          },
-          style: ElevatedButton.styleFrom(
-            primary: Colors.amber, // background
-            onPrimary: Colors.black, // foreground
-          ),
+      appBar: AppBar(
+        title: const Text(
+          '@username',
+          style: TextStyle(fontSize: 18, color: Colors.white),
         ),
+        actions: [
+          GestureDetector(
+            child: const Icon(Icons.logout_outlined),
+            onTap: () {
+              AuthenticationHelper.signOutUser();
+              Navigator.of(context, rootNavigator: true).pushReplacement(
+                MaterialPageRoute(builder: (context) => const LoginScreen()),
+              );
+            },
+          ),
+        ],
+        backgroundColor: kAppColor,
       ),
     );
   }
