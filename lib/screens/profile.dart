@@ -175,7 +175,73 @@ class _ProfilePageState extends State<ProfilePage> {
                   ],
                 ),
               ],
-            )
+            ),
+            SizedBox(
+              height: 20,
+              width: 200,
+            ),
+            Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  ElevatedButton(
+                    child: const Text('   Message   '),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.white, // background
+                      onPrimary: Colors.black, // foreground
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30)),
+                    ),
+                    onPressed: () {},
+                  ),
+                  // SizedBox(
+                  //   width: 10.0,
+                  // ),
+                  ElevatedButton(
+                    child: const Text('    Follow    '),
+                    style: ElevatedButton.styleFrom(
+                        primary: Colors.amber, // background
+                        onPrimary: Colors.black, // foreground
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30))),
+                    onPressed: () {},
+                  ),
+                ]),
+            SizedBox(
+              height: 20,
+              width: 200,
+            ),
+            Row(mainAxisAlignment: MainAxisAlignment.center,
+                //crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  SizedBox(
+                    height: 35,
+                    width: 200,
+                    child: TextButton(
+                      child: Icon(Icons.camera_alt),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.red[100], // background
+                        onPrimary: Colors.black, // foreground
+                      ),
+                      onPressed: () {},
+                    ),
+                  ),
+                  // SizedBox(
+                  //   width: 10.0,
+                  // ),
+                  SizedBox(
+                    height: 35,
+                    width: 190,
+                    child: TextButton(
+                      child: Icon(Icons.play_arrow_rounded),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.greenAccent[100], // background
+                        onPrimary: Colors.black, // foreground
+                      ),
+                      onPressed: () {},
+                    ),
+                  ),
+                ]),
           ],
         ),
       ),
