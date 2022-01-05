@@ -36,13 +36,6 @@ class MyApp extends StatelessWidget {
       initialRoute: LoginScreen.id,
       routes: {
         LoginScreen.id: (context) => const LoginScreen(),
-        ProfilePage.id: (context) => ProfilePage(
-              profileID: Authentication.currentUser.uid,
-            ),
-        ChatsPage.id: (context) => const ChatsPage(),
-        DiscoverPage.id: (context) => const DiscoverPage(),
-        PostPage.id: (context) => const PostPage(),
-        HomePage.id: (context) => const HomePage(),
         ConvexAppBarDemo.id: (context) => const ConvexAppBarDemo()
       },
     );

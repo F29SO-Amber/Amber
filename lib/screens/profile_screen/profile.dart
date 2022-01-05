@@ -1,12 +1,13 @@
 import 'package:amber/models/user.dart';
+import 'package:amber/services/database_service.dart';
 import 'package:flutter/material.dart';
 import 'package:amber/constants.dart';
 import 'package:amber/screens/profile_screen/widgets/number_and_label.dart';
 import 'package:amber/screens/profile_screen/widgets/profile_picture.dart';
+import 'package:amber/screens/profile_screen/widgets/post_type.dart';
 import 'package:amber/services/authentication.dart';
 import 'package:amber/screens/login.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
   static const id = '/profile';
@@ -26,7 +27,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: StreamBuilder(
-        stream: Authentication.getUser(widget.profileID).asStream(),
+        stream: DatabaseService.getUser(widget.profileID).asStream(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             var userData = snapshot.data as AmberUser;
@@ -148,45 +149,25 @@ class _ProfilePageState extends State<ProfilePage> {
                       // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       //crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
-                        Container(
-                          height: 35,
-                          width: MediaQuery.of(context).size.width / 4,
-                          child: const Icon(Icons.image),
-                          decoration: BoxDecoration(
-                            color: Colors.red[100],
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(-100)),
-                          ),
+                        PostType(
+                          numOfDivisions: 4,
+                          bgColor: Colors.red[100]!,
+                          icon: const Icon(Icons.image),
                         ),
-                        Container(
-                          height: 35,
-                          width: MediaQuery.of(context).size.width / 4,
-                          child: const Icon(Icons.play_arrow_sharp),
-                          decoration: BoxDecoration(
-                            color: Colors.greenAccent[100],
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(-100)),
-                          ),
+                        PostType(
+                          numOfDivisions: 4,
+                          bgColor: Colors.greenAccent[100]!,
+                          icon: const Icon(Icons.play_arrow_sharp),
                         ),
-                        Container(
-                          height: 35,
-                          width: MediaQuery.of(context).size.width / 4,
-                          child: const Icon(Icons.article_outlined),
-                          decoration: BoxDecoration(
-                            color: Colors.blue[100],
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(-100)),
-                          ),
+                        PostType(
+                          numOfDivisions: 4,
+                          bgColor: Colors.blue[100]!,
+                          icon: const Icon(Icons.article_outlined),
                         ),
-                        Container(
-                          height: 35,
-                          width: MediaQuery.of(context).size.width / 4,
-                          child: const Icon(Icons.group),
-                          decoration: BoxDecoration(
-                            color: Colors.brown[100],
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(-100)),
-                          ),
+                        PostType(
+                          numOfDivisions: 4,
+                          bgColor: Colors.brown[100]!,
+                          icon: const Icon(Icons.group),
                         ),
                       ],
                     ),
