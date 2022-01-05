@@ -1,50 +1,57 @@
-//import 'dart:html';
 import 'package:amber/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_login/flutter_login.dart';
 
-class AuthenticationHelper {
+class Authentication {
   static final _auth = FirebaseAuth.instance;
   static final _firestore = FirebaseFirestore.instance;
-  static late Users currentuser;
+  static late User currentUser;
+  static CollectionReference usersRef = _firestore.collection('users');
+
+  static Future<User?> getCurrentUser() async {
+    return _auth.currentUser;
+  }
+
+  static Future<AmberUser> getUser(String uid) async {
+    DocumentSnapshot doc = await usersRef.doc(uid).get();
+    return AmberUser.fromDocument(doc);
+  }
 
   static Future<String?> authUser(LoginData data) async {
-    DocumentSnapshot doc =
-        await _firestore.collection('users').doc(_auth.currentUser?.uid).get();
     try {
-      await _auth.signInWithEmailAndPassword(
+      UserCredential authResult = await _auth.signInWithEmailAndPassword(
         email: data.name,
         password: data.password,
       );
-      
-      if (doc.exists) {
-        print('Document exists on the database');
-      } else {
-        print('Document does not exist on the database');
-      }
+      currentUser = authResult.user!;
     } on FirebaseAuthException catch (e) {
       return e.message;
     }
-    currentuser = Users.fromDocument(doc);
   }
 
   static Future<String?> signupUser(SignupData data) async {
     try {
-      await _auth.createUserWithEmailAndPassword(
+      UserCredential authResult = await _auth.createUserWithEmailAndPassword(
         email: data.name!,
         password: data.password!,
       );
-      return null;
-    } on FirebaseAuthException catch (e) {
-      return e.message;
-    } finally {
-      Map<String, String> map = {};
-      map.addAll({'email': '${data.name}'});
+      currentUser = authResult.user!;
+
+      Map<String, dynamic> map = {};
+      map.addAll({
+        'id': currentUser.uid,
+        'email': '${data.name}',
+        'time_created': Timestamp.now(),
+        'profilePhotoURL': '',
+      });
       data.additionalSignupData?.forEach((key, value) {
         map.addAll({key: value});
       });
-      _firestore.collection('users').doc(_auth.currentUser?.uid).set(map);
+      _firestore.collection('users').doc(currentUser.uid).set(map);
+      return null;
+    } on FirebaseAuthException catch (e) {
+      return e.message;
     }
   }
 
