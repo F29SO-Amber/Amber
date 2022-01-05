@@ -187,6 +187,21 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   onPressed: () {},
                 ),
+                // ElevatedButton(
+                //   child: const Text(
+                //     'Message',
+                //     style: TextStyle(fontWeight: FontWeight.bold),
+                //   ),
+                //   style: ElevatedButton.styleFrom(
+                //     fixedSize:
+                //         Size(MediaQuery.of(context).size.width * 0.45, 43),
+                //     primary: Colors.grey[200], // background
+                //     onPrimary: Colors.black, // foreground
+                //     shape: RoundedRectangleBorder(
+                //         borderRadius: BorderRadius.circular(12)),
+                //   ),
+                //   onPressed: () {},
+                // ),
                 ElevatedButton(
                   child: const Text('Follow'),
                   style: ElevatedButton.styleFrom(
@@ -201,7 +216,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ],
             ),
             const SizedBox(
-              height: 30,
+              height: 20,
               width: 200,
             ),
             Row(
