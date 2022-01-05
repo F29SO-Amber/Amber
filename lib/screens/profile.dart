@@ -235,7 +235,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 Container(
                   height: 35,
                   width: MediaQuery.of(context).size.width / 4,
-                  child: const Icon(Icons.play_arrow_sharp),
+                  child: const Icon(Icons.play_arrow_rounded),
                   decoration: BoxDecoration(
                     color: Colors.greenAccent[100],
                     borderRadius: const BorderRadius.all(Radius.circular(-100)),
