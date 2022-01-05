@@ -171,66 +171,77 @@ class _ProfilePageState extends State<ProfilePage> {
               width: 200,
             ),
             Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  ElevatedButton(
-                    child: const Text('Message'),
-                    style: ElevatedButton.styleFrom(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                OutlinedButton(
+                  child: const Text('Message'),
+                  style: OutlinedButton.styleFrom(
+                    fixedSize:
+                        Size(MediaQuery.of(context).size.width * 0.45, 43),
+                    primary: Colors.black,
+                    side: BorderSide(width: 1.0, color: Colors.amber.shade300),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  onPressed: () {},
+                ),
+                ElevatedButton(
+                  child: const Text('Follow'),
+                  style: ElevatedButton.styleFrom(
                       fixedSize:
                           Size(MediaQuery.of(context).size.width * 0.45, 43),
-                      primary: Colors.white, // background
+                      primary: Colors.amber.shade300, // background
                       onPrimary: Colors.black, // foreground
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12)),
-                    ),
-                    onPressed: () {},
-                  ),
-                  // SizedBox(
-                  //   width: 10.0,
-                  // ),
-                  ElevatedButton(
-                    child: const Text('    Follow    '),
-                    style: ElevatedButton.styleFrom(
-                        fixedSize:
-                            Size(MediaQuery.of(context).size.width * 0.45, 43),
-                        primary: Colors.amber.shade300, // background
-                        onPrimary: Colors.black, // foreground
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12))),
-                    onPressed: () {},
-                  ),
-                ]),
+                          borderRadius: BorderRadius.circular(12))),
+                  onPressed: () {},
+                ),
+              ],
+            ),
             const SizedBox(
-              height: 20,
+              height: 30,
               width: 200,
             ),
             Row(
               // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               //crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                SizedBox(
+                Container(
                   height: 35,
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  child: TextButton(
-                    child: const Icon(Icons.camera_alt),
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.red[100], // background
-                      onPrimary: Colors.black, // foreground
-                    ),
-                    onPressed: () {},
+                  width: MediaQuery.of(context).size.width / 4,
+                  child: const Icon(Icons.image),
+                  decoration: BoxDecoration(
+                    color: Colors.red[100],
+                    borderRadius: const BorderRadius.all(Radius.circular(-100)),
                   ),
                 ),
-                SizedBox(
+                Container(
                   height: 35,
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  child: TextButton(
-                    child: const Icon(Icons.play_arrow_rounded),
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.greenAccent[100], // background
-                      onPrimary: Colors.black, // foreground
-                    ),
-                    onPressed: () {},
+                  width: MediaQuery.of(context).size.width / 4,
+                  child: const Icon(Icons.play_arrow_sharp),
+                  decoration: BoxDecoration(
+                    color: Colors.greenAccent[100],
+                    borderRadius: const BorderRadius.all(Radius.circular(-100)),
+                  ),
+                ),
+                Container(
+                  height: 35,
+                  width: MediaQuery.of(context).size.width / 4,
+                  child: const Icon(Icons.article_outlined),
+                  decoration: BoxDecoration(
+                    color: Colors.blue[100],
+                    borderRadius: const BorderRadius.all(Radius.circular(-100)),
+                  ),
+                ),
+                Container(
+                  height: 35,
+                  width: MediaQuery.of(context).size.width / 4,
+                  child: const Icon(Icons.group),
+                  decoration: BoxDecoration(
+                    color: Colors.brown[100],
+                    borderRadius: const BorderRadius.all(Radius.circular(-100)),
                   ),
                 ),
               ],
