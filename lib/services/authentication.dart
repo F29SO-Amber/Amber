@@ -2,17 +2,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_login/flutter_login.dart';
 
-class AuthenticationHelper {
+class Authentication {
   static final _auth = FirebaseAuth.instance;
   static final _firestore = FirebaseFirestore.instance;
+  static late User currentUser;
 
   static Future<String?> authUser(LoginData data) async {
     try {
-      await _auth.signInWithEmailAndPassword(
+      UserCredential authResult = await _auth.signInWithEmailAndPassword(
         email: data.name,
         password: data.password,
       );
-      return null;
+      currentUser = authResult.user!;
     } on FirebaseAuthException catch (e) {
       return e.message;
     }
@@ -20,20 +21,26 @@ class AuthenticationHelper {
 
   static Future<String?> signupUser(SignupData data) async {
     try {
-      await _auth.createUserWithEmailAndPassword(
+      UserCredential authResult = await _auth.createUserWithEmailAndPassword(
         email: data.name!,
         password: data.password!,
       );
-      return null;
-    } on FirebaseAuthException catch (e) {
-      return e.message;
-    } finally {
-      Map<String, String> map = {};
-      map.addAll({'email': '${data.name}'});
+      currentUser = authResult.user!;
+
+      Map<String, dynamic> map = {};
+      map.addAll({
+        'id': currentUser.uid,
+        'email': '${data.name}',
+        'time_created': Timestamp.now(),
+        'profilePhotoURL': '',
+      });
       data.additionalSignupData?.forEach((key, value) {
         map.addAll({key: value});
       });
-      _firestore.collection('users').add(map);
+      _firestore.collection('users').doc(currentUser.uid).set(map);
+      return null;
+    } on FirebaseAuthException catch (e) {
+      return e.message;
     }
   }
 

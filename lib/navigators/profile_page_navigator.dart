@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:amber/screens/extra.dart';
 import 'package:amber/screens/login.dart';
-import 'package:amber/screens/profile.dart';
+import 'package:amber/screens/profile_screen/profile.dart';
+import 'package:amber/services/authentication.dart';
 
 class ProfilePageNavigator extends StatefulWidget {
   const ProfilePageNavigator({Key? key}) : super(key: key);
@@ -24,13 +25,17 @@ class _ProfilePageNavigatorState extends State<ProfilePageNavigator> {
           builder: (BuildContext context) {
             switch (settings.name) {
               case '/':
-                return const ProfilePage();
+                return ProfilePage(
+                  profileID: Authentication.currentUser.uid,
+                );
               case '/home2':
                 return const ExtraPage(pageName: 'From Profile Page');
               case LoginScreen.id:
                 return const LoginScreen();
               default:
-                return const ProfilePage();
+                return ProfilePage(
+                  profileID: Authentication.currentUser.uid,
+                );
             }
           },
         );
