@@ -1,9 +1,11 @@
 import 'package:amber/screens/chats.dart';
-import 'package:amber/screens/discover.dart';
+import 'package:amber/screens/discovery_screen/discover.dart';
 import 'package:amber/screens/navbar.dart';
 import 'package:amber/screens/post.dart';
 import 'package:amber/screens/login.dart';
+import 'package:amber/screens/temp.dart';
 import 'package:amber/services/authentication.dart';
+import 'package:amber/services/database_service.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -24,6 +26,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // DatabaseService.testMethod('am2024');
     return MaterialApp(
       title: 'Login Demo',
       theme: ThemeData(

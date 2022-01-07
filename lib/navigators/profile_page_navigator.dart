@@ -1,3 +1,4 @@
+import 'package:amber/screens/edit_profile_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:amber/screens/extra.dart';
@@ -32,6 +33,8 @@ class _ProfilePageNavigatorState extends State<ProfilePageNavigator> {
                 return const ExtraPage(pageName: 'From Profile Page');
               case LoginScreen.id:
                 return const LoginScreen();
+              // case EditProfilePage.id:
+              //   return const EditProfilePage();
               default:
                 return ProfilePage(
                   profileID: Authentication.currentUser.uid,

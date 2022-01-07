@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:amber/screens/extra.dart';
-import 'package:amber/screens/discover.dart';
+import 'package:amber/screens/discovery_screen/discover.dart';
 
 class DiscoverPageNavigator extends StatefulWidget {
   const DiscoverPageNavigator({Key? key}) : super(key: key);

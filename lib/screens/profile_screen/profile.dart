@@ -1,4 +1,5 @@
 import 'package:amber/models/user.dart';
+import 'package:amber/screens/edit_profile_screen.dart';
 import 'package:amber/services/database_service.dart';
 import 'package:flutter/material.dart';
 import 'package:amber/constants.dart';
@@ -20,6 +21,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  String currentUserID = Authentication.currentUser.uid;
   // am2024@hw.ac.uk
   // 1234567
 
@@ -65,9 +67,12 @@ class _ProfilePageState extends State<ProfilePage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const SizedBox(height: 10),
-                    const ProfilePicture(
-                      side: 100,
-                      pathToImage: 'assets/img.png',
+                    const Padding(
+                      padding: EdgeInsets.all(20.0),
+                      child: ProfilePicture(
+                        side: 100,
+                        pathToImage: 'assets/img.png',
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 3.0),
@@ -110,37 +115,60 @@ class _ProfilePageState extends State<ProfilePage> {
                       ],
                     ),
                     const SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        OutlinedButton(
-                          child: const Text('Message'),
-                          style: OutlinedButton.styleFrom(
-                            fixedSize: Size(
-                                MediaQuery.of(context).size.width * 0.45, 43),
-                            primary: Colors.black,
-                            side: BorderSide(
-                                width: 1.0, color: Colors.amber.shade300),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                          onPressed: () {},
-                        ),
-                        ElevatedButton(
-                          child: const Text('Follow'),
-                          style: ElevatedButton.styleFrom(
+                    widget.profileID == currentUserID
+                        ? OutlinedButton(
+                            child: const Text('Edit Profile'),
+                            style: OutlinedButton.styleFrom(
+                              backgroundColor: Colors.amber.shade50,
                               fixedSize: Size(
-                                  MediaQuery.of(context).size.width * 0.45, 43),
-                              primary: Colors.amber.shade300, // background
-                              onPrimary: Colors.black, // foreground
+                                  MediaQuery.of(context).size.width * 0.90, 43),
+                              primary: Colors.black,
+                              side: BorderSide(
+                                  width: 1.0, color: Colors.amber.shade500),
                               shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12))),
-                          onPressed: () {},
-                        ),
-                      ],
-                    ),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            onPressed: () {
+                              Navigator.pushNamed(context, EditProfilePage.id);
+                            },
+                          )
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              OutlinedButton(
+                                child: const Text('Message'),
+                                style: OutlinedButton.styleFrom(
+                                  fixedSize: Size(
+                                      MediaQuery.of(context).size.width * 0.45,
+                                      43),
+                                  primary: Colors.black,
+                                  side: BorderSide(
+                                      width: 1.0, color: Colors.amber.shade300),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                                onPressed: () {},
+                              ),
+                              ElevatedButton(
+                                child: const Text('Follow'),
+                                style: ElevatedButton.styleFrom(
+                                    fixedSize: Size(
+                                        MediaQuery.of(context).size.width *
+                                            0.45,
+                                        43),
+                                    primary:
+                                        Colors.amber.shade300, // background
+                                    onPrimary: Colors.black, // foreground
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(12))),
+                                onPressed: () {},
+                              ),
+                            ],
+                          ),
                     const SizedBox(
                       height: 20,
                       width: 200,

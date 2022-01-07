@@ -10,19 +10,16 @@ class ProfilePicture extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20),
-      child: Container(
-        height: side,
-        width: side,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(pathToImage),
-            fit: BoxFit.fill,
-          ),
-          shape: BoxShape.rectangle,
-          borderRadius: BorderRadius.circular(33.0),
+    return Container(
+      height: side,
+      width: side,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage(pathToImage),
+          fit: BoxFit.fill,
         ),
+        shape: BoxShape.rectangle,
+        borderRadius: BorderRadius.circular(33.0),
       ),
     );
   }

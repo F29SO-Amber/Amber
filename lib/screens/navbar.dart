@@ -21,7 +21,7 @@ class ConvexAppBarDemo extends StatefulWidget {
 class _ConvexAppBarDemoState extends State<ConvexAppBarDemo>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  int _selectedIndex = 4;
+  int _selectedIndex = 1;
 
   final List<GlobalKey<NavigatorState>> _navigatorKeys = [
     homePageNavigatorKey,

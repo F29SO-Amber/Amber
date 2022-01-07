@@ -11,4 +11,30 @@ class DatabaseService {
     DocumentSnapshot doc = await usersRef.doc(uid).get();
     return AmberUser.fromDocument(doc);
   }
+
+  Future<String?> isUserValueUnique(String email) async {
+    QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore
+        .collection('users')
+        .where('email', isEqualTo: email)
+        .get();
+
+    List<QueryDocumentSnapshot> docs = snapshot.docs;
+    for (var doc in docs) {
+      if (doc.data() != null) {
+        var data = doc.data() as Map<String, dynamic>;
+        var name = data['email']; // You can get other data in this manner.
+        print(name);
+      }
+    }
+
+    return snapshot.docs.isEmpty ? 'nullq' : 'Nope';
+  }
+
+  // Future<DatabaseService> x() async {
+  //   QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore
+  //       .collection('users')
+  //       .where('email', isEqualTo: email)
+  //       .get();
+  //   return DatabaseService();
+  // }
 }
