@@ -131,7 +131,11 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                             ),
                             onPressed: () {
-                              Navigator.pushNamed(context, EditProfilePage.id);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => EditProfilePage(
+                                          currentUserID: currentUserID)));
                             },
                           )
                         : Row(
