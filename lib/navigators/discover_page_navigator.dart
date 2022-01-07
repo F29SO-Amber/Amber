@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:amber/screens/extra.dart';
 import 'package:amber/screens/discovery_screen/discover.dart';
 
 class DiscoverPageNavigator extends StatefulWidget {
@@ -24,8 +23,6 @@ class _DiscoverPageNavigatorState extends State<DiscoverPageNavigator> {
             switch (settings.name) {
               case '/':
                 return const DiscoverPage();
-              case '/discover2':
-                return const ExtraPage(pageName: 'From Discover Page');
               default:
                 return const DiscoverPage();
             }

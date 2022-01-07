@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:amber/screens/extra.dart';
 import 'package:amber/screens/home.dart';
+import 'package:amber/screens/extra.dart';
 
 class HomePageNavigator extends StatefulWidget {
   const HomePageNavigator({Key? key}) : super(key: key);

@@ -27,14 +27,6 @@ class DatabaseService {
       }
     }
 
-    return snapshot.docs.isEmpty ? 'nullq' : 'Nope';
+    return snapshot.docs.isEmpty ? 'null' : 'Nope';
   }
-
-  // Future<DatabaseService> x() async {
-  //   QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore
-  //       .collection('users')
-  //       .where('email', isEqualTo: email)
-  //       .get();
-  //   return DatabaseService();
-  // }
 }

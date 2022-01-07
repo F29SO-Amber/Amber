@@ -1,4 +1,3 @@
-import 'package:amber/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -52,10 +51,6 @@ class _ConvexAppBarDemoState extends State<ConvexAppBarDemo>
   Widget build(BuildContext context) {
     return WillPopScope(
       child: Scaffold(
-        // appBar: AppBar(
-        //   title: const Text('ConvexAppBar'),
-        //   backgroundColor: kAppColor,
-        // ),
         body: SafeArea(
           top: false,
           child: IndexedStack(

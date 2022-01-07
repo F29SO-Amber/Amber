@@ -1,19 +1,10 @@
-import 'package:amber/screens/chats.dart';
-import 'package:amber/screens/discovery_screen/discover.dart';
-import 'package:amber/screens/navbar.dart';
-import 'package:amber/screens/post.dart';
-import 'package:amber/screens/login.dart';
-import 'package:amber/screens/temp.dart';
-import 'package:amber/services/authentication.dart';
-import 'package:amber/services/database_service.dart';
-import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-import 'package:amber/screens/profile_screen/profile.dart';
-import 'package:amber/screens/home.dart';
-import 'package:amber/firebase_options.dart';
 import 'package:amber/constants.dart';
+import 'package:amber/screens/login.dart';
+import 'package:amber/screens/navbar.dart';
+import 'package:amber/firebase_options.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
