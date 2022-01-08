@@ -1,30 +1,29 @@
 import 'package:amber/models/user.dart';
+import 'package:amber/screens/profile_screen/widgets/custom_outlined_button.dart';
+import 'package:amber/screens/profile_screen/widgets/profile_picture.dart';
 import 'package:amber/screens/profile_screen/widgets/progress.dart';
 import 'package:amber/services/database_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class EditProfilePage extends StatefulWidget {
   final String currentUserID;
 
-  // const EditProfilePage({Key? key, required this.currentUserId})
-  //     : super(key: key);
-  // static const id = '/edit_profile';
-  EditProfilePage({required this.currentUserID});
+  const EditProfilePage({Key? key, required this.currentUserID})
+      : super(key: key);
+  static const id = '/edit_profile';
+  // const EditProfilePage({required this.currentUserID});
   @override
   State<EditProfilePage> createState() => _EditProfilePageState();
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController displayNameController = TextEditingController();
   late AmberUser user;
   bool isLoading = false;
   bool _displayNameValid = true;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getUser();
   }
@@ -73,9 +72,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
     });
     if (_displayNameValid) {
       DatabaseService.usersRef.doc(widget.currentUserID).update({
-        "name": displayNameController.text,
+        "username": displayNameController.text,
       });
-      SnackBar snackbar = SnackBar(content: Text("Profile updated!"));
+      SnackBar snackbar = const SnackBar(content: Text("Profile updated!"));
       ScaffoldMessenger.of(context).showSnackBar(snackbar);
     }
   }
@@ -83,72 +82,46 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //key: _scaffoldKey,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Text(
+        backgroundColor: Colors.amber,
+        title: const Text(
           "Edit profile",
-          style: TextStyle(
-            color: Colors.black,
-          ),
+          style: TextStyle(fontSize: 18, color: Colors.white),
         ),
         actions: <Widget>[
           IconButton(
-            //onPressed: onPressed,
-            icon: Icon(
-              Icons.done,
-              color: Colors.green,
-              size: 30.0,
-            ),
+            icon: const Icon(Icons.done, color: Colors.green, size: 30.0),
             onPressed: () => Navigator.pop(context),
-          )
+          ),
         ],
       ),
       body: isLoading
           ? circularProgress()
           : ListView(
               children: <Widget>[
-                Container(
-                  child: Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(
-                          top: 16.0,
-                          bottom: 8.0,
-                        ),
-                        child: CircleAvatar(
-                          radius: 50.0,
-                          // backgroundImage: Cache(user.profilePhotoURL),
-                        ),
+                Column(
+                  children: <Widget>[
+                    const Padding(
+                      padding: EdgeInsets.only(top: 25.0),
+                      child: ProfilePicture(
+                        pathToImage: 'assets/img.png',
+                        side: 90,
                       ),
-                      Padding(
-                        padding: EdgeInsets.all(16.0),
-                        child: Column(
-                          children: <Widget>[
-                            buildDisplayNameField(),
-                          ],
-                        ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: Column(
+                        children: <Widget>[
+                          buildDisplayNameField(),
+                        ],
                       ),
-                      ElevatedButton(
-                        onPressed: updateProfileData,
-                        child: Text(
-                          "Update Profile",
-                          style: TextStyle(
-                            //     color: Colors.black,
-                            fontSize: 15.0,
-                            //     fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                            fixedSize: Size(
-                                MediaQuery.of(context).size.width * 0.45, 43),
-                            primary: Colors.amber.shade300, // background
-                            onPrimary: Colors.black, // foreground
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12))),
-                      ),
-                    ],
-                  ),
+                    ),
+                    CustomOutlinedButton(
+                      buttonText: 'Update Profile',
+                      widthFactor: 0.90,
+                      onPress: updateProfileData,
+                    ),
+                  ],
                 ),
               ],
             ),

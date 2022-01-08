@@ -1,3 +1,4 @@
+import 'package:amber/screens/profile_screen/widgets/custom_outlined_button.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -117,45 +118,27 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     const SizedBox(height: 20),
                     widget.profileID == currentUserID
-                        ? OutlinedButton(
-                            child: const Text('Edit Profile'),
-                            style: OutlinedButton.styleFrom(
-                              backgroundColor: Colors.amber.shade50,
-                              fixedSize: Size(
-                                  MediaQuery.of(context).size.width * 0.90, 43),
-                              primary: Colors.black,
-                              side: BorderSide(
-                                  width: 1.0, color: Colors.amber.shade500),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
-                            onPressed: () {
+                        ? CustomOutlinedButton(
+                            buttonText: 'Edit Profile',
+                            widthFactor: 0.9,
+                            onPress: () {
                               Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => EditProfilePage(
-                                          currentUserID: currentUserID)));
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => EditProfilePage(
+                                      currentUserID: currentUserID),
+                                ),
+                              );
                             },
                           )
                         : Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
-                              OutlinedButton(
-                                child: const Text('Message'),
-                                style: OutlinedButton.styleFrom(
-                                  fixedSize: Size(
-                                      MediaQuery.of(context).size.width * 0.45,
-                                      43),
-                                  primary: Colors.black,
-                                  side: BorderSide(
-                                      width: 1.0, color: Colors.amber.shade300),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                ),
-                                onPressed: () {},
+                              CustomOutlinedButton(
+                                buttonText: 'Message',
+                                widthFactor: 0.45,
+                                onPress: () {},
                               ),
                               ElevatedButton(
                                 child: const Text('Follow'),

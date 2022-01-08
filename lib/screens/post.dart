@@ -13,18 +13,14 @@ class _PostPageState extends State<PostPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: kAppColor,
+        title: const Text(kAppName,
+            style: TextStyle(fontSize: 18, color: Colors.white)),
+      ),
       backgroundColor: createRandomColor(),
-      body: Center(
-        child: ElevatedButton(
-          child: const Text('Post'),
-          onPressed: () {
-            Navigator.pushNamed(context, '/post2');
-          },
-          style: ElevatedButton.styleFrom(
-            primary: Colors.amber, // background
-            onPrimary: Colors.black, // foreground
-          ),
-        ),
+      body: Column(
+        children: [],
       ),
     );
   }
