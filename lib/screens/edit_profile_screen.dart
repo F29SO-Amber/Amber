@@ -4,6 +4,7 @@ import 'package:amber/screens/profile_screen/widgets/profile_picture.dart';
 import 'package:amber/screens/profile_screen/widgets/progress.dart';
 import 'package:amber/services/database_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class EditProfilePage extends StatefulWidget {
@@ -12,18 +13,20 @@ class EditProfilePage extends StatefulWidget {
   const EditProfilePage({Key? key, required this.currentUserID})
       : super(key: key);
   static const id = '/edit_profile';
-  // const EditProfilePage({required this.currentUserID});
+  // EditProfilePage({required this.currentUserID});
   @override
   State<EditProfilePage> createState() => _EditProfilePageState();
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController displayNameController = TextEditingController();
   late AmberUser user;
   bool isLoading = false;
   bool _displayNameValid = true;
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
     getUser();
   }
@@ -72,7 +75,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     });
     if (_displayNameValid) {
       DatabaseService.usersRef.doc(widget.currentUserID).update({
-        "username": displayNameController.text,
+        "name": displayNameController.text,
       });
       SnackBar snackbar = const SnackBar(content: Text("Profile updated!"));
       ScaffoldMessenger.of(context).showSnackBar(snackbar);
@@ -82,14 +85,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //key: _scaffoldKey,
       appBar: AppBar(
         backgroundColor: Colors.amber,
         title: const Text(
           "Edit profile",
-          style: TextStyle(fontSize: 18, color: Colors.white),
+          style: TextStyle(fontSize: 18, color: Colors.black),
         ),
         actions: <Widget>[
           IconButton(
+            //onPressed: onPressed,
             icon: const Icon(Icons.done, color: Colors.green, size: 30.0),
             onPressed: () => Navigator.pop(context),
           ),
