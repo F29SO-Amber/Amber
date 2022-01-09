@@ -18,10 +18,12 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
-  TextEditingController displayNameController = TextEditingController();
+  TextEditingController displayUsernameController = TextEditingController();
   late AmberUser user;
   bool isLoading = false;
   bool _displayNameValid = true;
+  bool _usernameValid = true;
+
   @override
   void initState() {
     super.initState();
@@ -35,7 +37,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     DocumentSnapshot doc =
         await DatabaseService.usersRef.doc(widget.currentUserID).get();
     user = AmberUser.fromDocument(doc);
-    displayNameController.text = user.username;
+    displayUsernameController.text = user.username;
     setState(() {
       isLoading = false;
     });
@@ -45,34 +47,56 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Padding(
-          padding: EdgeInsets.only(top: 12.0),
-          child: Text(
-            "Username",
-            style: TextStyle(color: Colors.grey),
-          ),
-        ),
         TextField(
-          controller: displayNameController,
+          controller: displayUsernameController,
           decoration: InputDecoration(
-            hintText: "Update Display Name ",
-            errorText: _displayNameValid ? null : "Username too short!",
+            labelText: 'Username',
+            prefixIcon: const Icon(Icons.person, color: Colors.amber),
+            border: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(90.0)),
+              borderSide: BorderSide(width: 2, color: Colors.amber),
+            ),
+            enabledBorder: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(90.0)),
+              borderSide: BorderSide.none,
+            ),
+            focusedBorder: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(90.0)),
+              borderSide: BorderSide(width: 2, color: Colors.amber),
+            ),
+            filled: true,
+            fillColor: Colors.amber.shade50,
+            hintText: 'Update Username',
+            errorText: _usernameValid ? null : "Username invalid or taken",
           ),
+          onChanged: (value) {
+            setState(() {
+              isUsernameValid(value);
+            });
+          },
         ),
       ],
     );
   }
 
+  Future<void> isUsernameValid(value) async {
+    _usernameValid = await FirebaseFirestore.instance
+        .collection('users')
+        .where('username', isEqualTo: value)
+        .get()
+        .then((value) => value.size > 0 ? false : true);
+  }
+
   updateProfileData() {
-    setState(() {
-      displayNameController.text.trim().length < 3 ||
-              displayNameController.text.isEmpty
-          ? _displayNameValid = false
-          : _displayNameValid = true;
-    });
-    if (_displayNameValid) {
+    // setState(() {
+    //   displayUsernameController.text.trim().length < 3 ||
+    //           displayUsernameController.text.isEmpty
+    //       ? _displayNameValid = false
+    //       : _displayNameValid = true;
+    // });
+    if (_usernameValid) {
       DatabaseService.usersRef.doc(widget.currentUserID).update({
-        "username": displayNameController.text,
+        "username": displayUsernameController.text,
       });
       SnackBar snackbar = const SnackBar(content: Text("Profile updated!"));
       ScaffoldMessenger.of(context).showSnackBar(snackbar);
@@ -109,7 +133,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.all(16.0),
                       child: Column(
                         children: <Widget>[
                           buildDisplayNameField(),
