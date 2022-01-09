@@ -1,7 +1,12 @@
-import 'package:amber/screens/profile_screen/widgets/custom_outlined_button.dart';
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'dart:io';
 
+import 'package:amber/screens/profile_screen/widgets/custom_outlined_button.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:amber/constants.dart';
 import 'package:amber/models/user.dart';
 import 'package:amber/screens/login.dart';
@@ -24,8 +29,34 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   String currentUserID = Authentication.currentUser.uid;
-  // am2024@hw.ac.uk
-  // 1234567
+  String imageURL = '';
+
+  uploadImage() async {
+    final _storage = FirebaseStorage.instance;
+    final _picker = ImagePicker();
+    XFile? image;
+
+    // Permission.photos.request();
+    // var permissionStatus = await Permission.photos.status;
+    // if (permissionStatus.isGranted) {
+    image = await _picker.pickImage(source: ImageSource.gallery);
+    var file = File('${image?.path}');
+
+    if (image != null) {
+      var snapshot =
+          _storage.ref().child('profile_pics/$currentUserID').putFile(file);
+
+      var downloadedURL = (await snapshot).ref.getDownloadURL();
+      setState(() async {
+        imageURL = await downloadedURL;
+      });
+    } else {
+      print("No path received");
+    }
+    // } else {
+    //   print('Grant permissions and try again');
+    // }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,12 +100,24 @@ class _ProfilePageState extends State<ProfilePage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const SizedBox(height: 10),
-                    const Padding(
-                      padding: EdgeInsets.all(20.0),
-                      child: ProfilePicture(
-                        side: 100,
-                        pathToImage: 'assets/img.png',
-                      ),
+                    // const Padding(
+                    //   padding: EdgeInsets.all(20.0),
+                    //   child: ProfilePicture(
+                    //     side: 100,
+                    //     pathToImage: 'assets/img.png',
+                    //   ),
+                    // ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        (imageURL != '')
+                            ? Image.network(imageURL)
+                            : const FlutterLogo(size: 100),
+                        ElevatedButton(
+                          child: const Text('Upload Image'),
+                          onPressed: () => uploadImage(),
+                        )
+                      ],
                     ),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 3.0),
@@ -93,7 +136,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             Icons.verified,
                             color: Colors.amber,
                             size: 22,
-                          )
+                          ),
                         ],
                       ),
                     ),
