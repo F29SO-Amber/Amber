@@ -59,11 +59,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
             ),
             enabledBorder: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(90.0)),
-              borderSide: BorderSide.none,
+              //borderSide: BorderSide.none,
+              borderSide: BorderSide(width: 2, color: Colors.grey),
             ),
             focusedBorder: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(90.0)),
-              borderSide: BorderSide(width: 2, color: Colors.amber),
+              borderSide: BorderSide(width: 2, color: Colors.grey),
             ),
             filled: true,
             fillColor: Colors.amber.shade50,
