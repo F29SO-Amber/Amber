@@ -47,9 +47,8 @@ class _ProfilePageState extends State<ProfilePage> {
           _storage.ref().child('profile_pics/$currentUserID').putFile(file);
 
       var downloadedURL = (await snapshot).ref.getDownloadURL();
-      setState(() async {
-        imageURL = await downloadedURL;
-      });
+      imageURL = await downloadedURL;
+      setState(() {});
     } else {
       print("No path received");
     }
@@ -111,7 +110,12 @@ class _ProfilePageState extends State<ProfilePage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         (imageURL != '')
-                            ? Image.network(imageURL)
+                            ? Image.network(
+                                imageURL,
+                                width: 100,
+                                height: 100,
+                                fit: BoxFit.fill,
+                              )
                             : const FlutterLogo(size: 100),
                         ElevatedButton(
                           child: const Text('Upload Image'),
