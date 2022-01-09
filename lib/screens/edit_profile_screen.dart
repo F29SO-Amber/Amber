@@ -110,7 +110,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         backgroundColor: Colors.amber,
         title: const Text(
           "Edit profile",
-          style: TextStyle(fontSize: 18, color: Colors.white),
+          style: TextStyle(fontSize: 18, color: Colors.black),
         ),
         actions: <Widget>[
           IconButton(
