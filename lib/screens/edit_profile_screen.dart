@@ -49,6 +49,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       children: <Widget>[
         TextField(
           controller: displayUsernameController,
+          //textAlign: TextAlign.left,
           decoration: InputDecoration(
             labelText: 'Username',
             prefixIcon: const Icon(Icons.person, color: Colors.amber),
@@ -140,10 +141,28 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         ],
                       ),
                     ),
-                    CustomOutlinedButton(
-                      buttonText: 'Update Profile',
-                      widthFactor: 0.90,
-                      onPress: updateProfileData,
+                    // CustomOutlinedButton(
+                    //   buttonText: 'Update Profile',
+                    //   widthFactor: 0.90,
+                    //   onPress: updateProfileData,
+                    // ),
+                    ElevatedButton(
+                      onPressed: updateProfileData,
+                      child: Text(
+                        "Update Profile",
+                        style: TextStyle(
+                          //     color: Colors.black,
+                          fontSize: 15.0,
+                          //     fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                          fixedSize: Size(
+                              MediaQuery.of(context).size.width * 0.65, 43),
+                          primary: Colors.amber.shade300, // background
+                          onPrimary: Colors.black, // foreground
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(90.0))),
                     ),
                   ],
                 ),
