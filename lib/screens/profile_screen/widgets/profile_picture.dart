@@ -1,12 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class ProfilePicture extends StatelessWidget {
-  const ProfilePicture(
-      {Key? key, required this.side, required this.pathToImage})
+  const ProfilePicture({Key? key, required this.side, this.image, this.path})
       : super(key: key);
 
   final double side;
-  final String pathToImage;
+  final ImageProvider? image;
+  final String? path;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +17,7 @@ class ProfilePicture extends StatelessWidget {
       width: side,
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage(pathToImage),
+          image: image == null ? AssetImage(path!) : image!,
           fit: BoxFit.fill,
         ),
         shape: BoxShape.rectangle,

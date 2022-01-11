@@ -43,7 +43,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
           List<UserCard> list = [];
           snapshot.data?.docs.forEach(
             (doc) {
-              AmberUser user = AmberUser.fromDocument(doc);
+              UserModel user = UserModel.fromDocument(doc);
               list.add(
                 UserCard(
                   name: user.name,

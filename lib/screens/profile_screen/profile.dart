@@ -3,10 +3,8 @@ import 'dart:io';
 import 'package:amber/screens/profile_screen/widgets/custom_outlined_button.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:amber/constants.dart';
 import 'package:amber/models/user.dart';
 import 'package:amber/screens/login.dart';
@@ -64,7 +62,7 @@ class _ProfilePageState extends State<ProfilePage> {
         stream: DatabaseService.getUser(widget.profileID).asStream(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            var userData = snapshot.data as AmberUser;
+            var userData = snapshot.data as UserModel;
             return Scaffold(
               appBar: AppBar(
                 title: Text(
@@ -84,8 +82,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       Authentication.signOutUser();
                       Navigator.of(context, rootNavigator: true)
                           .pushReplacement(
-                        MaterialPageRoute(
-                            builder: (context) => const LoginScreen()),
+                        MaterialPageRoute(builder: (context) => LoginScreen()),
                       );
                     },
                   ),
@@ -99,29 +96,12 @@ class _ProfilePageState extends State<ProfilePage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const SizedBox(height: 10),
-                    // const Padding(
-                    //   padding: EdgeInsets.all(20.0),
-                    //   child: ProfilePicture(
-                    //     side: 100,
-                    //     pathToImage: 'assets/img.png',
-                    //   ),
-                    // ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        (imageURL != '')
-                            ? Image.network(
-                                imageURL,
-                                width: 100,
-                                height: 100,
-                                fit: BoxFit.fill,
-                              )
-                            : const FlutterLogo(size: 100),
-                        ElevatedButton(
-                          child: const Text('Upload Image'),
-                          onPressed: () => uploadImage(),
-                        )
-                      ],
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: ProfilePicture(
+                        side: 100,
+                        image: userData.profilePhoto,
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 3.0),

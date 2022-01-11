@@ -26,7 +26,7 @@ class _ProfilePageNavigatorState extends State<ProfilePageNavigator> {
               case '/':
                 return ProfilePage(profileID: Authentication.currentUser.uid);
               case LoginScreen.id:
-                return const LoginScreen();
+                return LoginScreen();
               // case EditProfilePage.id:
               //   return const EditProfilePage();
               default:

@@ -19,6 +19,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // DatabaseService.testMethod('am2024');
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Login Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSwatch(
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: LoginScreen.id,
       routes: {
-        LoginScreen.id: (context) => const LoginScreen(),
+        LoginScreen.id: (context) => LoginScreen(),
         ConvexAppBarDemo.id: (context) => const ConvexAppBarDemo()
       },
     );

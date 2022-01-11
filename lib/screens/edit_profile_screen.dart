@@ -1,28 +1,33 @@
+import 'dart:io';
+
 import 'package:amber/models/user.dart';
 import 'package:amber/screens/profile_screen/widgets/custom_outlined_button.dart';
 import 'package:amber/screens/profile_screen/widgets/profile_picture.dart';
 import 'package:amber/screens/profile_screen/widgets/progress.dart';
 import 'package:amber/services/database_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class EditProfilePage extends StatefulWidget {
+  static const id = '/edit_profile';
   final String currentUserID;
 
   const EditProfilePage({Key? key, required this.currentUserID})
       : super(key: key);
-  static const id = '/edit_profile';
-  // const EditProfilePage({required this.currentUserID});
+
   @override
   State<EditProfilePage> createState() => _EditProfilePageState();
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
   TextEditingController displayUsernameController = TextEditingController();
-  late AmberUser user;
+  late UserModel user;
   bool isLoading = false;
-  bool _displayNameValid = true;
+  String imageURL = '';
   bool _usernameValid = true;
+  File? file;
 
   @override
   void initState() {
@@ -30,17 +35,41 @@ class _EditProfilePageState extends State<EditProfilePage> {
     getUser();
   }
 
+  Future<void> chooseImage() async {
+    XFile? xFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+    file = File('${xFile?.path}');
+    setState(() {});
+  }
+
+  Future<String> uploadImage() async {
+    TaskSnapshot taskSnapshot = await FirebaseStorage.instance
+        .ref()
+        .child('profile')
+        .child(widget.currentUserID)
+        .putFile(file!);
+
+    return taskSnapshot.ref.getDownloadURL();
+  }
+
+  updateProfile() async {
+    Map<String, Object?> map = {};
+    if (file != null && _usernameValid) {
+      map['profilePhotoURL'] = await uploadImage();
+      map['username'] = displayUsernameController.text;
+      await DatabaseService.usersRef.doc(widget.currentUserID).update(map);
+      SnackBar snackBar = const SnackBar(content: Text("Profile updated!"));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+  }
+
   getUser() async {
     setState(() {
       isLoading = true;
     });
-    DocumentSnapshot doc =
-        await DatabaseService.usersRef.doc(widget.currentUserID).get();
-    user = AmberUser.fromDocument(doc);
+    user = UserModel.fromDocument(
+        await DatabaseService.usersRef.doc(widget.currentUserID).get());
     displayUsernameController.text = user.username;
-    setState(() {
-      isLoading = false;
-    });
+    setState(() => isLoading = false);
   }
 
   Column buildDisplayNameField() {
@@ -89,21 +118,21 @@ class _EditProfilePageState extends State<EditProfilePage> {
         .then((value) => value.size > 0 ? false : true);
   }
 
-  updateProfileData() {
-    // setState(() {
-    //   displayUsernameController.text.trim().length < 3 ||
-    //           displayUsernameController.text.isEmpty
-    //       ? _displayNameValid = false
-    //       : _displayNameValid = true;
-    // });
-    if (_usernameValid) {
-      DatabaseService.usersRef.doc(widget.currentUserID).update({
-        "username": displayUsernameController.text,
-      });
-      SnackBar snackbar = const SnackBar(content: Text("Profile updated!"));
-      ScaffoldMessenger.of(context).showSnackBar(snackbar);
-    }
-  }
+  // updateProfileData() {
+  //   // setState(() {
+  //   //   displayUsernameController.text.trim().length < 3 ||
+  //   //           displayUsernameController.text.isEmpty
+  //   //       ? _displayNameValid = false
+  //   //       : _displayNameValid = true;
+  //   // });
+  //   if (_usernameValid) {
+  //     DatabaseService.usersRef.doc(widget.currentUserID).update({
+  //       "username": displayUsernameController.text,
+  //     });
+  //     SnackBar snackbar = const SnackBar(content: Text("Profile updated!"));
+  //     ScaffoldMessenger.of(context).showSnackBar(snackbar);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -127,12 +156,18 @@ class _EditProfilePageState extends State<EditProfilePage> {
               children: <Widget>[
                 Column(
                   children: <Widget>[
-                    const Padding(
-                      padding: EdgeInsets.only(top: 25.0),
-                      child: ProfilePicture(
-                        pathToImage: 'assets/img.png',
-                        side: 90,
-                      ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        (file == null)
+                            ? InkWell(
+                                onTap: chooseImage,
+                                child: const Icon(Icons.image, size: 48))
+                            : ProfilePicture(
+                                side: 100,
+                                image: FileImage(file!),
+                              ),
+                      ],
                     ),
                     Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -148,7 +183,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     //   onPress: updateProfileData,
                     // ),
                     ElevatedButton(
-                      onPressed: updateProfileData,
+                      onPressed: updateProfile,
                       child: Text(
                         "Update Profile",
                         style: TextStyle(

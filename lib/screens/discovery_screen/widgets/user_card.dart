@@ -28,29 +28,33 @@ class UserCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Padding(
-                padding: EdgeInsets.only(left: 8.0, right: 15.0),
-                child: ProfilePicture(side: 60, pathToImage: 'assets/img.png'),
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
+              Row(
                 children: [
-                  Text(
-                    name,
-                    style: GoogleFonts.dmSans(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                      fontStyle: FontStyle.normal,
-                    ),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 8.0, right: 15.0),
+                    child: ProfilePicture(side: 60, path: 'assets/img.png'),
                   ),
-                  const SizedBox(height: 2),
-                  Text(
-                    accountType,
-                    style: GoogleFonts.dmSans(
-                      fontSize: 13,
-                      color: Colors.black38,
-                    ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        name,
+                        style: GoogleFonts.dmSans(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                          fontStyle: FontStyle.normal,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        accountType,
+                        style: GoogleFonts.dmSans(
+                          fontSize: 13,
+                          color: Colors.black38,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

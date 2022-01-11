@@ -7,9 +7,9 @@ class DatabaseService {
   static final _firestore = FirebaseFirestore.instance;
   static CollectionReference usersRef = _firestore.collection('users');
 
-  static Future<AmberUser> getUser(String uid) async {
+  static Future<UserModel> getUser(String uid) async {
     DocumentSnapshot doc = await usersRef.doc(uid).get();
-    return AmberUser.fromDocument(doc);
+    return UserModel.fromDocument(doc);
   }
 
   Future<String?> isUserValueUnique(String email) async {
