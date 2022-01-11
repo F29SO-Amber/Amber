@@ -24,8 +24,8 @@ class _PublishPageNavigatorState extends State<PublishPageNavigator> {
             switch (settings.name) {
               case '/':
                 return const PostPage();
-              case '/post2':
-                return const ExtraPage(pageName: 'From Post Page');
+              // case '/post2':
+              //   return const ExtraPage(pageName: 'From Post Page');
               default:
                 return const PostPage();
             }
