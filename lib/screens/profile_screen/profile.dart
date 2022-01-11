@@ -1,10 +1,6 @@
-import 'dart:io';
-
 import 'package:amber/screens/profile_screen/widgets/custom_outlined_button.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:amber/constants.dart';
 import 'package:amber/models/user.dart';
 import 'package:amber/screens/login.dart';
@@ -28,32 +24,6 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   String currentUserID = Authentication.currentUser.uid;
   String imageURL = '';
-
-  uploadImage() async {
-    final _storage = FirebaseStorage.instance;
-    final _picker = ImagePicker();
-    XFile? image;
-
-    // Permission.photos.request();
-    // var permissionStatus = await Permission.photos.status;
-    // if (permissionStatus.isGranted) {
-    image = await _picker.pickImage(source: ImageSource.gallery);
-    var file = File('${image?.path}');
-
-    if (image != null) {
-      var snapshot =
-          _storage.ref().child('profile_pics/$currentUserID').putFile(file);
-
-      var downloadedURL = (await snapshot).ref.getDownloadURL();
-      imageURL = await downloadedURL;
-      setState(() {});
-    } else {
-      print("No path received");
-    }
-    // } else {
-    //   print('Grant permissions and try again');
-    // }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -174,9 +144,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                         MediaQuery.of(context).size.width *
                                             0.45,
                                         43),
-                                    primary:
-                                        Colors.amber.shade300, // background
-                                    onPrimary: Colors.black, // foreground
+                                    primary: Colors.amber.shade300,
+                                    onPrimary: Colors.black,
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(12))),
@@ -184,10 +153,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                             ],
                           ),
-                    const SizedBox(
-                      height: 20,
-                      width: 200,
-                    ),
+                    const SizedBox(height: 20, width: 200),
                     Row(
                       // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       //crossAxisAlignment: CrossAxisAlignment.stretch,
