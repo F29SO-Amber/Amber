@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:amber/constants.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -16,28 +17,41 @@ class PostPage extends StatefulWidget {
 class _PostPageState extends State<PostPage> {
   File? file;
   handleTakePhoto() async {
-    Navigator.pop(context);
-    //XFile? image;
-    final picker = ImagePicker();
-    File file = (await picker.pickImage(
-      source: ImageSource.camera,
-      maxHeight: 675,
-      maxWidth: 960,
-    )) as File;
-
-    setState(() {
-      this.file = file;
-    });
+    try {
+      Navigator.pop(context);
+      //XFile? image;
+      final picker = ImagePicker();
+      final file = await picker.pickImage(
+        source: ImageSource.camera,
+        maxHeight: 675,
+        maxWidth: 960,
+      );
+      final image = File(file!.path);
+      setState(() {
+        this.file = image;
+      });
+    } on PlatformException catch (e) {
+      // TODO
+      print("failed");
+    }
   }
 
   handleChooseFromGallery() async {
-    Navigator.pop(context);
-    //XFile? image;
-    final picker = ImagePicker();
-    File file = (await picker.pickImage(source: ImageSource.gallery)) as File;
-    setState(() {
-      this.file = file;
-    });
+    try {
+      Navigator.pop(context);
+      //XFile? image;
+      final picker = ImagePicker();
+      final file = await picker.pickImage(
+        source: ImageSource.gallery,
+      );
+      final image = File(file!.path);
+      setState(() {
+        this.file = image;
+      });
+    } on PlatformException catch (e) {
+      // TODO
+      print("failed");
+    }
   }
 
   selectImage(parentContext) {
