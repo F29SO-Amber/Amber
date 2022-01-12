@@ -5,7 +5,7 @@ import 'package:amber/constants.dart';
 import 'package:amber/models/user.dart';
 import 'package:amber/services/database_service.dart';
 import 'package:amber/screens/profile_screen/profile.dart';
-import 'package:amber/screens/discovery_screen/widgets/user_card.dart';
+import 'package:amber/widgets/user_card.dart';
 
 class DiscoverPage extends StatefulWidget {
   static const id = '/discover';
@@ -32,8 +32,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
             UserModel user = UserModel.fromDocument(doc);
             list.add(
               UserCard(
-                  name: user.name,
-                  accountType: user.accountType,
+                  user: user,
                   onPress: () {
                     Navigator.push(
                       context,
