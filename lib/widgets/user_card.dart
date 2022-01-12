@@ -1,5 +1,5 @@
 import 'package:amber/models/user.dart';
-import 'package:amber/screens/profile_screen/widgets/profile_picture.dart';
+import 'package:amber/widgets/profile_picture.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 

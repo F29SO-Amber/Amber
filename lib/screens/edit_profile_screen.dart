@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:amber/models/user.dart';
-import 'package:amber/screens/profile_screen/widgets/custom_outlined_button.dart';
-import 'package:amber/screens/profile_screen/widgets/profile_picture.dart';
-import 'package:amber/screens/profile_screen/widgets/progress.dart';
+import 'package:amber/widgets/custom_outlined_button.dart';
+import 'package:amber/widgets/profile_picture.dart';
+import 'package:amber/widgets/progress.dart';
 import 'package:amber/services/database_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
