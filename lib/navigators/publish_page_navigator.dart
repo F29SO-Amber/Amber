@@ -1,7 +1,9 @@
+import 'package:amber/services/authentication.dart';
 import 'package:flutter/material.dart';
 
 import 'package:amber/screens/post.dart';
 import 'package:amber/screens/extra.dart';
+import 'package:amber/models/user.dart';
 
 class PublishPageNavigator extends StatefulWidget {
   const PublishPageNavigator({Key? key}) : super(key: key);
@@ -13,6 +15,7 @@ class PublishPageNavigator extends StatefulWidget {
 GlobalKey<NavigatorState> postNavigatorKey = GlobalKey<NavigatorState>();
 
 class _PublishPageNavigatorState extends State<PublishPageNavigator> {
+  String currentUserId = Authentication.currentUser.uid;
   @override
   Widget build(BuildContext context) {
     return Navigator(
@@ -20,15 +23,15 @@ class _PublishPageNavigatorState extends State<PublishPageNavigator> {
       onGenerateRoute: (RouteSettings settings) {
         return MaterialPageRoute(
           settings: settings,
-          builder: (BuildContext context) {
-            switch (settings.name) {
-              case '/':
-                return const PostPage();
-              // case '/post2':
-              //   return const ExtraPage(pageName: 'From Post Page');
-              default:
-                return const PostPage();
-            }
+          builder: (context) {
+            //switch (settings.name) {
+            //case '/':
+            //return PostPage(currentUser: Authentication.currentUser);
+            // case '/post2':
+            //   return const ExtraPage(pageName: 'From Post Page');
+            //default:
+            //return PostPage(currentUser: currentUser);
+            return PostPage(currentUserId: currentUserId);
           },
         );
       },

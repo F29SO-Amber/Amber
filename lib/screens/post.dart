@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:amber/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:amber/constants.dart';
 import 'package:flutter/services.dart';
@@ -7,8 +8,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 
 class PostPage extends StatefulWidget {
-  const PostPage({Key? key}) : super(key: key);
   static const id = '/post';
+  final String currentUserId;
+  const PostPage({Key? key, required this.currentUserId}) : super(key: key);
 
   @override
   State<PostPage> createState() => _PostPageState();
@@ -16,41 +18,65 @@ class PostPage extends StatefulWidget {
 
 class _PostPageState extends State<PostPage> {
   File? file;
+  bool isUploading = false;
+  // Future handleTakePhoto() async {
+  //   try {
+  //     Navigator.pop(context);
+  //     //XFile? image;
+  //     final picker = ImagePicker();
+  //     final file = await picker.pickImage(
+  //       //File image = (await picker.pickImage(
+  //       source: ImageSource.camera,
+  //       maxHeight: 675,
+  //       maxWidth: 960,
+  //     );
+  //     final image = File(file!.path);
+  //     // if (!mounted) return;
+  //     setState(() {
+  //       this.file = image;
+  //       //file = image;
+  //     });
+  //   } on PlatformException catch (e) {
+  //     // TODO
+  //     print("failed");
+  //   }
+  // }
   handleTakePhoto() async {
-    try {
-      Navigator.pop(context);
-      //XFile? image;
-      final picker = ImagePicker();
-      final file = await picker.pickImage(
-        source: ImageSource.camera,
-        maxHeight: 675,
-        maxWidth: 960,
-      );
-      final image = File(file!.path);
-      setState(() {
-        this.file = image;
-      });
-    } on PlatformException catch (e) {
-      // TODO
-      print("failed");
+    Navigator.pop(context);
+    XFile? xFile = await ImagePicker().pickImage(source: ImageSource.camera);
+    file = File('${xFile?.path}');
+    if (mounted) {
+      setState(() {});
     }
   }
 
+  // Future handleChooseFromGallery() async {
+  //   try {
+  //     Navigator.pop(context);
+  //     //XFile? image;
+  //     final picker = ImagePicker();
+  //     final file = await picker.pickImage(
+  //       //File image = picker.pickImage(
+  //       source: ImageSource.gallery,
+  //     );
+  //     final image = File(file!.path);
+  //     //if (!mounted) return;
+  //     setState(() {
+  //       this.file = image;
+  //       //file = image;
+  //     });
+  //   } on PlatformException catch (e) {
+  //     // TODO
+  //     print("failed");
+  //   }
+  // }
   handleChooseFromGallery() async {
-    try {
-      Navigator.pop(context);
-      //XFile? image;
-      final picker = ImagePicker();
-      final file = await picker.pickImage(
-        source: ImageSource.gallery,
-      );
-      final image = File(file!.path);
-      setState(() {
-        this.file = image;
-      });
-    } on PlatformException catch (e) {
-      // TODO
-      print("failed");
+    Navigator.pop(context);
+    XFile? xFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+    file = File('${xFile?.path}');
+    //if (!mounted) return;
+    if (mounted) {
+      setState(() {});
     }
   }
 
@@ -62,9 +88,10 @@ class _PostPageState extends State<PostPage> {
             title: const Text("Create post"),
             children: <Widget>[
               SimpleDialogOption(
-                child: const Text("Photo with camera "),
-                onPressed: handleTakePhoto,
-              ),
+                  child: const Text("Photo with camera "),
+                  onPressed: handleTakePhoto
+                  // Navigator.of(context).pop();
+                  ),
               SimpleDialogOption(
                 child: const Text("Image from gallery"),
                 onPressed: handleChooseFromGallery,
@@ -106,12 +133,43 @@ class _PostPageState extends State<PostPage> {
     );
   }
 
+  clearImage() {
+    setState(() {
+      file == null;
+    });
+  }
+
   buildUploadForm() {
-    return const Text("File loaded! ");
+    // return Scaffold(
+    //   appBar: AppBar(
+    //     backgroundColor: Colors.white,
+    //     leading: IconButton(
+    //         icon: Icon(Icons.arrow_back),
+    //         color: Colors.black,
+    //         onPressed: clearImage),
+    //     title: Text(
+    //       "Caption Post",
+    //       style: TextStyle(color: Colors.black),
+    //     ),
+    //     actions: [
+    //       TextButton(
+    //         onPressed: () => print("pressed"),
+    //         child: Text(
+    //           "Post",
+    //           style: TextStyle(
+    //               color: Colors.black,
+    //               fontWeight: FontWeight.bold,
+    //               fontSize: 20.0),
+    //         ),
+    //       ),
+    //     ],
+    //   ),
+    // );
+    return Text(" lol ");
   }
 
   @override
   Widget build(BuildContext context) {
-    return buildSplashScreen();
+    return file == null ? buildSplashScreen() : buildUploadForm();
   }
 }
