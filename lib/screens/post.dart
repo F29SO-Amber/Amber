@@ -133,11 +133,11 @@ class _PostPageState extends State<PostPage> {
     );
   }
 
-  clearImage() {
-    setState(() {
-      file == null;
-    });
-  }
+  // clearImage() {
+  //   setState(() {
+  //     file == null;
+  //   });
+  // }
 
   buildUploadForm() {
     // return Scaffold(
