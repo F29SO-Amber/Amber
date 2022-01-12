@@ -1,17 +1,16 @@
+import 'package:amber/models/user.dart';
 import 'package:amber/screens/profile_screen/widgets/profile_picture.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class UserCard extends StatelessWidget {
-  const UserCard(
-      {Key? key,
-      required this.name,
-      required this.accountType,
-      required this.onPress})
-      : super(key: key);
+  const UserCard({
+    Key? key,
+    required this.user,
+    required this.onPress,
+  }) : super(key: key);
 
-  final String name;
-  final String accountType;
+  final UserModel user;
   final VoidCallback onPress;
 
   @override
@@ -30,16 +29,16 @@ class UserCard extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.only(left: 8.0, right: 15.0),
-                    child: ProfilePicture(side: 60, path: 'assets/img.png'),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0, right: 15.0),
+                    child: ProfilePicture(side: 60, image: user.profilePhoto),
                   ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        name,
+                        user.name,
                         style: GoogleFonts.dmSans(
                           fontSize: 20,
                           fontWeight: FontWeight.w500,
@@ -48,7 +47,7 @@ class UserCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        accountType,
+                        user.accountType,
                         style: GoogleFonts.dmSans(
                           fontSize: 13,
                           color: Colors.black38,

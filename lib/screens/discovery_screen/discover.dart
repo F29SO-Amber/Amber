@@ -32,8 +32,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
             UserModel user = UserModel.fromDocument(doc);
             list.add(
               UserCard(
-                  name: user.name,
-                  accountType: user.accountType,
+                  user: user,
                   onPress: () {
                     Navigator.push(
                       context,
