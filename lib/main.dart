@@ -17,7 +17,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // DatabaseService.testMethod('am2024');
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Login Demo',
@@ -28,7 +27,7 @@ class MyApp extends StatelessWidget {
         textSelectionTheme:
             const TextSelectionThemeData(cursorColor: Colors.orange),
       ),
-      initialRoute: LoginScreen.id,
+      initialRoute: ConvexAppBarDemo.id,
       routes: {
         LoginScreen.id: (context) => LoginScreen(),
         ConvexAppBarDemo.id: (context) => const ConvexAppBarDemo()

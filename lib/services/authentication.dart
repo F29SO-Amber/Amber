@@ -3,46 +3,25 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_login/flutter_login.dart';
 
 class Authentication {
-  static final auth = FirebaseAuth.instance;
+  static final _auth = FirebaseAuth.instance;
   static final _firestore = FirebaseFirestore.instance;
   static late User currentUser;
-  static late String usernameresult;
 
   static Future<String?> authUser(LoginData data) async {
     try {
-      UserCredential authResult = await auth.signInWithEmailAndPassword(
+      UserCredential authResult = await _auth.signInWithEmailAndPassword(
         email: data.name,
         password: data.password,
       );
-      // List<String> list =
-      //     await auth.fetchSignInMethodsForEmail('am2023@hw.ac.uk');
-      // print(list.toString());
       currentUser = authResult.user!;
     } on FirebaseAuthException catch (e) {
       return e.message;
     }
   }
 
-  static usernamechecker(username) async {
-    try {
-// if the size of value is greater then 0 then that doc exist.
-      var a = await FirebaseFirestore.instance
-          .collection('users')
-          .where('username', isEqualTo: username)
-          .get()
-          .then((value) => value.size > 0 ? true : false);
-
-      String b = a.toString();
-      usernameresult = b;
-      print(usernameresult);
-    } catch (e) {
-      print(e.toString());
-    }
-  }
-
   static Future<String?> signupUser(SignupData data) async {
     try {
-      UserCredential authResult = await auth.createUserWithEmailAndPassword(
+      UserCredential authResult = await _auth.createUserWithEmailAndPassword(
         email: data.name!,
         password: data.password!,
       );
@@ -53,7 +32,8 @@ class Authentication {
         'id': currentUser.uid,
         'email': '${data.name}',
         'time_created': Timestamp.now(),
-        'profilePhotoURL': '',
+        'profilePhotoURL':
+            'https://firebasestorage.googleapis.com/v0/b/f29so-group-5-amber.appspot.com/o/profile%2Fcommon_profile_pic.jpeg?alt=media&token=1ffabf13-40e5-493e-ac53-e13656d3f430',
       });
       data.additionalSignupData?.forEach((key, value) {
         map.addAll({key: value});
@@ -66,9 +46,9 @@ class Authentication {
   }
 
   static Future<String?> recoverPassword(String email) async {
-    await auth.sendPasswordResetEmail(email: email);
+    await _auth.sendPasswordResetEmail(email: email);
     try {
-      await auth.sendPasswordResetEmail(email: email);
+      await _auth.sendPasswordResetEmail(email: email);
       return null;
     } on FirebaseAuthException catch (e) {
       return e.message;
@@ -77,7 +57,7 @@ class Authentication {
 
   static Future<String?> signOutUser() async {
     try {
-      await auth.signOut();
+      await _auth.signOut();
       return null;
     } on FirebaseAuthException catch (e) {
       return e.message;

@@ -78,9 +78,7 @@ class _ConvexAppBarDemoState extends State<ConvexAppBarDemo>
           backgroundColor: Colors.amber,
           gradient: null,
           controller: _tabController,
-          onTap: (int i) => setState(() {
-            _selectedIndex = i;
-          }),
+          onTap: (int i) => setState(() => _selectedIndex = i),
         ),
       ),
       onWillPop: _systemBackButtonPressed,

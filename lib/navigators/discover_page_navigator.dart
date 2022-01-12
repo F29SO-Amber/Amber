@@ -20,12 +20,7 @@ class _DiscoverPageNavigatorState extends State<DiscoverPageNavigator> {
         return MaterialPageRoute(
           settings: settings,
           builder: (BuildContext context) {
-            switch (settings.name) {
-              case '/':
-                return const DiscoverPage();
-              default:
-                return const DiscoverPage();
-            }
+            return const DiscoverPage();
           },
         );
       },

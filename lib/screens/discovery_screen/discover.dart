@@ -8,8 +8,9 @@ import 'package:amber/screens/profile_screen/profile.dart';
 import 'package:amber/screens/discovery_screen/widgets/user_card.dart';
 
 class DiscoverPage extends StatefulWidget {
-  const DiscoverPage({Key? key}) : super(key: key);
   static const id = '/discover';
+
+  const DiscoverPage({Key? key}) : super(key: key);
 
   @override
   State<DiscoverPage> createState() => _DiscoverPageState();
@@ -23,29 +24,14 @@ class _DiscoverPageState extends State<DiscoverPage> {
         backgroundColor: Colors.amber,
         title: const Text(kAppName),
       ),
-      //   title: TextFormField(
-      //     decoration: InputDecoration(
-      //       hintText: "Search for a user...",
-      //       filled: true,
-      //       prefixIcon: Icon(Icons.account_box, size: 28),
-      //       suffixIcon: GestureDetector(
-      //         child: const Icon(Icons.clear),
-      //         onTap: () {
-      //           print('cleared');
-      //         },
-      //       ),
-      //     ),
-      //   ),
-      // ),
       body: FutureBuilder(
         future: DatabaseService.usersRef.get(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           List<UserCard> list = [];
-          snapshot.data?.docs.forEach(
-            (doc) {
-              UserModel user = UserModel.fromDocument(doc);
-              list.add(
-                UserCard(
+          snapshot.data?.docs.forEach((doc) {
+            UserModel user = UserModel.fromDocument(doc);
+            list.add(
+              UserCard(
                   name: user.name,
                   accountType: user.accountType,
                   onPress: () {
@@ -55,11 +41,9 @@ class _DiscoverPageState extends State<DiscoverPage> {
                         builder: (context) => ProfilePage(profileID: user.id),
                       ),
                     );
-                  },
-                ),
-              );
-            },
-          );
+                  }),
+            );
+          });
           return ListView(
             children: list,
           );

@@ -40,21 +40,23 @@ class _ProfilePageState extends State<ProfilePage> {
                   style: const TextStyle(fontSize: 18, color: Colors.white),
                 ),
                 actions: [
-                  GestureDetector(
-                    child: const Padding(
-                      padding: EdgeInsets.all(10.0),
-                      child: Icon(
+                  Padding(
+                    padding: const EdgeInsets.only(right: 10.0),
+                    child: GestureDetector(
+                      child: const Icon(
                         Icons.logout_outlined,
                         color: Colors.white,
                       ),
+                      onTap: () {
+                        Authentication.signOutUser();
+                        Navigator.of(context, rootNavigator: true)
+                            .pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => LoginScreen(),
+                          ),
+                        );
+                      },
                     ),
-                    onTap: () {
-                      Authentication.signOutUser();
-                      Navigator.of(context, rootNavigator: true)
-                          .pushReplacement(
-                        MaterialPageRoute(builder: (context) => LoginScreen()),
-                      );
-                    },
                   ),
                 ],
                 backgroundColor: kAppColor,
@@ -65,7 +67,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 5),
                     Padding(
                       padding: const EdgeInsets.all(20.0),
                       child: ProfilePicture(
@@ -140,23 +142,21 @@ class _ProfilePageState extends State<ProfilePage> {
                               ElevatedButton(
                                 child: const Text('Follow'),
                                 style: ElevatedButton.styleFrom(
-                                    fixedSize: Size(
-                                        MediaQuery.of(context).size.width *
-                                            0.45,
-                                        43),
-                                    primary: Colors.amber.shade300,
-                                    onPrimary: Colors.black,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(12))),
+                                  fixedSize: Size(
+                                      MediaQuery.of(context).size.width * 0.45,
+                                      43),
+                                  primary: Colors.amber.shade300,
+                                  onPrimary: Colors.black,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
                                 onPressed: () {},
                               ),
                             ],
                           ),
                     const SizedBox(height: 20, width: 200),
                     Row(
-                      // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      //crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
                         PostType(
                           numOfDivisions: 4,
