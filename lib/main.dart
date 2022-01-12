@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
         textSelectionTheme:
             const TextSelectionThemeData(cursorColor: Colors.orange),
       ),
-      initialRoute: ConvexAppBarDemo.id,
+      initialRoute: LoginScreen.id,
       routes: {
         LoginScreen.id: (context) => LoginScreen(),
         ConvexAppBarDemo.id: (context) => const ConvexAppBarDemo()
