@@ -24,7 +24,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    Authentication.easySignIn();
+    // Authentication.easySignIn();
   }
 
   @override
@@ -39,7 +39,7 @@ class _MyAppState extends State<MyApp> {
         textSelectionTheme:
             const TextSelectionThemeData(cursorColor: Colors.orange),
       ),
-      initialRoute: MainScreen.id,
+      initialRoute: LoginScreen.id,
       routes: {
         LoginScreen.id: (context) => LoginScreen(),
         MainScreen.id: (context) => const MainScreen()

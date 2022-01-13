@@ -10,6 +10,7 @@ import 'package:amber/screens/edit_profile_screen.dart';
 import 'package:amber/widgets/post_type.dart';
 import 'package:amber/widgets/profile_picture.dart';
 import 'package:amber/widgets/number_and_label.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class ProfilePage extends StatefulWidget {
   static const id = '/profile';
@@ -180,6 +181,17 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ],
                     ),
+                    // AlignedGridView.count(
+                    //   crossAxisCount: 4,
+                    //   mainAxisSpacing: 4,
+                    //   crossAxisSpacing: 4,
+                    //   itemBuilder: (context, index) {
+                    //     return Tile(
+                    //       index: index,
+                    //       extent: (index % 7 + 1) * 30,
+                    //     );
+                    //   },
+                    // ),
                   ],
                 ),
               ),
