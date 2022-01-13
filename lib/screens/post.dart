@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:amber/models/user.dart';
+import 'package:amber/services/database_service.dart';
 import 'package:flutter/material.dart';
 import 'package:amber/constants.dart';
 import 'package:flutter/services.dart';
@@ -145,105 +146,117 @@ class _PostPageState extends State<PostPage> {
 
   Scaffold buildUploadForm() {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.amber[50],
-        leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            color: Colors.black,
-            onPressed: clearImage),
-        title: Text(
-          "Caption Post",
-          style: TextStyle(color: Colors.black),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => print("pressed"),
-            child: Text(
-              "Post",
-              style: TextStyle(
-                  color: Colors.amber[600],
-                  fontWeight: FontWeight.bold,
-                  fontSize: 17.0),
-            ),
-          ),
-        ],
-      ),
-      body: ListView(
-        children: <Widget>[
-          Container(
-            height: 220.0,
-            width: MediaQuery.of(context).size.width * 0.8,
-            child: Center(
-              child: AspectRatio(
-                aspectRatio: 16 / 9,
-                child: Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: FileImage(file!),
+      body: StreamBuilder(
+        stream: DatabaseService.getUser(widget.currentUserId).asStream(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            var userData = snapshot.data as UserModel;
+            return Scaffold(
+              appBar: AppBar(
+                backgroundColor: Colors.amber[50],
+                leading: IconButton(
+                    icon: Icon(Icons.arrow_back),
+                    color: Colors.black,
+                    onPressed: clearImage),
+                title: Text(
+                  "Caption Post",
+                  style: TextStyle(color: Colors.black),
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () => print("pressed"),
+                    child: Text(
+                      "Post",
+                      style: TextStyle(
+                          color: Colors.amber[600],
+                          fontWeight: FontWeight.bold,
+                          fontSize: 17.0),
                     ),
                   ),
-                ),
+                ],
               ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: 10.0),
-          ),
-          ListTile(
-            leading: CircleAvatar(
-                //backgroundImage: userData.profilePhoto,
-                ),
-            title: Container(
-              width: 250.0,
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: "Write a caption...",
-                  border: InputBorder.none,
-                ),
+              body: ListView(
+                children: <Widget>[
+                  Container(
+                    height: 220.0,
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    child: Center(
+                      child: AspectRatio(
+                        aspectRatio: 16 / 9,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: FileImage(file!),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 10.0),
+                  ),
+                  ListTile(
+                    leading: CircleAvatar(
+                      backgroundImage: userData.profilePhoto,
+                    ),
+                    title: Container(
+                      width: 250.0,
+                      child: TextField(
+                        decoration: InputDecoration(
+                          hintText: "Write a caption...",
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Divider(),
+                  ListTile(
+                    leading: Icon(
+                      Icons.pin_drop,
+                      color: Colors.amber[600],
+                      size: 35.0,
+                    ),
+                    title: Container(
+                      width: 250.0,
+                      child: TextField(
+                        decoration: InputDecoration(
+                          hintText: "Where was this photo taken?",
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: 200.0,
+                    height: 100.0,
+                    alignment: Alignment.center,
+                    child: ElevatedButton.icon(
+                      onPressed: () => print("get user location"),
+                      icon: Icon(
+                        Icons.my_location,
+                        color: Colors.white,
+                      ),
+                      label: Text(
+                        "Use Current Location",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                        ),
+                        primary: Colors.amber[600],
+                      ),
+                    ),
+                  )
+                ],
               ),
-            ),
-          ),
-          Divider(),
-          ListTile(
-            leading: Icon(
-              Icons.pin_drop,
-              color: Colors.amber[600],
-              size: 35.0,
-            ),
-            title: Container(
-              width: 250.0,
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: "Where was this photo taken?",
-                  border: InputBorder.none,
-                ),
-              ),
-            ),
-          ),
-          Container(
-            width: 200.0,
-            height: 100.0,
-            alignment: Alignment.center,
-            child: ElevatedButton.icon(
-              onPressed: () => print("get user location"),
-              icon: Icon(
-                Icons.my_location,
-                color: Colors.white,
-              ),
-              label: Text(
-                "Use Current Location",
-                style: TextStyle(color: Colors.white),
-              ),
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                primary: Colors.amber[600],
-              ),
-            ),
-          )
-        ],
+            );
+          } else {
+            return const CircularProgressIndicator();
+          }
+        },
       ),
     );
   }
