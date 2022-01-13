@@ -42,7 +42,8 @@ class _PostPageState extends State<PostPage> {
   //   }
   // }
   handleTakePhoto() async {
-    Navigator.pop(context);
+    Navigator.pop(dialogContext);
+    //Navigator.of(context, rootNavigator: true).pop();
     XFile? xFile = await ImagePicker().pickImage(source: ImageSource.camera);
     file = File('${xFile?.path}');
     if (mounted) {
@@ -71,7 +72,7 @@ class _PostPageState extends State<PostPage> {
   //   }
   // }
   handleChooseFromGallery() async {
-    Navigator.pop(context);
+    Navigator.pop(dialogContext);
     XFile? xFile = await ImagePicker().pickImage(source: ImageSource.gallery);
     file = File('${xFile?.path}');
     //if (!mounted) return;
@@ -80,10 +81,13 @@ class _PostPageState extends State<PostPage> {
     }
   }
 
+  late BuildContext dialogContext;
+  //late BuildContext ctx;
   selectImage(parentContext) {
     return showDialog(
         context: parentContext,
         builder: (context) {
+          dialogContext = context;
           return SimpleDialog(
             title: const Text("Create post"),
             children: <Widget>[
@@ -121,7 +125,7 @@ class _PostPageState extends State<PostPage> {
                 style: TextStyle(color: Colors.black, fontSize: 18.0),
               ),
               style: ElevatedButton.styleFrom(
-                  fixedSize: Size(MediaQuery.of(context).size.width * 0.65, 43),
+                  //fixedSize: Size(MediaQuery.of(context).size.width * 0.65, 43),
                   primary: Colors.amber, // background
                   onPrimary: Colors.black, // foreground
                   shape: RoundedRectangleBorder(
@@ -133,39 +137,42 @@ class _PostPageState extends State<PostPage> {
     );
   }
 
-  // clearImage() {
-  //   setState(() {
-  //     file == null;
-  //   });
-  // }
+  clearImage() {
+    setState(() {
+      file == null;
+    });
+  }
 
-  buildUploadForm() {
-    // return Scaffold(
-    //   appBar: AppBar(
-    //     backgroundColor: Colors.white,
-    //     leading: IconButton(
-    //         icon: Icon(Icons.arrow_back),
-    //         color: Colors.black,
-    //         onPressed: clearImage),
-    //     title: Text(
-    //       "Caption Post",
-    //       style: TextStyle(color: Colors.black),
-    //     ),
-    //     actions: [
-    //       TextButton(
-    //         onPressed: () => print("pressed"),
-    //         child: Text(
-    //           "Post",
-    //           style: TextStyle(
-    //               color: Colors.black,
-    //               fontWeight: FontWeight.bold,
-    //               fontSize: 20.0),
-    //         ),
-    //       ),
-    //     ],
-    //   ),
+  Scaffold buildUploadForm() {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            color: Colors.black,
+            onPressed: clearImage),
+        title: Text(
+          "Caption Post",
+          style: TextStyle(color: Colors.black),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => print("pressed"),
+            child: Text(
+              "Post",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20.0),
+            ),
+          ),
+        ],
+      ),
+    );
+    // return Text(
+    //   " lol ",
+    //   style: TextStyle(fontSize: 30.0),
     // );
-    return Text(" lol ");
   }
 
   @override
