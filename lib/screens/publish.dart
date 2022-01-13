@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:amber/constants.dart';
 import 'package:amber/services/auth_service.dart';
 import 'package:amber/services/database_service.dart';
+import 'package:amber/services/storage_service.dart';
 import 'package:amber/widgets/custom_outlined_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -27,16 +28,6 @@ class _PublishScreenState extends State<PublishScreen> {
     setState(() {});
   }
 
-  Future<String> uploadImage() async {
-    TaskSnapshot taskSnapshot = await FirebaseStorage.instance
-        .ref()
-        .child('posts')
-        .child('${Authentication.currentUser.uid}_${Timestamp.now()}')
-        .putFile(file!);
-
-    return taskSnapshot.ref.getDownloadURL();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,7 +46,8 @@ class _PublishScreenState extends State<PublishScreen> {
               ),
               onTap: () async {
                 if (file != null) {
-                  DatabaseService.addUserPost(await uploadImage());
+                  DatabaseService.addUserPost(
+                      await StorageService.uploadPost(file!));
                   Navigator.pop(context);
                 }
               },

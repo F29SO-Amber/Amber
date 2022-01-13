@@ -9,15 +9,15 @@ import 'package:amber/navigators/publish_page_navigator.dart';
 import 'package:amber/navigators/profile_page_navigator.dart';
 import 'package:amber/navigators/home_page_navigator.dart';
 
-class ConvexAppBarDemo extends StatefulWidget {
-  const ConvexAppBarDemo({Key? key}) : super(key: key);
+class MainScreen extends StatefulWidget {
+  const MainScreen({Key? key}) : super(key: key);
   static const id = '/navbar';
 
   @override
-  _ConvexAppBarDemoState createState() => _ConvexAppBarDemoState();
+  _MainScreenState createState() => _MainScreenState();
 }
 
-class _ConvexAppBarDemoState extends State<ConvexAppBarDemo>
+class _MainScreenState extends State<MainScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   int _selectedIndex = 1;

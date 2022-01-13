@@ -1,3 +1,4 @@
+import 'package:amber/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -12,8 +13,19 @@ Future main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    Authentication.easySignIn();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,10 +39,10 @@ class MyApp extends StatelessWidget {
         textSelectionTheme:
             const TextSelectionThemeData(cursorColor: Colors.orange),
       ),
-      initialRoute: LoginScreen.id,
+      initialRoute: MainScreen.id,
       routes: {
         LoginScreen.id: (context) => LoginScreen(),
-        ConvexAppBarDemo.id: (context) => const ConvexAppBarDemo()
+        MainScreen.id: (context) => const MainScreen()
       },
     );
   }

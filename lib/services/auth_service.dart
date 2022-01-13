@@ -7,6 +7,18 @@ class Authentication {
   static final _firestore = FirebaseFirestore.instance;
   static late User currentUser;
 
+  static easySignIn() async {
+    try {
+      UserCredential authResult = await _auth.signInWithEmailAndPassword(
+        email: 'f29so-group5@gmail.com',
+        password: '1234567',
+      );
+      currentUser = authResult.user!;
+    } on FirebaseAuthException catch (e) {
+      return e.message;
+    }
+  }
+
   static Future<String?> authUser(LoginData data) async {
     try {
       UserCredential authResult = await _auth.signInWithEmailAndPassword(
