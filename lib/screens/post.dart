@@ -108,7 +108,7 @@ class _PostPageState extends State<PostPage> {
 
   clearImage() {
     setState(() {
-      file == null;
+      file = null;
     });
   }
 
@@ -233,6 +233,9 @@ class _PostPageState extends State<PostPage> {
                     title: Container(
                       width: 250.0,
                       child: TextField(
+                        keyboardType: TextInputType.multiline,
+                        maxLength: null,
+                        maxLines: null,
                         controller: captionController,
                         decoration: InputDecoration(
                           hintText: "Write a caption...",
@@ -251,6 +254,9 @@ class _PostPageState extends State<PostPage> {
                     title: Container(
                       width: 250.0,
                       child: TextField(
+                        keyboardType: TextInputType.multiline,
+                        maxLength: null,
+                        maxLines: null,
                         controller: locationController,
                         decoration: InputDecoration(
                           hintText: "Where was this photo taken?",
