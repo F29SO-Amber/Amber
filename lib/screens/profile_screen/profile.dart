@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:amber/widgets/custom_outlined_button.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -25,6 +27,15 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   String currentUserID = Authentication.currentUser.uid;
   String imageURL = '';
+  final rnd = Random();
+  late List<int> extents;
+  int crossAxisCount = 3;
+
+  @override
+  void initState() {
+    super.initState();
+    extents = List<int>.generate(10000, (int index) => rnd.nextInt(7) + 1);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -181,17 +192,27 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ],
                     ),
-                    // AlignedGridView.count(
-                    //   crossAxisCount: 4,
-                    //   mainAxisSpacing: 4,
-                    //   crossAxisSpacing: 4,
-                    //   itemBuilder: (context, index) {
-                    //     return Tile(
-                    //       index: index,
-                    //       extent: (index % 7 + 1) * 30,
-                    //     );
-                    //   },
-                    // ),
+                    Container(
+                      height: 282,
+                      width: double.infinity,
+                      child: Padding(
+                        padding: EdgeInsets.all(5),
+                        child: AlignedGridView.count(
+                          crossAxisCount: crossAxisCount,
+                          mainAxisSpacing: 4,
+                          crossAxisSpacing: 4,
+                          itemBuilder: (context, index) {
+                            final height = extents[index] * 40;
+                            return ImageTile(
+                              index: index,
+                              width: 100,
+                              height: 100,
+                            );
+                          },
+                          itemCount: extents.length,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -201,6 +222,29 @@ class _ProfilePageState extends State<ProfilePage> {
           }
         },
       ),
+    );
+  }
+}
+
+class ImageTile extends StatelessWidget {
+  const ImageTile({
+    Key? key,
+    required this.index,
+    required this.width,
+    required this.height,
+  }) : super(key: key);
+
+  final int index;
+  final int width;
+  final int height;
+
+  @override
+  Widget build(BuildContext context) {
+    return Image.network(
+      'https://picsum.photos/$width/$height?random=$index',
+      width: width.toDouble(),
+      height: height.toDouble(),
+      fit: BoxFit.cover,
     );
   }
 }
