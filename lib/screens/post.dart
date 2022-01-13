@@ -5,9 +5,6 @@ import 'package:amber/services/database_service.dart';
 import 'package:amber/widgets/progress.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:amber/constants.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:image/image.dart' as Im;
@@ -28,11 +25,10 @@ class _PostPageState extends State<PostPage> {
   TextEditingController captionController = TextEditingController();
   File? file;
   bool isUploading = false;
-  String postId = Uuid().v4();
+  String postId = const Uuid().v4();
 
   handleTakePhoto() async {
     Navigator.pop(dialogContext);
-    //Navigator.of(context, rootNavigator: true).pop();
     XFile? xFile = await ImagePicker().pickImage(source: ImageSource.camera);
     file = File('${xFile?.path}');
     if (mounted) {
@@ -44,14 +40,12 @@ class _PostPageState extends State<PostPage> {
     Navigator.pop(dialogContext);
     XFile? xFile = await ImagePicker().pickImage(source: ImageSource.gallery);
     file = File('${xFile?.path}');
-    //if (!mounted) return;
     if (mounted) {
       setState(() {});
     }
   }
 
   late BuildContext dialogContext;
-  //late BuildContext ctx;
   selectImage(parentContext) {
     return showDialog(
         context: parentContext,
@@ -62,9 +56,7 @@ class _PostPageState extends State<PostPage> {
             children: <Widget>[
               SimpleDialogOption(
                   child: const Text("Photo with camera "),
-                  onPressed: handleTakePhoto
-                  // Navigator.of(context).pop();
-                  ),
+                  onPressed: handleTakePhoto),
               SimpleDialogOption(
                 child: const Text("Image from gallery"),
                 onPressed: handleChooseFromGallery,
@@ -84,7 +76,6 @@ class _PostPageState extends State<PostPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          //SvgPicture.asset('assets/images/upload.svg', height: 260),
           Padding(
             padding: const EdgeInsets.only(top: 20.0),
             child: ElevatedButton(
@@ -168,7 +159,7 @@ class _PostPageState extends State<PostPage> {
     setState(() {
       file = null;
       isUploading = false;
-      postId = Uuid().v4();
+      postId = const Uuid().v4();
     });
   }
 
@@ -183,10 +174,10 @@ class _PostPageState extends State<PostPage> {
               appBar: AppBar(
                 backgroundColor: Colors.amber[50],
                 leading: IconButton(
-                    icon: Icon(Icons.arrow_back),
+                    icon: const Icon(Icons.arrow_back),
                     color: Colors.black,
                     onPressed: clearImage),
-                title: Text(
+                title: const Text(
                   "Caption Post",
                   style: TextStyle(color: Colors.black),
                 ),
@@ -205,8 +196,8 @@ class _PostPageState extends State<PostPage> {
               ),
               body: ListView(
                 children: <Widget>[
-                  isUploading ? linearProgress() : Text(""),
-                  Container(
+                  isUploading ? linearProgress() : const Text(""),
+                  SizedBox(
                     height: 220.0,
                     width: MediaQuery.of(context).size.width * 0.8,
                     child: Center(
@@ -223,17 +214,12 @@ class _PostPageState extends State<PostPage> {
                       ),
                     ),
                   ),
-                  Padding(
+                  const Padding(
                     padding: EdgeInsets.only(top: 10.0),
                   ),
-                  // ListTile(
-                  //   leading: CircleAvatar(
-                  //     backgroundImage: userData.profilePhoto,
-                  //   ),
-                  //title: Container(
                   Container(
                     width: 250.0,
-                    padding: EdgeInsets.only(left: 5, bottom: 0),
+                    padding: const EdgeInsets.only(left: 5, bottom: 0),
                     child: TextField(
                       keyboardType: TextInputType.multiline,
                       maxLength: null,
@@ -249,18 +235,10 @@ class _PostPageState extends State<PostPage> {
                       ),
                     ),
                   ),
-                  //),
-                  Divider(),
-                  //ListTile(
-                  // leading: Icon(
-                  //   Icons.pin_drop,
-                  //   color: Colors.amber[600],
-                  //   size: 35.0,
-                  // ),
-                  // title: Container(
+                  const Divider(),
                   Container(
                     width: 250.0,
-                    padding: EdgeInsets.only(left: 5),
+                    padding: const EdgeInsets.only(left: 5),
                     child: TextField(
                       keyboardType: TextInputType.multiline,
                       maxLength: null,
@@ -277,18 +255,17 @@ class _PostPageState extends State<PostPage> {
                       ),
                     ),
                   ),
-                  //),
                   Container(
                     width: 200.0,
                     height: 100.0,
                     alignment: Alignment.center,
                     child: ElevatedButton.icon(
                       onPressed: () => print("get user location"),
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.my_location,
                         color: Colors.white,
                       ),
-                      label: Text(
+                      label: const Text(
                         "Use Current Location",
                         style: TextStyle(color: Colors.white),
                       ),
