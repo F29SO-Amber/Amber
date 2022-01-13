@@ -13,7 +13,17 @@ class _ChatsPageState extends State<ChatsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: createRandomColor(),
+      backgroundColor: Colors.black87,
+      appBar: AppBar(
+        elevation: 15.0,
+        foregroundColor: Colors.black,
+        //backgroundColor: Colors.deepPurpleAccent,
+        leading: Text('profile button'),
+        title: Text('Amber logo and branding'),
+        actions: <Widget>[
+        Text('New chat button')
+        ],
+      ),
       body: Center(
         child: ElevatedButton(
           child: const Text('Chat'),
