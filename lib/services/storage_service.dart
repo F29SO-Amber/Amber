@@ -6,6 +6,7 @@ import 'package:amber/services/auth_service.dart';
 
 class StorageService {
   static final _storage = FirebaseStorage.instance;
+  static final Reference storageRef = FirebaseStorage.instance.ref();
 
   static Future<String> uploadPost(File file) async {
     TaskSnapshot taskSnapshot = await _storage

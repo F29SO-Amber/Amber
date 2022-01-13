@@ -2,11 +2,17 @@ import 'dart:io';
 
 import 'package:amber/models/user.dart';
 import 'package:amber/services/database_service.dart';
+import 'package:amber/widgets/progress.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:amber/constants.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:image/image.dart' as Im;
+import 'package:uuid/uuid.dart';
+import 'package:amber/services/storage_service.dart';
 
 class PostPage extends StatefulWidget {
   static const id = '/post';
@@ -18,30 +24,12 @@ class PostPage extends StatefulWidget {
 }
 
 class _PostPageState extends State<PostPage> {
+  TextEditingController locationController = TextEditingController();
+  TextEditingController captionController = TextEditingController();
   File? file;
   bool isUploading = false;
-  // Future handleTakePhoto() async {
-  //   try {
-  //     Navigator.pop(context);
-  //     //XFile? image;
-  //     final picker = ImagePicker();
-  //     final file = await picker.pickImage(
-  //       //File image = (await picker.pickImage(
-  //       source: ImageSource.camera,
-  //       maxHeight: 675,
-  //       maxWidth: 960,
-  //     );
-  //     final image = File(file!.path);
-  //     // if (!mounted) return;
-  //     setState(() {
-  //       this.file = image;
-  //       //file = image;
-  //     });
-  //   } on PlatformException catch (e) {
-  //     // TODO
-  //     print("failed");
-  //   }
-  // }
+  String postId = Uuid().v4();
+
   handleTakePhoto() async {
     Navigator.pop(dialogContext);
     //Navigator.of(context, rootNavigator: true).pop();
@@ -52,26 +40,6 @@ class _PostPageState extends State<PostPage> {
     }
   }
 
-  // Future handleChooseFromGallery() async {
-  //   try {
-  //     Navigator.pop(context);
-  //     //XFile? image;
-  //     final picker = ImagePicker();
-  //     final file = await picker.pickImage(
-  //       //File image = picker.pickImage(
-  //       source: ImageSource.gallery,
-  //     );
-  //     final image = File(file!.path);
-  //     //if (!mounted) return;
-  //     setState(() {
-  //       this.file = image;
-  //       //file = image;
-  //     });
-  //   } on PlatformException catch (e) {
-  //     // TODO
-  //     print("failed");
-  //   }
-  // }
   handleChooseFromGallery() async {
     Navigator.pop(dialogContext);
     XFile? xFile = await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -140,7 +108,67 @@ class _PostPageState extends State<PostPage> {
 
   clearImage() {
     setState(() {
-      file == null;
+      file = null;
+    });
+  }
+
+  compressImage() async {
+    final tempDir = await getTemporaryDirectory();
+    final path = tempDir.path;
+    Im.Image? imageFile = Im.decodeImage(file!.readAsBytesSync());
+    final compressedImageFile = File('$path/img_$postId.jpg')
+      ..writeAsBytesSync(Im.encodeJpg(imageFile!, quality: 85));
+    setState(() {
+      file = compressedImageFile;
+    });
+  }
+
+  Future<String> uploadImage(imageFile) async {
+    UploadTask uploadTask =
+        StorageService.storageRef.child("post_$postId.jpg").putFile(imageFile);
+    TaskSnapshot storageSnap = await uploadTask;
+    String downloadURL = await storageSnap.ref.getDownloadURL();
+    return downloadURL;
+  }
+
+  createPostInFirestore(
+      {required String mediaURL,
+      required String location,
+      required String description}) async {
+    DatabaseService.postsRef
+        .doc(widget.currentUserId)
+        .collection("userPosts")
+        .doc(postId)
+        .set({
+      "postId": postId,
+      "ownerId": widget.currentUserId,
+      "username": UserModel.fromDocument(
+              await DatabaseService.usersRef.doc(widget.currentUserId).get())
+          .username,
+      "mediaURL": mediaURL,
+      "description": description,
+      "location": location,
+      "likes": {},
+    });
+  }
+
+  handleSubmit() async {
+    setState(() {
+      isUploading = true;
+    });
+    await compressImage();
+    String mediaURL = await uploadImage(file);
+    createPostInFirestore(
+      mediaURL: mediaURL,
+      location: locationController.text,
+      description: captionController.text,
+    );
+    captionController.clear();
+    locationController.clear();
+    setState(() {
+      file = null;
+      isUploading = false;
+      postId = Uuid().v4();
     });
   }
 
@@ -164,7 +192,7 @@ class _PostPageState extends State<PostPage> {
                 ),
                 actions: [
                   TextButton(
-                    onPressed: () => print("pressed"),
+                    onPressed: isUploading ? null : () => handleSubmit(),
                     child: Text(
                       "Post",
                       style: TextStyle(
@@ -177,6 +205,7 @@ class _PostPageState extends State<PostPage> {
               ),
               body: ListView(
                 children: <Widget>[
+                  isUploading ? linearProgress() : Text(""),
                   Container(
                     height: 220.0,
                     width: MediaQuery.of(context).size.width * 0.8,
@@ -204,6 +233,10 @@ class _PostPageState extends State<PostPage> {
                     title: Container(
                       width: 250.0,
                       child: TextField(
+                        keyboardType: TextInputType.multiline,
+                        maxLength: null,
+                        maxLines: null,
+                        controller: captionController,
                         decoration: InputDecoration(
                           hintText: "Write a caption...",
                           border: InputBorder.none,
@@ -221,6 +254,10 @@ class _PostPageState extends State<PostPage> {
                     title: Container(
                       width: 250.0,
                       child: TextField(
+                        keyboardType: TextInputType.multiline,
+                        maxLength: null,
+                        maxLines: null,
+                        controller: locationController,
                         decoration: InputDecoration(
                           hintText: "Where was this photo taken?",
                           border: InputBorder.none,
