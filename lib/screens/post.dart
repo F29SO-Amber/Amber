@@ -226,45 +226,58 @@ class _PostPageState extends State<PostPage> {
                   Padding(
                     padding: EdgeInsets.only(top: 10.0),
                   ),
-                  ListTile(
-                    leading: CircleAvatar(
-                      backgroundImage: userData.profilePhoto,
-                    ),
-                    title: Container(
-                      width: 250.0,
-                      child: TextField(
-                        keyboardType: TextInputType.multiline,
-                        maxLength: null,
-                        maxLines: null,
-                        controller: captionController,
-                        decoration: InputDecoration(
-                          hintText: "Write a caption...",
-                          border: InputBorder.none,
+                  // ListTile(
+                  //   leading: CircleAvatar(
+                  //     backgroundImage: userData.profilePhoto,
+                  //   ),
+                  //title: Container(
+                  Container(
+                    width: 250.0,
+                    padding: EdgeInsets.only(left: 5, bottom: 0),
+                    child: TextField(
+                      keyboardType: TextInputType.multiline,
+                      maxLength: null,
+                      maxLines: null,
+                      controller: captionController,
+                      decoration: InputDecoration(
+                        prefixIcon: CircleAvatar(
+                          radius: 1,
+                          backgroundImage: userData.profilePhoto,
                         ),
+                        hintText: "  Write a caption...",
+                        border: InputBorder.none,
                       ),
                     ),
                   ),
+                  //),
                   Divider(),
-                  ListTile(
-                    leading: Icon(
-                      Icons.pin_drop,
-                      color: Colors.amber[600],
-                      size: 35.0,
-                    ),
-                    title: Container(
-                      width: 250.0,
-                      child: TextField(
-                        keyboardType: TextInputType.multiline,
-                        maxLength: null,
-                        maxLines: null,
-                        controller: locationController,
-                        decoration: InputDecoration(
-                          hintText: "Where was this photo taken?",
-                          border: InputBorder.none,
+                  //ListTile(
+                  // leading: Icon(
+                  //   Icons.pin_drop,
+                  //   color: Colors.amber[600],
+                  //   size: 35.0,
+                  // ),
+                  // title: Container(
+                  Container(
+                    width: 250.0,
+                    padding: EdgeInsets.only(left: 5),
+                    child: TextField(
+                      keyboardType: TextInputType.multiline,
+                      maxLength: null,
+                      maxLines: null,
+                      controller: locationController,
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(
+                          Icons.pin_drop,
+                          color: Colors.amber[600],
+                          size: 38.0,
                         ),
+                        hintText: "  Where was this photo taken?",
+                        border: InputBorder.none,
                       ),
                     ),
                   ),
+                  //),
                   Container(
                     width: 200.0,
                     height: 100.0,
