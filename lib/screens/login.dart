@@ -7,7 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:amber/constants.dart';
 import 'package:amber/screens/navbar.dart';
-import 'package:amber/services/authentication.dart';
+import 'package:amber/services/auth_service.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({Key? key}) : super(key: key);

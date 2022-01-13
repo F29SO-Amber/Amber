@@ -1,9 +1,8 @@
 import 'package:amber/models/user.dart';
+import 'package:amber/services/auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class DatabaseService {
-  static final _auth = FirebaseAuth.instance;
   static final _firestore = FirebaseFirestore.instance;
   static CollectionReference usersRef = _firestore.collection('users');
   static late String usernameresult;
@@ -46,5 +45,21 @@ class DatabaseService {
     } catch (e) {
       print(e.toString());
     }
+  }
+
+  static addUserPost(String imageURL) {
+    Map<String, dynamic> map = {};
+    map.addAll({
+      'id': '${Authentication.currentUser.uid}_${Timestamp.now()}',
+      'imageUrl': imageURL,
+      'caption': '',
+      'score': 0,
+      'authorId': Authentication.currentUser.uid,
+      'timestamp': Timestamp.now(),
+    });
+    _firestore
+        .collection('posts')
+        .doc('${Authentication.currentUser.uid}_${Timestamp.now()}')
+        .set(map);
   }
 }

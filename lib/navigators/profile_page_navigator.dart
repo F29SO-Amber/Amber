@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:amber/screens/login.dart';
-import 'package:amber/services/authentication.dart';
+import 'package:amber/services/auth_service.dart';
 import 'package:amber/screens/profile_screen/profile.dart';
 
 class ProfilePageNavigator extends StatefulWidget {

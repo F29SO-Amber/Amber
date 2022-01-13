@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:amber/constants.dart';
 import 'package:amber/models/user.dart';
 import 'package:amber/screens/login.dart';
-import 'package:amber/services/authentication.dart';
+import 'package:amber/services/auth_service.dart';
 import 'package:amber/services/database_service.dart';
 import 'package:amber/screens/edit_profile_screen.dart';
 import 'package:amber/widgets/post_type.dart';
