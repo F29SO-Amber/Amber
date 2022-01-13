@@ -134,7 +134,7 @@ class _PostPageState extends State<PostPage> {
   createPostInFirestore(
       {required String mediaURL,
       required String location,
-      required String description}) {
+      required String description}) async {
     DatabaseService.postsRef
         .doc(widget.currentUserId)
         .collection("userPosts")
@@ -142,7 +142,9 @@ class _PostPageState extends State<PostPage> {
         .set({
       "postId": postId,
       "ownerId": widget.currentUserId,
-      //"username": DatabaseService
+      "username": UserModel.fromDocument(
+              await DatabaseService.usersRef.doc(widget.currentUserId).get())
+          .username,
       "mediaURL": mediaURL,
       "description": description,
       "location": location,
