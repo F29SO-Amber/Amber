@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Post {
+class PostModel {
   final String id;
   final String imageUrl;
   final String caption;
@@ -8,7 +8,7 @@ class Post {
   final String authorId;
   final Timestamp timestamp;
 
-  Post({
+  PostModel({
     required this.id,
     required this.imageUrl,
     required this.caption,
@@ -17,8 +17,8 @@ class Post {
     required this.timestamp,
   });
 
-  factory Post.fromDocument(DocumentSnapshot doc) {
-    return Post(
+  factory PostModel.fromDocument(DocumentSnapshot doc) {
+    return PostModel(
       id: doc.id,
       imageUrl: doc['imageUrl'],
       caption: doc['caption'],
