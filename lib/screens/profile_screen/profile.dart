@@ -1,6 +1,8 @@
 import 'dart:math';
 
+import 'package:amber/models/post.dart';
 import 'package:amber/widgets/custom_outlined_button.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:amber/constants.dart';
@@ -39,189 +41,220 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: StreamBuilder(
-        stream: DatabaseService.getUser(widget.profileID).asStream(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            var userData = snapshot.data as UserModel;
-            return Scaffold(
-              appBar: AppBar(
-                title: Text(
-                  '@${userData.username}',
-                  style: const TextStyle(fontSize: 18, color: Colors.white),
+    return StreamBuilder(
+      stream: DatabaseService.getUser(widget.profileID).asStream(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          var userData = snapshot.data as UserModel;
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(
+                '@${userData.username}',
+                style: const TextStyle(fontSize: 18, color: Colors.white),
+              ),
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 10.0),
+                  child: GestureDetector(
+                    child: const Icon(
+                      Icons.logout_outlined,
+                      color: Colors.white,
+                    ),
+                    onTap: () {
+                      Authentication.signOutUser();
+                      Navigator.of(context, rootNavigator: true)
+                          .pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) => LoginScreen(),
+                        ),
+                      );
+                    },
+                  ),
                 ),
-                actions: [
+              ],
+              backgroundColor: kAppColor,
+            ),
+            body: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 5),
                   Padding(
-                    padding: const EdgeInsets.only(right: 10.0),
-                    child: GestureDetector(
-                      child: const Icon(
-                        Icons.logout_outlined,
-                        color: Colors.white,
-                      ),
-                      onTap: () {
-                        Authentication.signOutUser();
-                        Navigator.of(context, rootNavigator: true)
-                            .pushReplacement(
-                          MaterialPageRoute(
-                            builder: (context) => LoginScreen(),
-                          ),
-                        );
-                      },
+                    padding: const EdgeInsets.all(20.0),
+                    child: ProfilePicture(
+                      side: 100,
+                      image: userData.profilePhoto,
                     ),
                   ),
-                ],
-                backgroundColor: kAppColor,
-              ),
-              body: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const SizedBox(height: 5),
-                    Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: ProfilePicture(
-                        side: 100,
-                        image: userData.profilePhoto,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 3.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            '${userData.name} ',
-                            style: GoogleFonts.dmSans(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w500,
-                              fontStyle: FontStyle.normal,
-                            ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 3.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          '${userData.name} ',
+                          style: GoogleFonts.dmSans(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500,
+                            fontStyle: FontStyle.normal,
                           ),
-                          const Icon(
-                            Icons.verified,
-                            color: Colors.amber,
-                            size: 22,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 3.0, bottom: 15),
-                      child: Text(
-                        userData.accountType,
-                        style: GoogleFonts.dmSans(
-                          fontSize: 13,
-                          color: Colors.black38,
                         ),
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: const [
-                        NumberAndLabel(number: '140', label: '   Posts   '),
-                        NumberAndLabel(number: '524', label: 'Followers'),
-                        NumberAndLabel(number: '343', label: 'Following'),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    widget.profileID == currentUserID
-                        ? CustomOutlinedButton(
-                            buttonText: 'Edit Profile',
-                            widthFactor: 0.9,
-                            onPress: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => EditProfilePage(
-                                      currentUserID: currentUserID),
-                                ),
-                              );
-                            },
-                          )
-                        : Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              CustomOutlinedButton(
-                                buttonText: 'Message',
-                                widthFactor: 0.45,
-                                onPress: () {},
-                              ),
-                              ElevatedButton(
-                                child: const Text('Follow'),
-                                style: ElevatedButton.styleFrom(
-                                  fixedSize: Size(
-                                      MediaQuery.of(context).size.width * 0.45,
-                                      43),
-                                  primary: Colors.amber.shade300,
-                                  onPrimary: Colors.black,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                ),
-                                onPressed: () {},
-                              ),
-                            ],
-                          ),
-                    const SizedBox(height: 20, width: 200),
-                    Row(
-                      children: <Widget>[
-                        PostType(
-                          numOfDivisions: 4,
-                          bgColor: Colors.red[100]!,
-                          icon: const Icon(Icons.image),
-                        ),
-                        PostType(
-                          numOfDivisions: 4,
-                          bgColor: Colors.greenAccent[100]!,
-                          icon: const Icon(Icons.play_arrow_sharp),
-                        ),
-                        PostType(
-                          numOfDivisions: 4,
-                          bgColor: Colors.blue[100]!,
-                          icon: const Icon(Icons.article_outlined),
-                        ),
-                        PostType(
-                          numOfDivisions: 4,
-                          bgColor: Colors.brown[100]!,
-                          icon: const Icon(Icons.group),
+                        const Icon(
+                          Icons.verified,
+                          color: Colors.amber,
+                          size: 22,
                         ),
                       ],
                     ),
-                    Container(
-                      height: 282,
-                      width: double.infinity,
-                      child: Padding(
-                        padding: EdgeInsets.all(5),
-                        child: AlignedGridView.count(
-                          crossAxisCount: crossAxisCount,
-                          mainAxisSpacing: 4,
-                          crossAxisSpacing: 4,
-                          itemBuilder: (context, index) {
-                            final height = extents[index] * 40;
-                            return ImageTile(
-                              index: index,
-                              width: 100,
-                              height: 100,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 3.0, bottom: 15),
+                    child: Text(
+                      userData.accountType,
+                      style: GoogleFonts.dmSans(
+                        fontSize: 13,
+                        color: Colors.black38,
+                      ),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: const [
+                      NumberAndLabel(number: '140', label: '   Posts   '),
+                      NumberAndLabel(number: '524', label: 'Followers'),
+                      NumberAndLabel(number: '343', label: 'Following'),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  widget.profileID == currentUserID
+                      ? CustomOutlinedButton(
+                          buttonText: 'Edit Profile',
+                          widthFactor: 0.9,
+                          onPress: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => EditProfilePage(
+                                    currentUserID: currentUserID),
+                              ),
                             );
                           },
-                          itemCount: extents.length,
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            CustomOutlinedButton(
+                              buttonText: 'Message',
+                              widthFactor: 0.45,
+                              onPress: () {},
+                            ),
+                            ElevatedButton(
+                              child: const Text('Follow'),
+                              style: ElevatedButton.styleFrom(
+                                fixedSize: Size(
+                                    MediaQuery.of(context).size.width * 0.45,
+                                    43),
+                                primary: Colors.amber.shade300,
+                                onPrimary: Colors.black,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                              onPressed: () {},
+                            ),
+                          ],
                         ),
+                  const SizedBox(height: 20, width: 200),
+                  Row(
+                    children: <Widget>[
+                      PostType(
+                        numOfDivisions: 4,
+                        bgColor: Colors.red[100]!,
+                        icon: const Icon(Icons.image),
                       ),
-                    ),
-                  ],
-                ),
+                      PostType(
+                        numOfDivisions: 4,
+                        bgColor: Colors.greenAccent[100]!,
+                        icon: const Icon(Icons.play_arrow_sharp),
+                      ),
+                      PostType(
+                        numOfDivisions: 4,
+                        bgColor: Colors.blue[100]!,
+                        icon: const Icon(Icons.article_outlined),
+                      ),
+                      PostType(
+                        numOfDivisions: 4,
+                        bgColor: Colors.brown[100]!,
+                        icon: const Icon(Icons.group),
+                      ),
+                    ],
+                  ),
+                  // SizedBox(
+                  //   height: 282,
+                  //   width: double.infinity,
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.all(5),
+                  //     child: AlignedGridView.count(
+                  //       crossAxisCount: crossAxisCount,
+                  //       mainAxisSpacing: 4,
+                  //       crossAxisSpacing: 4,
+                  //       itemBuilder: (context, index) {
+                  //         DatabaseService.postsRef
+                  //             .where('authorId', isEqualTo: currentUserID);
+                  //         return ImageTile(
+                  //           index: index,
+                  //           width: 100,
+                  //           height: 100,
+                  //         );
+                  //       },
+                  //       itemCount: extents.length,
+                  //     ),
+                  //   ),
+                  // ),
+                  const SizedBox(),
+                  FutureBuilder(
+                    future: DatabaseService.postsRef
+                        .where('authorId', isEqualTo: currentUserID)
+                        .get(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      return GridView.builder(
+                        shrinkWrap: true,
+                        itemCount: (snapshot.data! as dynamic).docs.length,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          crossAxisSpacing: 5,
+                          mainAxisSpacing: 1.5,
+                          childAspectRatio: 1,
+                        ),
+                        itemBuilder: (context, index) {
+                          DocumentSnapshot snap =
+                              (snapshot.data! as dynamic).docs[index];
+
+                          return Image(
+                            image: NetworkImage(snap['imageUrl']),
+                            fit: BoxFit.cover,
+                          );
+                        },
+                      );
+                    },
+                  )
+                ],
               ),
-            );
-          } else {
-            return const CircularProgressIndicator();
-          }
-        },
-      ),
+            ),
+          );
+        } else {
+          return const CircularProgressIndicator();
+        }
+      },
     );
   }
 }
@@ -229,21 +262,19 @@ class _ProfilePageState extends State<ProfilePage> {
 class ImageTile extends StatelessWidget {
   const ImageTile({
     Key? key,
-    required this.index,
-    required this.width,
-    required this.height,
+    required this.url,
+    required this.side,
   }) : super(key: key);
 
-  final int index;
-  final int width;
-  final int height;
+  final String url;
+  final double side;
 
   @override
   Widget build(BuildContext context) {
     return Image.network(
-      'https://picsum.photos/$width/$height?random=$index',
-      width: width.toDouble(),
-      height: height.toDouble(),
+      url,
+      width: side,
+      height: side,
       fit: BoxFit.cover,
     );
   }

@@ -48,7 +48,7 @@ class _PublishScreenState extends State<PublishScreen> {
                 if (file != null) {
                   DatabaseService.addUserPost(
                       await StorageService.uploadPost(file!));
-                  Navigator.pop(context);
+                  // Navigator.pop(context);
                 }
               },
             ),

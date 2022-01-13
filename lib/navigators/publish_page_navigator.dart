@@ -31,8 +31,8 @@ class _PublishPageNavigatorState extends State<PublishPageNavigator> {
             // case '/post2':
             //   return const ExtraPage(pageName: 'From Post Page');
             //default:
-            return PostPage(currentUserId: currentUserId);
-            ////return PublishScreen(currentUserID: currentUserId);
+            // return PostPage(currentUserId: currentUserId);
+            return PublishScreen(currentUserID: currentUserId);
           },
         );
       },

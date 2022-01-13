@@ -4,7 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseService {
   static final _firestore = FirebaseFirestore.instance;
-  static CollectionReference usersRef = _firestore.collection('users');
+  static final usersRef = _firestore.collection('users');
+  static final postsRef = _firestore.collection('posts');
   static late String usernameresult;
 
   static Future<UserModel> getUser(String uid) async {
