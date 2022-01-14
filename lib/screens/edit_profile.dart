@@ -32,6 +32,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    nameController.dispose();
+    usernameController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -111,8 +118,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   if (_formKey.currentState!.validate()) {
                     Map<String, Object?> map = {};
                     if (file != null) {
-                      map['profilePhotoURL'] = await uploadImage();
+                      map['name'] = nameController.text;
                       map['username'] = usernameController.text;
+                      map['profilePhotoURL'] = await uploadImage();
                       await DatabaseService.usersRef
                           .doc(widget.user.id)
                           .update(map);
@@ -123,24 +131,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   }
                 },
               ),
-              // child: ElevatedButton(
-              //   onPressed: () async {
-              //     if (_formKey.currentState!.validate()) {
-              //       Map<String, Object?> map = {};
-              //       if (file != null) {
-              //         map['profilePhotoURL'] = await uploadImage();
-              //         map['username'] = usernameController.text;
-              //         await DatabaseService.usersRef
-              //             .doc(widget.user.id)
-              //             .update(map);
-              //         ScaffoldMessenger.of(context).showSnackBar(
-              //           const SnackBar(content: Text("Profile updated!")),
-              //         );
-              //       }
-              //     }
-              //   },
-              //   child: const Text('Submit'),
-              // ),
             ),
           ],
         ),
