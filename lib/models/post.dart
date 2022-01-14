@@ -2,14 +2,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PostModel {
   final String id;
+  final String authorId;
   final String imageUrl;
   final String caption;
   final int score;
-  final String authorId;
+  final String location;
   final Timestamp timestamp;
 
   PostModel({
     required this.id,
+    required this.location,
     required this.imageUrl,
     required this.caption,
     required this.score,
@@ -25,6 +27,7 @@ class PostModel {
       score: doc['score'],
       authorId: doc['authorId'],
       timestamp: doc['timestamp'],
+      location: doc['location'],
     );
   }
 }
