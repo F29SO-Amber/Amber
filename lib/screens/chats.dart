@@ -13,29 +13,57 @@ class _ChatsPageState extends State<ChatsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black87,
+      backgroundColor: Colors.black,
       appBar: AppBar(
         elevation: 15.0,
-        foregroundColor: Colors.black,
-        //backgroundColor: Colors.deepPurpleAccent,
-        leading: Text('profile button'),
-        title: Text('Amber logo and branding'),
-        actions: <Widget>[
-        Text('New chat button')
-        ],
-      ),
-      body: Center(
-        child: ElevatedButton(
-          child: const Text('Chat'),
-          onPressed: () {
-            Navigator.pushNamed(context, '/chat2');
-          },
-          style: ElevatedButton.styleFrom(
-            primary: Colors.amber, // background
-            onPrimary: Colors.black, // foreground
+        foregroundColor: kAppColor,
+        backgroundColor: Colors.black,
+        leading: const Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Image(image: AssetImage('assets/logo.png'),
           ),
         ),
+        title: const Text(kAppName,
+          style: TextStyle(
+            fontSize: 35.0
+          ),
+        ),
+        actions: <Widget>[
+        IconButton(onPressed: (){},
+          icon: const Icon(Icons.chat),
+          iconSize: 30,
+        ),
+        ],
+      ),
+      body:  Container(
+        padding: const EdgeInsets.all(10.0),
+        decoration: const BoxDecoration(
+          color: Colors.deepPurpleAccent,
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30),
+              topRight: Radius.circular(30)
+          )
+        ),
+        child: buildChats(),
       ),
     );
   }
+  
 }
+
+Widget buildChats() =>ListView.builder(
+  physics: BouncingScrollPhysics(),
+  itemBuilder: (context,index){
+    //final users= users[index];
+    return Container(
+      height: 75.0,
+      child: ListTile(
+        onTap: (){},
+        leading: Image.asset(''),
+        title: Text('Name of user'),
+
+      ),
+    );
+    }
+  );
+
