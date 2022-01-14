@@ -10,11 +10,10 @@ import 'package:amber/models/user.dart';
 import 'package:amber/screens/login.dart';
 import 'package:amber/services/auth_service.dart';
 import 'package:amber/services/database_service.dart';
-import 'package:amber/screens/edit_profile_screen.dart';
+import 'package:amber/screens/edit_profile.dart';
 import 'package:amber/widgets/post_type.dart';
 import 'package:amber/widgets/profile_picture.dart';
 import 'package:amber/widgets/number_and_label.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 import '../edit_profile.dart';
 
