@@ -16,6 +16,8 @@ import 'package:amber/widgets/profile_picture.dart';
 import 'package:amber/widgets/number_and_label.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
+import '../edit_profile.dart';
+
 class ProfilePage extends StatefulWidget {
   static const id = '/profile';
   final String profileID;
@@ -136,8 +138,9 @@ class _ProfilePageState extends State<ProfilePage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => EditProfilePage(
-                                    currentUserID: currentUserID),
+                                builder: (context) => EditProfileScreen(
+                                  user: userData,
+                                ),
                               ),
                             );
                           },

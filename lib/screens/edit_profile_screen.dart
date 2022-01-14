@@ -63,9 +63,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   getUser() async {
-    setState(() {
-      isLoading = true;
-    });
+    setState(() => isLoading = true);
     user = UserModel.fromDocument(
         await DatabaseService.usersRef.doc(widget.currentUserID).get());
     displayUsernameController.text = user.username;
@@ -76,29 +74,27 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        TextField(
+        TextFormField(
           controller: displayUsernameController,
-          //textAlign: TextAlign.left,
           decoration: InputDecoration(
-            labelText: 'Username',
-            prefixIcon: const Icon(Icons.person, color: Colors.amber),
-            border: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(90.0)),
-              borderSide: BorderSide(width: 2, color: Colors.amber),
-            ),
-            enabledBorder: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(90.0)),
-              //borderSide: BorderSide.none,
-              borderSide: BorderSide(width: 2, color: Colors.grey),
-            ),
-            focusedBorder: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(90.0)),
-              borderSide: BorderSide(width: 2, color: Colors.grey),
-            ),
-            filled: true,
+            prefixIcon: const Icon(Icons.person, size: 22.0),
             fillColor: Colors.amber.shade50,
-            hintText: 'Update Username',
-            errorText: _usernameValid ? null : "Username invalid or taken",
+            filled: true,
+            hintText: 'Update your username',
+            hintStyle: TextStyle(
+              color: Colors.grey[400],
+            ),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
+            border: border(context),
+            enabledBorder: border(context),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: const BorderRadius.all(Radius.circular(30.0)),
+              borderSide: BorderSide(
+                color: Theme.of(context).colorScheme.secondary,
+                width: 1.0,
+              ),
+            ),
+            errorStyle: const TextStyle(height: 0.0, fontSize: 0.0),
           ),
           onChanged: (value) {
             setState(() {
@@ -110,6 +106,18 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
+  border(BuildContext context) {
+    return OutlineInputBorder(
+      borderRadius: BorderRadius.all(
+        Radius.circular(30.0),
+      ),
+      borderSide: BorderSide(
+        color: Colors.white,
+        width: 0.0,
+      ),
+    );
+  }
+
   Future<void> isUsernameValid(value) async {
     _usernameValid = await FirebaseFirestore.instance
         .collection('users')
@@ -117,22 +125,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
         .get()
         .then((value) => value.size > 0 ? false : true);
   }
-
-  // updateProfileData() {
-  //   // setState(() {
-  //   //   displayUsernameController.text.trim().length < 3 ||
-  //   //           displayUsernameController.text.isEmpty
-  //   //       ? _displayNameValid = false
-  //   //       : _displayNameValid = true;
-  //   // });
-  //   if (_usernameValid) {
-  //     DatabaseService.usersRef.doc(widget.currentUserID).update({
-  //       "username": displayUsernameController.text,
-  //     });
-  //     SnackBar snackbar = const SnackBar(content: Text("Profile updated!"));
-  //     ScaffoldMessenger.of(context).showSnackBar(snackbar);
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -143,12 +135,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
           "Edit profile",
           style: TextStyle(fontSize: 18, color: Colors.black),
         ),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.done, color: Colors.green, size: 30.0),
-            onPressed: () => Navigator.pop(context),
-          ),
-        ],
       ),
       body: isLoading
           ? circularProgress()
@@ -162,7 +148,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         (file == null)
                             ? InkWell(
                                 onTap: chooseImage,
-                                child: const Icon(Icons.image, size: 48))
+                                child: const Icon(Icons.image, size: 48),
+                              )
                             : ProfilePicture(
                                 side: 100,
                                 image: FileImage(file!),

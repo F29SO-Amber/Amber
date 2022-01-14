@@ -56,30 +56,82 @@ class _PublishScreenState extends State<PublishScreen> {
         ],
         backgroundColor: kAppColor,
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            (file == null)
-                ? const Icon(Icons.image, size: 48)
-                : Container(
-                    height: 180,
-                    width: 320,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: FileImage(file!),
-                        fit: BoxFit.cover,
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            children: [
+              (file == null)
+                  ? GestureDetector(
+                      child: Container(
+                        height: (MediaQuery.of(context).size.width / 16) * 9,
+                        width: MediaQuery.of(context).size.width,
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage('assets/upload.png'),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                       ),
+                      onTap: chooseImage,
+                    )
+                  : GestureDetector(
+                      child: Container(
+                        height: (MediaQuery.of(context).size.width / 16) * 9,
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: FileImage(file!),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      onTap: chooseImage,
                     ),
+              Container(
+                // color: createRandomColor(),
+                width: MediaQuery.of(context).size.width,
+                padding: const EdgeInsets.only(left: 15, top: 20),
+                child: const TextField(
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                    hintText: "Write a caption...",
+                    border: InputBorder.none,
+                    prefixIcon:
+                        Icon(Icons.description, color: kAppColor, size: 30),
                   ),
-            const SizedBox(height: 40),
-            CustomOutlinedButton(
-              buttonText: 'Pick Image',
-              widthFactor: 0.85,
-              onPress: chooseImage,
-            )
-          ],
-        ),
+                ),
+              ),
+              const Divider(),
+              Container(
+                // color: createRandomColor(),
+                width: MediaQuery.of(context).size.width,
+                padding: const EdgeInsets.only(left: 15),
+                child: const TextField(
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                    hintText: "Locate your post...",
+                    border: InputBorder.none,
+                    prefixIcon: Icon(
+                      Icons.pin_drop_outlined,
+                      color: kAppColor,
+                      size: 30,
+                    ),
+                    suffixIcon: Icon(Icons.home),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 50.0),
+            child: CustomOutlinedButton(
+              widthFactor: 0.8,
+              onPress: () {},
+              buttonText: "Post",
+            ),
+          ),
+        ],
       ),
     );
   }
