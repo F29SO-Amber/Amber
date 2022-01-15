@@ -6,7 +6,7 @@ import 'package:amber/models/user.dart';
 import 'package:amber/widgets/user_card.dart';
 import 'package:amber/services/auth_service.dart';
 import 'package:amber/services/database_service.dart';
-import 'package:amber/screens/profile_screen/profile.dart';
+import 'package:amber/screens/profile.dart';
 
 class DiscoverPage extends StatefulWidget {
   static const id = '/discover';
