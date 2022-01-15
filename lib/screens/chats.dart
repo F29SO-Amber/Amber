@@ -19,26 +19,27 @@ class _ChatsPageState extends State<ChatsPage> {
         foregroundColor: kAppColor,
         backgroundColor: Colors.black,
         leading: const Padding(
-          padding: EdgeInsets.all(8.0),
+          padding: EdgeInsets.all(10.0),
           child: Image(image: AssetImage('assets/logo.png'),
           ),
         ),
         title: const Text(kAppName,
           style: TextStyle(
+            letterSpacing: 6,
             fontSize: 35.0
           ),
         ),
         actions: <Widget>[
         IconButton(onPressed: (){},
           icon: const Icon(Icons.chat),
-          iconSize: 30,
+          iconSize: 35,
         ),
         ],
       ),
       body:  Container(
         padding: const EdgeInsets.all(10.0),
         decoration: const BoxDecoration(
-          color: Colors.deepPurpleAccent,
+          color: Colors.white,
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(30),
               topRight: Radius.circular(30)
@@ -53,14 +54,24 @@ class _ChatsPageState extends State<ChatsPage> {
 
 Widget buildChats() =>ListView.builder(
   physics: BouncingScrollPhysics(),
+  itemCount: 25,
   itemBuilder: (context,index){
     //final users= users[index];
     return Container(
       height: 75.0,
       child: ListTile(
-        onTap: (){},
-        leading: Image.asset(''),
-        title: Text('Name of user'),
+        onTap: (){
+          Navigator.pushReplacementNamed(context, '/chat2');
+          //Navigator.pushNamed(context, '/home2');
+         // Navigator.of(context).push(MaterialPageRoute(builder: context)=>ChatPage(user:user))
+        },
+        leading: Image.asset('assets/img.png'),
+        title: Text('Vladamir Putin',
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold
+        ),),
+        tileColor: Colors.black,
 
       ),
     );
