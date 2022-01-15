@@ -17,10 +17,15 @@ class MainScreen extends StatefulWidget {
   _MainScreenState createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen>
-    with SingleTickerProviderStateMixin {
+class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  int _selectedIndex = 1;
+  int _selectedIndex = 4;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 5, vsync: this);
+  }
 
   final List<GlobalKey<NavigatorState>> _navigatorKeys = [
     homePageNavigatorKey,
@@ -39,12 +44,6 @@ class _MainScreenState extends State<MainScreen>
       SystemChannels.platform.invokeMethod<void>('SystemNavigator.pop');
     }
     throw '';
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 5, vsync: this);
   }
 
   @override
@@ -73,10 +72,9 @@ class _MainScreenState extends State<MainScreen>
             TabItem<IconData>(icon: Icons.people, title: 'Profile'),
           ],
           style: TabStyle.react,
-          initialActiveIndex: 4,
+          initialActiveIndex: _selectedIndex,
           curve: Curves.bounceInOut,
           backgroundColor: Colors.amber,
-          gradient: null,
           controller: _tabController,
           onTap: (int i) => setState(() => _selectedIndex = i),
         ),

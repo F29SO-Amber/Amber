@@ -2,6 +2,7 @@ import 'package:amber/models/user.dart';
 import 'package:amber/screens/login.dart';
 import 'package:amber/services/auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_login/flutter_login.dart';
 
 class DatabaseService {
   static final _firestore = FirebaseFirestore.instance;
@@ -15,10 +16,8 @@ class DatabaseService {
   }
 
   static Future<String?> isUserValueUnique(String username) async {
-    QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore
-        .collection('users')
-        .where('username', isEqualTo: username)
-        .get();
+    QuerySnapshot<Map<String, dynamic>> snapshot =
+        await _firestore.collection('users').where('username', isEqualTo: username).get();
 
     LoginScreen.temp = snapshot.docs.isEmpty ? null : 'Nope';
   }
@@ -40,6 +39,21 @@ class DatabaseService {
     }
   }
 
+  static addUserData(SignupData data) {
+    Map<String, dynamic> map = {};
+    map.addAll({
+      'id': Authentication.currentUser.uid,
+      'email': '${data.name}',
+      'time_created': Timestamp.now(),
+      'profilePhotoURL':
+          'https://firebasestorage.googleapis.com/v0/b/f29so-group-5-amber.appspot.com/o/profile%2Fcommon_profile_pic.jpeg?alt=media&token=1ffabf13-40e5-493e-ac53-e13656d3f430',
+    });
+    data.additionalSignupData?.forEach((key, value) {
+      map.addAll({key: value});
+    });
+    usersRef.doc(Authentication.currentUser.uid).set(map);
+  }
+
   static addUserPost(String imageURL) {
     Map<String, dynamic> map = {};
     map.addAll({
@@ -50,9 +64,6 @@ class DatabaseService {
       'authorId': Authentication.currentUser.uid,
       'timestamp': Timestamp.now(),
     });
-    _firestore
-        .collection('posts')
-        .doc('${Authentication.currentUser.uid}_${Timestamp.now()}')
-        .set(map);
+    postsRef.doc('${Authentication.currentUser.uid}_${Timestamp.now()}').set(map);
   }
 }
