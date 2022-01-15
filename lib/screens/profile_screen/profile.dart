@@ -57,21 +57,23 @@ class _ProfilePageState extends State<ProfilePage> {
               actions: [
                 Padding(
                   padding: const EdgeInsets.only(right: 10.0),
-                  child: GestureDetector(
-                    child: const Icon(
-                      Icons.logout_outlined,
-                      color: Colors.white,
-                    ),
-                    onTap: () {
-                      Authentication.signOutUser();
-                      Navigator.of(context, rootNavigator: true)
-                          .pushReplacement(
-                        MaterialPageRoute(
-                          builder: (context) => LoginScreen(),
-                        ),
-                      );
-                    },
-                  ),
+                  child: (widget.profileID == currentUserID)
+                      ? GestureDetector(
+                          child: const Icon(
+                            Icons.logout_outlined,
+                            color: Colors.white,
+                          ),
+                          onTap: () {
+                            Authentication.signOutUser();
+                            Navigator.of(context, rootNavigator: true)
+                                .pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) => LoginScreen(),
+                              ),
+                            );
+                          },
+                        )
+                      : Container(),
                 ),
               ],
               backgroundColor: kAppColor,
@@ -216,7 +218,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   const SizedBox(),
                   FutureBuilder(
                     future: DatabaseService.postsRef
-                        .where('authorId', isEqualTo: currentUserID)
+                        .where('authorId', isEqualTo: widget.profileID)
                         .get(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {

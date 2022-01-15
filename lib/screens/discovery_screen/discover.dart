@@ -31,9 +31,10 @@ class _DiscoverPageState extends State<DiscoverPage> {
           List<UserCard> list = [];
           snapshot.data?.docs.forEach((doc) {
             UserModel user = UserModel.fromDocument(doc);
-            if(user.id != Authentication.currentUser.uid){ //do not show current user on discover page
-            list.add(
-              UserCard(
+            if (user.id != Authentication.currentUser.uid) {
+              //do not show current user on discover page
+              list.add(
+                UserCard(
                   user: user,
                   onPress: () {
                     Navigator.push(
@@ -42,9 +43,10 @@ class _DiscoverPageState extends State<DiscoverPage> {
                         builder: (context) => ProfilePage(profileID: user.id),
                       ),
                     );
-                  }),
-            );
-          }
+                  },
+                ),
+              );
+            }
           });
           return ListView(
             children: list,
