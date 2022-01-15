@@ -122,14 +122,33 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: const [
-                      NumberAndLabel(number: '140', label: '   Posts   '),
-                      NumberAndLabel(number: '524', label: 'Followers'),
-                      NumberAndLabel(number: '343', label: 'Following'),
-                    ],
+                  StreamBuilder(
+                    stream: DatabaseService.postsRef
+                        .where('authorId', isEqualTo: widget.profileID)
+                        .get()
+                        .asStream(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData &&
+                          snapshot.connectionState == ConnectionState.done) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            NumberAndLabel(
+                              number:
+                                  '${(snapshot.data as QuerySnapshot).docs.length}',
+                              label: '   Posts   ',
+                            ),
+                            const NumberAndLabel(
+                                number: '524', label: 'Followers'),
+                            const NumberAndLabel(
+                                number: '343', label: 'Following'),
+                          ],
+                        );
+                      } else {
+                        return const CircularProgressIndicator();
+                      }
+                    },
                   ),
                   const SizedBox(height: 20),
                   widget.profileID == currentUserID
@@ -144,7 +163,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   user: userData,
                                 ),
                               ),
-                            );
+                            ).then((value) => setState(() {}));
                           },
                         )
                       : Row(
@@ -219,39 +238,41 @@ class _ProfilePageState extends State<ProfilePage> {
                   FutureBuilder(
                     future: DatabaseService.postsRef
                         .where('authorId', isEqualTo: widget.profileID)
+                        .orderBy('timestamp', descending: true)
                         .get(),
                     builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        return GridView.builder(
+                          padding: EdgeInsets.all(10),
+                          shrinkWrap: true,
+                          itemCount: (snapshot.data! as dynamic).docs.length,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10,
+                            childAspectRatio: 1,
+                          ),
+                          itemBuilder: (context, index) {
+                            DocumentSnapshot snap =
+                                (snapshot.data! as dynamic).docs[index];
+                            return Container(
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: NetworkImage(snap['imageUrl']),
+                                  fit: BoxFit.cover,
+                                ),
+                                shape: BoxShape.rectangle,
+                                borderRadius: BorderRadius.circular(11.0),
+                              ),
+                            );
+                          },
+                        );
+                      } else {
                         return const Center(
                           child: CircularProgressIndicator(),
                         );
                       }
-                      return GridView.builder(
-                        padding: EdgeInsets.all(10),
-                        shrinkWrap: true,
-                        itemCount: (snapshot.data! as dynamic).docs.length,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 10,
-                          childAspectRatio: 1,
-                        ),
-                        itemBuilder: (context, index) {
-                          DocumentSnapshot snap =
-                              (snapshot.data! as dynamic).docs[index];
-                          return Container(
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: NetworkImage(snap['imageUrl']),
-                                fit: BoxFit.cover,
-                              ),
-                              shape: BoxShape.rectangle,
-                              borderRadius: BorderRadius.circular(11.0),
-                            ),
-                          );
-                        },
-                      );
                     },
                   )
                 ],

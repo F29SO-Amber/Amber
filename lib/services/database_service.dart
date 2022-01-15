@@ -1,4 +1,5 @@
 import 'package:amber/models/user.dart';
+import 'package:amber/screens/login.dart';
 import 'package:amber/services/auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -13,22 +14,13 @@ class DatabaseService {
     return UserModel.fromDocument(doc);
   }
 
-  Future<String?> isUserValueUnique(String email) async {
+  static Future<String?> isUserValueUnique(String username) async {
     QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore
         .collection('users')
-        .where('username', isEqualTo: email)
+        .where('username', isEqualTo: username)
         .get();
 
-    List<QueryDocumentSnapshot> docs = snapshot.docs;
-    for (var doc in docs) {
-      if (doc.data() != null) {
-        var data = doc.data() as Map<String, dynamic>;
-        var name = data['username']; // You can get other data in this manner.
-        print(name);
-      }
-    }
-
-    return snapshot.docs.isEmpty ? 'null' : 'Nope';
+    LoginScreen.temp = snapshot.docs.isEmpty ? null : 'Nope';
   }
 
   static usernamechecker(username) async {

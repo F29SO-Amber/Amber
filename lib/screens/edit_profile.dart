@@ -118,16 +118,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   if (_formKey.currentState!.validate()) {
                     Map<String, Object?> map = {};
                     if (file != null) {
-                      map['name'] = nameController.text;
-                      map['username'] = usernameController.text;
                       map['profilePhotoURL'] = await uploadImage();
-                      await DatabaseService.usersRef
-                          .doc(widget.user.id)
-                          .update(map);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Profile updated!")),
-                      );
                     }
+                    map['name'] = nameController.text;
+                    map['username'] = usernameController.text;
+                    await DatabaseService.usersRef
+                        .doc(widget.user.id)
+                        .update(map);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Profile updated!")),
+                    );
                   }
                 },
               ),
