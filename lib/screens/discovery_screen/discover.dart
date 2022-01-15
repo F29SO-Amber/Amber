@@ -3,16 +3,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:amber/constants.dart';
 import 'package:amber/models/user.dart';
-import 'package:amber/services/database_service.dart';
-import 'package:amber/screens/profile_screen/profile.dart';
 import 'package:amber/widgets/user_card.dart';
 import 'package:amber/services/auth_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:amber/services/database_service.dart';
+import 'package:amber/screens/profile_screen/profile.dart';
 
 class DiscoverPage extends StatefulWidget {
   static const id = '/discover';
 
   const DiscoverPage({Key? key}) : super(key: key);
+
   @override
   State<DiscoverPage> createState() => _DiscoverPageState();
 }
@@ -39,18 +39,14 @@ class _DiscoverPageState extends State<DiscoverPage> {
                   onPress: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => ProfilePage(profileID: user.id),
-                      ),
+                      MaterialPageRoute(builder: (context) => ProfilePage(userUID: user.id)),
                     );
                   },
                 ),
               );
             }
           });
-          return ListView(
-            children: list,
-          );
+          return ListView(children: list);
         },
       ),
     );

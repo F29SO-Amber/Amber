@@ -14,18 +14,14 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: createRandomColor(),
-      body: Center(
-        child: ElevatedButton(
-          child: const Text('Home'),
-          onPressed: () {
-            Navigator.pushNamed(context, '/home2');
-          },
-          style: ElevatedButton.styleFrom(
-            primary: Colors.amber, // background
-            onPrimary: Colors.black, // foreground
-          ),
+      appBar: AppBar(
+        backgroundColor: Colors.amber,
+        title: const Text(
+          kAppName,
+          style: TextStyle(fontSize: 18, color: Colors.white),
         ),
       ),
+      body: const Center(child: Text('To be implemented!')),
     );
   }
 }

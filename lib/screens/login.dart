@@ -6,7 +6,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:amber/constants.dart';
-import 'package:amber/screens/navbar.dart';
+import 'package:amber/screens/main_screen.dart';
 import 'package:amber/services/auth_service.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -68,8 +68,7 @@ class LoginScreen extends StatelessWidget {
           displayName: 'Account Type',
           icon: const Icon(FontAwesomeIcons.artstation),
           fieldValidator: (value) {
-            RegExp regExp =
-                RegExp(r"^(Artist|Business|Personal)", caseSensitive: false);
+            RegExp regExp = RegExp(r"^(Artist|Business|Personal)", caseSensitive: false);
             if (!regExp.hasMatch(value!)) {
               return "Accounts should be Artist, Business or Personal";
             }

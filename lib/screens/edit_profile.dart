@@ -1,17 +1,18 @@
 import 'dart:io';
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:amber/models/user.dart';
+import 'package:amber/services/image_service.dart';
+import 'package:amber/widgets/profile_picture.dart';
+import 'package:amber/services/storage_service.dart';
 import 'package:amber/services/database_service.dart';
 import 'package:amber/widgets/custom_form_field.dart';
 import 'package:amber/widgets/custom_outlined_button.dart';
-import 'package:amber/widgets/profile_picture.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class EditProfileScreen extends StatefulWidget {
   final UserModel user;
+
   const EditProfileScreen({Key? key, required this.user}) : super(key: key);
 
   @override
@@ -43,10 +44,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.amber,
-        title: const Text(
-          "Edit profile",
-          style: TextStyle(fontSize: 18, color: Colors.white),
-        ),
+        title: const Text("Edit profile", style: TextStyle(fontSize: 18, color: Colors.white)),
         leading: GestureDetector(
           child: const Icon(Icons.arrow_back_ios, color: Colors.white),
           onTap: () => Navigator.pop(context),
@@ -60,18 +58,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             const SizedBox(height: 5),
             Center(
               child: GestureDetector(
-                onTap: chooseImage,
+                onTap: () => ImageService.chooseFromGallery(file!).then((x) => {setState(() {})}),
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 20.0),
                   child: (file == null)
-                      ? ProfilePicture(
-                          side: 100,
-                          image: widget.user.profilePhoto,
-                        )
-                      : ProfilePicture(
-                          side: 100,
-                          image: FileImage(file!),
-                        ),
+                      ? ProfilePicture(side: 100, image: widget.user.profilePhoto)
+                      : ProfilePicture(side: 100, image: FileImage(file!)),
                 ),
               ),
             ),
@@ -83,8 +75,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter some text';
-                  } else if (!RegExp(
-                          r'^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$')
+                  } else if (!RegExp(r'^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$')
                       .hasMatch(value)) {
                     return 'Enter Valid Username';
                   }
@@ -100,8 +91,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter some text';
-                  } else if (!RegExp(
-                          r'^[A-Z][a-zA-Z]{3,}(?: [A-Z][a-zA-Z]*){0,2}$')
+                  } else if (!RegExp(r'^[A-Z][a-zA-Z]{3,}(?: [A-Z][a-zA-Z]*){0,2}$')
                       .hasMatch(value)) {
                     return 'Enter Valid Username';
                   }
@@ -118,13 +108,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   if (_formKey.currentState!.validate()) {
                     Map<String, Object?> map = {};
                     if (file != null) {
-                      map['profilePhotoURL'] = await uploadImage();
+                      map['profilePhotoURL'] =
+                          await StorageService.uploadProfileImage(widget.user.id, file!);
                     }
                     map['name'] = nameController.text;
                     map['username'] = usernameController.text;
-                    await DatabaseService.usersRef
-                        .doc(widget.user.id)
-                        .update(map);
+                    await DatabaseService.usersRef.doc(widget.user.id).update(map);
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text("Profile updated!")),
                     );
@@ -136,21 +125,5 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         ),
       ),
     );
-  }
-
-  Future<void> chooseImage() async {
-    XFile? xFile = await ImagePicker().pickImage(source: ImageSource.gallery);
-    file = File('${xFile?.path}');
-    setState(() {});
-  }
-
-  Future<String> uploadImage() async {
-    TaskSnapshot taskSnapshot = await FirebaseStorage.instance
-        .ref()
-        .child('profile')
-        .child(widget.user.id)
-        .putFile(file!);
-
-    return taskSnapshot.ref.getDownloadURL();
   }
 }

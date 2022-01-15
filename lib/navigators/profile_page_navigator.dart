@@ -24,13 +24,13 @@ class _ProfilePageNavigatorState extends State<ProfilePageNavigator> {
           builder: (BuildContext context) {
             switch (settings.name) {
               case '/':
-                return ProfilePage(profileID: Authentication.currentUser.uid);
+                return ProfilePage(userUID: Authentication.currentUser.uid);
               case LoginScreen.id:
                 return LoginScreen();
               // case EditProfilePage.id:
               //   return const EditProfilePage();
               default:
-                return ProfilePage(profileID: Authentication.currentUser.uid);
+                return ProfilePage(userUID: Authentication.currentUser.uid);
             }
           },
         );

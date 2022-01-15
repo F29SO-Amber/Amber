@@ -1,75 +1,52 @@
-import 'dart:math';
-
-import 'package:amber/models/post.dart';
-import 'package:amber/widgets/custom_outlined_button.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:amber/constants.dart';
 import 'package:amber/models/user.dart';
+import 'package:amber/models/post.dart';
 import 'package:amber/screens/login.dart';
-import 'package:amber/services/auth_service.dart';
-import 'package:amber/services/database_service.dart';
-import 'package:amber/screens/edit_profile.dart';
 import 'package:amber/widgets/post_type.dart';
+import 'package:amber/screens/edit_profile.dart';
+import 'package:amber/services/auth_service.dart';
 import 'package:amber/widgets/profile_picture.dart';
 import 'package:amber/widgets/number_and_label.dart';
+import 'package:amber/services/database_service.dart';
+import 'package:amber/widgets/custom_outlined_button.dart';
 
-import '../edit_profile.dart';
+// am2024@hw.ac.uk
 
 class ProfilePage extends StatefulWidget {
   static const id = '/profile';
-  final String profileID;
+  final String userUID;
 
-  const ProfilePage({Key? key, required this.profileID}) : super(key: key);
+  const ProfilePage({Key? key, required this.userUID}) : super(key: key);
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  String currentUserID = Authentication.currentUser.uid;
-  String imageURL = '';
-  final rnd = Random();
-  late List<int> extents;
-  int crossAxisCount = 3;
-
-  @override
-  void initState() {
-    super.initState();
-    extents = List<int>.generate(10000, (int index) => rnd.nextInt(7) + 1);
-  }
-
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: DatabaseService.getUser(widget.profileID).asStream(),
+      stream: DatabaseService.getUser(widget.userUID).asStream(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          var userData = snapshot.data as UserModel;
+          var user = snapshot.data as UserModel;
           return Scaffold(
             appBar: AppBar(
-              title: Text(
-                '@${userData.username}',
-                style: const TextStyle(fontSize: 18, color: Colors.white),
-              ),
+              title: Text('@${user.username}',
+                  style: const TextStyle(fontSize: 18, color: Colors.white)),
               actions: [
                 Padding(
                   padding: const EdgeInsets.only(right: 10.0),
-                  child: (widget.profileID == currentUserID)
+                  child: (widget.userUID == Authentication.currentUser.uid)
                       ? GestureDetector(
-                          child: const Icon(
-                            Icons.logout_outlined,
-                            color: Colors.white,
-                          ),
+                          child: const Icon(Icons.logout_outlined, color: Colors.white),
                           onTap: () {
                             Authentication.signOutUser();
-                            Navigator.of(context, rootNavigator: true)
-                                .pushReplacement(
-                              MaterialPageRoute(
-                                builder: (context) => LoginScreen(),
-                              ),
+                            Navigator.of(context, rootNavigator: true).pushReplacement(
+                              MaterialPageRoute(builder: (context) => LoginScreen()),
                             );
                           },
                         )
@@ -86,72 +63,49 @@ class _ProfilePageState extends State<ProfilePage> {
                   const SizedBox(height: 5),
                   Padding(
                     padding: const EdgeInsets.all(20.0),
-                    child: ProfilePicture(
-                      side: 100,
-                      image: userData.profilePhoto,
-                    ),
+                    child: ProfilePicture(side: 100, image: user.profilePhoto),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 3.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
-                          '${userData.name} ',
-                          style: GoogleFonts.dmSans(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500,
-                            fontStyle: FontStyle.normal,
-                          ),
-                        ),
-                        const Icon(
-                          Icons.verified,
-                          color: Colors.amber,
-                          size: 22,
-                        ),
+                        Text('${user.name} ', style: kDarkLabelTextStyle),
+                        const Icon(Icons.verified, color: Colors.amber, size: 22),
                       ],
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 3.0, bottom: 15),
-                    child: Text(
-                      userData.accountType,
-                      style: GoogleFonts.dmSans(
-                        fontSize: 13,
-                        color: Colors.black38,
-                      ),
-                    ),
+                    padding: const EdgeInsets.only(top: 1.0, bottom: 15),
+                    child: Text(user.accountType, style: kLightLabelTextStyle),
                   ),
-                  StreamBuilder(
-                    stream: DatabaseService.postsRef
-                        .where('authorId', isEqualTo: widget.profileID)
-                        .get()
-                        .asStream(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData &&
-                          snapshot.connectionState == ConnectionState.done) {
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            NumberAndLabel(
-                              number:
-                                  '${(snapshot.data as QuerySnapshot).docs.length}',
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      StreamBuilder(
+                        stream: DatabaseService.postsRef
+                            .where('authorId', isEqualTo: widget.userUID)
+                            .get()
+                            .asStream(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData &&
+                              snapshot.connectionState == ConnectionState.done) {
+                            return NumberAndLabel(
+                              number: '${(snapshot.data as QuerySnapshot).docs.length}',
                               label: '   Posts   ',
-                            ),
-                            const NumberAndLabel(
-                                number: '524', label: 'Followers'),
-                            const NumberAndLabel(
-                                number: '343', label: 'Following'),
-                          ],
-                        );
-                      } else {
-                        return const CircularProgressIndicator();
-                      }
-                    },
+                            );
+                          } else {
+                            return const CircularProgressIndicator();
+                          }
+                        },
+                      ),
+                      const NumberAndLabel(number: '524', label: 'Followers'),
+                      const NumberAndLabel(number: '343', label: 'Following'),
+                    ],
                   ),
                   const SizedBox(height: 20),
-                  widget.profileID == currentUserID
+                  (widget.userUID == Authentication.currentUser.uid)
                       ? CustomOutlinedButton(
                           buttonText: 'Edit Profile',
                           widthFactor: 0.9,
@@ -159,9 +113,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => EditProfileScreen(
-                                  user: userData,
-                                ),
+                                builder: (context) => EditProfileScreen(user: user),
                               ),
                             ).then((value) => setState(() {}));
                           },
@@ -178,9 +130,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             ElevatedButton(
                               child: const Text('Follow'),
                               style: ElevatedButton.styleFrom(
-                                fixedSize: Size(
-                                    MediaQuery.of(context).size.width * 0.45,
-                                    43),
+                                fixedSize: Size(MediaQuery.of(context).size.width * 0.45, 43),
                                 primary: Colors.amber.shade300,
                                 onPrimary: Colors.black,
                                 shape: RoundedRectangleBorder(
@@ -191,7 +141,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           ],
                         ),
-                  const SizedBox(height: 20, width: 200),
+                  const SizedBox(height: 20),
                   Row(
                     children: <Widget>[
                       PostType(
@@ -216,52 +166,30 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ],
                   ),
-                  // Padding(
-                  //   padding: const EdgeInsets.all(5),
-                  //   child: AlignedGridView.count(
-                  //     crossAxisCount: crossAxisCount,
-                  //     mainAxisSpacing: 4,
-                  //     crossAxisSpacing: 4,
-                  //     itemBuilder: (context, index) {
-                  //       DatabaseService.postsRef
-                  //           .where('authorId', isEqualTo: currentUserID);
-                  //       return ImageTile(
-                  //         index: index,
-                  //         width: 200,
-                  //         height: 100,
-                  //       );
-                  //     },
-                  //     itemCount: extents.length,
-                  //   ),
-                  // ),
                   const SizedBox(),
                   FutureBuilder(
                     future: DatabaseService.postsRef
-                        .where('authorId', isEqualTo: widget.profileID)
+                        .where('authorId', isEqualTo: widget.userUID)
                         .orderBy('timestamp', descending: true)
                         .get(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.done) {
                         return GridView.builder(
-                          padding: EdgeInsets.all(10),
+                          padding: const EdgeInsets.all(10),
                           shrinkWrap: true,
                           itemCount: (snapshot.data! as dynamic).docs.length,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 3,
                             crossAxisSpacing: 10,
                             mainAxisSpacing: 10,
                             childAspectRatio: 1,
                           ),
                           itemBuilder: (context, index) {
-                            DocumentSnapshot snap =
-                                (snapshot.data! as dynamic).docs[index];
+                            PostModel post =
+                                PostModel.fromDocument((snapshot.data! as dynamic).docs[index]);
                             return Container(
                               decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: NetworkImage(snap['imageUrl']),
-                                  fit: BoxFit.cover,
-                                ),
+                                image: DecorationImage(image: post.image, fit: BoxFit.cover),
                                 shape: BoxShape.rectangle,
                                 borderRadius: BorderRadius.circular(11.0),
                               ),
@@ -269,9 +197,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           },
                         );
                       } else {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
+                        return const Center(child: CircularProgressIndicator());
                       }
                     },
                   )
@@ -286,26 +212,3 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 }
-//
-// class ImageTile extends StatelessWidget {
-//   const ImageTile({
-//     Key? key,
-//     required this.index,
-//     required this.width,
-//     required this.height,
-//   }) : super(key: key);
-//
-//   final int index;
-//   final int width;
-//   final int height;
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Image.network(
-//       'https://picsum.photos/$width/$height?random=$index',
-//       width: width.toDouble(),
-//       height: height.toDouble(),
-//       fit: BoxFit.cover,
-//     );
-//   }
-// }

@@ -4,7 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 
 import 'package:amber/constants.dart';
 import 'package:amber/screens/login.dart';
-import 'package:amber/screens/navbar.dart';
+import 'package:amber/screens/main_screen.dart';
 import 'package:amber/firebase_options.dart';
 
 Future main() async {
@@ -36,8 +36,7 @@ class _MyAppState extends State<MyApp> {
         colorScheme: ColorScheme.fromSwatch(
           primarySwatch: createMaterialColor(const Color(0xff9eb7ff)),
         ).copyWith(secondary: Colors.orange),
-        textSelectionTheme:
-            const TextSelectionThemeData(cursorColor: Colors.orange),
+        textSelectionTheme: const TextSelectionThemeData(cursorColor: Colors.orange),
       ),
       initialRoute: LoginScreen.id,
       routes: {

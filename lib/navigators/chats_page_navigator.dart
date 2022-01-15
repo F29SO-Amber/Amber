@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:amber/screens/extra.dart';
 import 'package:amber/screens/chats.dart';
 
 class ChatsPageNavigator extends StatefulWidget {
@@ -24,8 +23,6 @@ class _ChatsPageNavigatorState extends State<ChatsPageNavigator> {
             switch (settings.name) {
               case '/':
                 return const ChatsPage();
-              case '/chat2':
-                return const ExtraPage(pageName: 'From Chat Page');
               default:
                 return const ChatsPage();
             }

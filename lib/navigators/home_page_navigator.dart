@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:amber/screens/home.dart';
-import 'package:amber/screens/extra.dart';
 
 class HomePageNavigator extends StatefulWidget {
   const HomePageNavigator({Key? key}) : super(key: key);
@@ -24,8 +23,6 @@ class _HomePageNavigatorState extends State<HomePageNavigator> {
             switch (settings.name) {
               case '/':
                 return const HomePage();
-              case '/home2':
-                return const ExtraPage(pageName: 'From Home Page');
               default:
                 return const HomePage();
             }
