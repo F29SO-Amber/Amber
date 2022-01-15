@@ -4,6 +4,7 @@ import 'package:amber/models/post.dart';
 import 'package:amber/widgets/custom_outlined_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:amber/constants.dart';
 import 'package:amber/models/user.dart';
@@ -194,26 +195,22 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ],
                   ),
-                  // SizedBox(
-                  //   height: 282,
-                  //   width: double.infinity,
-                  //   child: Padding(
-                  //     padding: const EdgeInsets.all(5),
-                  //     child: AlignedGridView.count(
-                  //       crossAxisCount: crossAxisCount,
-                  //       mainAxisSpacing: 4,
-                  //       crossAxisSpacing: 4,
-                  //       itemBuilder: (context, index) {
-                  //         DatabaseService.postsRef
-                  //             .where('authorId', isEqualTo: currentUserID);
-                  //         return ImageTile(
-                  //           index: index,
-                  //           width: 100,
-                  //           height: 100,
-                  //         );
-                  //       },
-                  //       itemCount: extents.length,
-                  //     ),
+                  // Padding(
+                  //   padding: const EdgeInsets.all(5),
+                  //   child: AlignedGridView.count(
+                  //     crossAxisCount: crossAxisCount,
+                  //     mainAxisSpacing: 4,
+                  //     crossAxisSpacing: 4,
+                  //     itemBuilder: (context, index) {
+                  //       DatabaseService.postsRef
+                  //           .where('authorId', isEqualTo: currentUserID);
+                  //       return ImageTile(
+                  //         index: index,
+                  //         width: 200,
+                  //         height: 100,
+                  //       );
+                  //     },
+                  //     itemCount: extents.length,
                   //   ),
                   // ),
                   const SizedBox(),
@@ -228,22 +225,28 @@ class _ProfilePageState extends State<ProfilePage> {
                         );
                       }
                       return GridView.builder(
+                        padding: EdgeInsets.all(10),
                         shrinkWrap: true,
                         itemCount: (snapshot.data! as dynamic).docs.length,
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 3,
-                          crossAxisSpacing: 5,
-                          mainAxisSpacing: 1.5,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
                           childAspectRatio: 1,
                         ),
                         itemBuilder: (context, index) {
                           DocumentSnapshot snap =
                               (snapshot.data! as dynamic).docs[index];
-
-                          return Image(
-                            image: NetworkImage(snap['imageUrl']),
-                            fit: BoxFit.cover,
+                          return Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: NetworkImage(snap['imageUrl']),
+                                fit: BoxFit.cover,
+                              ),
+                              shape: BoxShape.rectangle,
+                              borderRadius: BorderRadius.circular(11.0),
+                            ),
                           );
                         },
                       );
@@ -260,24 +263,26 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 }
-
-class ImageTile extends StatelessWidget {
-  const ImageTile({
-    Key? key,
-    required this.url,
-    required this.side,
-  }) : super(key: key);
-
-  final String url;
-  final double side;
-
-  @override
-  Widget build(BuildContext context) {
-    return Image.network(
-      url,
-      width: side,
-      height: side,
-      fit: BoxFit.cover,
-    );
-  }
-}
+//
+// class ImageTile extends StatelessWidget {
+//   const ImageTile({
+//     Key? key,
+//     required this.index,
+//     required this.width,
+//     required this.height,
+//   }) : super(key: key);
+//
+//   final int index;
+//   final int width;
+//   final int height;
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Image.network(
+//       'https://picsum.photos/$width/$height?random=$index',
+//       width: width.toDouble(),
+//       height: height.toDouble(),
+//       fit: BoxFit.cover,
+//     );
+//   }
+// }
