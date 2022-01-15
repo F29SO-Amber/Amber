@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:amber/constants.dart';
 import 'package:amber/models/user.dart';
@@ -26,6 +27,8 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  int selectedTab = 0;
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -145,24 +148,34 @@ class _ProfilePageState extends State<ProfilePage> {
                   Row(
                     children: <Widget>[
                       PostType(
-                        numOfDivisions: 4,
+                        numOfDivisions: 3,
                         bgColor: Colors.red[100]!,
-                        icon: const Icon(Icons.image),
+                        icon: const Icon(FontAwesomeIcons.images),
+                        index: 0,
+                        currentTab: selectedTab,
+                        onPress: () {
+                          setState(() => selectedTab = 0);
+                        },
                       ),
                       PostType(
-                        numOfDivisions: 4,
+                        numOfDivisions: 3,
                         bgColor: Colors.greenAccent[100]!,
-                        icon: const Icon(Icons.play_arrow_sharp),
+                        icon: const Icon(FontAwesomeIcons.playCircle),
+                        index: 1,
+                        currentTab: selectedTab,
+                        onPress: () {
+                          setState(() => selectedTab = 1);
+                        },
                       ),
                       PostType(
-                        numOfDivisions: 4,
-                        bgColor: Colors.blue[100]!,
-                        icon: const Icon(Icons.article_outlined),
-                      ),
-                      PostType(
-                        numOfDivisions: 4,
+                        numOfDivisions: 3,
                         bgColor: Colors.brown[100]!,
-                        icon: const Icon(Icons.group),
+                        icon: const Icon(FontAwesomeIcons.userFriends),
+                        index: 2,
+                        currentTab: selectedTab,
+                        onPress: () {
+                          setState(() => selectedTab = 2);
+                        },
                       ),
                     ],
                   ),
