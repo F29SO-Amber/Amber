@@ -125,8 +125,10 @@ class _PostPageState extends State<PostPage> {
   }
 
   Future<String> uploadImage(imageFile) async {
-    UploadTask uploadTask =
-        StorageService.storageRef.child("post_$postId.jpg").putFile(imageFile);
+    UploadTask uploadTask = StorageService.storageRef
+        .child("posts")
+        .child('${widget.currentUserId}_${Timestamp.now()}')
+        .putFile(imageFile);
     TaskSnapshot storageSnap = await uploadTask;
     String downloadURL = await storageSnap.ref.getDownloadURL();
     return downloadURL;
