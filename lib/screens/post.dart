@@ -147,7 +147,9 @@ class _PostPageState extends State<PostPage> {
       map['score'] = 0;
       map['authorId'] = widget.currentUserId;
       map['timestamp'] = Timestamp.now();
-      await DatabaseService.postsRef.doc(widget.currentUserId).set(map);
+      await DatabaseService.postsRef
+          .doc('${widget.currentUserId}_${Timestamp.now()}')
+          .set(map);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Image Posted!")),
       );
