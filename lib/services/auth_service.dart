@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:amber/services/database_service.dart';
 
-class Authentication {
+class AuthService {
   static final _auth = FirebaseAuth.instance;
   static late User currentUser;
 

@@ -31,9 +31,9 @@ class LoginScreen extends StatelessWidget {
       logo: const AssetImage('assets/logo.png'),
       loginAfterSignUp: false,
       theme: kLoginTheme,
-      onLogin: Authentication.authUser,
-      onSignup: Authentication.signupUser,
-      onRecoverPassword: Authentication.recoverPassword,
+      onLogin: AuthService.authUser,
+      onSignup: AuthService.signupUser,
+      onRecoverPassword: AuthService.recoverPassword,
       messages: LoginMessages(signUpSuccess: "Sign up successful!"),
       additionalSignupFields: [
         UserFormField(

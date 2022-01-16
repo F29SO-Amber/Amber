@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -36,18 +38,21 @@ class _ProfilePageState extends State<ProfilePage> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           var user = snapshot.data as UserModel;
+          // print(DatabaseService.user?.name);
           return Scaffold(
             appBar: AppBar(
-              title: Text('@${user.username}',
-                  style: const TextStyle(fontSize: 18, color: Colors.white)),
+              title: Text(
+                '@${user.username}',
+                style: const TextStyle(fontSize: 18, color: Colors.white),
+              ),
               actions: [
                 Padding(
                   padding: const EdgeInsets.only(right: 10.0),
-                  child: (widget.userUID == Authentication.currentUser.uid)
+                  child: (widget.userUID == AuthService.currentUser.uid)
                       ? GestureDetector(
                           child: const Icon(Icons.logout_outlined, color: Colors.white),
                           onTap: () {
-                            Authentication.signOutUser();
+                            AuthService.signOutUser();
                             Navigator.of(context, rootNavigator: true).pushReplacement(
                               MaterialPageRoute(builder: (context) => LoginScreen()),
                             );
@@ -108,7 +113,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ],
                   ),
                   const SizedBox(height: 20),
-                  (widget.userUID == Authentication.currentUser.uid)
+                  (widget.userUID == AuthService.currentUser.uid)
                       ? CustomOutlinedButton(
                           buttonText: 'Edit Profile',
                           widthFactor: 0.9,
@@ -188,8 +193,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.done) {
                         return GridView.builder(
-                          padding: const EdgeInsets.all(10),
+                          padding: const EdgeInsets.all(10).copyWith(bottom: 30),
                           shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
                           itemCount: (snapshot.data! as dynamic).docs.length,
                           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 3,
@@ -210,7 +216,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           },
                         );
                       } else {
-                        return const Center(child: CircularProgressIndicator());
+                        return Container();
                       }
                     },
                   )
@@ -219,7 +225,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           );
         } else {
-          return const CircularProgressIndicator();
+          return Container();
         }
       },
     );

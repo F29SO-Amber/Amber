@@ -13,7 +13,7 @@ class PublishPageNavigator extends StatefulWidget {
 GlobalKey<NavigatorState> postNavigatorKey = GlobalKey<NavigatorState>();
 
 class _PublishPageNavigatorState extends State<PublishPageNavigator> {
-  String currentUserId = Authentication.currentUser.uid;
+  String currentUserId = AuthService.currentUser.uid;
   @override
   Widget build(BuildContext context) {
     return Navigator(

@@ -31,7 +31,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
           List<UserCard> list = [];
           snapshot.data?.docs.forEach((doc) {
             UserModel user = UserModel.fromDocument(doc);
-            if (user.id != Authentication.currentUser.uid) {
+            if (user.id != AuthService.currentUser.uid) {
               //do not show current user on discover page
               list.add(
                 UserCard(

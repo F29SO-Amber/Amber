@@ -12,7 +12,7 @@ class StorageService {
     TaskSnapshot taskSnapshot = await _storage
         .ref()
         .child('posts')
-        .child('${Authentication.currentUser.uid}_${Timestamp.now()}')
+        .child('${AuthService.currentUser.uid}_${Timestamp.now()}')
         .putFile(file);
 
     return taskSnapshot.ref.getDownloadURL();

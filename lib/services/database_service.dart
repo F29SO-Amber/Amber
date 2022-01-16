@@ -6,14 +6,20 @@ import 'package:flutter_login/flutter_login.dart';
 
 class DatabaseService {
   static final _firestore = FirebaseFirestore.instance;
-  static CollectionReference usersRef = _firestore.collection('users');
-  static CollectionReference postsRef = _firestore.collection('posts');
+  static final usersRef = _firestore.collection('users');
+  static final postsRef = _firestore.collection('posts');
+  static late final UserModel? user;
   static late String usernameresult;
 
   static Future<UserModel> getUser(String uid) async {
     DocumentSnapshot doc = await usersRef.doc(uid).get();
+    // user = UserModel.fromDocument(doc);
     return UserModel.fromDocument(doc);
   }
+
+  // static Future<void> updateCurrentUser() async {
+  //   user = UserModel.fromDocument(await usersRef.doc(AuthService.currentUser.uid).get());
+  // }
 
   static Future<String?> isUserValueUnique(String username) async {
     QuerySnapshot<Map<String, dynamic>> snapshot =
@@ -42,7 +48,7 @@ class DatabaseService {
   static addUserData(SignupData data) {
     Map<String, dynamic> map = {};
     map.addAll({
-      'id': Authentication.currentUser.uid,
+      'id': AuthService.currentUser.uid,
       'email': '${data.name}',
       'time_created': Timestamp.now(),
       'profilePhotoURL':
@@ -51,19 +57,19 @@ class DatabaseService {
     data.additionalSignupData?.forEach((key, value) {
       map.addAll({key: value});
     });
-    usersRef.doc(Authentication.currentUser.uid).set(map);
+    usersRef.doc(AuthService.currentUser.uid).set(map);
   }
 
   static addUserPost(String imageURL) {
     Map<String, dynamic> map = {};
     map.addAll({
-      'id': '${Authentication.currentUser.uid}_${Timestamp.now()}',
+      'id': '${AuthService.currentUser.uid}_${Timestamp.now()}',
       'imageUrl': imageURL,
       'caption': '',
       'score': 0,
-      'authorId': Authentication.currentUser.uid,
+      'authorId': AuthService.currentUser.uid,
       'timestamp': Timestamp.now(),
     });
-    postsRef.doc('${Authentication.currentUser.uid}_${Timestamp.now()}').set(map);
+    postsRef.doc('${AuthService.currentUser.uid}_${Timestamp.now()}').set(map);
   }
 }
