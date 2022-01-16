@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 
 import 'package:amber/navigators/chats_page_navigator.dart';
@@ -11,7 +10,7 @@ import 'package:amber/navigators/home_page_navigator.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
-  static const id = '/navbar';
+  static const id = '/main_screen';
 
   @override
   _MainScreenState createState() => _MainScreenState();

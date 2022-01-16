@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class CustomOutlinedButton extends StatelessWidget {
-  const CustomOutlinedButton({
+class CustomElevatedButton extends StatelessWidget {
+  const CustomElevatedButton({
     Key? key,
     required this.widthFactor,
     required this.onPress,
@@ -14,13 +14,12 @@ class CustomOutlinedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return OutlinedButton(
+    return ElevatedButton(
       child: Text(buttonText),
-      style: OutlinedButton.styleFrom(
-        backgroundColor: Colors.amber.shade50,
+      style: ElevatedButton.styleFrom(
         fixedSize: Size(MediaQuery.of(context).size.width * widthFactor, 43),
-        primary: Colors.black,
-        side: BorderSide(width: 1.0, color: Colors.amber.shade500),
+        primary: Colors.amber.shade300,
+        onPrimary: Colors.black,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
