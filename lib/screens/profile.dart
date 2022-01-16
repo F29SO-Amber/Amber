@@ -1,5 +1,4 @@
-import 'dart:io';
-
+import 'package:amber/widgets/custom_elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -30,6 +29,72 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   int selectedTab = 0;
+  bool isFollowing = false;
+
+  checkIfFollowing() async {
+    DocumentSnapshot doc = await DatabaseService.followersRef
+        .doc(widget.userUID)
+        .collection('usersFollowers')
+        .doc(AuthService.currentUser.uid)
+        .get();
+    setState(() {
+      isFollowing = doc.exists;
+    });
+  }
+
+  handleUnfollow() async {
+    DocumentSnapshot doc = await DatabaseService.usersRef.doc(AuthService.currentUser.uid).get();
+    // users = UserModel.fromJson(doc.data());
+    setState(() {
+      isFollowing = false;
+    });
+    //remove follower
+    DatabaseService.followersRef
+        .doc(widget.userUID)
+        .collection('userFollowers')
+        .doc(AuthService.currentUser.uid)
+        .get()
+        .then(
+      (doc) {
+        if (doc.exists) {
+          doc.reference.delete();
+        }
+      },
+    );
+    //remove following
+    DatabaseService.followingRef
+        .doc(AuthService.currentUser.uid)
+        .collection('userFollowing')
+        .doc(widget.userUID)
+        .get()
+        .then(
+      (doc) {
+        if (doc.exists) {
+          doc.reference.delete();
+        }
+      },
+    );
+  }
+
+  handleFollow() async {
+    DocumentSnapshot doc = await DatabaseService.usersRef.doc(AuthService.currentUser.uid).get();
+    // users = UserModel.fromJson(doc.data());
+    setState(() {
+      isFollowing = true;
+    });
+    //updates the followers collection of the followed user
+    DatabaseService.followersRef
+        .doc(widget.userUID)
+        .collection('userFollowers')
+        .doc(AuthService.currentUser.uid)
+        .set({});
+    //updates the following collection of the currentUser
+    DatabaseService.followingRef
+        .doc(AuthService.currentUser.uid)
+        .collection('userFollowing')
+        .doc(widget.userUID)
+        .set({});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,19 +162,50 @@ class _ProfilePageState extends State<ProfilePage> {
                             .get()
                             .asStream(),
                         builder: (context, snapshot) {
-                          if (snapshot.hasData &&
-                              snapshot.connectionState == ConnectionState.done) {
+                          if (snapshot.connectionState == ConnectionState.done) {
                             return NumberAndLabel(
                               number: '${(snapshot.data as QuerySnapshot).docs.length}',
                               label: '   Posts   ',
                             );
                           } else {
-                            return const CircularProgressIndicator();
+                            return Container();
                           }
                         },
                       ),
-                      const NumberAndLabel(number: '524', label: 'Followers'),
-                      const NumberAndLabel(number: '343', label: 'Following'),
+                      StreamBuilder(
+                        stream: DatabaseService.followersRef
+                            .doc(widget.userUID)
+                            .collection('userFollowers')
+                            .get()
+                            .asStream(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.done) {
+                            return NumberAndLabel(
+                              number: '${(snapshot.data as QuerySnapshot).docs.length}',
+                              label: 'Followers',
+                            );
+                          } else {
+                            return Container();
+                          }
+                        },
+                      ),
+                      StreamBuilder(
+                        stream: DatabaseService.followingRef
+                            .doc(widget.userUID)
+                            .collection('userFollowing')
+                            .get()
+                            .asStream(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.done) {
+                            return NumberAndLabel(
+                              number: '${(snapshot.data as QuerySnapshot).docs.length}',
+                              label: 'Following',
+                            );
+                          } else {
+                            return Container();
+                          }
+                        },
+                      ),
                     ],
                   ),
                   const SizedBox(height: 20),
@@ -135,18 +231,17 @@ class _ProfilePageState extends State<ProfilePage> {
                               widthFactor: 0.45,
                               onPress: () {},
                             ),
-                            ElevatedButton(
-                              child: const Text('Follow'),
-                              style: ElevatedButton.styleFrom(
-                                fixedSize: Size(MediaQuery.of(context).size.width * 0.45, 43),
-                                primary: Colors.amber.shade300,
-                                onPrimary: Colors.black,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
-                              onPressed: () {},
-                            ),
+                            (isFollowing)
+                                ? CustomElevatedButton(
+                                    buttonText: 'Unfollow',
+                                    widthFactor: 0.45,
+                                    onPress: handleUnfollow,
+                                  )
+                                : CustomElevatedButton(
+                                    buttonText: 'Follow',
+                                    widthFactor: 0.45,
+                                    onPress: handleFollow,
+                                  ),
                           ],
                         ),
                   const SizedBox(height: 20),
@@ -225,7 +320,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           );
         } else {
-          return Container();
+          return const Center(child: CircularProgressIndicator());
         }
       },
     );

@@ -18,6 +18,7 @@ import 'package:amber/services/storage_service.dart';
 class PostPage extends StatefulWidget {
   static const id = '/post';
   final String currentUserId;
+
   const PostPage({Key? key, required this.currentUserId}) : super(key: key);
 
   @override
@@ -25,11 +26,11 @@ class PostPage extends StatefulWidget {
 }
 
 class _PostPageState extends State<PostPage> {
-  TextEditingController locationController = TextEditingController();
-  TextEditingController captionController = TextEditingController();
   File? file;
   bool isUploading = false;
-  String postId = Uuid().v4();
+  String postId = const Uuid().v4();
+  TextEditingController locationController = TextEditingController();
+  TextEditingController captionController = TextEditingController();
 
   handleTakePhoto() async {
     Navigator.pop(dialogContext);
@@ -61,9 +62,7 @@ class _PostPageState extends State<PostPage> {
           return SimpleDialog(
             title: const Text("Create post"),
             children: <Widget>[
-              SimpleDialogOption(
-                  child: const Text("Photo with camera "),
-                  onPressed: handleTakePhoto
+              SimpleDialogOption(child: const Text("Photo with camera "), onPressed: handleTakePhoto
                   // Navigator.of(context).pop();
                   ),
               SimpleDialogOption(
@@ -98,8 +97,7 @@ class _PostPageState extends State<PostPage> {
                   //fixedSize: Size(MediaQuery.of(context).size.width * 0.65, 43),
                   primary: Colors.amber, // background
                   onPrimary: Colors.black, // foreground
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(90.0))),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(90.0))),
             ),
           ),
         ],
@@ -135,9 +133,7 @@ class _PostPageState extends State<PostPage> {
   }
 
   createPostInFirestore(
-      {required String mediaURL,
-      required String location,
-      required String description}) async {
+      {required String mediaURL, required String location, required String description}) async {
     Map<String, Object?> map = {};
     if (file != null) {
       map['id'] = '${widget.currentUserId}_${Timestamp.now()}';
@@ -147,9 +143,7 @@ class _PostPageState extends State<PostPage> {
       map['score'] = 0;
       map['authorId'] = widget.currentUserId;
       map['timestamp'] = Timestamp.now();
-      await DatabaseService.postsRef
-          .doc('${widget.currentUserId}_${Timestamp.now()}')
-          .set(map);
+      await DatabaseService.postsRef.doc('${widget.currentUserId}_${Timestamp.now()}').set(map);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Image Posted!")),
       );
@@ -187,9 +181,7 @@ class _PostPageState extends State<PostPage> {
               appBar: AppBar(
                 backgroundColor: Colors.amber[50],
                 leading: IconButton(
-                    icon: Icon(Icons.arrow_back),
-                    color: Colors.black,
-                    onPressed: clearImage),
+                    icon: Icon(Icons.arrow_back), color: Colors.black, onPressed: clearImage),
                 title: Text(
                   "Caption Post",
                   style: TextStyle(color: Colors.black),
@@ -200,9 +192,7 @@ class _PostPageState extends State<PostPage> {
                     child: Text(
                       "Post",
                       style: TextStyle(
-                          color: Colors.amber[600],
-                          fontWeight: FontWeight.bold,
-                          fontSize: 17.0),
+                          color: Colors.amber[600], fontWeight: FontWeight.bold, fontSize: 17.0),
                     ),
                   ),
                 ],

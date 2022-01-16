@@ -8,18 +8,13 @@ class DatabaseService {
   static final _firestore = FirebaseFirestore.instance;
   static final usersRef = _firestore.collection('users');
   static final postsRef = _firestore.collection('posts');
-  static late final UserModel? user;
+  static final followersRef = _firestore.collection('followers');
+  static final followingRef = _firestore.collection('following');
   static late String usernameresult;
 
   static Future<UserModel> getUser(String uid) async {
-    DocumentSnapshot doc = await usersRef.doc(uid).get();
-    // user = UserModel.fromDocument(doc);
-    return UserModel.fromDocument(doc);
+    return UserModel.fromDocument(await usersRef.doc(uid).get());
   }
-
-  // static Future<void> updateCurrentUser() async {
-  //   user = UserModel.fromDocument(await usersRef.doc(AuthService.currentUser.uid).get());
-  // }
 
   static Future<String?> isUserValueUnique(String username) async {
     QuerySnapshot<Map<String, dynamic>> snapshot =
