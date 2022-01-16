@@ -27,6 +27,9 @@ class _ChatsPageState extends State<ChatsPage> {
         child: const Center(child: Text('To be implemented!')),
         onTap: () => showMaterialModalBottomSheet(
           expand: false,
+          // shape: RoundedRectangleBorder(
+          //   borderRadius: BorderRadius.circular(33),
+          // ),
           context: context,
           backgroundColor: Colors.transparent,
           builder: (context) => const ModalFit(),
@@ -43,17 +46,44 @@ class ModalFit extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       child: SafeArea(
-          top: false,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 50.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: const [
-                ProfilePicture(side: 100, path: 'assets/camera.png'),
-                ProfilePicture(side: 100, path: 'assets/gallery.png'),
-              ],
-            ),
-          )),
+        top: false,
+        child: SizedBox(
+          height: 250,
+          width: double.infinity,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 25.0),
+                child: Text('Choose media from:', style: kDarkLabelTextStyle),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Column(
+                    children: [
+                      const ProfilePicture(side: 100, path: 'assets/camera.png'),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10.0),
+                        child: Text('Camera', style: kLightLabelTextStyle),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      const ProfilePicture(side: 100, path: 'assets/gallery.png'),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10.0),
+                        child: Text('Gallery', style: kLightLabelTextStyle),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
