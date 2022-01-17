@@ -31,10 +31,16 @@ class _ProfilePageState extends State<ProfilePage> {
   int selectedTab = 0;
   bool isFollowing = false;
 
+  @override
+  void initState() {
+    super.initState();
+    checkIfFollowing();
+  }
+
   checkIfFollowing() async {
     DocumentSnapshot doc = await DatabaseService.followersRef
         .doc(widget.userUID)
-        .collection('usersFollowers')
+        .collection('userFollowers')
         .doc(AuthService.currentUser.uid)
         .get();
     setState(() {
@@ -42,25 +48,19 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
-  handleUnfollow() async {
-    DocumentSnapshot doc = await DatabaseService.usersRef.doc(AuthService.currentUser.uid).get();
-    // users = UserModel.fromJson(doc.data());
-    setState(() {
-      isFollowing = false;
-    });
+  unfollowUser() async {
+    setState(() => isFollowing = false);
     //remove follower
     DatabaseService.followersRef
         .doc(widget.userUID)
         .collection('userFollowers')
         .doc(AuthService.currentUser.uid)
         .get()
-        .then(
-      (doc) {
-        if (doc.exists) {
-          doc.reference.delete();
-        }
-      },
-    );
+        .then((doc) {
+      if (doc.exists) {
+        doc.reference.delete();
+      }
+    });
     //remove following
     DatabaseService.followingRef
         .doc(AuthService.currentUser.uid)
@@ -76,12 +76,8 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  handleFollow() async {
-    DocumentSnapshot doc = await DatabaseService.usersRef.doc(AuthService.currentUser.uid).get();
-    // users = UserModel.fromJson(doc.data());
-    setState(() {
-      isFollowing = true;
-    });
+  followUser() async {
+    setState(() => isFollowing = true);
     //updates the followers collection of the followed user
     DatabaseService.followersRef
         .doc(widget.userUID)
@@ -168,7 +164,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               label: '   Posts   ',
                             );
                           } else {
-                            return Container();
+                            return const NumberAndLabel(number: '0', label: '   Posts   ');
                           }
                         },
                       ),
@@ -185,7 +181,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               label: 'Followers',
                             );
                           } else {
-                            return Container();
+                            return const NumberAndLabel(number: '0', label: 'Followers');
                           }
                         },
                       ),
@@ -202,7 +198,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               label: 'Following',
                             );
                           } else {
-                            return Container();
+                            return const NumberAndLabel(number: '0', label: 'Following');
                           }
                         },
                       ),
@@ -235,12 +231,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ? CustomElevatedButton(
                                     buttonText: 'Unfollow',
                                     widthFactor: 0.45,
-                                    onPress: handleUnfollow,
+                                    onPress: unfollowUser,
                                   )
                                 : CustomElevatedButton(
                                     buttonText: 'Follow',
                                     widthFactor: 0.45,
-                                    onPress: handleFollow,
+                                    onPress: followUser,
                                   ),
                           ],
                         ),
@@ -280,11 +276,12 @@ class _ProfilePageState extends State<ProfilePage> {
                     ],
                   ),
                   const SizedBox(),
-                  FutureBuilder(
-                    future: DatabaseService.postsRef
+                  StreamBuilder(
+                    stream: DatabaseService.postsRef
                         .where('authorId', isEqualTo: widget.userUID)
                         .orderBy('timestamp', descending: true)
-                        .get(),
+                        .get()
+                        .asStream(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.done) {
                         return GridView.builder(
@@ -311,7 +308,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           },
                         );
                       } else {
-                        return Container();
+                        return const Center(child: Text('No Posts'));
                       }
                     },
                   )

@@ -1,3 +1,4 @@
+import 'package:amber/widgets/post_widget.dart';
 import 'package:amber/widgets/profile_picture.dart';
 import 'package:flutter/material.dart';
 import 'package:amber/constants.dart';
@@ -23,17 +24,23 @@ class _ChatsPageState extends State<ChatsPage> {
           style: TextStyle(fontSize: 18, color: Colors.white),
         ),
       ),
-      body: GestureDetector(
-        child: const Center(child: Text('To be implemented!')),
-        onTap: () => showMaterialModalBottomSheet(
-          expand: false,
-          // shape: RoundedRectangleBorder(
-          //   borderRadius: BorderRadius.circular(33),
-          // ),
-          context: context,
-          backgroundColor: Colors.transparent,
-          builder: (context) => const ModalFit(),
-        ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const UserPost(),
+          GestureDetector(
+            child: const Center(child: Text('To be implemented!')),
+            onTap: () => showMaterialModalBottomSheet(
+              expand: false,
+              // shape: RoundedRectangleBorder(
+              //   borderRadius: BorderRadius.circular(33),
+              // ),
+              context: context,
+              backgroundColor: Colors.transparent,
+              builder: (context) => const ModalFit(),
+            ),
+          ),
+        ],
       ),
     );
   }
