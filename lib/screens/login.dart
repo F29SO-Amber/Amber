@@ -5,7 +5,7 @@ import 'package:flutter_login/flutter_login.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'package:amber/constants.dart';
+import 'package:amber/utilities/constants.dart';
 import 'package:amber/screens/main_screen.dart';
 import 'package:amber/services/auth_service.dart';
 

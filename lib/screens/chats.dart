@@ -1,7 +1,7 @@
 import 'package:amber/widgets/post_widget.dart';
 import 'package:amber/widgets/profile_picture.dart';
 import 'package:flutter/material.dart';
-import 'package:amber/constants.dart';
+import 'package:amber/utilities/constants.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ChatsPage extends StatefulWidget {

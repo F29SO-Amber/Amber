@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:amber/constants.dart';
+import 'package:amber/utilities/constants.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
