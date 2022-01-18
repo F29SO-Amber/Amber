@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 class ChatPage extends StatefulWidget {
   const ChatPage({Key? key, required this.chatID})
       : super(key: key);
+
   final String chatID;
 
   static const id = '/chat';
@@ -28,6 +29,17 @@ class _ChatPageState extends State<ChatPage> {
 
   // FirebaseAuth auth = FirebaseAuth.instance;
   @override
+  addData() async {
+    await FirebaseFirestore.instance.collection('messages').add({
+      'from': FirebaseAuth.instance.currentUser!.email,
+      'to': widget.chatID,
+      'time2': DateTime.now(),
+      'message': myControllerMsg.text,
+    });
+    myControllerMsg.clear();
+    print("done");
+    print(widget.chatID);
+  }
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
@@ -55,27 +67,6 @@ class _ChatPageState extends State<ChatPage> {
           color: Color(0xFF1F1A30),
           child: Column(
             children: [
-              // SizedBox(
-              //   height: 20,
-              // ),
-              // Padding(
-              //   padding: EdgeInsets.only(
-              //       bottom: MediaQuery.of(context).size.height * 0,
-              //       top: MediaQuery.of(context).size.height * 0.005),
-              //   child: Align(
-              //     alignment: Alignment.topLeft,
-              //     child: Padding(
-              //       padding: EdgeInsets.only(
-              //           top: MediaQuery.of(context).size.width * 0.06,
-              //           left: MediaQuery.of(context).size.width * 0.06),
-              //       // child: Text("${widget.chatmanname}",
-              //       //     style: TextStyle(
-              //       //         color: Colors.white,
-              //       //         fontWeight: FontWeight.bold,
-              //       //         fontSize: 30)),
-              //     ),
-              //   ),
-              // ),
               Expanded(
                 child: StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
