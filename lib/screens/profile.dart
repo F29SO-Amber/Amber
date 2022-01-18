@@ -372,28 +372,32 @@ class followers extends StatelessWidget {
         title: const Text(kAppName),
       ),
       body: FutureBuilder(
-        future:  DatabaseService.usersRef.get(),
-      
+        future: DatabaseService.followersRef
+            .doc(AuthService.currentUser.uid)
+            .collection('userFollowers')
+            .get(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           List<UserCard> list = [];
-          Future<List<String>> followerID = getData();
-          // ignore: unrelated_type_equality_checks
-          if (DatabaseService.usersRef.get() == followerID) { //change this to getting value from getData function list
-            snapshot.data?.docs.forEach((doc) {
-              UserModel user = UserModel.fromDocument(doc);
-              list.add(
-                UserCard(
-                  user: user,
-                  onPress: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ProfilePage(userUID: user.id)),
-                    );
-                  },
-                ),
-              );
-            });
+
+          List<String> a =
+              snapshot.data?.docs.map((doc) => doc.id).toList() as List<String>;
+          print(a);
+
+          for (int i = 0; i <= a.length; i++) {
+            UserModel user =
+                DatabaseService.getUser(a.elementAt(i)) as UserModel;
+            list.add(
+              UserCard(
+                user: user,
+                onPress: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ProfilePage(userUID: user.id)),
+                  );
+                },
+              ),
+            );
           }
           return ListView(children: list);
         },
