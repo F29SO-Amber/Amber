@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
-
 class ChatPage extends StatefulWidget {
-  const ChatPage({Key? key, required this.chatID})
+  const ChatPage({Key? key, required this.chatID, required this.chatName})
       : super(key: key);
 
   final String chatID;
+  final String chatName;
 
   static const id = '/chat';
 
@@ -25,12 +25,12 @@ class _ChatPageState extends State<ChatPage> {
   double blurRadius2 = 0;
   final myControllerMsg = TextEditingController();
   DateTime _now = DateTime.now();
-  // String formattedDate = DateFormat('kk:mm:ss \n EEE d MMM').format(now1);
 
   // FirebaseAuth auth = FirebaseAuth.instance;
   @override
   addData() async {
     await FirebaseFirestore.instance.collection('messages').add({
+      'token': '${FirebaseAuth.instance.currentUser!.email}|${widget.chatID}',
       'from': FirebaseAuth.instance.currentUser!.email,
       'to': widget.chatID,
       'time2': DateTime.now(),
@@ -53,7 +53,7 @@ class _ChatPageState extends State<ChatPage> {
                 child: CircleAvatar(
                 ),
               ),
-              Text("Texts",
+              Text("${widget.chatName}",
                   style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,

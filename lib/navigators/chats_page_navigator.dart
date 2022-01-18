@@ -27,6 +27,7 @@ class _ChatsPageNavigatorState extends State<ChatsPageNavigator> {
               case '/chat':
                 return ChatPage(
                   chatID: Authentication.currentUser.uid,
+                  chatName: Authentication.currentUser.uid,
                 );
               default:
                 return const ChatsPage();

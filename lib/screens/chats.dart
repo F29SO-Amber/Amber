@@ -177,7 +177,9 @@ class _ChatsPageState extends State<ChatsPage> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => ChatPage(
-                                          chatID: data['email'])));
+                                          chatID: data['email'],
+                                          chatName: data['name']
+                                      )));
 
                               // print(ref.getDownloadURL().toString());
                               // print("done");
