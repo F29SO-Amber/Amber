@@ -34,6 +34,7 @@ class _PostPageState extends State<PostPage> {
   TextEditingController captionController = TextEditingController();
 
   handleTakePhoto() async {
+    Navigator.pop(context);
     XFile? xFile = await ImagePicker().pickImage(source: ImageSource.camera);
     file = File('${xFile?.path}');
     if (mounted) {
@@ -42,6 +43,7 @@ class _PostPageState extends State<PostPage> {
   }
 
   handleChooseFromGallery() async {
+    Navigator.pop(context);
     XFile? xFile = await ImagePicker().pickImage(source: ImageSource.gallery);
     file = File('${xFile?.path}');
     if (mounted) {
