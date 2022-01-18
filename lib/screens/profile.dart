@@ -1,4 +1,5 @@
 import 'package:amber/widgets/custom_elevated_button.dart';
+import 'package:amber/widgets/user_card.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -14,7 +15,6 @@ import 'package:amber/widgets/profile_picture.dart';
 import 'package:amber/widgets/number_and_label.dart';
 import 'package:amber/services/database_service.dart';
 import 'package:amber/widgets/custom_outlined_button.dart';
-
 // am2024@hw.ac.uk
 
 class ProfilePage extends StatefulWidget {
@@ -111,11 +111,14 @@ class _ProfilePageState extends State<ProfilePage> {
                   padding: const EdgeInsets.only(right: 10.0),
                   child: (widget.userUID == AuthService.currentUser.uid)
                       ? GestureDetector(
-                          child: const Icon(Icons.logout_outlined, color: Colors.white),
+                          child: const Icon(Icons.logout_outlined,
+                              color: Colors.white),
                           onTap: () {
                             AuthService.signOutUser();
-                            Navigator.of(context, rootNavigator: true).pushReplacement(
-                              MaterialPageRoute(builder: (context) => LoginScreen()),
+                            Navigator.of(context, rootNavigator: true)
+                                .pushReplacement(
+                              MaterialPageRoute(
+                                  builder: (context) => LoginScreen()),
                             );
                           },
                         )
@@ -140,7 +143,8 @@ class _ProfilePageState extends State<ProfilePage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text('${user.name} ', style: kDarkLabelTextStyle),
-                        const Icon(Icons.verified, color: Colors.amber, size: 22),
+                        const Icon(Icons.verified,
+                            color: Colors.amber, size: 22),
                       ],
                     ),
                   ),
@@ -158,13 +162,16 @@ class _ProfilePageState extends State<ProfilePage> {
                             .get()
                             .asStream(),
                         builder: (context, snapshot) {
-                          if (snapshot.connectionState == ConnectionState.done) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.done) {
                             return NumberAndLabel(
-                              number: '${(snapshot.data as QuerySnapshot).docs.length}',
+                              number:
+                                  '${(snapshot.data as QuerySnapshot).docs.length}',
                               label: '   Posts   ',
                             );
                           } else {
-                            return const NumberAndLabel(number: '0', label: '   Posts   ');
+                            return const NumberAndLabel(
+                                number: '0', label: '   Posts   ');
                           }
                         },
                       ),
@@ -175,13 +182,20 @@ class _ProfilePageState extends State<ProfilePage> {
                             .get()
                             .asStream(),
                         builder: (context, snapshot) {
-                          if (snapshot.connectionState == ConnectionState.done) {
-                            return NumberAndLabel(
-                              number: '${(snapshot.data as QuerySnapshot).docs.length}',
-                              label: 'Followers',
-                            );
+                          if (snapshot.connectionState ==
+                              ConnectionState.done) {
+                            return GestureDetector(
+                                onTap: () {
+                                  _navigateToNextScreen(context);
+                                },
+                                child: NumberAndLabel(
+                                  number:
+                                      '${(snapshot.data as QuerySnapshot).docs.length}',
+                                  label: 'Followers',
+                                ));
                           } else {
-                            return const NumberAndLabel(number: '0', label: 'Followers');
+                            return const NumberAndLabel(
+                                number: '0', label: 'Followers');
                           }
                         },
                       ),
@@ -192,13 +206,16 @@ class _ProfilePageState extends State<ProfilePage> {
                             .get()
                             .asStream(),
                         builder: (context, snapshot) {
-                          if (snapshot.connectionState == ConnectionState.done) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.done) {
                             return NumberAndLabel(
-                              number: '${(snapshot.data as QuerySnapshot).docs.length}',
+                              number:
+                                  '${(snapshot.data as QuerySnapshot).docs.length}',
                               label: 'Following',
                             );
                           } else {
-                            return const NumberAndLabel(number: '0', label: 'Following');
+                            return const NumberAndLabel(
+                                number: '0', label: 'Following');
                           }
                         },
                       ),
@@ -213,7 +230,8 @@ class _ProfilePageState extends State<ProfilePage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => EditProfileScreen(user: user),
+                                builder: (context) =>
+                                    EditProfileScreen(user: user),
                               ),
                             ).then((value) => setState(() {}));
                           },
@@ -285,22 +303,25 @@ class _ProfilePageState extends State<ProfilePage> {
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.done) {
                         return GridView.builder(
-                          padding: const EdgeInsets.all(10).copyWith(bottom: 30),
+                          padding:
+                              const EdgeInsets.all(10).copyWith(bottom: 30),
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: (snapshot.data! as dynamic).docs.length,
-                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 3,
                             crossAxisSpacing: 10,
                             mainAxisSpacing: 10,
                             childAspectRatio: 1,
                           ),
                           itemBuilder: (context, index) {
-                            PostModel post =
-                                PostModel.fromDocument((snapshot.data! as dynamic).docs[index]);
+                            PostModel post = PostModel.fromDocument(
+                                (snapshot.data! as dynamic).docs[index]);
                             return Container(
                               decoration: BoxDecoration(
-                                image: DecorationImage(image: post.image, fit: BoxFit.cover),
+                                image: DecorationImage(
+                                    image: post.image, fit: BoxFit.cover),
                                 shape: BoxShape.rectangle,
                                 borderRadius: BorderRadius.circular(11.0),
                               ),
@@ -320,6 +341,63 @@ class _ProfilePageState extends State<ProfilePage> {
           return const Center(child: CircularProgressIndicator());
         }
       },
+    );
+  }
+
+  void _navigateToNextScreen(BuildContext context) {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => followers()));
+  }
+}
+
+Future<List<String>> getData() async {
+  // Get docs from collection reference
+  QuerySnapshot querySnapshot = await DatabaseService.followersRef
+      .doc(AuthService.currentUser.uid)
+      .collection('userFollowers')
+      .get();
+
+  // Get data from docs and convert map to List
+  final allData = querySnapshot.docs.map((doc) => doc.id).toList();
+  print(allData);
+  return allData;
+}
+
+class followers extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.amber,
+        title: const Text(kAppName),
+      ),
+      body: FutureBuilder(
+        future:  DatabaseService.usersRef.get(),
+      
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          List<UserCard> list = [];
+          Future<List<String>> followerID = getData();
+          // ignore: unrelated_type_equality_checks
+          if (DatabaseService.usersRef.get() == followerID) { //change this to getting value from getData function list
+            snapshot.data?.docs.forEach((doc) {
+              UserModel user = UserModel.fromDocument(doc);
+              list.add(
+                UserCard(
+                  user: user,
+                  onPress: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ProfilePage(userUID: user.id)),
+                    );
+                  },
+                ),
+              );
+            });
+          }
+          return ListView(children: list);
+        },
+      ),
     );
   }
 }
