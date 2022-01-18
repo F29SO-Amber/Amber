@@ -10,10 +10,13 @@ import 'package:amber/utilities/constants.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:image/image.dart' as Im;
 import 'package:uuid/uuid.dart';
 import 'package:amber/services/storage_service.dart';
+
+import 'chats.dart';
 
 class PostPage extends StatefulWidget {
   static const id = '/post';
@@ -33,7 +36,7 @@ class _PostPageState extends State<PostPage> {
   TextEditingController captionController = TextEditingController();
 
   handleTakePhoto() async {
-    Navigator.pop(dialogContext);
+    //Navigator.pop(dialogContext);
     //Navigator.of(context, rootNavigator: true).pop();
     XFile? xFile = await ImagePicker().pickImage(source: ImageSource.camera);
     file = File('${xFile?.path}');
@@ -43,7 +46,7 @@ class _PostPageState extends State<PostPage> {
   }
 
   handleChooseFromGallery() async {
-    Navigator.pop(dialogContext);
+    //Navigator.pop(dialogContext);
     XFile? xFile = await ImagePicker().pickImage(source: ImageSource.gallery);
     file = File('${xFile?.path}');
     //if (!mounted) return;
@@ -52,58 +55,58 @@ class _PostPageState extends State<PostPage> {
     }
   }
 
-  late BuildContext dialogContext;
-  //late BuildContext ctx;
-  selectImage(parentContext) {
-    return showDialog(
-        context: parentContext,
-        builder: (context) {
-          dialogContext = context;
-          return SimpleDialog(
-            title: const Text("Create post"),
-            children: <Widget>[
-              SimpleDialogOption(child: const Text("Photo with camera "), onPressed: handleTakePhoto
-                  // Navigator.of(context).pop();
-                  ),
-              SimpleDialogOption(
-                child: const Text("Image from gallery"),
-                onPressed: handleChooseFromGallery,
-              ),
-              SimpleDialogOption(
-                child: const Text("Cancel"),
-                onPressed: () => Navigator.pop(context),
-              ),
-            ],
-          );
-        });
-  }
+  // late BuildContext dialogContext;
+  // //late BuildContext ctx;
+  // selectImage(parentContext) {
+  //   return showDialog(
+  //       context: parentContext,
+  //       builder: (context) {
+  //         dialogContext = context;
+  //         return SimpleDialog(
+  //           title: const Text("Create post"),
+  //           children: <Widget>[
+  //             SimpleDialogOption(child: const Text("Photo with camera "), onPressed: handleTakePhoto
+  //                 // Navigator.of(context).pop();
+  //                 ),
+  //             SimpleDialogOption(
+  //               child: const Text("Image from gallery"),
+  //               onPressed: handleChooseFromGallery,
+  //             ),
+  //             SimpleDialogOption(
+  //               child: const Text("Cancel"),
+  //               onPressed: () => Navigator.pop(context),
+  //             ),
+  //           ],
+  //         );
+  //       });
+  // }
 
-  Container buildSplashScreen() {
-    return Container(
-      color: Colors.white,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          //SvgPicture.asset('assets/images/upload.svg', height: 260),
-          Padding(
-            padding: const EdgeInsets.only(top: 20.0),
-            child: ElevatedButton(
-              onPressed: () => selectImage(context),
-              child: const Text(
-                "Upload image",
-                style: TextStyle(color: Colors.black, fontSize: 18.0),
-              ),
-              style: ElevatedButton.styleFrom(
-                  //fixedSize: Size(MediaQuery.of(context).size.width * 0.65, 43),
-                  primary: Colors.amber, // background
-                  onPrimary: Colors.black, // foreground
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(90.0))),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // Container buildSplashScreen() {
+  //   return Container(
+  //     color: Colors.white,
+  //     child: Column(
+  //       mainAxisAlignment: MainAxisAlignment.center,
+  //       children: <Widget>[
+  //         //SvgPicture.asset('assets/images/upload.svg', height: 260),
+  //         Padding(
+  //           padding: const EdgeInsets.only(top: 20.0),
+  //           child: ElevatedButton(
+  //             onPressed: () => selectImage(context),
+  //             child: const Text(
+  //               "Upload image",
+  //               style: TextStyle(color: Colors.black, fontSize: 18.0),
+  //             ),
+  //             style: ElevatedButton.styleFrom(
+  //                 //fixedSize: Size(MediaQuery.of(context).size.width * 0.65, 43),
+  //                 primary: Colors.amber, // background
+  //                 onPrimary: Colors.black, // foreground
+  //                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(90.0))),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   clearImage() {
     setState(() {
@@ -133,7 +136,9 @@ class _PostPageState extends State<PostPage> {
   }
 
   createPostInFirestore(
-      {required String mediaURL, required String location, required String description}) async {
+      {required String mediaURL,
+      required String location,
+      required String description}) async {
     Map<String, Object?> map = {};
     if (file != null) {
       map['id'] = '${widget.currentUserId}_${Timestamp.now()}';
@@ -143,7 +148,9 @@ class _PostPageState extends State<PostPage> {
       map['score'] = 0;
       map['authorId'] = widget.currentUserId;
       map['timestamp'] = Timestamp.now();
-      await DatabaseService.postsRef.doc('${widget.currentUserId}_${Timestamp.now()}').set(map);
+      await DatabaseService.postsRef
+          .doc('${widget.currentUserId}_${Timestamp.now()}')
+          .set(map);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Image Posted!")),
       );
@@ -181,7 +188,9 @@ class _PostPageState extends State<PostPage> {
               appBar: AppBar(
                 backgroundColor: Colors.amber[50],
                 leading: IconButton(
-                    icon: Icon(Icons.arrow_back), color: Colors.black, onPressed: clearImage),
+                    icon: Icon(Icons.arrow_back),
+                    color: Colors.black,
+                    onPressed: clearImage),
                 title: Text(
                   "Caption Post",
                   style: TextStyle(color: Colors.black),
@@ -192,7 +201,9 @@ class _PostPageState extends State<PostPage> {
                     child: Text(
                       "Post",
                       style: TextStyle(
-                          color: Colors.amber[600], fontWeight: FontWeight.bold, fontSize: 17.0),
+                          color: Colors.amber[600],
+                          fontWeight: FontWeight.bold,
+                          fontSize: 17.0),
                     ),
                   ),
                 ],
@@ -206,11 +217,23 @@ class _PostPageState extends State<PostPage> {
                     child: Center(
                       child: AspectRatio(
                         aspectRatio: 16 / 9,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: FileImage(file!),
+                        child: GestureDetector(
+                          onTap: () => showMaterialModalBottomSheet(
+                            expand: false,
+                            // shape: RoundedRectangleBorder(
+                            //   borderRadius: BorderRadius.circular(33),
+                            // ),
+                            context: context,
+                            backgroundColor: Colors.transparent,
+                            builder: (context) => const ModalFit(),
+                          ),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                //image: FileImage(file!),
+                                image: AssetImage('assets/taptoselect.png'),
+                              ),
                             ),
                           ),
                         ),
@@ -307,6 +330,7 @@ class _PostPageState extends State<PostPage> {
 
   @override
   Widget build(BuildContext context) {
-    return file == null ? buildSplashScreen() : buildUploadForm();
+    //return file == null ? buildSplashScreen() : buildUploadForm();
+    return buildUploadForm();
   }
 }

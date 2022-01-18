@@ -1,8 +1,13 @@
+import 'dart:io';
+
+import 'package:amber/services/auth_service.dart';
 import 'package:amber/widgets/post_widget.dart';
 import 'package:amber/widgets/profile_picture.dart';
 import 'package:flutter/material.dart';
 import 'package:amber/utilities/constants.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:amber/screens/post.dart';
 
 class ChatsPage extends StatefulWidget {
   const ChatsPage({Key? key}) : super(key: key);
@@ -13,6 +18,7 @@ class ChatsPage extends StatefulWidget {
 }
 
 class _ChatsPageState extends State<ChatsPage> {
+  File? file;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,6 +57,26 @@ class ModalFit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String currentUserId = AuthService.currentUser.uid;
+    PostPage func = PostPage(currentUserId: currentUserId);
+    XFile? xFile;
+    File? file;
+    handleTakePhoto() async {
+      //Navigator.pop(dialogContext);
+      //Navigator.of(context, rootNavigator: true).pop();
+      XFile? xFile = await ImagePicker().pickImage(source: ImageSource.camera);
+      file = File('${xFile?.path}');
+      //return file;
+    }
+
+    handleChooseFromGallery() async {
+      //Navigator.pop(dialogContext);
+      XFile? xFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+      file = File('${xFile?.path}');
+      //return file;
+      //if (!mounted) return;
+    }
+
     return Material(
       child: SafeArea(
         top: false,
@@ -69,7 +95,11 @@ class ModalFit extends StatelessWidget {
                 children: [
                   Column(
                     children: [
-                      const ProfilePicture(side: 100, path: 'assets/camera.png'),
+                      GestureDetector(
+                        onTap: handleTakePhoto,
+                        child: const ProfilePicture(
+                            side: 100, path: 'assets/camera.png'),
+                      ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10.0),
                         child: Text('Camera', style: kLightLabelTextStyle),
@@ -78,7 +108,11 @@ class ModalFit extends StatelessWidget {
                   ),
                   Column(
                     children: [
-                      const ProfilePicture(side: 100, path: 'assets/gallery.png'),
+                      GestureDetector(
+                        onTap: handleChooseFromGallery,
+                        child: const ProfilePicture(
+                            side: 100, path: 'assets/gallery.png'),
+                      ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10.0),
                         child: Text('Gallery', style: kLightLabelTextStyle),
