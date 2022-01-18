@@ -32,6 +32,7 @@ class PostPage extends StatefulWidget {
 class _PostPageState extends State<PostPage> {
   File? file;
   bool isUploading = false;
+  bool fileChosen = false;
   String postId = const Uuid().v4();
   TextEditingController locationController = TextEditingController();
   TextEditingController captionController = TextEditingController();
@@ -41,6 +42,7 @@ class _PostPageState extends State<PostPage> {
     //Navigator.of(context, rootNavigator: true).pop();
     XFile? xFile = await ImagePicker().pickImage(source: ImageSource.camera);
     file = File('${xFile?.path}');
+    fileChosen = true;
     if (mounted) {
       setState(() {});
     }
@@ -50,6 +52,7 @@ class _PostPageState extends State<PostPage> {
     //Navigator.pop(dialogContext);
     XFile? xFile = await ImagePicker().pickImage(source: ImageSource.gallery);
     file = File('${xFile?.path}');
+    fileChosen = true;
     //if (!mounted) return;
     if (mounted) {
       setState(() {});
@@ -293,9 +296,12 @@ class _PostPageState extends State<PostPage> {
                           child: Container(
                             decoration: BoxDecoration(
                               image: DecorationImage(
+                                image: (file == null)
+                                    ? const AssetImage('assets/taptoselect.png')
+                                    : FileImage(file!) as ImageProvider,
+
                                 fit: BoxFit.cover,
                                 //image: FileImage(file!),
-                                image: AssetImage('assets/taptoselect.png'),
                               ),
                             ),
                           ),
