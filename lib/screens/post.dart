@@ -9,15 +9,12 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:amber/utilities/constants.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:image/image.dart' as Im;
 import 'package:uuid/uuid.dart';
 import 'package:amber/services/storage_service.dart';
-
-import 'chats.dart';
 
 class PostPage extends StatefulWidget {
   static const id = '/post';
@@ -32,85 +29,27 @@ class PostPage extends StatefulWidget {
 class _PostPageState extends State<PostPage> {
   File? file;
   bool isUploading = false;
-  bool fileChosen = false;
   String postId = const Uuid().v4();
   TextEditingController locationController = TextEditingController();
   TextEditingController captionController = TextEditingController();
 
   handleTakePhoto() async {
-    //Navigator.pop(dialogContext);
-    //Navigator.of(context, rootNavigator: true).pop();
+    Navigator.pop(context);
     XFile? xFile = await ImagePicker().pickImage(source: ImageSource.camera);
     file = File('${xFile?.path}');
-    fileChosen = true;
     if (mounted) {
       setState(() {});
     }
   }
 
   handleChooseFromGallery() async {
-    //Navigator.pop(dialogContext);
+    Navigator.pop(context);
     XFile? xFile = await ImagePicker().pickImage(source: ImageSource.gallery);
     file = File('${xFile?.path}');
-    fileChosen = true;
-    //if (!mounted) return;
     if (mounted) {
       setState(() {});
     }
   }
-
-  // late BuildContext dialogContext;
-  // //late BuildContext ctx;
-  // selectImage(parentContext) {
-  //   return showDialog(
-  //       context: parentContext,
-  //       builder: (context) {
-  //         dialogContext = context;
-  //         return SimpleDialog(
-  //           title: const Text("Create post"),
-  //           children: <Widget>[
-  //             SimpleDialogOption(child: const Text("Photo with camera "), onPressed: handleTakePhoto
-  //                 // Navigator.of(context).pop();
-  //                 ),
-  //             SimpleDialogOption(
-  //               child: const Text("Image from gallery"),
-  //               onPressed: handleChooseFromGallery,
-  //             ),
-  //             SimpleDialogOption(
-  //               child: const Text("Cancel"),
-  //               onPressed: () => Navigator.pop(context),
-  //             ),
-  //           ],
-  //         );
-  //       });
-  // }
-
-  // Container buildSplashScreen() {
-  //   return Container(
-  //     color: Colors.white,
-  //     child: Column(
-  //       mainAxisAlignment: MainAxisAlignment.center,
-  //       children: <Widget>[
-  //         //SvgPicture.asset('assets/images/upload.svg', height: 260),
-  //         Padding(
-  //           padding: const EdgeInsets.only(top: 20.0),
-  //           child: ElevatedButton(
-  //             onPressed: () => selectImage(context),
-  //             child: const Text(
-  //               "Upload image",
-  //               style: TextStyle(color: Colors.black, fontSize: 18.0),
-  //             ),
-  //             style: ElevatedButton.styleFrom(
-  //                 //fixedSize: Size(MediaQuery.of(context).size.width * 0.65, 43),
-  //                 primary: Colors.amber, // background
-  //                 onPrimary: Colors.black, // foreground
-  //                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(90.0))),
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
 
   clearImage() {
     setState(() {
@@ -322,13 +261,6 @@ class _PostPageState extends State<PostPage> {
                   ),
                   //),
                   Divider(),
-                  //ListTile(
-                  // leading: Icon(
-                  //   Icons.pin_drop,
-                  //   color: Colors.amber[600],
-                  //   size: 35.0,
-                  // ),
-                  // title: Container(
                   Container(
                     width: 250.0,
                     padding: EdgeInsets.only(left: 5),
