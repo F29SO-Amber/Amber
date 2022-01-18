@@ -33,8 +33,8 @@ class MyApp extends StatelessWidget {
         textSelectionTheme:
             const TextSelectionThemeData(cursorColor: Colors.orange),
       ),
-      //initialRoute: LoginScreen.id,
-      initialRoute:ChatsPage.id,
+      initialRoute: LoginScreen.id,
+      //initialRoute:ChatsPage.id,
       routes: {
         LoginScreen.id: (context) => const LoginScreen(),
         ConvexAppBarDemo.id: (context) => const ConvexAppBarDemo(),
