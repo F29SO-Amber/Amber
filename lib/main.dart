@@ -6,6 +6,7 @@ import 'package:amber/utilities/constants.dart';
 import 'package:amber/screens/login.dart';
 import 'package:amber/screens/main_screen.dart';
 import 'package:amber/firebase_options.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,6 +31,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      builder: EasyLoading.init(),
       debugShowCheckedModeBanner: false,
       title: 'Login Demo',
       theme: ThemeData(

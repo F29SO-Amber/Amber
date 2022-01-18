@@ -41,15 +41,15 @@ class LoginScreen extends StatelessWidget {
           displayName: 'Username',
           icon: const Icon(FontAwesomeIcons.at),
           fieldValidator: (value) {
-            try {
-              DatabaseService.usernamechecker(value);
-              if (DatabaseService.usernameresult != "false") {
-                DatabaseService.usernameresult = "0";
-                return 'Username already exists';
-              }
-            } finally {
-              print(DatabaseService.usernameresult);
-            }
+            // try {
+            //   DatabaseService.usernamechecker(value);
+            //   if (DatabaseService.usernameresult != "false") {
+            //     DatabaseService.usernameresult = "0";
+            //     return 'Username already exists';
+            //   }
+            // } finally {
+            //   print(DatabaseService.usernameresult);
+            // }
             // try {
             //   DatabaseService.isUserValueUnique(value!);
             //   return temp;
