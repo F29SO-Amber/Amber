@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:amber/models/user.dart';
 import 'package:amber/services/database_service.dart';
+import 'package:amber/widgets/profile_picture.dart';
 import 'package:amber/widgets/progress.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -225,7 +226,69 @@ class _PostPageState extends State<PostPage> {
                             // ),
                             context: context,
                             backgroundColor: Colors.transparent,
-                            builder: (context) => const ModalFit(),
+
+                            builder: (context) => Material(
+                              child: SafeArea(
+                                top: false,
+                                child: SizedBox(
+                                  height: 250,
+                                  width: double.infinity,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 25.0),
+                                        child: Text('Choose media from:',
+                                            style: kDarkLabelTextStyle),
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Column(
+                                            children: [
+                                              GestureDetector(
+                                                onTap: handleTakePhoto,
+                                                child: const ProfilePicture(
+                                                    side: 100,
+                                                    path: 'assets/camera.png'),
+                                              ),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 10.0),
+                                                child: Text('Camera',
+                                                    style:
+                                                        kLightLabelTextStyle),
+                                              ),
+                                            ],
+                                          ),
+                                          Column(
+                                            children: [
+                                              GestureDetector(
+                                                onTap: handleChooseFromGallery,
+                                                child: const ProfilePicture(
+                                                    side: 100,
+                                                    path: 'assets/gallery.png'),
+                                              ),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 10.0),
+                                                child: Text('Gallery',
+                                                    style:
+                                                        kLightLabelTextStyle),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
                           ),
                           child: Container(
                             decoration: BoxDecoration(
