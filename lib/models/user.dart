@@ -9,7 +9,7 @@ class UserModel {
   final String dob;
   final String accountType;
   final Timestamp timeCreated;
-  final ImageProvider profilePhoto;
+  final String profilePhotoURL;
   //final Map followers;
   //final Map following;
 
@@ -21,7 +21,7 @@ class UserModel {
     required this.dob,
     required this.accountType,
     required this.timeCreated,
-    required this.profilePhoto,
+    required this.profilePhotoURL,
     // required this.followers,
     //required this.following
   });
@@ -35,7 +35,7 @@ class UserModel {
       dob: doc['dob'],
       accountType: doc['account_type'],
       timeCreated: doc['time_created'],
-      profilePhoto: NetworkImage(doc['profilePhotoURL']),
+      profilePhotoURL: doc['profilePhotoURL'],
       // followers: doc['followers'],
       // following: doc['following'],
     );

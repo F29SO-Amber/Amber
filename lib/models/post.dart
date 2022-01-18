@@ -4,16 +4,22 @@ import 'package:flutter/cupertino.dart';
 class PostModel {
   final String id;
   final String authorId;
-  final ImageProvider image;
+  final String imageURL;
   final String caption;
   final int score;
   final String location;
   final Timestamp timestamp;
+  final String authorName;
+  final String authorUserName;
+  final String authorProfilePhotoURL;
 
   PostModel({
+    required this.authorName,
+    required this.authorUserName,
+    required this.authorProfilePhotoURL,
     required this.id,
     required this.location,
-    required this.image,
+    required this.imageURL,
     required this.caption,
     required this.score,
     required this.authorId,
@@ -23,12 +29,15 @@ class PostModel {
   factory PostModel.fromDocument(DocumentSnapshot doc) {
     return PostModel(
       id: doc.id,
-      image: NetworkImage(doc['imageUrl']),
+      imageURL: doc['imageURL'],
       caption: doc['caption'],
       score: doc['score'],
       authorId: doc['authorId'],
       timestamp: doc['timestamp'],
       location: doc['location'],
+      authorUserName: doc['authorUserName'],
+      authorProfilePhotoURL: doc['authorProfilePhotoURL'],
+      authorName: doc['authorName'],
     );
   }
 }

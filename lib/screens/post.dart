@@ -140,21 +140,22 @@ class _PostPageState extends State<PostPage> {
   }
 
   createPostInFirestore(
-      {required String mediaURL,
-      required String location,
-      required String description}) async {
+      {required String mediaURL, required String location, required String description}) async {
+    UserModel user = await DatabaseService.getUser(widget.currentUserId);
     Map<String, Object?> map = {};
     if (file != null) {
-      map['id'] = '${widget.currentUserId}_${Timestamp.now()}';
+      print('posting');
+      map['id'] = postId;
       map['location'] = location;
-      map['imageUrl'] = mediaURL;
+      map['imageURL'] = mediaURL;
       map['caption'] = description;
       map['score'] = 0;
       map['authorId'] = widget.currentUserId;
       map['timestamp'] = Timestamp.now();
-      await DatabaseService.postsRef
-          .doc('${widget.currentUserId}_${Timestamp.now()}')
-          .set(map);
+      map['authorName'] = user.name;
+      map['authorUserName'] = user.username;
+      map['authorProfilePhotoURL'] = user.profilePhotoURL;
+      await DatabaseService.postsRef.doc(postId).set(map);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Image Posted!")),
       );
@@ -192,9 +193,7 @@ class _PostPageState extends State<PostPage> {
               appBar: AppBar(
                 backgroundColor: Colors.amber[50],
                 leading: IconButton(
-                    icon: Icon(Icons.arrow_back),
-                    color: Colors.black,
-                    onPressed: clearImage),
+                    icon: Icon(Icons.arrow_back), color: Colors.black, onPressed: clearImage),
                 title: Text(
                   "Caption Post",
                   style: TextStyle(color: Colors.black),
@@ -205,9 +204,7 @@ class _PostPageState extends State<PostPage> {
                     child: Text(
                       "Post",
                       style: TextStyle(
-                          color: Colors.amber[600],
-                          fontWeight: FontWeight.bold,
-                          fontSize: 17.0),
+                          color: Colors.amber[600], fontWeight: FontWeight.bold, fontSize: 17.0),
                     ),
                   ),
                 ],
@@ -240,30 +237,23 @@ class _PostPageState extends State<PostPage> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 25.0),
-                                        child: Text('Choose media from:',
-                                            style: kDarkLabelTextStyle),
+                                        padding: const EdgeInsets.only(bottom: 25.0),
+                                        child:
+                                            Text('Choose media from:', style: kDarkLabelTextStyle),
                                       ),
                                       Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
+                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                         children: [
                                           Column(
                                             children: [
                                               GestureDetector(
                                                 onTap: handleTakePhoto,
                                                 child: const ProfilePicture(
-                                                    side: 100,
-                                                    path: 'assets/camera.png'),
+                                                    side: 100, path: 'assets/camera.png'),
                                               ),
                                               Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 10.0),
-                                                child: Text('Camera',
-                                                    style:
-                                                        kLightLabelTextStyle),
+                                                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                                child: Text('Camera', style: kLightLabelTextStyle),
                                               ),
                                             ],
                                           ),
@@ -272,16 +262,11 @@ class _PostPageState extends State<PostPage> {
                                               GestureDetector(
                                                 onTap: handleChooseFromGallery,
                                                 child: const ProfilePicture(
-                                                    side: 100,
-                                                    path: 'assets/gallery.png'),
+                                                    side: 100, path: 'assets/gallery.png'),
                                               ),
                                               Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 10.0),
-                                                child: Text('Gallery',
-                                                    style:
-                                                        kLightLabelTextStyle),
+                                                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                                child: Text('Gallery', style: kLightLabelTextStyle),
                                               ),
                                             ],
                                           ),
@@ -328,7 +313,7 @@ class _PostPageState extends State<PostPage> {
                       decoration: InputDecoration(
                         prefixIcon: CircleAvatar(
                           radius: 1,
-                          backgroundImage: userData.profilePhoto,
+                          backgroundImage: NetworkImage(userData.profilePhotoURL),
                         ),
                         hintText: "  Write a caption...",
                         border: InputBorder.none,

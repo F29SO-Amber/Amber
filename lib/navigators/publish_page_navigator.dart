@@ -1,3 +1,4 @@
+import 'package:amber/screens/publish.dart';
 import 'package:amber/services/auth_service.dart';
 import 'package:flutter/material.dart';
 
@@ -28,8 +29,8 @@ class _PublishPageNavigatorState extends State<PublishPageNavigator> {
             // case '/post2':
             //   return const ExtraPage(pageName: 'From Post Page');
             //default:
-            return PostPage(currentUserId: currentUserId);
-            // return PublishScreen(currentUserID: currentUserId);
+            // return PostPage(currentUserId: currentUserId);
+            return PublishScreen();
           },
         );
       },

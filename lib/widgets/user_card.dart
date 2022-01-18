@@ -31,7 +31,7 @@ class UserCard extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0, right: 15.0),
-                    child: ProfilePicture(side: 60, image: user.profilePhoto),
+                    child: ProfilePicture(side: 60, image: NetworkImage(user.profilePhotoURL)),
                   ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,

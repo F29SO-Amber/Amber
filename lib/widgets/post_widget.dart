@@ -1,3 +1,4 @@
+import 'package:amber/models/post.dart';
 import 'package:amber/utilities/constants.dart';
 import 'package:amber/widgets/profile_picture.dart';
 import 'package:flutter/material.dart';
@@ -5,13 +6,15 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class UserPost extends StatelessWidget {
-  const UserPost({Key? key}) : super(key: key);
+  final PostModel post;
+
+  const UserPost({Key? key, required this.post}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
-      padding: const EdgeInsets.symmetric(vertical: 25),
+      // padding: const EdgeInsets.symmetric(vertical: 25),
       child: Column(
         children: [
           Row(
@@ -50,9 +53,9 @@ class UserPost extends StatelessWidget {
           Container(
             height: (MediaQuery.of(context).size.width / 16) * 9,
             width: MediaQuery.of(context).size.width,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/upload.png'),
+                image: NetworkImage(post.imageURL),
                 fit: BoxFit.cover,
               ),
             ),
