@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:amber/constants.dart';
+import 'package:amber/screens/chat.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 final FirebaseStorage storage = FirebaseStorage.instance;
@@ -171,7 +172,16 @@ class _ChatsPageState extends State<ChatsPage> {
                                 ),
                               ),
                             ),
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ChatPage(
+                                          chatID: data['email'])));
 
+                              // print(ref.getDownloadURL().toString());
+                              // print("done");
+                            },
                           );
                         }).toList(),
                       );
