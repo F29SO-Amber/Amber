@@ -23,14 +23,8 @@ class _PublishPageNavigatorState extends State<PublishPageNavigator> {
         return MaterialPageRoute(
           settings: settings,
           builder: (context) {
-            //switch (settings.name) {
-            //case '/':
-            //return PostPage(currentUser: Authentication.currentUser);
-            // case '/post2':
-            //   return const ExtraPage(pageName: 'From Post Page');
-            //default:
             // return PostPage(currentUserId: currentUserId);
-            return PublishScreen();
+            return const PublishScreen();
           },
         );
       },

@@ -1,23 +1,24 @@
 import 'dart:io';
+import 'package:uuid/uuid.dart';
+import 'package:flutter/material.dart';
+import 'package:image/image.dart' as image;
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import 'package:amber/models/user.dart';
 import 'package:amber/utilities/constants.dart';
 import 'package:amber/services/auth_service.dart';
-import 'package:amber/services/database_service.dart';
 import 'package:amber/widgets/profile_picture.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:uuid/uuid.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:image/image.dart' as image;
+import 'package:amber/services/database_service.dart';
 
 class PublishScreen extends StatefulWidget {
-  const PublishScreen({Key? key}) : super(key: key);
   static const id = '/publish';
+
+  const PublishScreen({Key? key}) : super(key: key);
 
   @override
   _PublishScreenState createState() => _PublishScreenState();

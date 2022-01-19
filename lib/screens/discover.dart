@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:amber/utilities/constants.dart';
 import 'package:amber/models/user.dart';
+import 'package:amber/screens/profile.dart';
 import 'package:amber/widgets/user_card.dart';
+import 'package:amber/utilities/constants.dart';
 import 'package:amber/services/auth_service.dart';
 import 'package:amber/services/database_service.dart';
-import 'package:amber/screens/profile.dart';
 
 class DiscoverPage extends StatefulWidget {
   static const id = '/discover';
@@ -32,15 +32,12 @@ class _DiscoverPageState extends State<DiscoverPage> {
           snapshot.data?.docs.forEach((doc) {
             UserModel user = UserModel.fromDocument(doc);
             if (user.id != AuthService.currentUser.uid) {
-              //do not show current user on discover page
               list.add(
                 UserCard(
                   user: user,
                   onPress: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ProfilePage(userUID: user.id)),
-                    );
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => ProfilePage(userUID: user.id)));
                   },
                 ),
               );

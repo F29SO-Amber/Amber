@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 
+import 'package:amber/navigators/home_page_navigator.dart';
 import 'package:amber/navigators/chats_page_navigator.dart';
-import 'package:amber/navigators/discover_page_navigator.dart';
 import 'package:amber/navigators/publish_page_navigator.dart';
 import 'package:amber/navigators/profile_page_navigator.dart';
-import 'package:amber/navigators/home_page_navigator.dart';
+import 'package:amber/navigators/discover_page_navigator.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({Key? key}) : super(key: key);
   static const id = '/main_screen';
+
+  const MainScreen({Key? key}) : super(key: key);
 
   @override
   _MainScreenState createState() => _MainScreenState();

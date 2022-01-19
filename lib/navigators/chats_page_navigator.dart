@@ -19,14 +19,7 @@ class _ChatsPageNavigatorState extends State<ChatsPageNavigator> {
       onGenerateRoute: (RouteSettings settings) {
         return MaterialPageRoute(
           settings: settings,
-          builder: (BuildContext context) {
-            switch (settings.name) {
-              case '/':
-                return const ChatsPage();
-              default:
-                return const ChatsPage();
-            }
-          },
+          builder: (BuildContext context) => const ChatsPage(),
         );
       },
     );

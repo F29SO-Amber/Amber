@@ -19,14 +19,7 @@ class _HomePageNavigatorState extends State<HomePageNavigator> {
       onGenerateRoute: (RouteSettings settings) {
         return MaterialPageRoute(
           settings: settings,
-          builder: (BuildContext context) {
-            switch (settings.name) {
-              case '/':
-                return const HomePage();
-              default:
-                return const HomePage();
-            }
-          },
+          builder: (BuildContext context) => const HomePage(),
         );
       },
     );

@@ -19,9 +19,7 @@ class _DiscoverPageNavigatorState extends State<DiscoverPageNavigator> {
       onGenerateRoute: (RouteSettings settings) {
         return MaterialPageRoute(
           settings: settings,
-          builder: (BuildContext context) {
-            return const DiscoverPage();
-          },
+          builder: (BuildContext context) => const DiscoverPage(),
         );
       },
     );

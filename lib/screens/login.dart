@@ -16,14 +16,6 @@ class LoginScreen extends StatelessWidget {
   String usernameTest = '';
   static String? temp;
 
-  // Future<String?> validateUsername(String? value) async {
-  //   return await FirebaseFirestore.instance
-  //       .collection('users')
-  //       .where('username', isEqualTo: value)
-  //       .get()
-  //       .then((value) => value.size > 0 ? "Nope" : null);
-  // }
-
   @override
   Widget build(BuildContext context) {
     return FlutterLogin(

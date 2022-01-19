@@ -1,21 +1,21 @@
-import 'package:amber/widgets/custom_elevated_button.dart';
-import 'package:amber/widgets/progress.dart';
-import 'package:amber/widgets/user_card.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'package:amber/utilities/constants.dart';
 import 'package:amber/models/user.dart';
 import 'package:amber/models/post.dart';
 import 'package:amber/screens/login.dart';
+import 'package:amber/widgets/user_card.dart';
 import 'package:amber/widgets/post_type.dart';
+import 'package:amber/utilities/constants.dart';
 import 'package:amber/screens/edit_profile.dart';
 import 'package:amber/services/auth_service.dart';
 import 'package:amber/widgets/profile_picture.dart';
 import 'package:amber/widgets/number_and_label.dart';
 import 'package:amber/services/database_service.dart';
 import 'package:amber/widgets/custom_outlined_button.dart';
+import 'package:amber/widgets/custom_elevated_button.dart';
+
 // am2024@hw.ac.uk
 
 class ProfilePage extends StatefulWidget {
@@ -38,7 +38,7 @@ class _ProfilePageState extends State<ProfilePage> {
     checkIfFollowing();
   }
 
-  checkIfFollowing() async {
+  Future<void> checkIfFollowing() async {
     DocumentSnapshot doc = await DatabaseService.followersRef
         .doc(widget.userUID)
         .collection('userFollowers')
@@ -49,7 +49,7 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
-  unfollowUser() async {
+  Future<void> unfollowUser() async {
     setState(() => isFollowing = false);
     //remove follower
     DatabaseService.followersRef
@@ -77,7 +77,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  followUser() async {
+  Future<void> followUser() async {
     setState(() => isFollowing = true);
     //updates the followers collection of the followed user
     DatabaseService.followersRef
@@ -330,7 +330,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void _navigateToNextScreen(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => followers()));
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Followers()));
   }
 }
 
@@ -348,7 +348,9 @@ Future<List<UserModel>> getFollowersUIDs() async {
   return users;
 }
 
-class followers extends StatelessWidget {
+class Followers extends StatelessWidget {
+  const Followers({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -363,7 +365,6 @@ class followers extends StatelessWidget {
             List<UserCard> list = [];
             var a = snapshot.data as List<UserModel>;
             for (UserModel user in a) {
-              print(user.username);
               list.add(
                 UserCard(
                   user: user,

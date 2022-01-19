@@ -8,16 +8,6 @@ class StorageService {
   static final _storage = FirebaseStorage.instance;
   static final storageRef = FirebaseStorage.instance.ref();
 
-  static Future<String> uploadPost(File file) async {
-    TaskSnapshot taskSnapshot = await _storage
-        .ref()
-        .child('posts')
-        .child('${AuthService.currentUser.uid}_${Timestamp.now()}')
-        .putFile(file);
-
-    return taskSnapshot.ref.getDownloadURL();
-  }
-
   static Future<String> uploadProfileImage(String userUID, File file) async {
     return (await _storage.ref().child('profile').child(userUID).putFile(file))
         .ref

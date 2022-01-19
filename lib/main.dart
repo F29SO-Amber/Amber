@@ -1,12 +1,11 @@
-import 'package:amber/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-
-import 'package:amber/utilities/constants.dart';
-import 'package:amber/screens/login.dart';
-import 'package:amber/screens/main_screen.dart';
-import 'package:amber/firebase_options.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+
+import 'package:amber/screens/login.dart';
+import 'package:amber/firebase_options.dart';
+import 'package:amber/utilities/constants.dart';
+import 'package:amber/screens/main_screen.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();

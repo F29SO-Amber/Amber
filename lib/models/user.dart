@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserModel {
@@ -10,8 +9,6 @@ class UserModel {
   final String accountType;
   final Timestamp timeCreated;
   final String profilePhotoURL;
-  //final Map followers;
-  //final Map following;
 
   const UserModel({
     required this.id,
@@ -22,8 +19,6 @@ class UserModel {
     required this.accountType,
     required this.timeCreated,
     required this.profilePhotoURL,
-    // required this.followers,
-    //required this.following
   });
 
   factory UserModel.fromDocument(DocumentSnapshot doc) {
@@ -36,8 +31,6 @@ class UserModel {
       accountType: doc['account_type'],
       timeCreated: doc['time_created'],
       profilePhotoURL: doc['profilePhotoURL'],
-      // followers: doc['followers'],
-      // following: doc['following'],
     );
   }
 }

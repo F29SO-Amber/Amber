@@ -54,17 +54,4 @@ class DatabaseService {
     });
     usersRef.doc(AuthService.currentUser.uid).set(map);
   }
-
-  static addUserPost(String imageURL) {
-    Map<String, dynamic> map = {};
-    map.addAll({
-      'id': '${AuthService.currentUser.uid}_${Timestamp.now()}',
-      'imageUrl': imageURL,
-      'caption': '',
-      'score': 0,
-      'authorId': AuthService.currentUser.uid,
-      'timestamp': Timestamp.now(),
-    });
-    postsRef.doc('${AuthService.currentUser.uid}_${Timestamp.now()}').set(map);
-  }
 }
