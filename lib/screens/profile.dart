@@ -334,17 +334,18 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 }
 
-Future<List<String>> getData() async {
-  // Get docs from collection reference
-  QuerySnapshot querySnapshot = await DatabaseService.followersRef
+Future<List<UserModel>> getFollowersUIDs() async {
+  QuerySnapshot followers = await DatabaseService.followersRef
       .doc(AuthService.currentUser.uid)
       .collection('userFollowers')
       .get();
 
-  // Get data from docs and convert map to List
-  final allData = querySnapshot.docs.map((doc) => doc.id).toList();
-  print(allData);
-  return allData;
+  List ids = followers.docs.map((e) => (e.id)).toList();
+  List<UserModel> users = [];
+  for (String x in ids) {
+    users.add(await DatabaseService.getUser(x));
+  }
+  return users;
 }
 
 class followers extends StatelessWidget {
@@ -356,38 +357,28 @@ class followers extends StatelessWidget {
         title: const Text(kAppName),
       ),
       body: FutureBuilder(
-        future: getData(),
+        future: getFollowersUIDs(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             List<UserCard> list = [];
-            var a = snapshot.data as List<String>;
-            print(a);
-            for (String user in a) {
-              return StreamBuilder(
-                stream: DatabaseService.getUser(user).asStream(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    UserModel user = snapshot.data as UserModel;
-                    print(user.username);
-                    list.add(
-                      UserCard(
-                        user: user,
-                        onPress: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => ProfilePage(userUID: user.id)),
-                          );
-                        },
-                      ),
+            var a = snapshot.data as List<UserModel>;
+            for (UserModel user in a) {
+              print(user.username);
+              list.add(
+                UserCard(
+                  user: user,
+                  onPress: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ProfilePage(userUID: user.id)),
                     );
-                    return ListView(children: list);
-                  }
-                  return CircularProgressIndicator();
-                },
+                  },
+                ),
               );
             }
+            return ListView(children: list);
           }
-          return CircularProgressIndicator();
+          return const Center(child: CircularProgressIndicator());
         },
       ),
     );
