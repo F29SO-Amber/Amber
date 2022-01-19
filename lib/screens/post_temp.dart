@@ -1,18 +1,14 @@
 import 'dart:io';
 
 import 'package:amber/models/user.dart';
-import 'package:amber/services/image_service.dart';
 import 'package:amber/utilities/constants.dart';
 import 'package:amber/services/auth_service.dart';
 import 'package:amber/services/database_service.dart';
-import 'package:amber/services/storage_service.dart';
-import 'package:amber/widgets/custom_outlined_button.dart';
 import 'package:amber/widgets/profile_picture.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
@@ -21,7 +17,7 @@ import 'package:image/image.dart' as image;
 
 class PublishScreen extends StatefulWidget {
   const PublishScreen({Key? key}) : super(key: key);
-  static const id = '/chats';
+  static const id = '/publish';
 
   @override
   _PublishScreenState createState() => _PublishScreenState();
@@ -29,6 +25,7 @@ class PublishScreen extends StatefulWidget {
 
 class _PublishScreenState extends State<PublishScreen> {
   File? file;
+  bool uploadButtonPresent = true;
   final _formKey = GlobalKey<FormState>();
   final captionController = TextEditingController();
   final locationController = TextEditingController();
@@ -45,30 +42,26 @@ class _PublishScreenState extends State<PublishScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: kAppColor,
-        title: const Text(
-          'Caption Post',
-          style: TextStyle(fontSize: 18, color: Colors.white),
-        ),
+        title: const Text('Publish a Post', style: TextStyle(fontSize: 18, color: Colors.white)),
         actions: [
           IconButton(
             icon: const Icon(Icons.clear),
             color: Colors.white,
-            onPressed: () async {
-              setState(() {
-                file = null;
-                locationController.text = '';
-                captionController.text = '';
-              });
-            },
+            onPressed: () => disposeUserPostChanges(),
           ),
-          IconButton(
-            icon: const Icon(Icons.publish),
-            color: Colors.white,
-            onPressed: () async {
-              EasyLoading.show(status: 'Uploading...');
-              await addUserPost();
-              EasyLoading.dismiss();
-            },
+          Visibility(
+            visible: uploadButtonPresent,
+            child: IconButton(
+              icon: const Icon(Icons.publish),
+              color: Colors.white,
+              onPressed: () async {
+                setState(() => uploadButtonPresent = false);
+                EasyLoading.show(status: 'Uploading...');
+                await addUserPost();
+                EasyLoading.dismiss();
+                disposeUserPostChanges();
+              },
+            ),
           ),
         ],
       ),
@@ -166,7 +159,7 @@ class _PublishScreenState extends State<PublishScreen> {
                     decoration: const InputDecoration(
                       hintText: "Write a caption...",
                       border: InputBorder.none,
-                      prefixIcon: Icon(Icons.description, color: kAppColor, size: 30),
+                      prefixIcon: Icon(Icons.text_fields, color: kAppColor, size: 30),
                     ),
                   ),
                 ),
@@ -194,6 +187,15 @@ class _PublishScreenState extends State<PublishScreen> {
         ],
       ),
     );
+  }
+
+  void disposeUserPostChanges() {
+    setState(() {
+      file = null;
+      locationController.text = '';
+      captionController.text = '';
+      uploadButtonPresent = true;
+    });
   }
 
   Future<void> compressImageFile(String postID) async {
@@ -227,9 +229,7 @@ class _PublishScreenState extends State<PublishScreen> {
   }
 
   Future<String> uploadImage(String pID) async {
-    TaskSnapshot taskSnapshot =
-        await FirebaseStorage.instance.ref().child('posts').child(pID).putFile(file!);
-
-    return taskSnapshot.ref.getDownloadURL();
+    TaskSnapshot ts = await FirebaseStorage.instance.ref().child('posts').child(pID).putFile(file!);
+    return ts.ref.getDownloadURL();
   }
 }
