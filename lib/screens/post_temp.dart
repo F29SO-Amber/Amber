@@ -177,7 +177,7 @@ class _PublishScreenState extends State<PublishScreen> {
                       hintText: "Write a caption...",
                       border: InputBorder.none,
                       prefixIcon:
-                          Icon(Icons.text_fields, color: kAppColor, size: 30),
+                          Icon(Icons.create_sharp, color: kAppColor, size: 30),
                     ),
                   ),
                 ),
