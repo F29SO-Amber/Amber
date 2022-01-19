@@ -189,7 +189,8 @@ class _PublishScreenState extends State<PublishScreen> {
                     controller: locationController,
                     keyboardType: TextInputType.text,
                     decoration: const InputDecoration(
-                      hintText: "Locate your post...",
+                      //hintText: "Locate your post...",
+                      hintText: "Add a location...",
                       border: InputBorder.none,
                       prefixIcon: Icon(Icons.pin_drop_outlined,
                           color: kAppColor, size: 30),
