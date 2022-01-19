@@ -363,7 +363,7 @@ class followers extends StatelessWidget {
             var a = snapshot.data as List<String>;
             print(a);
             for (String user in a) {
-              StreamBuilder(
+              return StreamBuilder(
                 stream: DatabaseService.getUser(user).asStream(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.done) {
