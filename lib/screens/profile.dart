@@ -1,4 +1,5 @@
 import 'package:amber/widgets/custom_elevated_button.dart';
+import 'package:amber/widgets/progress.dart';
 import 'package:amber/widgets/user_card.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -372,35 +373,39 @@ class followers extends StatelessWidget {
         title: const Text(kAppName),
       ),
       body: FutureBuilder(
-        future: DatabaseService.followersRef
-            .doc(AuthService.currentUser.uid)
-            .collection('userFollowers')
-            .get(),
-        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        future: getData(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done){
           List<UserCard> list = [];
-
-          List<String> a =
-              snapshot.data?.docs.map((doc) => doc.id).toList() as List<String>;
-          print(a);
-
-          for (int i = 0; i <= a.length; i++) {
-            UserModel user =
-                DatabaseService.getUser(a.elementAt(i)) as UserModel;
-            list.add(
-              UserCard(
-                user: user,
-                onPress: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ProfilePage(userUID: user.id)),
-                  );
-                },
-              ),
-            );
+          var a = snapshot.data as List<String>;
+          for (String user in a) {
+            FutureBuilder(
+                future: DatabaseService.getUser(user),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    UserModel user = snapshot.data as UserModel;
+                    list.add(
+                      UserCard(
+                        user: user,
+                        onPress: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    ProfilePage(userUID: user.id)),
+                          );
+                        },
+                      ),
+                    );
+                    return ListView(children: list);
+                  }
+                  return CircularProgressIndicator();
+                });
           }
-          return ListView(children: list);
+          }
+          return CircularProgressIndicator();
         },
+
       ),
     );
   }
