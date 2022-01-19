@@ -43,18 +43,22 @@ class _PublishScreenState extends State<PublishScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: kAppColor,
-        title: const Text('Publish a Post', style: TextStyle(fontSize: 18, color: Colors.white)),
+        title: const Text('Create a Post',
+            style: TextStyle(
+                fontSize: 18,
+                color: Colors.black54,
+                fontWeight: FontWeight.bold)),
         actions: [
           IconButton(
             icon: const Icon(Icons.clear),
-            color: Colors.white,
+            color: Colors.black54,
             onPressed: () => disposeUserPostChanges(),
           ),
           Visibility(
             visible: uploadButtonPresent,
             child: IconButton(
               icon: const Icon(Icons.publish),
-              color: Colors.white,
+              color: Colors.black54,
               onPressed: () async {
                 setState(() => uploadButtonPresent = false);
                 EasyLoading.show(status: 'Uploading...');
@@ -101,26 +105,33 @@ class _PublishScreenState extends State<PublishScreen> {
                             children: [
                               Padding(
                                 padding: const EdgeInsets.only(bottom: 25.0),
-                                child: Text('Choose media from:', style: kDarkLabelTextStyle),
+                                child: Text('Choose media from:',
+                                    style: kDarkLabelTextStyle),
                               ),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 children: [
                                   Column(
                                     children: [
                                       GestureDetector(
                                         onTap: () async {
                                           XFile? xFile = await ImagePicker()
-                                              .pickImage(source: ImageSource.camera);
-                                          setState(() => file = File('${xFile?.path}'));
+                                              .pickImage(
+                                                  source: ImageSource.camera);
+                                          setState(() =>
+                                              file = File('${xFile?.path}'));
                                           Navigator.pop(context);
                                         },
                                         child: const ProfilePicture(
-                                            side: 100, path: 'assets/camera.png'),
+                                            side: 100,
+                                            path: 'assets/camera.png'),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 10.0),
-                                        child: Text('Camera', style: kLightLabelTextStyle),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 10.0),
+                                        child: Text('Camera',
+                                            style: kLightLabelTextStyle),
                                       ),
                                     ],
                                   ),
@@ -129,16 +140,21 @@ class _PublishScreenState extends State<PublishScreen> {
                                       GestureDetector(
                                         onTap: () async {
                                           XFile? xFile = await ImagePicker()
-                                              .pickImage(source: ImageSource.gallery);
-                                          setState(() => file = File('${xFile?.path}'));
+                                              .pickImage(
+                                                  source: ImageSource.gallery);
+                                          setState(() =>
+                                              file = File('${xFile?.path}'));
                                           Navigator.pop(context);
                                         },
                                         child: const ProfilePicture(
-                                            side: 100, path: 'assets/gallery.png'),
+                                            side: 100,
+                                            path: 'assets/gallery.png'),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 10.0),
-                                        child: Text('Gallery', style: kLightLabelTextStyle),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 10.0),
+                                        child: Text('Gallery',
+                                            style: kLightLabelTextStyle),
                                       ),
                                     ],
                                   ),
@@ -160,7 +176,8 @@ class _PublishScreenState extends State<PublishScreen> {
                     decoration: const InputDecoration(
                       hintText: "Write a caption...",
                       border: InputBorder.none,
-                      prefixIcon: Icon(Icons.text_fields, color: kAppColor, size: 30),
+                      prefixIcon:
+                          Icon(Icons.text_fields, color: kAppColor, size: 30),
                     ),
                   ),
                 ),
@@ -174,10 +191,12 @@ class _PublishScreenState extends State<PublishScreen> {
                     decoration: const InputDecoration(
                       hintText: "Locate your post...",
                       border: InputBorder.none,
-                      prefixIcon: Icon(Icons.pin_drop_outlined, color: kAppColor, size: 30),
+                      prefixIcon: Icon(Icons.pin_drop_outlined,
+                          color: kAppColor, size: 30),
                       suffixIcon: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 15.0),
-                        child: Icon(Icons.my_location, color: kAppColor, size: 30),
+                        child:
+                            Icon(Icons.my_location, color: kAppColor, size: 30),
                       ),
                     ),
                   ),
@@ -201,8 +220,9 @@ class _PublishScreenState extends State<PublishScreen> {
 
   Future<void> compressImageFile(String postID) async {
     image.Image? imageFile = image.decodeImage(file!.readAsBytesSync());
-    final compressedImageFile = File('${(await getTemporaryDirectory()).path}/img_$postID.jpg')
-      ..writeAsBytesSync(image.encodeJpg(imageFile!, quality: 85));
+    final compressedImageFile =
+        File('${(await getTemporaryDirectory()).path}/img_$postID.jpg')
+          ..writeAsBytesSync(image.encodeJpg(imageFile!, quality: 85));
     setState(() => file = compressedImageFile);
   }
 
@@ -224,13 +244,18 @@ class _PublishScreenState extends State<PublishScreen> {
         map['authorUserName'] = user.username;
         map['authorProfilePhotoURL'] = user.profilePhotoURL;
         await DatabaseService.postsRef.doc(postId).set(map);
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Image Posted!")));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text("Image Posted!")));
       }
     }
   }
 
   Future<String> uploadImage(String pID) async {
-    TaskSnapshot ts = await FirebaseStorage.instance.ref().child('posts').child(pID).putFile(file!);
+    TaskSnapshot ts = await FirebaseStorage.instance
+        .ref()
+        .child('posts')
+        .child(pID)
+        .putFile(file!);
     return ts.ref.getDownloadURL();
   }
 }
