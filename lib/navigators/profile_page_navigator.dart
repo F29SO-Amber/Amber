@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:amber/screens/login.dart';
 import 'package:amber/services/auth_service.dart';
 import 'package:amber/screens/profile.dart';
 
