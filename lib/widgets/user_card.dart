@@ -58,10 +58,10 @@ class UserCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(right: 15.0),
-                    child: Icon(Icons.person_add),
-                  ),
+                  // const Padding(
+                  //   padding: EdgeInsets.only(right: 15.0),
+                  //   // child: Icon(Icons.person_add),
+                  // ),
                 ],
               ),
             ),
