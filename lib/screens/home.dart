@@ -1,71 +1,85 @@
-import 'package:amber/models/post.dart';
-import 'package:amber/services/auth_service.dart';
-import 'package:amber/services/database_service.dart';
-import 'package:amber/widgets/post_widget.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:amber/utilities/constants.dart';
+import 'package:flutter/services.dart';
+import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 
-class HomePage extends StatefulWidget {
-  static const id = '/home';
+import 'package:amber/navigators/home_page_navigator.dart';
+import 'package:amber/navigators/chats_page_navigator.dart';
+import 'package:amber/navigators/publish_page_navigator.dart';
+import 'package:amber/navigators/profile_page_navigator.dart';
+import 'package:amber/navigators/discover_page_navigator.dart';
 
-  const HomePage({Key? key}) : super(key: key);
+class MainScreen extends StatefulWidget {
+  static const id = '/main_screen';
+
+  const MainScreen({Key? key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  _MainScreenState createState() => _MainScreenState();
 }
 
-class _HomePageState extends State<HomePage> {
-  Future<List<UserPost>> getPosts() async {
-    QuerySnapshot followingUsers = await DatabaseService.followingRef
-        .doc(AuthService.currentUser.uid)
-        .collection('userFollowing')
-        .get();
-
-    List<String> following = followingUsers.docs.map((e) => e.id).toList();
-
-    List<UserPost> posts = [];
-
-    for (String userID in following) {
-      posts.addAll(
-        ((await DatabaseService.postsRef.where('authorId', isEqualTo: userID).get()).docs).map(
-          (e) => UserPost(post: PostModel.fromDocument(e)),
-        ),
-      );
-    }
-
-    return posts;
-  }
+class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+  int _selectedIndex = 4;
 
   @override
   void initState() {
     super.initState();
-    getPosts();
+    _tabController = TabController(length: 5, vsync: this);
+  }
+
+  final List<GlobalKey<NavigatorState>> _navigatorKeys = [
+    homePageNavigatorKey,
+    discoverNavigatorKey,
+    postNavigatorKey,
+    chatsNavigatorKey,
+    profileNavigatorKey,
+  ];
+
+  Future<bool> _systemBackButtonPressed() async {
+    if (_navigatorKeys[_selectedIndex].currentState!.canPop()) {
+      _navigatorKeys[_selectedIndex]
+          .currentState!
+          .pop(_navigatorKeys[_selectedIndex].currentContext);
+    } else {
+      SystemChannels.platform.invokeMethod<void>('SystemNavigator.pop');
+    }
+    throw '';
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: createRandomColor(),
-      appBar: AppBar(
-        backgroundColor: Colors.amber,
-        title: const Text(
-          kAppName,
-          style: TextStyle(fontSize: 18, color: Colors.white),
+    return WillPopScope(
+      child: Scaffold(
+        body: SafeArea(
+          top: false,
+          child: IndexedStack(
+            index: _selectedIndex,
+            children: const <Widget>[
+              HomePageNavigator(),
+              DiscoverPageNavigator(),
+              PublishPageNavigator(),
+              ChatsPageNavigator(),
+              ProfilePageNavigator(),
+            ],
+          ),
+        ),
+        bottomNavigationBar: ConvexAppBar(
+          items: const [
+            TabItem<IconData>(icon: Icons.home, title: 'Home'),
+            TabItem<IconData>(icon: Icons.map, title: "Discovery"),
+            TabItem<IconData>(icon: Icons.publish, title: "Publish"),
+            TabItem<IconData>(icon: Icons.message, title: 'Message'),
+            TabItem<IconData>(icon: Icons.people, title: 'Profile'),
+          ],
+          style: TabStyle.react,
+          initialActiveIndex: _selectedIndex,
+          curve: Curves.bounceInOut,
+          backgroundColor: Colors.amber,
+          controller: _tabController,
+          onTap: (int i) => setState(() => _selectedIndex = i),
         ),
       ),
-      body: StreamBuilder(
-        stream: getPosts().asStream(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return ListView(
-              children: snapshot.data as List<UserPost>,
-            );
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
-        },
-      ),
+      onWillPop: _systemBackButtonPressed,
     );
   }
 }

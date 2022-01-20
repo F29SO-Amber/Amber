@@ -5,7 +5,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:amber/screens/login.dart';
 import 'package:amber/firebase_options.dart';
 import 'package:amber/utilities/constants.dart';
-import 'package:amber/screens/main_screen.dart';
+import 'package:amber/screens/home.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();

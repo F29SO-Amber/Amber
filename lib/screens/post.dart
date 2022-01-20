@@ -1,321 +1,240 @@
 import 'dart:io';
-
-import 'package:amber/models/user.dart';
-import 'package:amber/services/database_service.dart';
-import 'package:amber/widgets/profile_picture.dart';
-import 'package:amber/widgets/progress.dart';
+import 'package:uuid/uuid.dart';
+import 'package:flutter/material.dart';
+import 'package:image/image.dart' as image;
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
-import 'package:amber/utilities/constants.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:image/image.dart' as Im;
-import 'package:uuid/uuid.dart';
-import 'package:amber/services/storage_service.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
-class PostPage extends StatefulWidget {
-  static const id = '/post';
-  final String currentUserId;
+import 'package:amber/models/user.dart';
+import 'package:amber/utilities/constants.dart';
+import 'package:amber/services/auth_service.dart';
+import 'package:amber/widgets/profile_picture.dart';
+import 'package:amber/services/database_service.dart';
 
-  const PostPage({Key? key, required this.currentUserId}) : super(key: key);
+class PublishScreen extends StatefulWidget {
+  static const id = '/publish';
+
+  const PublishScreen({Key? key}) : super(key: key);
 
   @override
-  State<PostPage> createState() => _PostPageState();
+  _PublishScreenState createState() => _PublishScreenState();
 }
 
-class _PostPageState extends State<PostPage> {
+class _PublishScreenState extends State<PublishScreen> {
   File? file;
-  bool isUploading = false;
-  String postId = const Uuid().v4();
-  TextEditingController locationController = TextEditingController();
-  TextEditingController captionController = TextEditingController();
+  bool uploadButtonPresent = true;
+  final _formKey = GlobalKey<FormState>();
+  final captionController = TextEditingController();
+  final locationController = TextEditingController();
 
-  handleTakePhoto() async {
-    Navigator.pop(context);
-    XFile? xFile = await ImagePicker().pickImage(source: ImageSource.camera);
-    file = File('${xFile?.path}');
-    if (mounted) {
-      setState(() {});
-    }
-  }
-
-  handleChooseFromGallery() async {
-    Navigator.pop(context);
-    XFile? xFile = await ImagePicker().pickImage(source: ImageSource.gallery);
-    file = File('${xFile?.path}');
-    if (mounted) {
-      setState(() {});
-    }
-  }
-
-  clearImage() {
-    setState(() {
-      file = null;
-    });
-  }
-
-  compressImage() async {
-    final tempDir = await getTemporaryDirectory();
-    final path = tempDir.path;
-    Im.Image? imageFile = Im.decodeImage(file!.readAsBytesSync());
-    final compressedImageFile = File('$path/img_$postId.jpg')
-      ..writeAsBytesSync(Im.encodeJpg(imageFile!, quality: 85));
-    setState(() {
-      file = compressedImageFile;
-    });
-  }
-
-  Future<String> uploadImage(imageFile) async {
-    UploadTask uploadTask = StorageService.storageRef
-        .child("posts")
-        .child('${widget.currentUserId}_${Timestamp.now()}')
-        .putFile(imageFile);
-    TaskSnapshot storageSnap = await uploadTask;
-    String downloadURL = await storageSnap.ref.getDownloadURL();
-    return downloadURL;
-  }
-
-  createPostInFirestore(
-      {required String mediaURL, required String location, required String description}) async {
-    UserModel user = await DatabaseService.getUser(widget.currentUserId);
-    Map<String, Object?> map = {};
-    if (file != null) {
-      print('posting');
-      map['id'] = postId;
-      map['location'] = location;
-      map['imageURL'] = mediaURL;
-      map['caption'] = description;
-      map['score'] = 0;
-      map['authorId'] = widget.currentUserId;
-      map['timestamp'] = Timestamp.now();
-      map['authorName'] = user.name;
-      map['authorUserName'] = user.username;
-      map['authorProfilePhotoURL'] = user.profilePhotoURL;
-      await DatabaseService.postsRef.doc(postId).set(map);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Image Posted!")),
-      );
-    }
-  }
-
-  handleSubmit() async {
-    setState(() {
-      isUploading = true;
-    });
-    await compressImage();
-    String mediaURL = await uploadImage(file);
-    createPostInFirestore(
-      mediaURL: mediaURL,
-      location: locationController.text,
-      description: captionController.text,
-    );
-    captionController.clear();
-    locationController.clear();
-    setState(() {
-      file = null;
-      isUploading = false;
-      postId = Uuid().v4();
-    });
-  }
-
-  Scaffold buildUploadForm() {
-    return Scaffold(
-      body: StreamBuilder(
-        stream: DatabaseService.getUser(widget.currentUserId).asStream(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            var userData = snapshot.data as UserModel;
-            return Scaffold(
-              appBar: AppBar(
-                backgroundColor: Colors.amber[50],
-                leading: IconButton(
-                    icon: Icon(Icons.arrow_back), color: Colors.black, onPressed: clearImage),
-                title: Text(
-                  "Caption Post",
-                  style: TextStyle(color: Colors.black),
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: isUploading ? null : () => handleSubmit(),
-                    child: Text(
-                      "Post",
-                      style: TextStyle(
-                          color: Colors.amber[600], fontWeight: FontWeight.bold, fontSize: 17.0),
-                    ),
-                  ),
-                ],
-              ),
-              body: ListView(
-                children: <Widget>[
-                  isUploading ? linearProgress() : Text(""),
-                  Container(
-                    height: 220.0,
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    child: Center(
-                      child: AspectRatio(
-                        aspectRatio: 16 / 9,
-                        child: GestureDetector(
-                          onTap: () => showMaterialModalBottomSheet(
-                            expand: false,
-                            // shape: RoundedRectangleBorder(
-                            //   borderRadius: BorderRadius.circular(33),
-                            // ),
-                            context: context,
-                            backgroundColor: Colors.transparent,
-
-                            builder: (context) => Material(
-                              child: SafeArea(
-                                top: false,
-                                child: SizedBox(
-                                  height: 250,
-                                  width: double.infinity,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(bottom: 25.0),
-                                        child:
-                                            Text('Choose media from:', style: kDarkLabelTextStyle),
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          Column(
-                                            children: [
-                                              GestureDetector(
-                                                onTap: handleTakePhoto,
-                                                child: const ProfilePicture(
-                                                    side: 100, path: 'assets/camera.png'),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                                                child: Text('Camera', style: kLightLabelTextStyle),
-                                              ),
-                                            ],
-                                          ),
-                                          Column(
-                                            children: [
-                                              GestureDetector(
-                                                onTap: handleChooseFromGallery,
-                                                child: const ProfilePicture(
-                                                    side: 100, path: 'assets/gallery.png'),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                                                child: Text('Gallery', style: kLightLabelTextStyle),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: (file == null)
-                                    ? const AssetImage('assets/taptoselect.png')
-                                    : FileImage(file!) as ImageProvider,
-
-                                fit: BoxFit.cover,
-                                //image: FileImage(file!),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 10.0),
-                  ),
-                  // ListTile(
-                  //   leading: CircleAvatar(
-                  //     backgroundImage: userData.profilePhoto,
-                  //   ),
-                  //title: Container(
-                  Container(
-                    width: 250.0,
-                    padding: EdgeInsets.only(left: 5, bottom: 0),
-                    child: TextField(
-                      keyboardType: TextInputType.multiline,
-                      maxLength: null,
-                      maxLines: null,
-                      controller: captionController,
-                      decoration: InputDecoration(
-                        prefixIcon: CircleAvatar(
-                          radius: 1,
-                          backgroundImage: NetworkImage(userData.profilePhotoURL),
-                        ),
-                        hintText: "  Write a caption...",
-                        border: InputBorder.none,
-                      ),
-                    ),
-                  ),
-                  //),
-                  Divider(),
-                  Container(
-                    width: 250.0,
-                    padding: EdgeInsets.only(left: 5),
-                    child: TextField(
-                      keyboardType: TextInputType.multiline,
-                      maxLength: null,
-                      maxLines: null,
-                      controller: locationController,
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(
-                          Icons.pin_drop,
-                          color: Colors.amber[600],
-                          size: 38.0,
-                        ),
-                        hintText: "  Where was this photo taken?",
-                        border: InputBorder.none,
-                      ),
-                    ),
-                  ),
-                  //),
-                  Container(
-                    width: 200.0,
-                    height: 100.0,
-                    alignment: Alignment.center,
-                    child: ElevatedButton.icon(
-                      onPressed: () => print("get user location"),
-                      icon: Icon(
-                        Icons.my_location,
-                        color: Colors.white,
-                      ),
-                      label: Text(
-                        "Use Current Location",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30.0),
-                        ),
-                        primary: Colors.amber[600],
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            );
-          } else {
-            return const CircularProgressIndicator();
-          }
-        },
-      ),
-    );
+  @override
+  void dispose() {
+    super.dispose();
+    captionController.dispose();
+    locationController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    //return file == null ? buildSplashScreen() : buildUploadForm();
-    return buildUploadForm();
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: kAppColor,
+        title: const Text(
+          'Create a Post',
+          style: TextStyle(fontSize: 18, color: Colors.black54, fontWeight: FontWeight.bold),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.clear),
+            color: Colors.black54,
+            onPressed: () => disposeUserPostChanges(),
+          ),
+          Visibility(
+            visible: uploadButtonPresent,
+            child: IconButton(
+              icon: const Icon(Icons.publish),
+              color: Colors.black54,
+              onPressed: () async {
+                setState(() => uploadButtonPresent = false);
+                EasyLoading.show(status: 'Uploading...');
+                await addUserPost();
+                EasyLoading.dismiss();
+                disposeUserPostChanges();
+              },
+            ),
+          ),
+        ],
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                GestureDetector(
+                  child: Container(
+                    height: (MediaQuery.of(context).size.width / 16) * 9,
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: (file == null)
+                            ? const AssetImage('assets/taptoselect.png')
+                            : FileImage(file!) as ImageProvider,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  onTap: () => showMaterialModalBottomSheet(
+                    expand: false,
+                    context: context,
+                    backgroundColor: Colors.transparent,
+                    builder: (context) => Material(
+                      child: SafeArea(
+                        top: false,
+                        child: SizedBox(
+                          height: 250,
+                          width: double.infinity,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 25.0),
+                                child: Text('Choose media from:', style: kDarkLabelTextStyle),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Column(
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () async {
+                                          XFile? xFile = await ImagePicker()
+                                              .pickImage(source: ImageSource.camera);
+                                          setState(() => file = File('${xFile?.path}'));
+                                          Navigator.pop(context);
+                                        },
+                                        child: const ProfilePicture(
+                                            side: 100, path: 'assets/camera.png'),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                        child: Text('Camera', style: kLightLabelTextStyle),
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () async {
+                                          XFile? xFile = await ImagePicker()
+                                              .pickImage(source: ImageSource.gallery);
+                                          setState(() => file = File('${xFile?.path}'));
+                                          Navigator.pop(context);
+                                        },
+                                        child: const ProfilePicture(
+                                            side: 100, path: 'assets/gallery.png'),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                        child: Text('Gallery', style: kLightLabelTextStyle),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  padding: const EdgeInsets.only(left: 15, top: 20),
+                  child: TextFormField(
+                    controller: captionController,
+                    keyboardType: TextInputType.text,
+                    decoration: const InputDecoration(
+                      hintText: "Write a caption...",
+                      border: InputBorder.none,
+                      prefixIcon: Icon(Icons.create_sharp, color: kAppColor, size: 30),
+                    ),
+                  ),
+                ),
+                const Divider(),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  padding: const EdgeInsets.only(left: 15),
+                  child: TextFormField(
+                    controller: locationController,
+                    keyboardType: TextInputType.text,
+                    decoration: const InputDecoration(
+                      //hintText: "Locate your post...",
+                      hintText: "Add a location...",
+                      border: InputBorder.none,
+                      prefixIcon: Icon(Icons.pin_drop_outlined, color: kAppColor, size: 30),
+                      suffixIcon: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 15.0),
+                        child: Icon(Icons.my_location, color: kAppColor, size: 30),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void disposeUserPostChanges() {
+    setState(() {
+      file = null;
+      locationController.text = '';
+      captionController.text = '';
+      uploadButtonPresent = true;
+    });
+  }
+
+  Future<void> compressImageFile(String postID) async {
+    image.Image? imageFile = image.decodeImage(file!.readAsBytesSync());
+    final compressedImageFile = File('${(await getTemporaryDirectory()).path}/img_$postID.jpg')
+      ..writeAsBytesSync(image.encodeJpg(imageFile!, quality: 85));
+    setState(() => file = compressedImageFile);
+  }
+
+  Future<void> addUserPost() async {
+    UserModel user = await DatabaseService.getUser(AuthService.currentUser.uid);
+    if (_formKey.currentState!.validate()) {
+      Map<String, Object?> map = {};
+      if (file != null) {
+        String postId = const Uuid().v4();
+        await compressImageFile(postId);
+        map['id'] = postId;
+        map['location'] = locationController.text;
+        map['imageURL'] = await uploadImage(postId);
+        map['caption'] = captionController.text;
+        map['score'] = 0;
+        map['authorId'] = AuthService.currentUser.uid;
+        map['timestamp'] = Timestamp.now();
+        map['authorName'] = user.name;
+        map['authorUserName'] = user.username;
+        map['authorProfilePhotoURL'] = user.profilePhotoURL;
+        await DatabaseService.postsRef.doc(postId).set(map);
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Image Posted!")));
+      }
+    }
+  }
+
+  Future<String> uploadImage(String pID) async {
+    TaskSnapshot ts = await FirebaseStorage.instance.ref().child('posts').child(pID).putFile(file!);
+    return ts.ref.getDownloadURL();
   }
 }
