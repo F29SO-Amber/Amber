@@ -1,3 +1,4 @@
+import 'package:amber/screens/search.dart';
 import 'package:flutter/material.dart';
 
 import 'package:amber/screens/discover.dart';
@@ -20,7 +21,8 @@ class _DiscoverPageNavigatorState extends State<DiscoverPageNavigator> {
       onGenerateRoute: (RouteSettings settings) {
         return MaterialPageRoute(
           settings: settings,
-          builder: (BuildContext context) => const DiscoverPage(),
+          //builder: (BuildContext context) => const DiscoverPage(),
+          builder: (BuildContext context) => Search(),
         );
       },
     );
