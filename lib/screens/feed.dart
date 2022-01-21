@@ -15,10 +15,6 @@ class FeedPage extends StatefulWidget {
   State<FeedPage> createState() => _FeedPageState();
 }
 
-/*
- Home Page shows all the recent posts posted by the user's following list of other users and communities.
- Users will be able to up-vote or down-vote these post from here
-*/
 class _FeedPageState extends State<FeedPage> {
   Future<List<UserPost>> getPosts() async {
     QuerySnapshot followingUsers = await DatabaseService.followingRef
