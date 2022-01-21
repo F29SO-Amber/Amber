@@ -1,6 +1,7 @@
 import 'package:amber/models/user.dart';
 import 'package:amber/services/database_service.dart';
 import 'package:amber/widgets/progress.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -77,11 +78,12 @@ class _SearchState extends State<Search> {
         if (!snapshot.hasData) {
           return circularProgress();
         }
-        List<Text> searchResults = [];
+        List<UserResult> searchResults = [];
         //if (snapshot.connectionState == ConnectionState.done) {
         for (var doc in (snapshot.data! as QuerySnapshot).docs) {
           UserModel user = UserModel.fromDocument(doc);
-          searchResults.add(Text(user.username));
+          UserResult searchResult = UserResult(user);
+          searchResults.add(searchResult);
         }
         //}
         return ListView(
@@ -103,8 +105,40 @@ class _SearchState extends State<Search> {
 }
 
 class UserResult extends StatelessWidget {
+  final UserModel user;
+  UserResult(this.user);
+
   @override
   Widget build(BuildContext context) {
-    return Text('User Result');
+    return Container(
+      color: Colors.white,
+      child: Column(
+        children: <Widget>[
+          GestureDetector(
+            onTap: () => print("tapped"),
+            child: ListTile(
+              leading: CircleAvatar(
+                backgroundColor: Colors.grey,
+                backgroundImage:
+                    CachedNetworkImageProvider(user.profilePhotoURL),
+              ),
+              title: Text(
+                user.name,
+                style:
+                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+              ),
+              subtitle: Text(
+                user.username,
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
+          ),
+          Divider(
+            height: 2.0,
+            color: Colors.black,
+          )
+        ],
+      ),
+    );
   }
 }
