@@ -8,16 +8,16 @@ import 'package:amber/navigators/publish_page_navigator.dart';
 import 'package:amber/navigators/profile_page_navigator.dart';
 import 'package:amber/navigators/discover_page_navigator.dart';
 
-class MainScreen extends StatefulWidget {
+class HomePage extends StatefulWidget {
   static const id = '/main_screen';
 
-  const MainScreen({Key? key}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
-  _MainScreenState createState() => _MainScreenState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateMixin {
+class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   int _selectedIndex = 4;
 

@@ -19,7 +19,7 @@ class _HomePageNavigatorState extends State<HomePageNavigator> {
       onGenerateRoute: (RouteSettings settings) {
         return MaterialPageRoute(
           settings: settings,
-          builder: (BuildContext context) => const HomePage(),
+          builder: (BuildContext context) => const FeedPage(),
         );
       },
     );

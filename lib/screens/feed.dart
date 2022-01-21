@@ -6,16 +6,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:amber/utilities/constants.dart';
 
-class HomePage extends StatefulWidget {
+class FeedPage extends StatefulWidget {
   static const id = '/home';
 
-  const HomePage({Key? key}) : super(key: key);
+  const FeedPage({Key? key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<FeedPage> createState() => _FeedPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _FeedPageState extends State<FeedPage> {
   Future<List<UserPost>> getPosts() async {
     QuerySnapshot followingUsers = await DatabaseService.followingRef
         .doc(AuthService.currentUser.uid)

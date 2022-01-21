@@ -50,7 +50,7 @@ class _MyAppState extends State<MyApp> {
       initialRoute: LoginScreen.id,
       routes: {
         LoginScreen.id: (context) => LoginScreen(),
-        MainScreen.id: (context) => const MainScreen()
+        HomePage.id: (context) => const HomePage()
       },
     );
   }
