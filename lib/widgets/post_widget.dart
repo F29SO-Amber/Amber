@@ -1,16 +1,60 @@
 import 'package:amber/models/post.dart';
+import 'package:amber/services/auth_service.dart';
+import 'package:amber/services/database_service.dart';
 import 'package:amber/utilities/constants.dart';
 import 'package:amber/widgets/profile_picture.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class UserPost extends StatelessWidget {
+class UserPost extends StatefulWidget {
   final PostModel post;
 
-  const UserPost({Key? key, required this.post}) : super(key: key);
+  UserPost({Key? key, required this.post}) : super(key: key);
+
+  @override
+  State<UserPost> createState() => _UserPostState();
+}
+
+class _UserPostState extends State<UserPost> {
+  // late Map likes;
+  // late int likeCount;
+  late bool? isLiked;
+
+  @override
+  void initState() {
+    super.initState();
+    // likes = {};
+    // likeCount = 0;
+    isLiked = widget.post.likes.containsKey(AuthService.currentUser.uid)
+        ? widget.post.likes[AuthService.currentUser.uid]
+        : null;
+    // isLiked = likes[AuthService.currentUser.uid] == true;
+  }
+
+  // handleLike() {
+  //   bool _isLiked = likes[AuthService.currentUser.uid] == true;
+  //   if (_isLiked) {
+  //     DatabaseService.postsRef
+  //         .doc(widget.post.id)
+  //         .update({'likes.${AuthService.currentUser.uid}': false});
+  //     setState(() {
+  //       likeCount -= 1;
+  //       isLiked = false;
+  //       likes[AuthService.currentUser.uid] = false;
+  //     });
+  //   } else if (!_isLiked) {
+  //     DatabaseService.postsRef
+  //         .doc(widget.post.id)
+  //         .update({'likes.${AuthService.currentUser.uid}': true});
+  //     setState(() {
+  //       likeCount += 1;
+  //       isLiked = true;
+  //       likes[AuthService.currentUser.uid] = true;
+  //     });
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -25,28 +69,57 @@ class UserPost extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child:
-                        ProfilePicture(side: 32, image: NetworkImage(post.authorProfilePhotoURL)),
+                    child: ProfilePicture(
+                        side: 32, image: NetworkImage(widget.post.authorProfilePhotoURL)),
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(post.authorName, style: GoogleFonts.dmSans(fontSize: 15)),
-                      Text(post.location, style: kLightLabelTextStyle.copyWith(fontSize: 10)),
+                      Text(widget.post.authorName, style: GoogleFonts.dmSans(fontSize: 15)),
+                      Text(widget.post.location,
+                          style: kLightLabelTextStyle.copyWith(fontSize: 10)),
                     ],
                   ),
                 ],
               ),
               Row(
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Icon(FontAwesomeIcons.arrowAltCircleUp),
+                  GestureDetector(
+                    onTap: () {
+                      DatabaseService.postsRef
+                          .doc(widget.post.id)
+                          .update({'likes.${AuthService.currentUser.uid}': true});
+                      setState(() {
+                        isLiked = true;
+                      });
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: (isLiked != null && isLiked!)
+                          ? const Icon(FontAwesomeIcons.arrowAltCircleUp, color: kAppColor)
+                          : const Icon(FontAwesomeIcons.arrowAltCircleUp),
+                    ),
                   ),
-                  Text('${post.score}'),
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Icon(FontAwesomeIcons.arrowAltCircleDown),
+                  Text(
+                    // TODO
+                    '${widget.post.likes.values.where((element) => true).length - widget.post.likes.values.where((element) => false).length}',
+                  ),
+                  // const Text('0'),
+                  GestureDetector(
+                    onTap: () {
+                      DatabaseService.postsRef
+                          .doc(widget.post.id)
+                          .update({'likes.${AuthService.currentUser.uid}': false});
+                      setState(() {
+                        isLiked = false;
+                      });
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: (isLiked != null && !(isLiked!))
+                          ? const Icon(FontAwesomeIcons.arrowAltCircleDown, color: kAppColor)
+                          : const Icon(FontAwesomeIcons.arrowAltCircleDown),
+                    ),
                   ),
                 ],
               )
@@ -99,11 +172,22 @@ class UserPost extends StatelessWidget {
                 ),
               ],
             ),
-            child: Container(
-              height: (MediaQuery.of(context).size.width / 16) * 9,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                image: DecorationImage(image: NetworkImage(post.imageURL), fit: BoxFit.cover),
+            child: GestureDetector(
+              onDoubleTap: () {
+                DatabaseService.postsRef
+                    .doc(widget.post.id)
+                    .update({'likes.${AuthService.currentUser.uid}': true});
+                setState(() {
+                  isLiked = true;
+                });
+              },
+              child: Container(
+                height: (MediaQuery.of(context).size.width / 16) * 9,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  image:
+                      DecorationImage(image: NetworkImage(widget.post.imageURL), fit: BoxFit.cover),
+                ),
               ),
             ),
           ),
@@ -111,9 +195,9 @@ class UserPost extends StatelessWidget {
             padding: const EdgeInsets.all(10.0),
             child: Row(
               children: [
-                Text('${post.authorUserName}  •  ',
+                Text('${widget.post.authorUserName}  •  ',
                     style: GoogleFonts.dmSans(fontSize: 15, fontWeight: FontWeight.bold)),
-                Text(post.caption, style: GoogleFonts.dmSans()),
+                Text(widget.post.caption, style: GoogleFonts.dmSans()),
               ],
             ),
           ),

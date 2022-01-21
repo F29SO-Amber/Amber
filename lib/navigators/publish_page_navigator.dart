@@ -1,8 +1,8 @@
-import 'package:amber/screens/post.dart';
+import 'package:amber/screens/publish.dart';
 import 'package:amber/services/auth_service.dart';
 import 'package:flutter/material.dart';
 
-import 'package:amber/screens/post.dart';
+import 'package:amber/screens/publish.dart';
 
 class PublishPageNavigator extends StatefulWidget {
   const PublishPageNavigator({Key? key}) : super(key: key);

@@ -6,7 +6,7 @@ class PostModel {
   final String authorId;
   final String imageURL;
   final String caption;
-  final int score;
+  final Map likes;
   final String location;
   final Timestamp timestamp;
   final String authorName;
@@ -21,7 +21,7 @@ class PostModel {
     required this.location,
     required this.imageURL,
     required this.caption,
-    required this.score,
+    required this.likes,
     required this.authorId,
     required this.timestamp,
   });
@@ -31,7 +31,7 @@ class PostModel {
       id: doc.id,
       imageURL: doc['imageURL'],
       caption: doc['caption'],
-      score: doc['score'],
+      likes: doc['likes'],
       authorId: doc['authorId'],
       timestamp: doc['timestamp'],
       location: doc['location'],
