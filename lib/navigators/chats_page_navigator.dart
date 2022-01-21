@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'package:amber/screens/extra.dart';
 import 'package:amber/screens/chats.dart';
 
+//Creating mutable state for the Chats Page Navigator
 class ChatsPageNavigator extends StatefulWidget {
   const ChatsPageNavigator({Key? key}) : super(key: key);
-
+  
   @override
   _ChatsPageNavigatorState createState() => _ChatsPageNavigatorState();
 }
@@ -20,16 +20,7 @@ class _ChatsPageNavigatorState extends State<ChatsPageNavigator> {
       onGenerateRoute: (RouteSettings settings) {
         return MaterialPageRoute(
           settings: settings,
-          builder: (BuildContext context) {
-            switch (settings.name) {
-              case '/':
-                return const ChatsPage();
-              case '/chat2':
-                return const ExtraPage(pageName: 'From Chat Page');
-              default:
-                return const ChatsPage();
-            }
-          },
+          builder: (BuildContext context) => const ChatsPage(),
         );
       },
     );

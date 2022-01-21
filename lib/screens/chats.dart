@@ -1,52 +1,28 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:amber/constants.dart';
+import 'package:amber/utilities/constants.dart';
 
 class ChatsPage extends StatefulWidget {
-  const ChatsPage({Key? key}) : super(key: key);
   static const id = '/chats';
+
+  const ChatsPage({Key? key}) : super(key: key);
 
   @override
   State<ChatsPage> createState() => _ChatsPageState();
 }
 
 class _ChatsPageState extends State<ChatsPage> {
+  File? file;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: createRandomColor(),
       appBar: AppBar(
-        elevation: 15.0,
-        foregroundColor: kAppColor,
-        backgroundColor: Colors.black,
-        leading: const Padding(
-          padding: EdgeInsets.all(10.0),
-          child: Image(image: AssetImage('assets/logo.png'),
-          ),
-        ),
-        title: const Text(kAppName,
-          style: TextStyle(
-            letterSpacing: 6,
-            fontSize: 35.0
-          ),
-        ),
-        actions: <Widget>[
-        IconButton(onPressed: (){},
-          icon: const Icon(Icons.chat),
-          iconSize: 35,
-        ),
-        ],
+        backgroundColor: Colors.amber,
+        title: const Text(kAppName, style: TextStyle(fontSize: 18, color: Colors.white)),
       ),
-      body:  Container(
-        padding: const EdgeInsets.all(10.0),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(30),
-              topRight: Radius.circular(30)
-          )
-        ),
-        child: buildChats(),
-      ),
+      body: const Center(child: Text('To be implemented!')),
     );
   }
   
@@ -72,7 +48,6 @@ Widget buildChats() =>ListView.builder(
           fontWeight: FontWeight.bold
         ),),
         tileColor: Colors.black,
-
       ),
     );
     }

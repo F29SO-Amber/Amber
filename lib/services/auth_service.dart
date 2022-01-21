@@ -1,10 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_login/flutter_login.dart';
+import 'package:amber/services/database_service.dart';
 
-class Authentication {
+class AuthService {
   static final _auth = FirebaseAuth.instance;
-  static final _firestore = FirebaseFirestore.instance;
   static late User currentUser;
 
   static Future<String?> authUser(LoginData data) async {
@@ -27,17 +26,7 @@ class Authentication {
       );
       currentUser = authResult.user!;
 
-      Map<String, dynamic> map = {};
-      map.addAll({
-        'id': currentUser.uid,
-        'email': '${data.name}',
-        'time_created': Timestamp.now(),
-        'profilePhotoURL': '',
-      });
-      data.additionalSignupData?.forEach((key, value) {
-        map.addAll({key: value});
-      });
-      _firestore.collection('users').doc(currentUser.uid).set(map);
+      DatabaseService.addUserData(data);
       return null;
     } on FirebaseAuthException catch (e) {
       return e.message;

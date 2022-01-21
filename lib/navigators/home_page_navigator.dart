@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:amber/screens/extra.dart';
-import 'package:amber/screens/home.dart';
+import 'package:amber/screens/feed.dart';
 
+//Creating mutable state for the Home Page Navigator
 class HomePageNavigator extends StatefulWidget {
   const HomePageNavigator({Key? key}) : super(key: key);
 
@@ -20,16 +20,7 @@ class _HomePageNavigatorState extends State<HomePageNavigator> {
       onGenerateRoute: (RouteSettings settings) {
         return MaterialPageRoute(
           settings: settings,
-          builder: (BuildContext context) {
-            switch (settings.name) {
-              case '/':
-                return const HomePage();
-              case '/home2':
-                return const ExtraPage(pageName: 'From Home Page');
-              default:
-                return const HomePage();
-            }
-          },
+          builder: (BuildContext context) => const FeedPage(),
         );
       },
     );
