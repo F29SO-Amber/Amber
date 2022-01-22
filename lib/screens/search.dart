@@ -1,4 +1,5 @@
 import 'package:amber/models/user.dart';
+import 'package:amber/screens/profile.dart';
 import 'package:amber/services/database_service.dart';
 import 'package:amber/widgets/progress.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -14,17 +15,16 @@ class Search extends StatefulWidget {
 class _SearchState extends State<Search> {
   TextEditingController searchController = TextEditingController();
   Future<QuerySnapshot>? searchResultsFuture;
-  handleSearch(String query){
+  handleSearch(String query) {
     final start = query.substring(0, query.length - 1);
     final end = query.characters.last;
-    final limit =
-  start + String.fromCharCode(end.codeUnitAt(0) + 1);
+    final limit = start + String.fromCharCode(end.codeUnitAt(0) + 1);
 
-final users = DatabaseService.usersRef
-  .where('username', isGreaterThanOrEqualTo: query)
-  .where('username', isLessThan: limit)
-  .get();
-  
+    final users = DatabaseService.usersRef
+        .where('username', isGreaterThanOrEqualTo: query)
+        .where('username', isLessThan: limit)
+        .get();
+
     setState(() {
       searchResultsFuture = users;
     });
@@ -122,7 +122,13 @@ class UserResult extends StatelessWidget {
       child: Column(
         children: <Widget>[
           GestureDetector(
-            onTap: () => print("tapped"),
+            // onTap: () => print("tapped"),
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ProfilePage(userUID: user.id)));
+            },
             child: ListTile(
               leading: CircleAvatar(
                 backgroundColor: Colors.grey,
