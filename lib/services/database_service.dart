@@ -8,6 +8,7 @@ class DatabaseService {
   static final _firestore = FirebaseFirestore.instance;
   static final usersRef = _firestore.collection('users');
   static final postsRef = _firestore.collection('posts');
+  static final commentsRef = _firestore.collection('comments');
   static final followersRef = _firestore.collection('followers');
   static final followingRef = _firestore.collection('following');
   static late String usernameresult;

@@ -12,12 +12,18 @@ import 'package:amber/services/auth_service.dart';
 /*
  Login Page allows user to login into their existing accounts or have an option to create a new account.
 */
-class LoginScreen extends StatelessWidget {
-  LoginScreen({Key? key}) : super(key: key);
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({Key? key}) : super(key: key);
 
   static const id = '/auth';
-  String usernameTest = '';
   static String? temp;
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  String usernameTest = '';
 
   @override
   Widget build(BuildContext context) {
@@ -26,12 +32,13 @@ class LoginScreen extends StatelessWidget {
       logo: const AssetImage('assets/logo.png'),
       loginAfterSignUp: false,
       theme: kLoginTheme,
-      onLogin: AuthService.authUser,  //Authenticate login upon login
+      onLogin: AuthService.authUser, //Authenticate login upon login
       onSignup: AuthService.signupUser, //Sign up a new user
       onRecoverPassword: AuthService.recoverPassword, //Forgot Password authentication
       messages: LoginMessages(signUpSuccess: "Sign up successful!"),
       additionalSignupFields: [
-        UserFormField(    //Username Field
+        UserFormField(
+          //Username Field
           keyName: 'username',
           displayName: 'Username',
           icon: const Icon(FontAwesomeIcons.at),
@@ -53,12 +60,14 @@ class LoginScreen extends StatelessWidget {
             // }
           },
         ),
-        const UserFormField(    //Name field (For signup)
+        const UserFormField(
+          //Name field (For signup)
           keyName: 'name',
           displayName: 'Name',
           icon: Icon(FontAwesomeIcons.solidUser),
         ),
-        UserFormField(    //Account type field (For signup)
+        UserFormField(
+          //Account type field (For signup)
           keyName: 'account_type',
           displayName: 'Account Type',
           icon: const Icon(FontAwesomeIcons.artstation),
@@ -69,7 +78,8 @@ class LoginScreen extends StatelessWidget {
             }
           },
         ),
-        UserFormField(     //Date of Birth field (For signup)
+        UserFormField(
+          //Date of Birth field (For signup)
           keyName: 'dob',
           displayName: 'Date Of Birth',
           icon: const Icon(FontAwesomeIcons.calendarAlt),

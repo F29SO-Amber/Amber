@@ -1,4 +1,5 @@
 import 'package:amber/models/post.dart';
+import 'package:amber/screens/comments.dart';
 import 'package:amber/services/auth_service.dart';
 import 'package:amber/services/database_service.dart';
 import 'package:amber/utilities/constants.dart';
@@ -126,14 +127,11 @@ class _UserPostState extends State<UserPost> {
             ],
           ),
           Slidable(
-            key: const ValueKey(0),
-            startActionPane: ActionPane(
-              motion: const DrawerMotion(),
-              dismissible: DismissiblePane(onDismissed: () {
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(const SnackBar(content: Text("Image Posted!")));
-              }),
-              children: const [
+            // key: const ValueKey(0),
+            startActionPane: const ActionPane(
+              motion: DrawerMotion(),
+              // dismissible: DismissiblePane(onDismissed: () {}),
+              children: [
                 SlidableAction(
                   onPressed: null,
                   backgroundColor: Color(0xFFFE4A49),
@@ -152,11 +150,9 @@ class _UserPostState extends State<UserPost> {
             ),
             endActionPane: ActionPane(
               motion: const DrawerMotion(),
-              dismissible: DismissiblePane(onDismissed: () {}),
-              children: const [
-                SlidableAction(
-                  // An action can be bigger than the others.
-                  flex: 1,
+              // dismissible: DismissiblePane(onDismissed: () {}),
+              children: [
+                const SlidableAction(
                   onPressed: null,
                   backgroundColor: Color(0xFF7BC043),
                   foregroundColor: Colors.white,
@@ -164,7 +160,17 @@ class _UserPostState extends State<UserPost> {
                   label: 'Report',
                 ),
                 SlidableAction(
-                  onPressed: null,
+                  onPressed: (context) {
+                    Navigator.of(context, rootNavigator: true).push(
+                      MaterialPageRoute(
+                        builder: (context) => CommentsPage(
+                          postID: widget.post.id,
+                          username: widget.post.authorUserName,
+                          profilePhotoURL: widget.post.authorProfilePhotoURL,
+                        ),
+                      ),
+                    );
+                  },
                   backgroundColor: Color(0xFF0392CF),
                   foregroundColor: Colors.white,
                   icon: Icons.comment,

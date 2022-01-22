@@ -221,7 +221,7 @@ class _PublishScreenState extends State<PublishScreen> {
         map['location'] = locationController.text;
         map['imageURL'] = await uploadImage(postId);
         map['caption'] = captionController.text;
-        map['score'] = 0;
+        map['likes'] = {};
         map['authorId'] = AuthService.currentUser.uid;
         map['timestamp'] = Timestamp.now();
         map['authorName'] = user.name;
