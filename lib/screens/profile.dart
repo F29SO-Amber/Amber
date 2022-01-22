@@ -118,14 +118,11 @@ class _ProfilePageState extends State<ProfilePage> {
                   padding: const EdgeInsets.only(right: 10.0),
                   child: (widget.userUID == AuthService.currentUser.uid)
                       ? GestureDetector(
-                          child: const Icon(Icons.logout_outlined,
-                              color: Colors.white),
+                          child: const Icon(Icons.logout_outlined, color: Colors.white),
                           onTap: () {
                             AuthService.signOutUser();
-                            Navigator.of(context, rootNavigator: true)
-                                .pushReplacement(
-                              MaterialPageRoute(
-                                  builder: (context) => LoginScreen()),
+                            Navigator.of(context, rootNavigator: true).pushReplacement(
+                              MaterialPageRoute(builder: (context) => LoginScreen()),
                             );
                           },
                         )
@@ -142,8 +139,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   const SizedBox(height: 5),
                   Padding(
                     padding: const EdgeInsets.all(20.0),
-                    child: ProfilePicture(
-                        side: 100, image: NetworkImage(user.profilePhotoURL)),
+                    child: ProfilePicture(side: 100, image: NetworkImage(user.profilePhotoURL)),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 3.0),
@@ -151,8 +147,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text('${user.name} ', style: kDarkLabelTextStyle),
-                        const Icon(Icons.verified,
-                            color: Colors.amber, size: 22),
+                        const Icon(Icons.verified, color: Colors.amber, size: 22),
                       ],
                     ),
                   ),
@@ -170,16 +165,13 @@ class _ProfilePageState extends State<ProfilePage> {
                             .get()
                             .asStream(),
                         builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.done) {
+                          if (snapshot.connectionState == ConnectionState.done) {
                             return NumberAndLabel(
-                              number:
-                                  '${(snapshot.data as QuerySnapshot).docs.length}',
+                              number: '${(snapshot.data as QuerySnapshot).docs.length}',
                               label: '   Posts   ',
                             );
                           } else {
-                            return const NumberAndLabel(
-                                number: '0', label: '   Posts   ');
+                            return const NumberAndLabel(number: '0', label: '   Posts   ');
                           }
                         },
                       ),
@@ -190,20 +182,17 @@ class _ProfilePageState extends State<ProfilePage> {
                             .get()
                             .asStream(),
                         builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.done) {
+                          if (snapshot.connectionState == ConnectionState.done) {
                             return GestureDetector(
                                 onTap: () {
                                   _navigateToFollowersScreen(context);
                                 },
                                 child: NumberAndLabel(
-                                  number:
-                                      '${(snapshot.data as QuerySnapshot).docs.length}',
+                                  number: '${(snapshot.data as QuerySnapshot).docs.length}',
                                   label: 'Followers',
                                 ));
                           } else {
-                            return const NumberAndLabel(
-                                number: '0', label: 'Followers');
+                            return const NumberAndLabel(number: '0', label: 'Followers');
                           }
                         },
                       ),
@@ -214,20 +203,17 @@ class _ProfilePageState extends State<ProfilePage> {
                             .get()
                             .asStream(),
                         builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.done) {
+                          if (snapshot.connectionState == ConnectionState.done) {
                             return GestureDetector(
                                 onTap: () {
                                   _navigateToFollowingScreen(context);
                                 },
                                 child: NumberAndLabel(
-                                  number:
-                                      '${(snapshot.data as QuerySnapshot).docs.length}',
+                                  number: '${(snapshot.data as QuerySnapshot).docs.length}',
                                   label: 'Following',
                                 ));
                           } else {
-                            return const NumberAndLabel(
-                                number: '0', label: 'Following');
+                            return const NumberAndLabel(number: '0', label: 'Following');
                           }
                         },
                       ),
@@ -242,8 +228,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    EditProfileScreen(user: user),
+                                builder: (context) => EditProfileScreen(user: user),
                               ),
                             ).then((value) => setState(() {}));
                           },
@@ -315,36 +300,37 @@ class _ProfilePageState extends State<ProfilePage> {
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.done) {
                         return GridView.builder(
-                          padding:
-                              const EdgeInsets.all(10).copyWith(bottom: 30),
+                          padding: const EdgeInsets.all(10).copyWith(bottom: 30),
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: (snapshot.data! as dynamic).docs.length,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 3,
                             crossAxisSpacing: 10,
                             mainAxisSpacing: 10,
                             childAspectRatio: 1,
                           ),
                           itemBuilder: (context, index) {
-                            PostModel post = PostModel.fromDocument(
-                                (snapshot.data! as dynamic).docs[index]);
+                            PostModel post =
+                                PostModel.fromDocument((snapshot.data! as dynamic).docs[index]);
                             return GestureDetector(
                               child: Container(
                                 decoration: BoxDecoration(
                                   image: DecorationImage(
-                                      image: NetworkImage(post.imageURL),
-                                      fit: BoxFit.cover),
+                                      image: NetworkImage(post.imageURL), fit: BoxFit.cover),
                                   shape: BoxShape.rectangle,
                                   borderRadius: BorderRadius.circular(11.0),
                                 ),
                               ),
                               onTap: () {
-                                postscroller.postID = post.id;
-                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => const postscroller()));
-                                print('works');
-                               
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => CurrentUserPosts(
+                                      uid: widget.userUID,
+                                      index: index,
+                                    ),
+                                  ),
+                                );
                               },
                             );
                           },
@@ -381,10 +367,8 @@ class _ProfilePageState extends State<ProfilePage> {
 }
 
 Future<List<UserModel>> getFollowersUIDs(String id) async {
-  QuerySnapshot followers = await DatabaseService.followersRef
-      .doc(id)
-      .collection('userFollowers')
-      .get();
+  QuerySnapshot followers =
+      await DatabaseService.followersRef.doc(id).collection('userFollowers').get();
 
   List ids = followers.docs.map((e) => (e.id)).toList();
   List<UserModel> users = [];
@@ -395,10 +379,8 @@ Future<List<UserModel>> getFollowersUIDs(String id) async {
 }
 
 Future<List<UserModel>> getFollowingUID(String id) async {
-  QuerySnapshot following = await DatabaseService.followingRef
-      .doc(id)
-      .collection('userFollowing')
-      .get();
+  QuerySnapshot following =
+      await DatabaseService.followingRef.doc(id).collection('userFollowing').get();
 
   List ids = following.docs.map((e) => (e.id)).toList();
   List<UserModel> users = [];
@@ -432,8 +414,7 @@ class Followers extends StatelessWidget {
                   onPress: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => ProfilePage(userUID: user.id)),
+                      MaterialPageRoute(builder: (context) => ProfilePage(userUID: user.id)),
                     );
                   },
                 ),
@@ -472,8 +453,7 @@ class Following extends StatelessWidget {
                   onPress: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => ProfilePage(userUID: user.id)),
+                      MaterialPageRoute(builder: (context) => ProfilePage(userUID: user.id)),
                     );
                   },
                 ),

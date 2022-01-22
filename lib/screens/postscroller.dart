@@ -1,30 +1,31 @@
 import 'package:amber/models/post.dart';
-import 'package:amber/services/auth_service.dart';
 import 'package:amber/services/database_service.dart';
 import 'package:amber/widgets/post_widget.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:flutter/material.dart';
 import 'package:amber/utilities/constants.dart';
 
-class postscroller extends StatefulWidget {
-  static const id = '/postscroller';
-  static late String postID;
+class CurrentUserPosts extends StatefulWidget {
+  static const id = '/CurrentUserPosts';
+  final String uid;
+  final int index;
 
-  const postscroller({Key? key}) : super(key: key);
+  const CurrentUserPosts({Key? key, required this.uid, required this.index}) : super(key: key);
 
   @override
-  State<postscroller> createState() => _postscrollerState();
+  State<CurrentUserPosts> createState() => _CurrentUserPostsState();
 }
 
-class _postscrollerState extends State<postscroller> {
+class _CurrentUserPostsState extends State<CurrentUserPosts> {
+  final ItemScrollController itemScrollController = ItemScrollController();
+  final ItemPositionsListener itemPositionsListener = ItemPositionsListener.create();
+
   Future<List<UserPost>> getPosts() async {
-    print(postscroller.postID);
-
     List<UserPost> posts = [];
-
     posts.addAll(
       ((await DatabaseService.postsRef
-                  .where('id', isEqualTo: postscroller.postID)
+                  .where('authorId', isEqualTo: widget.uid)
+                  .orderBy('timestamp', descending: true)
                   .get())
               .docs)
           .map(
@@ -44,7 +45,7 @@ class _postscrollerState extends State<postscroller> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: createRandomColor(),
+      // backgroundColor: createRandomColor(),
       appBar: AppBar(
         backgroundColor: Colors.amber,
         title: const Text(
@@ -56,9 +57,15 @@ class _postscrollerState extends State<postscroller> {
         stream: getPosts().asStream(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            return ListView(
-              children: snapshot.data as List<UserPost>,
+            ScrollablePositionedList list = ScrollablePositionedList.builder(
+              itemCount: (snapshot.data! as dynamic).length,
+              itemBuilder: (context, index) => (snapshot.data! as dynamic)[index],
+              itemScrollController: itemScrollController,
+              itemPositionsListener: itemPositionsListener,
+              initialScrollIndex: widget.index,
             );
+            // itemScrollController.jumpTo(index: 3);
+            return list;
           } else {
             return const Center(child: CircularProgressIndicator());
           }

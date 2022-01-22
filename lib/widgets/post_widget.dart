@@ -12,7 +12,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 class UserPost extends StatefulWidget {
   final PostModel post;
 
-  UserPost({Key? key, required this.post}) : super(key: key);
+  const UserPost({Key? key, required this.post}) : super(key: key);
 
   @override
   State<UserPost> createState() => _UserPostState();

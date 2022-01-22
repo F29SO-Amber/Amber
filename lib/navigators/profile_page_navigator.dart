@@ -20,8 +20,9 @@ class _ProfilePageNavigatorState extends State<ProfilePageNavigator> {
       key: profileNavigatorKey,
       onGenerateRoute: (RouteSettings settings) {
         return MaterialPageRoute(
-            settings: settings,
-            builder: (BuildContext context) => ProfilePage(userUID: AuthService.currentUser.uid));
+          settings: settings,
+          builder: (BuildContext context) => ProfilePage(userUID: AuthService.currentUser.uid),
+        );
       },
     );
   }
