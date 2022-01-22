@@ -14,10 +14,17 @@ class Search extends StatefulWidget {
 class _SearchState extends State<Search> {
   TextEditingController searchController = TextEditingController();
   Future<QuerySnapshot>? searchResultsFuture;
-  handleSearch(String query) {
-    Future<QuerySnapshot> users = DatabaseService.usersRef
-        .where("username", isGreaterThanOrEqualTo: query)
-        .get();
+  handleSearch(String query){
+    final start = query.substring(0, query.length - 1);
+    final end = query.characters.last;
+    final limit =
+  start + String.fromCharCode(end.codeUnitAt(0) + 1);
+
+final users = DatabaseService.usersRef
+  .where('username', isGreaterThanOrEqualTo: query)
+  .where('username', isLessThan: limit)
+  .get();
+  
     setState(() {
       searchResultsFuture = users;
     });
