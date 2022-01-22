@@ -1,5 +1,6 @@
 import 'package:amber/models/user.dart';
 import 'package:amber/screens/profile.dart';
+import 'package:amber/services/auth_service.dart';
 import 'package:amber/services/database_service.dart';
 import 'package:amber/widgets/progress.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -89,8 +90,10 @@ class _SearchState extends State<Search> {
         //if (snapshot.connectionState == ConnectionState.done) {
         for (var doc in (snapshot.data! as QuerySnapshot).docs) {
           UserModel user = UserModel.fromDocument(doc);
-          UserResult searchResult = UserResult(user);
-          searchResults.add(searchResult);
+          if (user.id != AuthService.currentUser.uid) {
+            UserResult searchResult = UserResult(user);
+            searchResults.add(searchResult);
+          }
         }
         //}
         return ListView(
