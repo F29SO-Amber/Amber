@@ -1,3 +1,4 @@
+import 'package:amber/screens/postscroller.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -15,6 +16,7 @@ import 'package:amber/widgets/number_and_label.dart';
 import 'package:amber/services/database_service.dart';
 import 'package:amber/widgets/custom_outlined_button.dart';
 import 'package:amber/widgets/custom_elevated_button.dart';
+import 'package:amber/screens/postscroller.dart';
 
 // am2024@hw.ac.uk
 
@@ -328,14 +330,22 @@ class _ProfilePageState extends State<ProfilePage> {
                           itemBuilder: (context, index) {
                             PostModel post = PostModel.fromDocument(
                                 (snapshot.data! as dynamic).docs[index]);
-                            return Container(
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: NetworkImage(post.imageURL),
-                                    fit: BoxFit.cover),
-                                shape: BoxShape.rectangle,
-                                borderRadius: BorderRadius.circular(11.0),
+                            return GestureDetector(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      image: NetworkImage(post.imageURL),
+                                      fit: BoxFit.cover),
+                                  shape: BoxShape.rectangle,
+                                  borderRadius: BorderRadius.circular(11.0),
+                                ),
                               ),
+                              onTap: () {
+                                postscroller.postID = post.id;
+                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => const postscroller()));
+                                print('works');
+                               
+                              },
                             );
                           },
                         );
@@ -356,13 +366,17 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void _navigateToFollowersScreen(BuildContext context) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => Followers(userUID: widget.userUID,)));
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => Followers(
+              userUID: widget.userUID,
+            )));
   }
 
   void _navigateToFollowingScreen(BuildContext context) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => Following(userUID: widget.userUID,)));
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => Following(
+              userUID: widget.userUID,
+            )));
   }
 }
 
