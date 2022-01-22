@@ -39,7 +39,7 @@ class _ChatsPageState extends State<ChatsPage> {
       appBar: AppBar(
         elevation: 15.0,
         foregroundColor: kAppColor,
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.amber,
         leading: const Padding(
           padding: EdgeInsets.all(10.0),
           child: Image(image: AssetImage('assets/logo.png'),
@@ -47,6 +47,7 @@ class _ChatsPageState extends State<ChatsPage> {
         ),
         title: const Text(kAppName,
           style: TextStyle(
+            color: Colors.white,
               letterSpacing: 6,
               fontSize: 35.0
           ),
@@ -55,13 +56,14 @@ class _ChatsPageState extends State<ChatsPage> {
           IconButton(onPressed: (){},
             icon: const Icon(Icons.chat),
             iconSize: 35,
+            color:Colors.white ,
           ),
         ],
       ),
       body:  Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        color: Color(0xFF1F1A30),
+        color: Color(0XFFFFF9C4),
         child: Padding(
           padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.06),
           child: Column(
@@ -100,15 +102,15 @@ class _ChatsPageState extends State<ChatsPage> {
                                   top: MediaQuery.of(context).size.height *
                                       0.02),
                               decoration: BoxDecoration(
-                                color: Color(0xFF39304d),
+                                color: Color(0XFFFFF59D),
                                 borderRadius: BorderRadius.circular(20),
-                                boxShadow: [
+                                /*boxShadow: [
                                   BoxShadow(
-                                    color: Color(0xFF39304d),
+                                    color: Colors.grey,
                                     blurRadius: 10,
                                     offset: Offset(0, 0), // Shadow position
                                   ),
-                                ],
+                                ],*/
                               ),
                               child: ListTile(
                                 leading: Container(
@@ -138,18 +140,18 @@ class _ChatsPageState extends State<ChatsPage> {
                                 ),
                                 title: Text(
                                   data['name'],
-                                  style: TextStyle(color: Colors.white),
+                                  style: TextStyle(color: Colors.black),
                                 ),
                                 subtitle: Text(
                                   data['name'],
-                                  style: TextStyle(color: Colors.white),
+                                  style: TextStyle(color: Colors.black),
                                 ),
                                 trailing: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
                                       "12:00 am",
-                                      style: TextStyle(color: Colors.white),
+                                      style: TextStyle(color: Colors.black),
                                     ),
                                     Container(
                                       margin: EdgeInsets.only(
