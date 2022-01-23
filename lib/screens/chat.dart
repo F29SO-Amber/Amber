@@ -4,8 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
 class ChatPage extends StatefulWidget {
-  const ChatPage({Key? key, required this.chatID, required this.chatName})
-      : super(key: key);
+  const ChatPage({Key? key, required this.chatID, required this.chatName}) : super(key: key);
 
   final String chatID;
   final String chatName;
@@ -29,7 +28,6 @@ class _ChatPageState extends State<ChatPage> {
   // String formattedDate = DateFormat('kk:mm:ss \n EEE d MMM').format(now1);
 
   // FirebaseAuth auth = FirebaseAuth.instance;
-  @override
   addData() async {
     await FirebaseFirestore.instance.collection('messages').add({
       'token': '${FirebaseAuth.instance.currentUser!.email}|${widget.chatID}',
@@ -52,8 +50,7 @@ class _ChatPageState extends State<ChatPage> {
           title: Row(
             children: [
               Padding(
-                padding: EdgeInsets.only(
-                    right: MediaQuery.of(context).size.height * 0.02),
+                padding: EdgeInsets.only(right: MediaQuery.of(context).size.height * 0.02),
                 child: CircleAvatar(),
               ),
               Text("${widget.chatName}",
@@ -101,8 +98,7 @@ class _ChatPageState extends State<ChatPage> {
                       ])
                       .orderBy('time2', descending: true)
                       .snapshots(),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<QuerySnapshot> snapshot) {
+                  builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
                     if (snapshot.hasError) {
                       return Text("Error");
                     }
@@ -120,12 +116,9 @@ class _ChatPageState extends State<ChatPage> {
                           right: MediaQuery.of(context).size.width * 0.06),
                       child: ListView(
                         reverse: true,
-                        children: snapshot.data!.docs
-                            .map((DocumentSnapshot document) {
-                          Map<String, dynamic> data =
-                              document.data()! as Map<String, dynamic>;
-                          if (FirebaseAuth.instance.currentUser!.email ==
-                              data['to']) {
+                        children: snapshot.data!.docs.map((DocumentSnapshot document) {
+                          Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+                          if (FirebaseAuth.instance.currentUser!.email == data['to']) {
                             lefts = 0;
                             rights = 0.2;
                             fieldColor = Color(0xFF5C6BC0);
@@ -134,8 +127,7 @@ class _ChatPageState extends State<ChatPage> {
                           } else {
                             lefts = 0.2;
                             rights = 0;
-                            fieldColor =
-                                Color(0xFF64B5F6); // color for textmessage
+                            fieldColor = Color(0xFF64B5F6); // color for textmessage
                             textColor = Color(0xFF1F1A30);
                             dateColor = Colors.black87;
                           }
@@ -145,8 +137,7 @@ class _ChatPageState extends State<ChatPage> {
                             margin: EdgeInsets.only(
                                 top: MediaQuery.of(context).size.height * 0.02,
                                 left: MediaQuery.of(context).size.width * lefts,
-                                right:
-                                    MediaQuery.of(context).size.width * rights),
+                                right: MediaQuery.of(context).size.width * rights),
                             decoration: BoxDecoration(
                               color: fieldColor,
                               borderRadius: BorderRadius.circular(20),
@@ -165,8 +156,7 @@ class _ChatPageState extends State<ChatPage> {
                               ),
                               trailing: Padding(
                                 padding: EdgeInsets.only(
-                                    bottom: MediaQuery.of(context).size.height *
-                                        0.008),
+                                    bottom: MediaQuery.of(context).size.height * 0.008),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
@@ -187,8 +177,7 @@ class _ChatPageState extends State<ChatPage> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(
-                    top: MediaQuery.of(context).size.height * 0.02),
+                margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.02),
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.width * 0.15,
                 decoration: BoxDecoration(
@@ -217,10 +206,7 @@ class _ChatPageState extends State<ChatPage> {
                   child: TextField(
                     controller: myControllerMsg,
                     cursorColor: Colors.white,
-                    style: TextStyle(
-                        color: Colors.white,
-                        height: 1.4,
-                        fontWeight: FontWeight.w600),
+                    style: TextStyle(color: Colors.white, height: 1.4, fontWeight: FontWeight.w600),
                     decoration: InputDecoration(
                       // fillColor: field1Color,
                       focusedBorder: OutlineInputBorder(
@@ -246,8 +232,7 @@ class _ChatPageState extends State<ChatPage> {
                         //),
                       ),
                       hintText: 'Message...',
-                      hintStyle: TextStyle(
-                          color: Colors.white60, fontWeight: FontWeight.w400),
+                      hintStyle: TextStyle(color: Colors.white60, fontWeight: FontWeight.w400),
                     ),
                   ),
                 ),
