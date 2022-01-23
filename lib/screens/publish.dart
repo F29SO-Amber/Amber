@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:uuid/uuid.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:image/image.dart' as image;
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
@@ -10,8 +12,10 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_url_shortener/flutter_url_shortener.dart';
 
 import 'package:amber/models/user.dart';
+import 'package:amber/models/hashtag.dart';
 import 'package:amber/utilities/constants.dart';
 import 'package:amber/services/auth_service.dart';
 import 'package:amber/widgets/profile_picture.dart';
@@ -28,42 +32,12 @@ class PublishScreen extends StatefulWidget {
 
 class _PublishScreenState extends State<PublishScreen> {
   File? file;
-  bool uploadButtonPresent = true;
+  String _shortenURL = '';
   List _selectedHashtags = [];
+  bool uploadButtonPresent = true;
   final _formKey = GlobalKey<FormState>();
   final captionController = TextEditingController();
   final locationController = TextEditingController();
-  static final List<Hashtag> _hashtags = [
-    Hashtag(id: 1, name: "Lion"),
-    Hashtag(id: 2, name: "Flamingo"),
-    Hashtag(id: 3, name: "Hippo"),
-    Hashtag(id: 4, name: "Horse"),
-    Hashtag(id: 5, name: "Tiger"),
-    Hashtag(id: 6, name: "Penguin"),
-    Hashtag(id: 7, name: "Spider"),
-    Hashtag(id: 8, name: "Snake"),
-    Hashtag(id: 9, name: "Bear"),
-    Hashtag(id: 10, name: "Beaver"),
-    Hashtag(id: 11, name: "Cat"),
-    Hashtag(id: 12, name: "Fish"),
-    Hashtag(id: 13, name: "Rabbit"),
-    Hashtag(id: 14, name: "Mouse"),
-    Hashtag(id: 15, name: "Dog"),
-    Hashtag(id: 16, name: "Zebra"),
-    Hashtag(id: 17, name: "Cow"),
-    Hashtag(id: 18, name: "Frog"),
-    Hashtag(id: 19, name: "Blue Jay"),
-    Hashtag(id: 20, name: "Moose"),
-    Hashtag(id: 21, name: "Gecko"),
-    Hashtag(id: 22, name: "Kangaroo"),
-    Hashtag(id: 23, name: "Shark"),
-    Hashtag(id: 24, name: "Crocodile"),
-    Hashtag(id: 25, name: "Owl"),
-    Hashtag(id: 26, name: "Dragonfly"),
-    Hashtag(id: 27, name: "Dolphin"),
-    Hashtag(id: 28, name: "x"),
-  ];
-  final _items = _hashtags.map((tag) => MultiSelectItem<Hashtag>(tag, tag.name)).toList();
 
   @override
   void dispose() {
@@ -92,12 +66,13 @@ class _PublishScreenState extends State<PublishScreen> {
             child: IconButton(
               icon: const Icon(Icons.publish),
               color: Colors.black54,
-              onPressed: () async {
-                setState(() => uploadButtonPresent = false);
-                EasyLoading.show(status: 'Uploading...');
-                await addUserPost();
-                EasyLoading.dismiss();
-                disposeUserPostChanges();
+              onPressed: () {
+                // setState(() => uploadButtonPresent = false);
+                // EasyLoading.show(status: 'Uploading...');
+                // await addUserPost();
+                // EasyLoading.dismiss();
+                // disposeUserPostChanges();
+                _genBitlyUrl();
               },
             ),
           ),
@@ -240,7 +215,9 @@ class _PublishScreenState extends State<PublishScreen> {
                             style: const TextStyle(fontSize: 16, color: Colors.black54),
                           ),
                           title: const Text("Hashtags"),
-                          items: _items,
+                          items: Hashtag.hashtags
+                              .map((tag) => MultiSelectItem<Hashtag>(tag, tag.name))
+                              .toList(),
                           onConfirm: (values) {
                             _selectedHashtags = values;
                             setState(() {});
@@ -305,15 +282,44 @@ class _PublishScreenState extends State<PublishScreen> {
     }
   }
 
+  void _genShortenUrl() {
+    try {
+      FShort.instance
+          .generateShortenURL(
+              longUrl:
+                  'https://firebasestorage.googleapis.com/v0/b/f29so-group-5-amber.appspot.com/o/posts%2Fa340d737-4aff-451c-8af8-972974994c19?alt=media&token=b6a5ac5b-966c-4667-b2d6-607a75660559')
+          .then((value) {
+        setState(() {
+          _shortenURL = value.link!;
+        });
+      });
+      print(_shortenURL);
+    } on BitlyException catch (_) {
+      print('Bitly');
+    } on Exception catch (_) {
+      print('Exception');
+    }
+  }
+
+  void _genBitlyUrl() async {
+    try {
+      final response = await http.post(Uri.parse('https://api-ssl.bitly.com/v4/shorten'), body: {
+        'long_url':
+            "https://firebasestorage.googleapis.com/v0/b/f29so-group-5-amber.appspot.com/o/profile%2F2Os8VTF9FthZJVI19PLC9bSfNdJ3?alt=media&token=d3219f77-0260-4c99-bbfd-58002148e758",
+      }, headers: {
+        'Authorization': 'Bearer {TOKEN}',
+        'Content-Type': 'application/json',
+      });
+      var result = jsonDecode(response.body);
+      debugPrint('$result');
+    } on Exception catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
   Future<String> uploadImage(String pID) async {
     TaskSnapshot ts = await FirebaseStorage.instance.ref().child('posts').child(pID).putFile(file!);
+
     return ts.ref.getDownloadURL();
   }
-}
-
-class Hashtag {
-  final int id;
-  final String name;
-
-  Hashtag({Key? key, required this.id, required this.name});
 }
