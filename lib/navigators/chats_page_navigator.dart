@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:amber/screens/extra.dart';
 import 'package:amber/screens/chats.dart';
+import 'package:amber/screens/chat.dart';
+import 'package:amber/services/authentication.dart';
 
 class ChatsPageNavigator extends StatefulWidget {
   const ChatsPageNavigator({Key? key}) : super(key: key);
@@ -22,10 +24,11 @@ class _ChatsPageNavigatorState extends State<ChatsPageNavigator> {
           settings: settings,
           builder: (BuildContext context) {
             switch (settings.name) {
-              case '/':
-                return const ChatsPage();
-              case '/chat2':
-                return const ExtraPage(pageName: 'From Chat Page');
+              case '/chat':
+                return ChatPage(
+                  chatID: Authentication.currentUser.uid,
+                  chatName: Authentication.currentUser.uid,
+                );
               default:
                 return const ChatsPage();
             }
