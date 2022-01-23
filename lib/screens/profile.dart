@@ -100,8 +100,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: DatabaseService.getUser(widget.userUID).asStream(),
+    return FutureBuilder(
+      future: DatabaseService.getUser(widget.userUID),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           var user = snapshot.data as UserModel;
@@ -161,8 +161,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       StreamBuilder(
                         stream: DatabaseService.postsRef
                             .where('authorId', isEqualTo: widget.userUID)
-                            .get()
-                            .asStream(),
+                            .snapshots(),
                         builder: (context, snapshot) {
                           if (snapshot.connectionState == ConnectionState.done) {
                             return NumberAndLabel(
@@ -178,8 +177,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         stream: DatabaseService.followersRef
                             .doc(widget.userUID)
                             .collection('userFollowers')
-                            .get()
-                            .asStream(),
+                            .snapshots(),
                         builder: (context, snapshot) {
                           if (snapshot.connectionState == ConnectionState.done) {
                             return GestureDetector(
@@ -199,8 +197,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         stream: DatabaseService.followingRef
                             .doc(widget.userUID)
                             .collection('userFollowing')
-                            .get()
-                            .asStream(),
+                            .snapshots(),
                         builder: (context, snapshot) {
                           if (snapshot.connectionState == ConnectionState.done) {
                             return GestureDetector(
@@ -294,10 +291,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     stream: DatabaseService.postsRef
                         .where('authorId', isEqualTo: widget.userUID)
                         .orderBy('timestamp', descending: true)
-                        .get()
-                        .asStream(),
+                        .snapshots(),
                     builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.done) {
+                      if (snapshot.hasData) {
                         return GridView.builder(
                           padding: const EdgeInsets.all(10).copyWith(bottom: 30),
                           shrinkWrap: true,
