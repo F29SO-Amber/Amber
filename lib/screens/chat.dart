@@ -48,36 +48,26 @@ class _ChatPageState extends State<ChatPage> {
     return Scaffold(
         appBar: AppBar(
           titleSpacing: 0.0,
-          backgroundColor: Color(0xFF1F1A30),
+          backgroundColor: Colors.amber, // top bar color
           title: Row(
             children: [
               Padding(
                 padding: EdgeInsets.only(
-                    right: MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0.02),
-                child: CircleAvatar(
-                ),
+                    right: MediaQuery.of(context).size.height * 0.02),
+                child: CircleAvatar(),
               ),
               Text("${widget.chatName}",
                   style: TextStyle(
-                      color: Colors.white,
+                      color: Colors.black, // chat text name
                       fontWeight: FontWeight.bold,
                       fontSize: 22)),
             ],
           ),
         ),
         body: Container(
-          width: MediaQuery
-              .of(context)
-              .size
-              .width,
-          height: MediaQuery
-              .of(context)
-              .size
-              .height,
-          color: Color(0xFF1F1A30),
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          color: Color(0XFFFFF9C4), //background color
           child: Column(
             children: [
               // SizedBox(
@@ -106,11 +96,9 @@ class _ChatPageState extends State<ChatPage> {
                   stream: FirebaseFirestore.instance
                       .collection('messages')
                       .where('token', whereIn: [
-                    '${FirebaseAuth.instance.currentUser!.email}|${widget
-                        .chatID}',
-                    '${widget.chatID}|${FirebaseAuth.instance.currentUser!
-                        .email}'
-                  ])
+                        '${FirebaseAuth.instance.currentUser!.email}|${widget.chatID}',
+                        '${widget.chatID}|${FirebaseAuth.instance.currentUser!.email}'
+                      ])
                       .orderBy('time2', descending: true)
                       .snapshots(),
                   builder: (BuildContext context,
@@ -128,31 +116,26 @@ class _ChatPageState extends State<ChatPage> {
 
                     return Padding(
                       padding: EdgeInsets.only(
-                          left: MediaQuery
-                              .of(context)
-                              .size
-                              .width * 0.06,
-                          right: MediaQuery
-                              .of(context)
-                              .size
-                              .width * 0.06),
+                          left: MediaQuery.of(context).size.width * 0.06,
+                          right: MediaQuery.of(context).size.width * 0.06),
                       child: ListView(
                         reverse: true,
                         children: snapshot.data!.docs
                             .map((DocumentSnapshot document) {
                           Map<String, dynamic> data =
-                          document.data()! as Map<String, dynamic>;
+                              document.data()! as Map<String, dynamic>;
                           if (FirebaseAuth.instance.currentUser!.email ==
                               data['to']) {
                             lefts = 0;
                             rights = 0.2;
-                            fieldColor = Color(0xFF39304d);
+                            fieldColor = Color(0xFF5C6BC0);
                             textColor = Colors.white;
                             dateColor = Colors.white70;
                           } else {
                             lefts = 0.2;
                             rights = 0;
-                            fieldColor = Color(0xFF0CF6E3);
+                            fieldColor =
+                                Color(0xFF64B5F6); // color for textmessage
                             textColor = Color(0xFF1F1A30);
                             dateColor = Colors.black87;
                           }
@@ -160,19 +143,10 @@ class _ChatPageState extends State<ChatPage> {
 
                           return Container(
                             margin: EdgeInsets.only(
-                                top: MediaQuery
-                                    .of(context)
-                                    .size
-                                    .height * 0.02,
-                                left: MediaQuery
-                                    .of(context)
-                                    .size
-                                    .width * lefts,
+                                top: MediaQuery.of(context).size.height * 0.02,
+                                left: MediaQuery.of(context).size.width * lefts,
                                 right:
-                                MediaQuery
-                                    .of(context)
-                                    .size
-                                    .width * rights),
+                                    MediaQuery.of(context).size.width * rights),
                             decoration: BoxDecoration(
                               color: fieldColor,
                               borderRadius: BorderRadius.circular(20),
@@ -191,18 +165,14 @@ class _ChatPageState extends State<ChatPage> {
                               ),
                               trailing: Padding(
                                 padding: EdgeInsets.only(
-                                    bottom: MediaQuery
-                                        .of(context)
-                                        .size
-                                        .height *
+                                    bottom: MediaQuery.of(context).size.height *
                                         0.008),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     Text(
                                       // DateTime.parse(timestamp.toDate().toString()),
-                                      "${DateFormat('hh:mm a').format(
-                                          myDateTime)}",
+                                      "${DateFormat('hh:mm a').format(myDateTime)}",
                                       style: TextStyle(color: dateColor),
                                     ),
                                   ],
@@ -218,18 +188,9 @@ class _ChatPageState extends State<ChatPage> {
               ),
               Container(
                 margin: EdgeInsets.only(
-                    top: MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0.02),
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width,
-                height: MediaQuery
-                    .of(context)
-                    .size
-                    .width * 0.15,
+                    top: MediaQuery.of(context).size.height * 0.02),
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.width * 0.15,
                 decoration: BoxDecoration(
                   color: Color(0xFF39304d),
                   // borderRadius: BorderRadius.circular(20),
@@ -243,11 +204,11 @@ class _ChatPageState extends State<ChatPage> {
                 ),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Color(0xFF1F1A30),
+                    color: Color(0xFFFFA726), // message
                     // borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
-                        color: Color(0xFF39304d),
+                        color: Color(0xFFFFA726),
                         // blurRadius: blurRadius1,
                         offset: Offset(0, 0), // Shadow position
                       ),
@@ -279,6 +240,10 @@ class _ChatPageState extends State<ChatPage> {
                           Icons.send_rounded,
                           color: Colors.white70,
                         ),
+                        //child: Icon(
+                        //Icons.camera_enhance_rounded,
+                        //color: Colors.white70,
+                        //),
                       ),
                       hintText: 'Message...',
                       hintStyle: TextStyle(
