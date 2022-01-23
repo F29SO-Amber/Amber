@@ -29,6 +29,7 @@ dependencies:
   flutter_slidable: ^1.2.0
   firebase_storage: ^10.2.5
   convex_bottom_bar: ^3.0.0
+  swiping_card_deck: ^1.0.0
   modal_bottom_sheet: ^2.0.0
   flutter_easyloading: ^3.0.3
   cached_network_image: ^3.2.0

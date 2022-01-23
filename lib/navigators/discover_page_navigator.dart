@@ -22,7 +22,7 @@ class _DiscoverPageNavigatorState extends State<DiscoverPageNavigator> {
         return MaterialPageRoute(
           settings: settings,
           //builder: (BuildContext context) => const DiscoverPage(),
-          builder: (BuildContext context) => Search(),
+          builder: (BuildContext context) => const DiscoverPage(),
         );
       },
     );
