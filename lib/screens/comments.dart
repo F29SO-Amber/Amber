@@ -1,20 +1,24 @@
-import 'package:amber/models/comment.dart';
-import 'package:amber/models/user.dart';
-import 'package:amber/services/auth_service.dart';
-import 'package:amber/services/database_service.dart';
-import 'package:amber/utilities/constants.dart';
+import 'package:flutter/material.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
+
+import 'package:amber/models/user.dart';
+import 'package:amber/models/comment.dart';
+import 'package:amber/utilities/constants.dart';
+import 'package:amber/services/auth_service.dart';
+import 'package:amber/services/database_service.dart';
 
 class CommentsPage extends StatefulWidget {
   final String postID;
   final String username;
   final String profilePhotoURL;
 
-  const CommentsPage(
-      {Key? key, required this.postID, required this.username, required this.profilePhotoURL})
-      : super(key: key);
+  const CommentsPage({
+    Key? key,
+    required this.postID,
+    required this.username,
+    required this.profilePhotoURL,
+  }) : super(key: key);
 
   @override
   State<CommentsPage> createState() => _CommentsPageState();
@@ -74,7 +78,7 @@ class _CommentsPageState extends State<CommentsPage> {
                                       contentPadding: const EdgeInsets.symmetric(horizontal: 0),
                                       leading: CircleAvatar(
                                         radius: 20.0,
-                                        backgroundImage: NetworkImage(comments.userProfilePhoto),
+                                        backgroundImage: NetworkImage(comments.profilePhotoURL),
                                       ),
                                       title: Row(
                                         children: [

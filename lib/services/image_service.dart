@@ -7,9 +7,9 @@ class ImageService {
   final apiKey = 'm9invNolYWWbS1oLMBYmRvNgt0SDq49P';
   final picPurifyURL = 'https://www.picpurify.com/analyse/1.1';
 
-  static Future<void> chooseFromGallery(File file) async {
+  static Future<File> chooseFromGallery() async {
     XFile? xFile = await ImagePicker().pickImage(source: ImageSource.gallery);
-    file = File('${xFile?.path}');
+    return File('${xFile?.path}');
   }
 
   static Future<void> chooseFromCamera(File file) async {

@@ -1,4 +1,4 @@
-import 'package:amber/screens/postscroller.dart';
+import 'package:amber/screens/user_posts.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -16,7 +16,6 @@ import 'package:amber/widgets/number_and_label.dart';
 import 'package:amber/services/database_service.dart';
 import 'package:amber/widgets/custom_outlined_button.dart';
 import 'package:amber/widgets/custom_elevated_button.dart';
-import 'package:amber/screens/postscroller.dart';
 
 // am2024@hw.ac.uk
 
@@ -122,7 +121,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           onTap: () {
                             AuthService.signOutUser();
                             Navigator.of(context, rootNavigator: true).pushReplacement(
-                              MaterialPageRoute(builder: (context) => LoginScreen()),
+                              MaterialPageRoute(builder: (context) => const LoginScreen()),
                             );
                           },
                         )

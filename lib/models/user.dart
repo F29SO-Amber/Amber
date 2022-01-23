@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-//Class for defining all User details
 class UserModel {
-  //Initializing user details
   final String id;
   final String name;
   final String email;
@@ -12,7 +10,6 @@ class UserModel {
   final Timestamp timeCreated;
   final String profilePhotoURL;
 
-  //Required details from users
   const UserModel({
     required this.id,
     required this.name,
@@ -24,7 +21,6 @@ class UserModel {
     required this.profilePhotoURL,
   });
 
-  //Returns the instance of class UserModel
   factory UserModel.fromDocument(DocumentSnapshot doc) {
     return UserModel(
       id: doc.id,

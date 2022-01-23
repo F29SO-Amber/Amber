@@ -1,13 +1,14 @@
+import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:amber/models/post.dart';
+import 'package:amber/widgets/post_widget.dart';
+import 'package:amber/utilities/constants.dart';
 import 'package:amber/services/auth_service.dart';
 import 'package:amber/services/database_service.dart';
-import 'package:amber/widgets/post_widget.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:amber/utilities/constants.dart';
 
 class FeedPage extends StatefulWidget {
-  static const id = '/home';
+  static const id = '/feed';
 
   const FeedPage({Key? key}) : super(key: key);
 
@@ -35,12 +36,6 @@ class _FeedPageState extends State<FeedPage> {
     }
 
     return posts;
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getPosts();
   }
 
   @override

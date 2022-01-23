@@ -1,5 +1,5 @@
-import 'dart:convert';
 import 'dart:io';
+import 'dart:convert';
 import 'package:uuid/uuid.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -32,7 +32,6 @@ class PublishScreen extends StatefulWidget {
 
 class _PublishScreenState extends State<PublishScreen> {
   File? file;
-  String _shortenURL = '';
   List _selectedHashtags = [];
   bool uploadButtonPresent = true;
   final _formKey = GlobalKey<FormState>();
@@ -66,13 +65,12 @@ class _PublishScreenState extends State<PublishScreen> {
             child: IconButton(
               icon: const Icon(Icons.publish),
               color: Colors.black54,
-              onPressed: () {
-                // setState(() => uploadButtonPresent = false);
-                // EasyLoading.show(status: 'Uploading...');
-                // await addUserPost();
-                // EasyLoading.dismiss();
-                // disposeUserPostChanges();
-                _genBitlyUrl();
+              onPressed: () async {
+                setState(() => uploadButtonPresent = false);
+                EasyLoading.show(status: 'Uploading...');
+                await addUserPost();
+                EasyLoading.dismiss();
+                disposeUserPostChanges();
               },
             ),
           ),
@@ -279,41 +277,6 @@ class _PublishScreenState extends State<PublishScreen> {
         await DatabaseService.postsRef.doc(postId).set(map);
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Image Posted!")));
       }
-    }
-  }
-
-  void _genShortenUrl() {
-    try {
-      FShort.instance
-          .generateShortenURL(
-              longUrl:
-                  'https://firebasestorage.googleapis.com/v0/b/f29so-group-5-amber.appspot.com/o/posts%2Fa340d737-4aff-451c-8af8-972974994c19?alt=media&token=b6a5ac5b-966c-4667-b2d6-607a75660559')
-          .then((value) {
-        setState(() {
-          _shortenURL = value.link!;
-        });
-      });
-      print(_shortenURL);
-    } on BitlyException catch (_) {
-      print('Bitly');
-    } on Exception catch (_) {
-      print('Exception');
-    }
-  }
-
-  void _genBitlyUrl() async {
-    try {
-      final response = await http.post(Uri.parse('https://api-ssl.bitly.com/v4/shorten'), body: {
-        'long_url':
-            "https://firebasestorage.googleapis.com/v0/b/f29so-group-5-amber.appspot.com/o/profile%2F2Os8VTF9FthZJVI19PLC9bSfNdJ3?alt=media&token=d3219f77-0260-4c99-bbfd-58002148e758",
-      }, headers: {
-        'Authorization': 'Bearer {TOKEN}',
-        'Content-Type': 'application/json',
-      });
-      var result = jsonDecode(response.body);
-      debugPrint('$result');
-    } on Exception catch (e) {
-      debugPrint(e.toString());
     }
   }
 

@@ -1,16 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CommentModel {
-  String username;
   String comment;
+  String username;
   Timestamp timestamp;
-  String userProfilePhoto;
+  String profilePhotoURL;
 
   CommentModel({
-    required this.username,
     required this.comment,
+    required this.username,
     required this.timestamp,
-    required this.userProfilePhoto,
+    required this.profilePhotoURL,
   });
 
   factory CommentModel.fromDocument(DocumentSnapshot doc) {
@@ -18,7 +18,7 @@ class CommentModel {
       username: doc['username'],
       comment: doc['text'],
       timestamp: doc['timestamp'],
-      userProfilePhoto: doc['profilePhotoURL'],
+      profilePhotoURL: doc['profilePhotoURL'],
     );
   }
 }

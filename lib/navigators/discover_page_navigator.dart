@@ -1,9 +1,7 @@
-import 'package:amber/screens/search.dart';
 import 'package:flutter/material.dart';
-
 import 'package:amber/screens/discover.dart';
 
-//Creating mutable state for the Discover Page Navigator
+//Creating mutable state for the Discovery Page Navigator
 class DiscoverPageNavigator extends StatefulWidget {
   const DiscoverPageNavigator({Key? key}) : super(key: key);
 
@@ -19,11 +17,7 @@ class _DiscoverPageNavigatorState extends State<DiscoverPageNavigator> {
     return Navigator(
       key: discoverNavigatorKey,
       onGenerateRoute: (RouteSettings settings) {
-        return MaterialPageRoute(
-          settings: settings,
-          //builder: (BuildContext context) => const DiscoverPage(),
-          builder: (BuildContext context) => const DiscoverPage(),
-        );
+        return MaterialPageRoute(settings: settings, builder: (_) => const DiscoverPage());
       },
     );
   }

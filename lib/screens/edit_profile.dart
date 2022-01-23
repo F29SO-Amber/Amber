@@ -28,7 +28,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final usernameController = TextEditingController();
   final nameController = TextEditingController();
 
-  //Initial details of the user
   @override
   void initState() {
     super.initState();
@@ -36,7 +35,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     nameController.text = widget.user.name;
   }
 
-  //Final details of the user
   @override
   void dispose() {
     super.dispose();
@@ -50,7 +48,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       appBar: AppBar(
         backgroundColor: Colors.amber,
         title: const Text("Edit profile", style: TextStyle(fontSize: 18, color: Colors.white)),
-        leading: GestureDetector(  // Back button on the app bar
+        leading: GestureDetector(
           child: const Icon(Icons.arrow_back_ios, color: Colors.white),
           onTap: () => Navigator.pop(context),
         ),
@@ -61,9 +59,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           padding: const EdgeInsets.all(20.0),
           children: [
             const SizedBox(height: 5),
-            Center(   //Edit Profile Picture
+            Center(
+              //Edit Profile Picture
               child: GestureDetector(
-                onTap: () => ImageService.chooseFromGallery(file!).then((x) => {setState(() {})}),
+                onTap: () async {
+                  file = await ImageService.chooseFromGallery();
+                  setState(() {});
+                },
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 20.0),
                   child: (file == null)
@@ -72,7 +74,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 ),
               ),
             ),
-            Padding(    //Edit Username
+            Padding(
+              //Edit Username
               padding: const EdgeInsets.symmetric(vertical: 5.0),
               child: CustomFormField(
                 controller: usernameController,
@@ -88,7 +91,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 },
               ),
             ),
-            Padding(    //Edit Name
+            Padding(
+              //Edit Name
               padding: const EdgeInsets.symmetric(vertical: 5.0),
               child: CustomFormField(
                 icon: Icons.person,
@@ -104,7 +108,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 },
               ),
             ),
-            Padding(    //Save the new details
+            Padding(
+              //Save the new details
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: CustomOutlinedButton(
                 buttonText: 'Save Profile',
@@ -120,7 +125,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     map['username'] = usernameController.text;
                     await DatabaseService.usersRef.doc(widget.user.id).update(map);
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("Profile updated!")),    //Message showed upon successful edit of profile
+                      const SnackBar(content: Text("Profile updated!")),
                     );
                   }
                 },

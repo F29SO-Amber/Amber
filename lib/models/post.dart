@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-//Class for defining every Post's details
 class PostModel {
-  //Initializing post details
   final String id;
   final String authorId;
   final String imageURL;
@@ -14,7 +12,6 @@ class PostModel {
   final String authorUserName;
   final String authorProfilePhotoURL;
 
-  //Required details for post
   PostModel({
     required this.authorName,
     required this.authorUserName,
@@ -28,7 +25,6 @@ class PostModel {
     required this.timestamp,
   });
 
-  //Returns the instance of class PostModel
   factory PostModel.fromDocument(DocumentSnapshot doc) {
     return PostModel(
       id: doc.id,

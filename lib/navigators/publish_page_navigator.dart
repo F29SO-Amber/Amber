@@ -1,8 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:amber/screens/publish.dart';
 import 'package:amber/services/auth_service.dart';
-import 'package:flutter/material.dart';
-
-import 'package:amber/screens/publish.dart';
 
 //Creating mutable state for the Publish Page Navigator
 class PublishPageNavigator extends StatefulWidget {
@@ -21,13 +19,7 @@ class _PublishPageNavigatorState extends State<PublishPageNavigator> {
     return Navigator(
       key: postNavigatorKey,
       onGenerateRoute: (RouteSettings settings) {
-        return MaterialPageRoute(
-          settings: settings,
-          builder: (context) {
-            // return PostPage(currentUserId: currentUserId);
-            return const PublishScreen();
-          },
-        );
+        return MaterialPageRoute(settings: settings, builder: (_) => const PublishScreen());
       },
     );
   }

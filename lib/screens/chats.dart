@@ -25,31 +25,4 @@ class _ChatsPageState extends State<ChatsPage> {
       body: const Center(child: Text('To be implemented!')),
     );
   }
-  
 }
-
-Widget buildChats() =>ListView.builder(
-  physics: BouncingScrollPhysics(),
-  itemCount: 25,
-  itemBuilder: (context,index){
-    //final users= users[index];
-    return Container(
-      height: 75.0,
-      child: ListTile(
-        onTap: (){
-          Navigator.pushReplacementNamed(context, '/chat2');
-          //Navigator.pushNamed(context, '/home2');
-         // Navigator.of(context).push(MaterialPageRoute(builder: context)=>ChatPage(user:user))
-        },
-        leading: Image.asset('assets/img.png'),
-        title: Text('Vladamir Putin',
-        style: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.bold
-        ),),
-        tileColor: Colors.black,
-      ),
-    );
-    }
-  );
-

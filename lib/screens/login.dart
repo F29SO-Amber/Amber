@@ -1,12 +1,10 @@
-import 'package:amber/services/database_service.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'package:amber/utilities/constants.dart';
 import 'package:amber/screens/home.dart';
+import 'package:amber/utilities/constants.dart';
 import 'package:amber/services/auth_service.dart';
 
 /*
@@ -37,28 +35,11 @@ class _LoginScreenState extends State<LoginScreen> {
       onRecoverPassword: AuthService.recoverPassword, //Forgot Password authentication
       messages: LoginMessages(signUpSuccess: "Sign up successful!"),
       additionalSignupFields: [
-        UserFormField(
+        const UserFormField(
           //Username Field
           keyName: 'username',
           displayName: 'Username',
-          icon: const Icon(FontAwesomeIcons.at),
-          fieldValidator: (value) {
-            // try {
-            //   DatabaseService.usernamechecker(value);
-            //   if (DatabaseService.usernameresult != "false") {
-            //     DatabaseService.usernameresult = "0";
-            //     return 'Username already exists';
-            //   }
-            // } finally {
-            //   print(DatabaseService.usernameresult);
-            // }
-            // try {
-            //   DatabaseService.isUserValueUnique(value!);
-            //   return temp;
-            // } catch (e) {
-            //   print(e);
-            // }
-          },
+          icon: Icon(FontAwesomeIcons.at),
         ),
         const UserFormField(
           //Name field (For signup)
@@ -72,9 +53,10 @@ class _LoginScreenState extends State<LoginScreen> {
           displayName: 'Account Type',
           icon: const Icon(FontAwesomeIcons.artstation),
           fieldValidator: (value) {
-            RegExp regExp = RegExp(r"^(Artist|Business|Personal)", caseSensitive: false);
+            RegExp regExp = RegExp(r"^(Artist|Student|Content Creator|Brand Marketer|Personal)",
+                caseSensitive: false);
             if (!regExp.hasMatch(value!)) {
-              return "Accounts should be Artist, Business or Personal";
+              return "Accounts should be Artist, Student, Content Creator, Brand Marketer or Personal";
             }
           },
         ),

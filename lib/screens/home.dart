@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 
-import 'package:amber/navigators/home_page_navigator.dart';
+import 'package:amber/navigators/feed_page_navigator.dart';
 import 'package:amber/navigators/chats_page_navigator.dart';
 import 'package:amber/navigators/publish_page_navigator.dart';
 import 'package:amber/navigators/profile_page_navigator.dart';
@@ -55,7 +55,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           child: IndexedStack(
             index: _selectedIndex,
             children: const <Widget>[
-              HomePageNavigator(),
+              FeedPageNavigator(),
               DiscoverPageNavigator(),
               PublishPageNavigator(),
               ChatsPageNavigator(),
