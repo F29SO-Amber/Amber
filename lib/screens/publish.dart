@@ -8,6 +8,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:amber/models/user.dart';
 import 'package:amber/utilities/constants.dart';
@@ -27,9 +29,41 @@ class PublishScreen extends StatefulWidget {
 class _PublishScreenState extends State<PublishScreen> {
   File? file;
   bool uploadButtonPresent = true;
+  List _selectedHashtags = [];
   final _formKey = GlobalKey<FormState>();
   final captionController = TextEditingController();
   final locationController = TextEditingController();
+  static final List<Hashtag> _hashtags = [
+    Hashtag(id: 1, name: "Lion"),
+    Hashtag(id: 2, name: "Flamingo"),
+    Hashtag(id: 3, name: "Hippo"),
+    Hashtag(id: 4, name: "Horse"),
+    Hashtag(id: 5, name: "Tiger"),
+    Hashtag(id: 6, name: "Penguin"),
+    Hashtag(id: 7, name: "Spider"),
+    Hashtag(id: 8, name: "Snake"),
+    Hashtag(id: 9, name: "Bear"),
+    Hashtag(id: 10, name: "Beaver"),
+    Hashtag(id: 11, name: "Cat"),
+    Hashtag(id: 12, name: "Fish"),
+    Hashtag(id: 13, name: "Rabbit"),
+    Hashtag(id: 14, name: "Mouse"),
+    Hashtag(id: 15, name: "Dog"),
+    Hashtag(id: 16, name: "Zebra"),
+    Hashtag(id: 17, name: "Cow"),
+    Hashtag(id: 18, name: "Frog"),
+    Hashtag(id: 19, name: "Blue Jay"),
+    Hashtag(id: 20, name: "Moose"),
+    Hashtag(id: 21, name: "Gecko"),
+    Hashtag(id: 22, name: "Kangaroo"),
+    Hashtag(id: 23, name: "Shark"),
+    Hashtag(id: 24, name: "Crocodile"),
+    Hashtag(id: 25, name: "Owl"),
+    Hashtag(id: 26, name: "Dragonfly"),
+    Hashtag(id: 27, name: "Dolphin"),
+    Hashtag(id: 28, name: "x"),
+  ];
+  final _items = _hashtags.map((tag) => MultiSelectItem<Hashtag>(tag, tag.name)).toList();
 
   @override
   void dispose() {
@@ -186,6 +220,44 @@ class _PublishScreenState extends State<PublishScreen> {
                     ),
                   ),
                 ),
+                const Divider(),
+                Padding(
+                  padding: const EdgeInsets.only(left: 28, right: 7),
+                  child: Row(
+                    children: [
+                      const Icon(FontAwesomeIcons.hashtag, color: kAppColor, size: 25),
+                      Expanded(
+                        child: MultiSelectBottomSheetField(
+                          buttonIcon: const Icon(FontAwesomeIcons.arrowDown, color: kAppColor),
+                          decoration: BoxDecoration(border: Border.all(color: Colors.white)),
+                          initialChildSize: 0.4,
+                          listType: MultiSelectListType.CHIP,
+                          searchable: true,
+                          buttonText: Text(
+                            (_selectedHashtags.isEmpty)
+                                ? "Select your favorite Hashtags..."
+                                : "Your selected Hashtags:",
+                            style: const TextStyle(fontSize: 16, color: Colors.black54),
+                          ),
+                          title: const Text("Hashtags"),
+                          items: _items,
+                          onConfirm: (values) {
+                            _selectedHashtags = values;
+                            setState(() {});
+                          },
+                          chipDisplay: MultiSelectChipDisplay(
+                            onTap: (value) {
+                              setState(() {
+                                _selectedHashtags.remove(value);
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Divider(),
               ],
             ),
           ),
@@ -237,4 +309,11 @@ class _PublishScreenState extends State<PublishScreen> {
     TaskSnapshot ts = await FirebaseStorage.instance.ref().child('posts').child(pID).putFile(file!);
     return ts.ref.getDownloadURL();
   }
+}
+
+class Hashtag {
+  final int id;
+  final String name;
+
+  Hashtag({Key? key, required this.id, required this.name});
 }
