@@ -76,167 +76,167 @@ class _PublishScreenState extends State<PublishScreen> {
           ),
         ],
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                GestureDetector(
-                  child: Container(
-                    height: (MediaQuery.of(context).size.width / 16) * 9,
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  GestureDetector(
+                    child: Container(
+                      height: (MediaQuery.of(context).size.width / 16) * 9,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: (file == null)
+                              ? const AssetImage('assets/taptoselect.png')
+                              : FileImage(file!) as ImageProvider,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    onTap: () => showMaterialModalBottomSheet(
+                      expand: false,
+                      context: context,
+                      backgroundColor: Colors.transparent,
+                      builder: (context) => Material(
+                        child: SafeArea(
+                          top: false,
+                          child: SizedBox(
+                            height: 250,
+                            width: double.infinity,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 25.0),
+                                  child: Text('Choose media from:', style: kDarkLabelTextStyle),
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Column(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () async {
+                                            XFile? xFile = await ImagePicker()
+                                                .pickImage(source: ImageSource.camera);
+                                            setState(() => file = File('${xFile?.path}'));
+                                            Navigator.pop(context);
+                                          },
+                                          child: const ProfilePicture(
+                                              side: 100, path: 'assets/camera.png'),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                          child: Text('Camera', style: kLightLabelTextStyle),
+                                        ),
+                                      ],
+                                    ),
+                                    Column(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () async {
+                                            XFile? xFile = await ImagePicker()
+                                                .pickImage(source: ImageSource.gallery);
+                                            setState(() => file = File('${xFile?.path}'));
+                                            Navigator.pop(context);
+                                          },
+                                          child: const ProfilePicture(
+                                              side: 100, path: 'assets/gallery.png'),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                          child: Text('Gallery', style: kLightLabelTextStyle),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
                     width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: (file == null)
-                            ? const AssetImage('assets/taptoselect.png')
-                            : FileImage(file!) as ImageProvider,
-                        fit: BoxFit.cover,
+                    padding: const EdgeInsets.only(left: 15, top: 20),
+                    child: TextFormField(
+                      controller: captionController,
+                      keyboardType: TextInputType.text,
+                      decoration: const InputDecoration(
+                        hintText: "Write a caption...",
+                        border: InputBorder.none,
+                        prefixIcon: Icon(Icons.create_sharp, color: kAppColor, size: 30),
                       ),
                     ),
                   ),
-                  onTap: () => showMaterialModalBottomSheet(
-                    expand: false,
-                    context: context,
-                    backgroundColor: Colors.transparent,
-                    builder: (context) => Material(
-                      child: SafeArea(
-                        top: false,
-                        child: SizedBox(
-                          height: 250,
-                          width: double.infinity,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 25.0),
-                                child: Text('Choose media from:', style: kDarkLabelTextStyle),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Column(
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () async {
-                                          XFile? xFile = await ImagePicker()
-                                              .pickImage(source: ImageSource.camera);
-                                          setState(() => file = File('${xFile?.path}'));
-                                          Navigator.pop(context);
-                                        },
-                                        child: const ProfilePicture(
-                                            side: 100, path: 'assets/camera.png'),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 10.0),
-                                        child: Text('Camera', style: kLightLabelTextStyle),
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () async {
-                                          XFile? xFile = await ImagePicker()
-                                              .pickImage(source: ImageSource.gallery);
-                                          setState(() => file = File('${xFile?.path}'));
-                                          Navigator.pop(context);
-                                        },
-                                        child: const ProfilePicture(
-                                            side: 100, path: 'assets/gallery.png'),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 10.0),
-                                        child: Text('Gallery', style: kLightLabelTextStyle),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+                  const Divider(),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    padding: const EdgeInsets.only(left: 15),
+                    child: TextFormField(
+                      controller: locationController,
+                      keyboardType: TextInputType.text,
+                      decoration: const InputDecoration(
+                        //hintText: "Locate your post...",
+                        hintText: "Add a location...",
+                        border: InputBorder.none,
+                        prefixIcon: Icon(Icons.pin_drop_outlined, color: kAppColor, size: 30),
+                        suffixIcon: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 15.0),
+                          child: Icon(Icons.my_location, color: kAppColor, size: 30),
                         ),
                       ),
                     ),
                   ),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  padding: const EdgeInsets.only(left: 15, top: 20),
-                  child: TextFormField(
-                    controller: captionController,
-                    keyboardType: TextInputType.text,
-                    decoration: const InputDecoration(
-                      hintText: "Write a caption...",
-                      border: InputBorder.none,
-                      prefixIcon: Icon(Icons.create_sharp, color: kAppColor, size: 30),
-                    ),
-                  ),
-                ),
-                const Divider(),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  padding: const EdgeInsets.only(left: 15),
-                  child: TextFormField(
-                    controller: locationController,
-                    keyboardType: TextInputType.text,
-                    decoration: const InputDecoration(
-                      //hintText: "Locate your post...",
-                      hintText: "Add a location...",
-                      border: InputBorder.none,
-                      prefixIcon: Icon(Icons.pin_drop_outlined, color: kAppColor, size: 30),
-                      suffixIcon: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 15.0),
-                        child: Icon(Icons.my_location, color: kAppColor, size: 30),
-                      ),
-                    ),
-                  ),
-                ),
-                const Divider(),
-                Padding(
-                  padding: const EdgeInsets.only(left: 28, right: 7),
-                  child: Row(
-                    children: [
-                      const Icon(FontAwesomeIcons.hashtag, color: kAppColor, size: 25),
-                      Expanded(
-                        child: MultiSelectBottomSheetField(
-                          buttonIcon: const Icon(FontAwesomeIcons.arrowDown, color: kAppColor),
-                          decoration: BoxDecoration(border: Border.all(color: Colors.white)),
-                          initialChildSize: 0.4,
-                          listType: MultiSelectListType.CHIP,
-                          searchable: true,
-                          buttonText: Text(
-                            (_selectedHashtags.isEmpty)
-                                ? "Select your favorite Hashtags..."
-                                : "Your selected Hashtags:",
-                            style: const TextStyle(fontSize: 16, color: Colors.black54),
-                          ),
-                          title: const Text("Hashtags"),
-                          items: Hashtag.hashtags
-                              .map((tag) => MultiSelectItem<Hashtag>(tag, tag.name))
-                              .toList(),
-                          onConfirm: (values) {
-                            _selectedHashtags = values;
-                            setState(() {});
-                          },
-                          chipDisplay: MultiSelectChipDisplay(
-                            onTap: (value) {
-                              setState(() {
-                                _selectedHashtags.remove(value);
-                              });
+                  const Divider(),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 28, right: 7),
+                    child: Row(
+                      children: [
+                        const Icon(FontAwesomeIcons.hashtag, color: kAppColor, size: 25),
+                        Expanded(
+                          child: MultiSelectBottomSheetField(
+                            buttonIcon: const Icon(FontAwesomeIcons.arrowDown, color: kAppColor),
+                            decoration: BoxDecoration(border: Border.all(color: Colors.white)),
+                            initialChildSize: 0.4,
+                            listType: MultiSelectListType.CHIP,
+                            searchable: true,
+                            buttonText: Text(
+                              (_selectedHashtags.isEmpty)
+                                  ? "Select your favorite Hashtags..."
+                                  : "Your selected Hashtags:",
+                              style: const TextStyle(fontSize: 16, color: Colors.black54),
+                            ),
+                            title: const Text("Hashtags"),
+                            items: Hashtag.hashtags
+                                .map((tag) => MultiSelectItem<Hashtag>(tag, tag.name))
+                                .toList(),
+                            onConfirm: (values) {
+                              _selectedHashtags = values;
+                              setState(() {});
                             },
+                            chipDisplay: MultiSelectChipDisplay(
+                              onTap: (value) {
+                                setState(() => _selectedHashtags.remove(value));
+                              },
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                const Divider(),
-              ],
+                  const Divider(),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -246,6 +246,7 @@ class _PublishScreenState extends State<PublishScreen> {
       file = null;
       locationController.text = '';
       captionController.text = '';
+      _selectedHashtags = [];
       uploadButtonPresent = true;
     });
   }

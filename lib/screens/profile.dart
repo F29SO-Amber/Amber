@@ -36,6 +36,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   int selectedTab = 0;
   bool isFollowing = false;
+  String? followerCount;
 
   @override
   void initState() {
@@ -146,7 +147,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text('${user.name} ', style: kDarkLabelTextStyle),
-                        const Icon(Icons.verified, color: Colors.amber, size: 22),
+                        (followerCount != null && (followerCount?.length)! > 3)
+                            ? const Icon(Icons.verified, color: Colors.amber, size: 22)
+                            : Container(),
                       ],
                     ),
                   ),
@@ -163,7 +166,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             .where('authorId', isEqualTo: widget.userUID)
                             .snapshots(),
                         builder: (context, snapshot) {
-                          if (snapshot.connectionState == ConnectionState.done) {
+                          if (snapshot.hasData) {
                             return NumberAndLabel(
                               number: '${(snapshot.data as QuerySnapshot).docs.length}',
                               label: '   Posts   ',
@@ -179,15 +182,17 @@ class _ProfilePageState extends State<ProfilePage> {
                             .collection('userFollowers')
                             .snapshots(),
                         builder: (context, snapshot) {
-                          if (snapshot.connectionState == ConnectionState.done) {
+                          if (snapshot.hasData) {
+                            followerCount = '${(snapshot.data as QuerySnapshot).docs.length}';
                             return GestureDetector(
-                                onTap: () {
-                                  _navigateToFollowersScreen(context);
-                                },
-                                child: NumberAndLabel(
-                                  number: '${(snapshot.data as QuerySnapshot).docs.length}',
-                                  label: 'Followers',
-                                ));
+                              onTap: () {
+                                _navigateToFollowersScreen(context);
+                              },
+                              child: NumberAndLabel(
+                                number: '${(snapshot.data as QuerySnapshot).docs.length}',
+                                label: 'Followers',
+                              ),
+                            );
                           } else {
                             return const NumberAndLabel(number: '0', label: 'Followers');
                           }
@@ -199,15 +204,16 @@ class _ProfilePageState extends State<ProfilePage> {
                             .collection('userFollowing')
                             .snapshots(),
                         builder: (context, snapshot) {
-                          if (snapshot.connectionState == ConnectionState.done) {
+                          if (snapshot.hasData) {
                             return GestureDetector(
-                                onTap: () {
-                                  _navigateToFollowingScreen(context);
-                                },
-                                child: NumberAndLabel(
-                                  number: '${(snapshot.data as QuerySnapshot).docs.length}',
-                                  label: 'Following',
-                                ));
+                              onTap: () {
+                                _navigateToFollowingScreen(context);
+                              },
+                              child: NumberAndLabel(
+                                number: '${(snapshot.data as QuerySnapshot).docs.length}',
+                                label: 'Following',
+                              ),
+                            );
                           } else {
                             return const NumberAndLabel(number: '0', label: 'Following');
                           }
