@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
-import 'package:amber/constants.dart';
+import 'package:amber/utilities/constants.dart';
 import 'package:amber/screens/chat.dart';
 import 'package:amber/services/database_service.dart';
 
@@ -46,7 +46,7 @@ class _ChatsPageState extends State<ChatsPage> {
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        color: const Color(0XFFFFF9C4),
+        color: Colors.amber.shade50,
         child: Padding(
           padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.06),
           child: Column(
@@ -74,7 +74,7 @@ class _ChatsPageState extends State<ChatsPage> {
                               margin:
                                   EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.02),
                               decoration: BoxDecoration(
-                                color: const Color(0XFFFFF59D),
+                                color: Colors.grey.shade100,
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: ListTile(
