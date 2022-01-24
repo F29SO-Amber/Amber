@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'dart:math' as math;
 
+import 'package:google_fonts/google_fonts.dart';
+
 const String kAppName = 'ᗩмвєя';
 const Color kAppColor = Colors.amber;
 
@@ -46,6 +48,18 @@ MaterialColor createMaterialColor(Color color) {
 }
 
 Color createRandomColor() {
-  return Color((math.Random().nextDouble() * 0xFFFFFF).toInt())
-      .withOpacity(1.0);
+  return Color((math.Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(1.0);
 }
+
+final TextStyle kDarkLabelTextStyle = GoogleFonts.dmSans(
+  fontSize: 20,
+  fontWeight: FontWeight.w500,
+  fontStyle: FontStyle.normal,
+);
+
+final TextStyle kLightLabelTextStyle = GoogleFonts.dmSans(
+  fontSize: 13,
+  color: Colors.black38,
+  fontWeight: FontWeight.w500,
+  fontStyle: FontStyle.normal,
+);

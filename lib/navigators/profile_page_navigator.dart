@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:amber/screens/profile.dart';
+import 'package:amber/services/auth_service.dart';
 
-import 'package:amber/screens/extra.dart';
-import 'package:amber/screens/login.dart';
-import 'package:amber/screens/profile_screen/profile.dart';
-import 'package:amber/services/authentication.dart';
-
+//Creating mutable state for the Profile Page Navigator
 class ProfilePageNavigator extends StatefulWidget {
   const ProfilePageNavigator({Key? key}) : super(key: key);
 
@@ -22,22 +20,7 @@ class _ProfilePageNavigatorState extends State<ProfilePageNavigator> {
       onGenerateRoute: (RouteSettings settings) {
         return MaterialPageRoute(
           settings: settings,
-          builder: (BuildContext context) {
-            switch (settings.name) {
-              case '/':
-                return ProfilePage(
-                  profileID: Authentication.currentUser.uid,
-                );
-              case '/home2':
-                return const ExtraPage(pageName: 'From Profile Page');
-              case LoginScreen.id:
-                return const LoginScreen();
-              default:
-                return ProfilePage(
-                  profileID: Authentication.currentUser.uid,
-                );
-            }
-          },
+          builder: (_) => ProfilePage(userUID: AuthService.currentUser.uid),
         );
       },
     );
