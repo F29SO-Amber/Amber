@@ -22,8 +22,9 @@ import 'package:amber/services/database_service.dart';
 
 class PublishScreen extends StatefulWidget {
   static const id = '/publish';
+  final String mashUpLink;
 
-  const PublishScreen({Key? key}) : super(key: key);
+  const PublishScreen({Key? key, required this.mashUpLink}) : super(key: key);
 
   @override
   _PublishScreenState createState() => _PublishScreenState();
@@ -95,9 +96,11 @@ class _PublishScreenState extends State<PublishScreen> {
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: (file == null)
-                              ? const AssetImage('assets/taptoselect.png')
-                              : FileImage(file!) as ImageProvider,
+                          image: (widget.mashUpLink.isNotEmpty)
+                              ? FileImage(File(widget.mashUpLink))
+                              : (file == null)
+                                  ? const AssetImage('assets/taptoselect.png')
+                                  : FileImage(file!) as ImageProvider,
                           fit: BoxFit.cover,
                         ),
                       ),

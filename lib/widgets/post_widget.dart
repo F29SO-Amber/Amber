@@ -1,5 +1,6 @@
 import 'package:amber/models/post.dart';
 import 'package:amber/screens/comments.dart';
+import 'package:amber/screens/mash_up.dart';
 import 'package:amber/services/auth_service.dart';
 import 'package:amber/services/database_service.dart';
 import 'package:amber/utilities/constants.dart';
@@ -19,43 +20,15 @@ class UserPost extends StatefulWidget {
 }
 
 class _UserPostState extends State<UserPost> {
-  // late Map likes;
-  // late int likeCount;
   late bool? isLiked;
 
   @override
   void initState() {
     super.initState();
-    // likes = {};
-    // likeCount = 0;
     isLiked = widget.post.likes.containsKey(AuthService.currentUser.uid)
         ? widget.post.likes[AuthService.currentUser.uid]
         : null;
-    // isLiked = likes[AuthService.currentUser.uid] == true;
   }
-
-  // handleLike() {
-  //   bool _isLiked = likes[AuthService.currentUser.uid] == true;
-  //   if (_isLiked) {
-  //     DatabaseService.postsRef
-  //         .doc(widget.post.id)
-  //         .update({'likes.${AuthService.currentUser.uid}': false});
-  //     setState(() {
-  //       likeCount -= 1;
-  //       isLiked = false;
-  //       likes[AuthService.currentUser.uid] = false;
-  //     });
-  //   } else if (!_isLiked) {
-  //     DatabaseService.postsRef
-  //         .doc(widget.post.id)
-  //         .update({'likes.${AuthService.currentUser.uid}': true});
-  //     setState(() {
-  //       likeCount += 1;
-  //       isLiked = true;
-  //       likes[AuthService.currentUser.uid] = true;
-  //     });
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -128,18 +101,24 @@ class _UserPostState extends State<UserPost> {
           ),
           Slidable(
             // key: const ValueKey(0),
-            startActionPane: const ActionPane(
-              motion: DrawerMotion(),
+            startActionPane: ActionPane(
+              motion: const DrawerMotion(),
               // dismissible: DismissiblePane(onDismissed: () {}),
               children: [
                 SlidableAction(
-                  onPressed: null,
-                  backgroundColor: Color(0xFFFE4A49),
+                  onPressed: (context) {
+                    Navigator.of(context, rootNavigator: true).push(
+                      MaterialPageRoute(
+                        builder: (context) => MashUpPost(imageURL: widget.post.imageURL),
+                      ),
+                    );
+                  },
+                  backgroundColor: const Color(0xFFFE4A49),
                   foregroundColor: Colors.white,
                   icon: FontAwesomeIcons.retweet,
                   label: 'Mash-up',
                 ),
-                SlidableAction(
+                const SlidableAction(
                   onPressed: null,
                   backgroundColor: Color(0xFF21B7CA),
                   foregroundColor: Colors.white,
@@ -171,7 +150,7 @@ class _UserPostState extends State<UserPost> {
                       ),
                     );
                   },
-                  backgroundColor: Color(0xFF0392CF),
+                  backgroundColor: const Color(0xFF0392CF),
                   foregroundColor: Colors.white,
                   icon: Icons.comment,
                   label: 'Comment',

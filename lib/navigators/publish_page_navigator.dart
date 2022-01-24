@@ -19,7 +19,8 @@ class _PublishPageNavigatorState extends State<PublishPageNavigator> {
     return Navigator(
       key: postNavigatorKey,
       onGenerateRoute: (RouteSettings settings) {
-        return MaterialPageRoute(settings: settings, builder: (_) => const PublishScreen());
+        return MaterialPageRoute(
+            settings: settings, builder: (_) => const PublishScreen(mashUpLink: ''));
       },
     );
   }
