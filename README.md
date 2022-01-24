@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://firebasestorage.googleapis.com/v0/b/f29so-group-5-amber.appspot.com/o/images%2F%5Bremoval.ai%5D_tmp-61eba88a1d033.png?alt=media&token=1450e35d-2707-4d8d-9de1-731a14aca964" width="200" />
+<img src="https://firebasestorage.googleapis.com/v0/b/f29so-group-5-amber.appspot.com/o/images%2FScreenshot%202022-01-24%20at%203.12.30%20PM.png?alt=media&token=e2958329-b108-436e-a8ed-4845728cee84"/>
 </p>
 
 # Amber
