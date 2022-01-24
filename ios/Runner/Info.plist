@@ -50,5 +50,9 @@
     <string>Allow this app to access your camera</string>
     <key>NSMicrophoneUsageDescription</key>
     <string>Allow this app to access your microphone</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+    <string>This app needs access to location when open.</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>This app needs access to location when in the background.</string>
 </dict>
 </plist>

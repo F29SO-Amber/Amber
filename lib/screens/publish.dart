@@ -1,9 +1,9 @@
 import 'dart:io';
-import 'dart:convert';
 import 'package:uuid/uuid.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image/image.dart' as image;
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -12,7 +12,6 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:flutter_url_shortener/flutter_url_shortener.dart';
 
 import 'package:amber/models/user.dart';
 import 'package:amber/models/hashtag.dart';
@@ -37,6 +36,12 @@ class _PublishScreenState extends State<PublishScreen> {
   final _formKey = GlobalKey<FormState>();
   final captionController = TextEditingController();
   final locationController = TextEditingController();
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   getLocation();
+  // }
 
   @override
   void dispose() {
@@ -283,7 +288,11 @@ class _PublishScreenState extends State<PublishScreen> {
 
   Future<String> uploadImage(String pID) async {
     TaskSnapshot ts = await FirebaseStorage.instance.ref().child('posts').child(pID).putFile(file!);
-
     return ts.ref.getDownloadURL();
   }
+
+  // void getLocation() async {
+  //   Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+  //   print(position);
+  // }
 }
