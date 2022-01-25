@@ -21,28 +21,6 @@ class _CurrentUserPostsState extends State<CurrentUserPosts> {
   final ItemScrollController itemScrollController = ItemScrollController();
   final ItemPositionsListener itemPositionsListener = ItemPositionsListener.create();
 
-  Future<List<UserPost>> getPosts() async {
-    List<UserPost> posts = [];
-    posts.addAll(
-      ((await DatabaseService.postsRef
-                  .where('authorId', isEqualTo: widget.uid)
-                  .orderBy('timestamp', descending: true)
-                  .get())
-              .docs)
-          .map(
-        (e) => UserPost(post: PostModel.fromDocument(e)),
-      ),
-    );
-
-    return posts;
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getPosts();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,7 +33,7 @@ class _CurrentUserPostsState extends State<CurrentUserPosts> {
         ),
       ),
       body: StreamBuilder(
-        stream: getPosts().asStream(),
+        stream: DatabaseService.getUserPosts(widget.uid).asStream(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             ScrollablePositionedList list = ScrollablePositionedList.builder(

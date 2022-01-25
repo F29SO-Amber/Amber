@@ -1,4 +1,3 @@
-import 'package:amber/screens/chats.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -46,8 +45,7 @@ class _MyAppState extends State<MyApp> {
         colorScheme: ColorScheme.fromSwatch(
           primarySwatch: createMaterialColor(const Color(0xff9eb7ff)),
         ).copyWith(secondary: Colors.orange),
-        textSelectionTheme:
-            const TextSelectionThemeData(cursorColor: Colors.orange),
+        textSelectionTheme: const TextSelectionThemeData(cursorColor: Colors.orange),
       ),
       initialRoute: LoginScreen.id,
       // initialRoute: ChatsPage.id,

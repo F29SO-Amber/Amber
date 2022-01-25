@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:amber/models/user.dart';
 import 'package:amber/models/comment.dart';
 import 'package:amber/utilities/constants.dart';
-import 'package:amber/services/auth_service.dart';
 import 'package:amber/services/database_service.dart';
 
 class CommentsPage extends StatefulWidget {
@@ -124,17 +122,7 @@ class _CommentsPageState extends State<CommentsPage> {
                 suffixIcon: GestureDetector(
                   onTap: () async {
                     if (commentController.text.trim().isNotEmpty) {
-                      UserModel user = await DatabaseService.getUser(AuthService.currentUser.uid);
-                      Map<String, Object?> map = {};
-                      map['username'] = user.username;
-                      map['text'] = commentController.text;
-                      map['timestamp'] = Timestamp.now();
-                      map['profilePhotoURL'] = user.profilePhotoURL;
-                      await DatabaseService.commentsRef
-                          .doc(widget.postID)
-                          .collection('comments')
-                          .doc()
-                          .set(map);
+                      await DatabaseService.addUserComment(commentController.text, widget.postID);
                       ScaffoldMessenger.of(context)
                           .showSnackBar(const SnackBar(content: Text("Comment Posted!")));
                       commentController.text = '';

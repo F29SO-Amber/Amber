@@ -295,10 +295,11 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   const SizedBox(),
                   SizedBox(
-                    height: 600,
+                    height: 100,
                     child: Swiper(
                       loop: false,
-                      indicatorLayout: PageIndicatorLayout.COLOR,
+                      outer: true,
+                      indicatorLayout: PageIndicatorLayout.NONE,
                       itemCount: 3,
                       pagination: const SwiperPagination(),
                       control: const SwiperControl(),

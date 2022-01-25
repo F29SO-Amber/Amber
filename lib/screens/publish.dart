@@ -1,13 +1,9 @@
 import 'dart:io';
-import 'package:uuid/uuid.dart';
+import 'package:amber/services/image_service.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:image/image.dart' as image;
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
@@ -74,9 +70,18 @@ class _PublishScreenState extends State<PublishScreen> {
               onPressed: () async {
                 setState(() => uploadButtonPresent = false);
                 EasyLoading.show(status: 'Uploading...');
-                await addUserPost();
+                if (_formKey.currentState!.validate() && file != null) {
+                  await DatabaseService.addUserPost(
+                    file!,
+                    captionController.text,
+                    locationController.text,
+                  );
+                }
                 EasyLoading.dismiss();
                 disposeUserPostChanges();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Image Posted!")),
+                );
               },
             ),
           ),
@@ -96,12 +101,12 @@ class _PublishScreenState extends State<PublishScreen> {
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
                         image: DecorationImage(
+                          fit: BoxFit.cover,
                           image: (widget.mashUpLink.isNotEmpty)
                               ? FileImage(File(widget.mashUpLink))
                               : (file == null)
                                   ? const AssetImage('assets/taptoselect.png')
                                   : FileImage(file!) as ImageProvider,
-                          fit: BoxFit.cover,
                         ),
                       ),
                     ),
@@ -129,9 +134,8 @@ class _PublishScreenState extends State<PublishScreen> {
                                       children: [
                                         GestureDetector(
                                           onTap: () async {
-                                            XFile? xFile = await ImagePicker()
-                                                .pickImage(source: ImageSource.camera);
-                                            setState(() => file = File('${xFile?.path}'));
+                                            file = await ImageService.chooseFromCamera();
+                                            setState(() {});
                                             Navigator.pop(context);
                                           },
                                           child: const ProfilePicture(
@@ -147,9 +151,8 @@ class _PublishScreenState extends State<PublishScreen> {
                                       children: [
                                         GestureDetector(
                                           onTap: () async {
-                                            XFile? xFile = await ImagePicker()
-                                                .pickImage(source: ImageSource.gallery);
-                                            setState(() => file = File('${xFile?.path}'));
+                                            file = await ImageService.chooseFromGallery();
+                                            setState(() {});
                                             Navigator.pop(context);
                                           },
                                           child: const ProfilePicture(
@@ -191,7 +194,6 @@ class _PublishScreenState extends State<PublishScreen> {
                       controller: locationController,
                       keyboardType: TextInputType.text,
                       decoration: const InputDecoration(
-                        //hintText: "Locate your post...",
                         hintText: "Add a location...",
                         border: InputBorder.none,
                         prefixIcon: Icon(Icons.pin_drop_outlined, color: kAppColor, size: 30),
@@ -257,41 +259,6 @@ class _PublishScreenState extends State<PublishScreen> {
       _selectedHashtags = [];
       uploadButtonPresent = true;
     });
-  }
-
-  Future<void> compressImageFile(String postID) async {
-    image.Image? imageFile = image.decodeImage(file!.readAsBytesSync());
-    final compressedImageFile = File('${(await getTemporaryDirectory()).path}/img_$postID.jpg')
-      ..writeAsBytesSync(image.encodeJpg(imageFile!, quality: 85));
-    setState(() => file = compressedImageFile);
-  }
-
-  Future<void> addUserPost() async {
-    UserModel user = await DatabaseService.getUser(AuthService.currentUser.uid);
-    if (_formKey.currentState!.validate()) {
-      Map<String, Object?> map = {};
-      if (file != null) {
-        String postId = const Uuid().v4();
-        await compressImageFile(postId);
-        map['id'] = postId;
-        map['location'] = locationController.text;
-        map['imageURL'] = await uploadImage(postId);
-        map['caption'] = captionController.text;
-        map['likes'] = {};
-        map['authorId'] = AuthService.currentUser.uid;
-        map['timestamp'] = Timestamp.now();
-        map['authorName'] = user.name;
-        map['authorUserName'] = user.username;
-        map['authorProfilePhotoURL'] = user.profilePhotoURL;
-        await DatabaseService.postsRef.doc(postId).set(map);
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Image Posted!")));
-      }
-    }
-  }
-
-  Future<String> uploadImage(String pID) async {
-    TaskSnapshot ts = await FirebaseStorage.instance.ref().child('posts').child(pID).putFile(file!);
-    return ts.ref.getDownloadURL();
   }
 
   // void getLocation() async {
