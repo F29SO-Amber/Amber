@@ -49,8 +49,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
                       viewportFraction: 0.85,
                       scale: 0.9,
                       itemBuilder: (c, i) {
-                        PostModel post =
-                            PostModel.fromDocument((snapshot.data! as dynamic).docs[i]);
+                        var post = PostModel.fromDocument((snapshot.data! as dynamic).docs[i]);
                         return Container(
                           decoration: BoxDecoration(
                             image: DecorationImage(

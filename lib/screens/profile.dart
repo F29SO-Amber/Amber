@@ -1,4 +1,5 @@
 import 'package:amber/screens/user_posts.dart';
+import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -293,54 +294,67 @@ class _ProfilePageState extends State<ProfilePage> {
                     ],
                   ),
                   const SizedBox(),
-                  StreamBuilder(
-                    stream: DatabaseService.postsRef
-                        .where('authorId', isEqualTo: widget.userUID)
-                        .orderBy('timestamp', descending: true)
-                        .snapshots(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return GridView.builder(
-                          padding: const EdgeInsets.all(10).copyWith(bottom: 30),
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: (snapshot.data! as dynamic).docs.length,
-                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            crossAxisSpacing: 10,
-                            mainAxisSpacing: 10,
-                            childAspectRatio: 1,
-                          ),
-                          itemBuilder: (context, index) {
-                            PostModel post =
-                                PostModel.fromDocument((snapshot.data! as dynamic).docs[index]);
-                            return GestureDetector(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      image: NetworkImage(post.imageURL), fit: BoxFit.cover),
-                                  shape: BoxShape.rectangle,
-                                  borderRadius: BorderRadius.circular(11.0),
+                  SizedBox(
+                    height: 600,
+                    child: Swiper(
+                      loop: false,
+                      indicatorLayout: PageIndicatorLayout.COLOR,
+                      itemCount: 3,
+                      pagination: const SwiperPagination(),
+                      control: const SwiperControl(),
+                      itemBuilder: (context, index) {
+                        return StreamBuilder(
+                          stream: DatabaseService.postsRef
+                              .where('authorId', isEqualTo: widget.userUID)
+                              .orderBy('timestamp', descending: true)
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return GridView.builder(
+                                padding: const EdgeInsets.all(10).copyWith(bottom: 30),
+                                scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: (snapshot.data! as dynamic).docs.length,
+                                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 3,
+                                  crossAxisSpacing: 10,
+                                  mainAxisSpacing: 10,
+                                  childAspectRatio: 1,
                                 ),
-                              ),
-                              onTap: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => CurrentUserPosts(
-                                      uid: widget.userUID,
-                                      index: index,
+                                itemBuilder: (context, index) {
+                                  PostModel post = PostModel.fromDocument(
+                                      (snapshot.data! as dynamic).docs[index]);
+                                  return GestureDetector(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                            image: NetworkImage(post.imageURL), fit: BoxFit.cover),
+                                        shape: BoxShape.rectangle,
+                                        borderRadius: BorderRadius.circular(11.0),
+                                      ),
                                     ),
-                                  ),
-                                );
-                              },
-                            );
+                                    onTap: () {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) => CurrentUserPosts(
+                                            uid: widget.userUID,
+                                            index: index,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                              );
+                            } else {
+                              return const Center(child: Text('No Posts'));
+                            }
                           },
                         );
-                      } else {
-                        return const Center(child: Text('No Posts'));
-                      }
-                    },
-                  )
+                      },
+                    ),
+                  ),
                 ],
               ),
             ),
