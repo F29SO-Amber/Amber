@@ -4,7 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
-import 'package:amber/screens/login.dart';
+import 'package:amber/pages/login.dart';
 import 'package:amber/firebase_options.dart';
 import 'package:amber/utilities/constants.dart';
 import 'package:amber/screens/home.dart';

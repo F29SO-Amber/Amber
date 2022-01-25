@@ -1,6 +1,6 @@
 import 'package:amber/models/post.dart';
-import 'package:amber/screens/comments.dart';
-import 'package:amber/screens/mash_up.dart';
+import 'package:amber/pages/comments.dart';
+import 'package:amber/pages/mash_up.dart';
 import 'package:amber/services/auth_service.dart';
 import 'package:amber/services/database_service.dart';
 import 'package:amber/utilities/constants.dart';

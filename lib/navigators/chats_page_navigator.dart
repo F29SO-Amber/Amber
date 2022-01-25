@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:amber/screens/chats.dart';
-import 'package:amber/screens/chat.dart';
+import 'package:amber/pages/chat.dart';
 import 'package:amber/services/auth_service.dart';
 
 class ChatsPageNavigator extends StatefulWidget {

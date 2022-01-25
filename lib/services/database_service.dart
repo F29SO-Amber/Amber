@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:amber/models/post.dart';
 import 'package:amber/models/user.dart';
-import 'package:amber/screens/login.dart';
+import 'package:amber/pages/login.dart';
 import 'package:amber/services/auth_service.dart';
 import 'package:amber/services/image_service.dart';
 import 'package:amber/services/storage_service.dart';
