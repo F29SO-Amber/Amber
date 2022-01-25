@@ -1,3 +1,4 @@
+import 'package:amber/pages/user_list.dart';
 import 'package:amber/pages/user_posts.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
@@ -368,118 +369,14 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void _navigateToFollowersScreen(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => Followers(
-              userUID: widget.userUID,
-            )));
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => UserList(userUID: widget.userUID, followers: true)),
+    );
   }
 
   void _navigateToFollowingScreen(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => Following(
-              userUID: widget.userUID,
-            )));
-  }
-}
-
-Future<List<UserModel>> getFollowersUIDs(String id) async {
-  QuerySnapshot followers =
-      await DatabaseService.followersRef.doc(id).collection('userFollowers').get();
-
-  List ids = followers.docs.map((e) => (e.id)).toList();
-  List<UserModel> users = [];
-  for (String x in ids) {
-    users.add(await DatabaseService.getUser(x));
-  }
-  return users;
-}
-
-Future<List<UserModel>> getFollowingUID(String id) async {
-  QuerySnapshot following =
-      await DatabaseService.followingRef.doc(id).collection('userFollowing').get();
-
-  List ids = following.docs.map((e) => (e.id)).toList();
-  List<UserModel> users = [];
-  for (String x in ids) {
-    users.add(await DatabaseService.getUser(x));
-  }
-  return users;
-}
-
-class Followers extends StatelessWidget {
-  final String userUID;
-  const Followers({Key? key, required this.userUID}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.amber,
-        title: const Text(kAppName),
-      ),
-      body: FutureBuilder(
-        future: getFollowersUIDs(userUID),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            List<UserCard> list = [];
-            var a = snapshot.data as List<UserModel>;
-            for (UserModel user in a) {
-              list.add(
-                UserCard(
-                  user: user,
-                  onPress: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ProfilePage(userUID: user.id)),
-                    );
-                  },
-                ),
-              );
-            }
-            return ListView(children: list);
-          }
-          return const Center(child: CircularProgressIndicator());
-        },
-      ),
-    );
-  }
-}
-
-class Following extends StatelessWidget {
-  final String userUID;
-  const Following({Key? key, required this.userUID}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.amber,
-        title: const Text(kAppName),
-      ),
-      body: FutureBuilder(
-        future: getFollowingUID(userUID),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            List<UserCard> list = [];
-            var a = snapshot.data as List<UserModel>;
-            for (UserModel user in a) {
-              list.add(
-                UserCard(
-                  user: user,
-                  onPress: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ProfilePage(userUID: user.id)),
-                    );
-                  },
-                ),
-              );
-            }
-            return ListView(children: list);
-          }
-          return const Center(child: CircularProgressIndicator());
-        },
-      ),
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => UserList(userUID: widget.userUID, followers: false)),
     );
   }
 }

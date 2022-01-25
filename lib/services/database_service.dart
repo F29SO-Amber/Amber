@@ -105,4 +105,28 @@ class DatabaseService {
     map['profilePhotoURL'] = user.profilePhotoURL;
     await DatabaseService.commentsRef.doc(postID).collection('comments').doc().set(map);
   }
+
+  static Future<List<UserModel>> getFollowersUIDs(String id) async {
+    QuerySnapshot followers =
+        await DatabaseService.followersRef.doc(id).collection('userFollowers').get();
+
+    List ids = followers.docs.map((e) => (e.id)).toList();
+    List<UserModel> users = [];
+    for (String x in ids) {
+      users.add(await DatabaseService.getUser(x));
+    }
+    return users;
+  }
+
+  static Future<List<UserModel>> getFollowingUID(String id) async {
+    QuerySnapshot following =
+        await DatabaseService.followingRef.doc(id).collection('userFollowing').get();
+
+    List ids = following.docs.map((e) => (e.id)).toList();
+    List<UserModel> users = [];
+    for (String x in ids) {
+      users.add(await DatabaseService.getUser(x));
+    }
+    return users;
+  }
 }

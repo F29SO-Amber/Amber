@@ -1,13 +1,12 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import 'package:amber/pages/login.dart';
+import 'package:amber/screens/home.dart';
 import 'package:amber/firebase_options.dart';
 import 'package:amber/utilities/constants.dart';
-import 'package:amber/screens/home.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,9 +47,8 @@ class _MyAppState extends State<MyApp> {
         textSelectionTheme: const TextSelectionThemeData(cursorColor: Colors.orange),
       ),
       initialRoute: LoginScreen.id,
-      // initialRoute: ChatsPage.id,
       routes: {
-        LoginScreen.id: (context) => LoginScreen(),
+        LoginScreen.id: (context) => const LoginScreen(),
         HomePage.id: (context) => const HomePage()
       },
     );
