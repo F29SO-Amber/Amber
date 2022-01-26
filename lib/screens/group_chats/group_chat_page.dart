@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:amber/screens/group_chats/add_members.dart';
 
 class GroupChatHomeScreen extends StatefulWidget {
   // const GroupChatHomeScreen({Key? key}) : super(key: key);
@@ -70,7 +71,11 @@ class _GroupChatHomeScreenState extends State<GroupChatHomeScreen> {
 
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () => Navigator.of(context).push,
+        onPressed: () => Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => AddMembersInGroup(),
+          ),
+        ),
         tooltip: "Create Group",
       ),
     );
