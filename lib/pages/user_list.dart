@@ -1,9 +1,10 @@
+import 'package:flutter/material.dart';
+
 import 'package:amber/models/user.dart';
 import 'package:amber/screens/profile.dart';
-import 'package:amber/services/database_service.dart';
-import 'package:amber/utilities/constants.dart';
 import 'package:amber/widgets/user_card.dart';
-import 'package:flutter/material.dart';
+import 'package:amber/utilities/constants.dart';
+import 'package:amber/services/database_service.dart';
 
 class UserList extends StatelessWidget {
   final String userUID;

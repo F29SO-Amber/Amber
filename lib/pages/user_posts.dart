@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
-import 'package:amber/models/post.dart';
-import 'package:amber/widgets/post_widget.dart';
 import 'package:amber/utilities/constants.dart';
 import 'package:amber/services/database_service.dart';
 

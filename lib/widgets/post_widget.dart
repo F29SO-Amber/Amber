@@ -107,7 +107,8 @@ class _UserPostState extends State<UserPost> {
               children: [
                 SlidableAction(
                   onPressed: (context) {
-                    Navigator.of(context, rootNavigator: true).push(
+                    Navigator.push(
+                      context,
                       MaterialPageRoute(
                         builder: (context) => MashUpPost(imageURL: widget.post.imageURL),
                       ),

@@ -9,7 +9,6 @@ import 'package:amber/models/user.dart';
 import 'package:amber/models/post.dart';
 import 'package:amber/pages/login.dart';
 import 'package:amber/widgets/post_type.dart';
-import 'package:amber/widgets/user_card.dart';
 import 'package:amber/utilities/constants.dart';
 import 'package:amber/pages/edit_profile.dart';
 import 'package:amber/services/auth_service.dart';
@@ -188,7 +187,12 @@ class _ProfilePageState extends State<ProfilePage> {
                             followerCount = '${(snapshot.data as QuerySnapshot).docs.length}';
                             return GestureDetector(
                               onTap: () {
-                                _navigateToFollowersScreen(context);
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) =>
+                                        UserList(userUID: widget.userUID, followers: true),
+                                  ),
+                                );
                               },
                               child: NumberAndLabel(
                                 number: '${(snapshot.data as QuerySnapshot).docs.length}',
@@ -209,7 +213,12 @@ class _ProfilePageState extends State<ProfilePage> {
                           if (snapshot.hasData) {
                             return GestureDetector(
                               onTap: () {
-                                _navigateToFollowingScreen(context);
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) =>
+                                        UserList(userUID: widget.userUID, followers: false),
+                                  ),
+                                );
                               },
                               child: NumberAndLabel(
                                 number: '${(snapshot.data as QuerySnapshot).docs.length}',
@@ -296,7 +305,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   const SizedBox(),
                   SizedBox(
-                    height: 100,
+                    height: 600,
                     child: Swiper(
                       loop: false,
                       outer: true,
@@ -365,18 +374,6 @@ class _ProfilePageState extends State<ProfilePage> {
           return const Center(child: CircularProgressIndicator());
         }
       },
-    );
-  }
-
-  void _navigateToFollowersScreen(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => UserList(userUID: widget.userUID, followers: true)),
-    );
-  }
-
-  void _navigateToFollowingScreen(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => UserList(userUID: widget.userUID, followers: false)),
     );
   }
 }

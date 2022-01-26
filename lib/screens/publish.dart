@@ -68,6 +68,7 @@ class _PublishScreenState extends State<PublishScreen> {
               icon: const Icon(Icons.publish),
               color: Colors.black54,
               onPressed: () async {
+                file = File(widget.mashUpLink);
                 setState(() => uploadButtonPresent = false);
                 EasyLoading.show(status: 'Uploading...');
                 if (_formKey.currentState!.validate() && file != null) {
@@ -78,6 +79,9 @@ class _PublishScreenState extends State<PublishScreen> {
                   );
                 }
                 EasyLoading.dismiss();
+                if (widget.mashUpLink.isNotEmpty) {
+                  Navigator.pop(context);
+                }
                 disposeUserPostChanges();
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text("Image Posted!")),
