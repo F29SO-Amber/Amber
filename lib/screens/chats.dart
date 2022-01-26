@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-
+import 'package:amber/screens/group_chats/group_chat_page.dart';
 import 'package:amber/screens/chat.dart';
 import 'package:amber/utilities/constants.dart';
 import 'package:amber/services/database_service.dart';
@@ -17,7 +17,9 @@ class ChatsPage extends StatefulWidget {
   State<ChatsPage> createState() => _ChatsPageState();
 }
 
+
 class _ChatsPageState extends State<ChatsPage> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,12 +38,21 @@ class _ChatsPageState extends State<ChatsPage> {
         ),
         actions: <Widget>[
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context, rootNavigator: true).push(
+                MaterialPageRoute(
+                  builder: (context) =>
+                      GroupChatHomeScreen(),
+                ),
+              );
+            },
             icon: const Icon(Icons.chat),
             iconSize: 35,
             color: Colors.white,
+
           ),
         ],
+
       ),
       body: Container(
         width: MediaQuery.of(context).size.width,
@@ -64,6 +75,7 @@ class _ChatsPageState extends State<ChatsPage> {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator());
                     }
+
                     return ListView(
                       children: snapshot.data!.docs.map(
                         (DocumentSnapshot document) {
