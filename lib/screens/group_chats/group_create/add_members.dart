@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:amber/screens/group_chats/group_create/create_group.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -167,7 +168,13 @@ class _AddMembersInGroupState extends State<AddMembersInGroup> {
       floatingActionButton: membersList.length >= 2
           ? FloatingActionButton(
         child: Icon(Icons.forward),
-        onPressed: () => Navigator.of(context).push
+        onPressed: () => Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => CreateGroup(
+              membersList: membersList,
+            ),
+          ),
+        ),
       )
           : SizedBox(),
     );
