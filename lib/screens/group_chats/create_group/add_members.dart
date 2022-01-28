@@ -1,4 +1,4 @@
-
+import 'package:amber/screens/group_chats/create_group/create_group.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -33,9 +33,8 @@ class _AddMembersInGroupState extends State<AddMembersInGroup> {
       setState(() {
         membersList.add({
           "name": map['name'],
-          "email": map['email'],
+          "username": map['username'],
           "uid": map['uid'],
-          "isAdmin": true,
         });
       });
     });
@@ -48,7 +47,7 @@ class _AddMembersInGroupState extends State<AddMembersInGroup> {
 
     await _firestore
         .collection('users')
-        .where("email", isEqualTo: _search.text)
+        .where("username", isEqualTo: _search.text)
         .get()
         .then((value) {
       setState(() {
@@ -72,9 +71,8 @@ class _AddMembersInGroupState extends State<AddMembersInGroup> {
       setState(() {
         membersList.add({
           "name": userMap!['name'],
-          "email": userMap!['email'],
+          "username": userMap!['username'],
           "uid": userMap!['uid'],
-          "isAdmin": false,
         });
 
         userMap = null;
@@ -168,7 +166,13 @@ class _AddMembersInGroupState extends State<AddMembersInGroup> {
       floatingActionButton: membersList.length >= 2
           ? FloatingActionButton(
         child: Icon(Icons.forward),
-        onPressed: () => Navigator.of(context).push,
+        onPressed: () => Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => CreateGroup(
+              membersList: membersList,
+            ),
+          ),
+        ),
       )
           : SizedBox(),
     );
