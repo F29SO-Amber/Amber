@@ -45,7 +45,9 @@ class _CurrentUserPostsState extends State<CurrentUserPosts> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
+
       // backgroundColor: createRandomColor(),
       appBar: AppBar(
         backgroundColor: Colors.amber,
@@ -75,3 +77,7 @@ class _CurrentUserPostsState extends State<CurrentUserPosts> {
     );
   }
 }
+
+
+
+

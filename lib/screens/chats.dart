@@ -116,67 +116,90 @@ class _ChatsPageState extends State<ChatsPage> {
           padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.06),
           child: Column(
             children:  [
+              Expanded(
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: DatabaseService.usersRef
+                      .where('email', isNotEqualTo: FirebaseAuth.instance.currentUser!.email)
+                      .snapshots(),
+                  builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (snapshot.hasError) {
+                      return const Text("Error");
+                    }
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
 
-              SizedBox(
-                height: size.height / 20,
-              ),
-              Container(
-                height: size.height / 14,
-                width: size.width,
-                alignment: Alignment.center,
-                child: Container(
-                  height: size.height / 14,
-                  width: size.width / 1.15,
-                  child: TextField(
-                    controller: _search,
-                    decoration: InputDecoration(
-                      hintText: "Search here",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                  ),
+                    return ListView(
+                      children: snapshot.data!.docs.map(
+                            (DocumentSnapshot document) {
+                          Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+
+                          return Column(
+
+                            children: [
+                              SizedBox(
+                                height: size.height / 20,
+                              ),
+                              Container(
+                                height: size.height / 14,
+                                width: size.width,
+                                alignment: Alignment.center,
+                                child: Container(
+                                  height: size.height / 14,
+                                  width: size.width / 1.15,
+                                  child: TextField(
+                                    controller: _search,
+                                    decoration: InputDecoration(
+                                      hintText: "Search here",
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: size.height / 50,
+                              ),
+                              ElevatedButton(
+                                onPressed: onSearch,
+                                child: Text("Search"),
+                              ),
+                              SizedBox(
+                                height: size.height / 30,
+                              ),
+                              userMap != null
+                                  ? ListTile(
+                                onTap: () {
+                                  Navigator.of(context, rootNavigator: true).push(
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          ChatPage(chatID: data['email'], chatName: data['name']),
+                                    ),
+                                  );
+                                },
+                                leading: Icon(Icons.account_box, color: Colors.black),
+                                title: Text(
+                                  userMap!['name'],
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                subtitle: Text(userMap!['email']),
+                                trailing: Icon(Icons.chat, color: Colors.black),
+                              )
+                                  : Container(),
+                            ]
+
+                          );
+                        },
+                      ).toList(),
+                    );
+                  },
                 ),
               ),
-              SizedBox(
-                height: size.height / 50,
-              ),
-              ElevatedButton(
-                onPressed: onSearch,
-                child: Text("Search"),
-              ),
-              SizedBox(
-                height: size.height / 30,
-              ),
-              userMap != null
-                  ? ListTile(
-                onTap: () {
-                  String roomId = chatRoomId(
-                      _auth.currentUser!.displayName!,
-                      userMap!['name']);
-
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => ChatPage(
-                        chatID: "email",
-                        chatName: "name",
-                      ),
-                    ),
-                  );
-                },
-                leading: Icon(Icons.account_box, color: Colors.black),
-                title: Text(
-                  userMap!['name'],
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 17,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                subtitle: Text(userMap!['email']),
-                trailing: Icon(Icons.chat, color: Colors.black),
-              )
-                  : Container(),
               const SizedBox(height: 20),
               Expanded(
                 child: StreamBuilder<QuerySnapshot>(
@@ -195,7 +218,6 @@ class _ChatsPageState extends State<ChatsPage> {
                       children: snapshot.data!.docs.map(
                         (DocumentSnapshot document) {
                           Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
-
                           return InkWell(
                             child: Container(
                               margin:
