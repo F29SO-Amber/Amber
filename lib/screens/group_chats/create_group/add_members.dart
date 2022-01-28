@@ -33,8 +33,7 @@ class _AddMembersInGroupState extends State<AddMembersInGroup> {
       setState(() {
         membersList.add({
           "name": map['name'],
-          "username": map['username'],
-          "uid": map['uid'],
+          "email": map['email'],
         });
       });
     });
@@ -62,7 +61,7 @@ class _AddMembersInGroupState extends State<AddMembersInGroup> {
     bool isAlreadyExist = false;
 
     for (int i = 0; i < membersList.length; i++) {
-      if (membersList[i]['uid'] == userMap!['uid']) {
+      if (membersList[i]['id'] == userMap!['id']) {
         isAlreadyExist = true;
       }
     }
@@ -71,8 +70,7 @@ class _AddMembersInGroupState extends State<AddMembersInGroup> {
       setState(() {
         membersList.add({
           "name": userMap!['name'],
-          "username": userMap!['username'],
-          "uid": userMap!['uid'],
+          "email": userMap!['email'],
         });
 
         userMap = null;
