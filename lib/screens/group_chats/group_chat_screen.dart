@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:amber/screens/group_chats/create_group/add_members.dart';
+import 'package:amber/screens/group_chats/chat_room.dart';
+import 'package:amber/utilities/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -60,87 +63,27 @@ class _GroupChatHomeScreenState extends State<GroupChatHomeScreen> {
         itemCount: groupList.length,
         itemBuilder: (context, index) {
           return ListTile(
-            onTap: () => Navigator.of(context).push,
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => GroupChatRoom(
+                  groupName: groupList[index]['name'],
+                  groupChatId: groupList[index]['id'],
+                ),
+              ),
+            ),
             leading: Icon(Icons.group),
             title: Text(groupList[index]['name']),
           );
         },
       ),
-
-      // bottomNavigationBar: BottomNavigationBar(
-      //   onTap: (int val) {
-      //     setState(() {
-      //       _index = val;
-      //     });
-      //     if (val == 0) {
-      //       Navigator.push(
-      //           context,
-      //           MaterialPageRoute(
-      //             builder: (context) => AddMembersInGroup(),
-      //           ));
-      //     }
-      //     if (val == 1) {
-      //       Navigator.push(
-      //           context,
-      //           MaterialPageRoute(
-      //             builder: (context) => AddMembersInGroup(),
-      //           ));
-      //     }
-      //     if (val == 2) {
-      //       Navigator.push(
-      //           context,
-      //           MaterialPageRoute(
-      //             builder: (context) => AddMembersInGroup(),
-      //           ));
-      //     }
-      //     if (val == 3) {
-      //       Navigator.push(
-      //           context,
-      //           MaterialPageRoute(
-      //             builder: (context) => AddMembersInGroup(),
-      //           ));
-      //     }
-      //   },
       backgroundColor: CupertinoColors.systemGrey6,
-      // currentIndex: _index,
-      //   items: const <BottomNavigationBarItem>[
-      //     BottomNavigationBarItem(
-      //       icon: Icon(
-      //         Icons.group_outlined,
-      //         size: 40.0,
-      //         color: Colors.cyan,
-      //       ),
-      //       label: 'Groups',
-      //     ),
-      //     // BottomNavigationBarItem(
-      //     //   icon: Icon(
-      //     //     Icons.contacts_rounded,
-      //     //     size: 40.0,
-      //     //     color: Colors.cyan,
-      //     //   ),
-      //     //   label: 'Contacts',
-      //     // ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(
-      //         Icons.person_outline_sharp,
-      //         size: 40.0,
-      //         color: Colors.cyan,
-      //       ),
-      //       label: 'Create Group',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(
-      //         Icons.logout,
-      //         size: 30.0,
-      //         color: Colors.cyan,
-      //       ),
-      //       label: 'LogOut',
-      //     ),
-      //   ],
-      // ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () => Navigator.of(context).push,
+        onPressed: () => Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => AddMembersInGroup(),
+          ),
+        ),
         tooltip: "Create Group",
       ),
     );

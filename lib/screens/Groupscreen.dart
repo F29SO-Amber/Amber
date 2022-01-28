@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:amber/utilities/constants.dart';
 
 class GroupChatHomeScreen extends StatefulWidget {
   // const GroupChatHomeScreen({Key? key}) : super(key: key);
@@ -45,9 +46,36 @@ class _GroupChatHomeScreenState extends State<GroupChatHomeScreen> {
     final Size size = MediaQuery.of(context).size;
 
     return Scaffold(
+      drawer: const Drawer(),
       appBar: AppBar(
-        backgroundColor: CupertinoColors.systemPink,
-        title: Text("Groups"),
+        // elevation: 15.0,
+        // foregroundColor: kAppColor,
+        backgroundColor: Colors.amber,
+        leading: const Padding(
+          padding: EdgeInsets.all(10.0),
+          child: Image(image: AssetImage('assets/logo.png')),
+        ),
+        title: const Text(
+          kAppName,
+          style: TextStyle(color: Colors.white, letterSpacing: 6, fontSize: 35.0),
+        ),
+        actions: <Widget>[
+          IconButton(
+            onPressed: () {
+              Navigator.of(context, rootNavigator: true).push(
+                MaterialPageRoute(
+                  builder: (context) =>
+                      GroupChatHomeScreen(),
+                ),
+              );
+            },
+            icon: const Icon(Icons.chat),
+            iconSize: 35,
+            color: Colors.white,
+
+          ),
+        ],
+
       ),
       body: isLoading
           ? Container(
@@ -67,77 +95,7 @@ class _GroupChatHomeScreenState extends State<GroupChatHomeScreen> {
         },
       ),
 
-      // bottomNavigationBar: BottomNavigationBar(
-      //   onTap: (int val) {
-      //     setState(() {
-      //       _index = val;
-      //     });
-      //     if (val == 0) {
-      //       Navigator.push(
-      //           context,
-      //           MaterialPageRoute(
-      //             builder: (context) => AddMembersInGroup(),
-      //           ));
-      //     }
-      //     if (val == 1) {
-      //       Navigator.push(
-      //           context,
-      //           MaterialPageRoute(
-      //             builder: (context) => AddMembersInGroup(),
-      //           ));
-      //     }
-      //     if (val == 2) {
-      //       Navigator.push(
-      //           context,
-      //           MaterialPageRoute(
-      //             builder: (context) => AddMembersInGroup(),
-      //           ));
-      //     }
-      //     if (val == 3) {
-      //       Navigator.push(
-      //           context,
-      //           MaterialPageRoute(
-      //             builder: (context) => AddMembersInGroup(),
-      //           ));
-      //     }
-      //   },
       backgroundColor: CupertinoColors.systemGrey6,
-      // currentIndex: _index,
-      //   items: const <BottomNavigationBarItem>[
-      //     BottomNavigationBarItem(
-      //       icon: Icon(
-      //         Icons.group_outlined,
-      //         size: 40.0,
-      //         color: Colors.cyan,
-      //       ),
-      //       label: 'Groups',
-      //     ),
-      //     // BottomNavigationBarItem(
-      //     //   icon: Icon(
-      //     //     Icons.contacts_rounded,
-      //     //     size: 40.0,
-      //     //     color: Colors.cyan,
-      //     //   ),
-      //     //   label: 'Contacts',
-      //     // ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(
-      //         Icons.person_outline_sharp,
-      //         size: 40.0,
-      //         color: Colors.cyan,
-      //       ),
-      //       label: 'Create Group',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(
-      //         Icons.logout,
-      //         size: 30.0,
-      //         color: Colors.cyan,
-      //       ),
-      //       label: 'LogOut',
-      //     ),
-      //   ],
-      // ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () => Navigator.of(context).push,

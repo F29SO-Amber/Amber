@@ -129,13 +129,8 @@ class _ChatsPageState extends State<ChatsPage> {
                       return const Center(child: CircularProgressIndicator());
                     }
 
-                    return ListView(
-                      children: snapshot.data!.docs.map(
-                            (DocumentSnapshot document) {
-                          Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
-
-                          return Column(
-
+                    return Container(
+                      child: Column(
                             children: [
                               SizedBox(
                                 height: size.height / 20,
@@ -174,7 +169,9 @@ class _ChatsPageState extends State<ChatsPage> {
                                   Navigator.of(context, rootNavigator: true).push(
                                     MaterialPageRoute(
                                       builder: (context) =>
-                                          ChatPage(chatID: data['email'], chatName: data['name']),
+                                          ChatPage(
+                                              chatID: 'email',
+                                              chatName: 'name'),
                                     ),
                                   );
                                 },
@@ -193,9 +190,7 @@ class _ChatsPageState extends State<ChatsPage> {
                                   : Container(),
                             ]
 
-                          );
-                        },
-                      ).toList(),
+                      ),
                     );
                   },
                 ),
