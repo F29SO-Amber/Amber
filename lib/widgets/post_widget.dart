@@ -32,6 +32,10 @@ class _UserPostState extends State<UserPost> {
 
   @override
   Widget build(BuildContext context) {
+    int score = widget.post.likes.values.toList().where((item) => item == true).length -
+        widget.post.likes.values.toList().where((item) => item == false).length;
+    int finalScore = score;
+    print(widget.post.likes.values.toList());
     return Container(
       color: Colors.white,
       child: Column(
@@ -65,6 +69,7 @@ class _UserPostState extends State<UserPost> {
                           .update({'likes.${AuthService.currentUser.uid}': true});
                       setState(() {
                         isLiked = true;
+                        finalScore = ++finalScore;
                       });
                     },
                     child: Padding(
@@ -75,8 +80,7 @@ class _UserPostState extends State<UserPost> {
                     ),
                   ),
                   Text(
-                    // TODO
-                    '${widget.post.likes.values.where((element) => true).length - widget.post.likes.values.where((element) => false).length}',
+                    '$finalScore',
                   ),
                   // const Text('0'),
                   GestureDetector(
@@ -86,6 +90,7 @@ class _UserPostState extends State<UserPost> {
                           .update({'likes.${AuthService.currentUser.uid}': false});
                       setState(() {
                         isLiked = false;
+                        finalScore = --finalScore;
                       });
                     },
                     child: Padding(

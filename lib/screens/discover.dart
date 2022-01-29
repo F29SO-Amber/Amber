@@ -102,10 +102,11 @@ class _DiscoverPageState extends State<DiscoverPage> {
                                       ),
                                       onTap: () {
                                         Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ProfilePage(userUID: user.id)));
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => ProfilePage(userUID: user.id),
+                                          ),
+                                        );
                                       },
                                     ),
                                   ),
@@ -123,6 +124,10 @@ class _DiscoverPageState extends State<DiscoverPage> {
                   return const Center(child: CircularProgressIndicator());
                 }
               },
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text('Explore Hashtags', style: GoogleFonts.dmSans(fontSize: 20)),
             ),
           ],
         ),

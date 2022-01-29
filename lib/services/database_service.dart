@@ -15,6 +15,7 @@ class DatabaseService {
   static final _firestore = FirebaseFirestore.instance;
   static final usersRef = _firestore.collection('users');
   static final postsRef = _firestore.collection('posts');
+  static final hashtagsRef = _firestore.collection('hashtags');
   static final commentsRef = _firestore.collection('comments');
   static final followersRef = _firestore.collection('followers');
   static final followingRef = _firestore.collection('following');
@@ -39,7 +40,7 @@ class DatabaseService {
       'email': '${data.name}',
       'time_created': Timestamp.now(),
       'profilePhotoURL':
-          'https://firebasestorage.googleapis.com/v0/b/f29so-group-5-amber.appspot.com/o/profile%2Fcommon_profile_pic.jpeg?alt=media&token=1ffabf13-40e5-493e-ac53-e13656d3f430',
+          'https://firebasestorage.googleapis.com/v0/b/f29so-group-5-amber.appspot.com/o/images%2Fsnapchat-bitmoji-featured.jpeg?alt=media&token=99a93201-9511-48c1-9420-0aa3ea6a2cb7',
     });
     data.additionalSignupData?.forEach((key, value) {
       map.addAll({key: value});
@@ -66,10 +67,10 @@ class DatabaseService {
     Map<String, Object?> map = {};
     String postID = const Uuid().v4();
     UserModel user = await getUser(AuthService.currentUser.uid);
-    File compressedFile = await ImageService.compressImageFile(file, postID);
+    // File compressedFile = await ImageService.compressImageFile(file, postID);
     map['id'] = postID;
     map['location'] = location;
-    map['imageURL'] = await StorageService.uploadImage(postID, compressedFile);
+    map['imageURL'] = await StorageService.uploadImage(postID, file);
     map['caption'] = caption;
     map['likes'] = {};
     map['authorId'] = AuthService.currentUser.uid;
