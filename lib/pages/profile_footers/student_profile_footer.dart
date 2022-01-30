@@ -36,7 +36,7 @@ class _StudentFooterState extends State<StudentFooter> {
             PostType(
               numOfDivisions: 3,
               bgColor: Colors.greenAccent[100]!,
-              icon: const Icon(FontAwesomeIcons.playCircle),
+              icon: const Icon(FontAwesomeIcons.file),
               index: 1,
               currentTab: selectedTab,
               onPress: () {

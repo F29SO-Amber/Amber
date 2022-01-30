@@ -24,33 +24,13 @@ class _UserFooterState extends State<UserFooter> {
         Row(
           children: <Widget>[
             PostType(
-              numOfDivisions: 3,
+              numOfDivisions: 1,
               bgColor: Colors.red[100]!,
               icon: const Icon(FontAwesomeIcons.images),
               index: 0,
               currentTab: selectedTab,
               onPress: () {
                 setState(() => selectedTab = 0);
-              },
-            ),
-            PostType(
-              numOfDivisions: 3,
-              bgColor: Colors.greenAccent[100]!,
-              icon: const Icon(FontAwesomeIcons.playCircle),
-              index: 1,
-              currentTab: selectedTab,
-              onPress: () {
-                setState(() => selectedTab = 1);
-              },
-            ),
-            PostType(
-              numOfDivisions: 3,
-              bgColor: Colors.brown[100]!,
-              icon: const Icon(FontAwesomeIcons.userFriends),
-              index: 2,
-              currentTab: selectedTab,
-              onPress: () {
-                setState(() => selectedTab = 2);
               },
             ),
           ],

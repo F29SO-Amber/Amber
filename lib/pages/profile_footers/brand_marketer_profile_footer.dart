@@ -24,7 +24,7 @@ class _BrandMarketerFooterState extends State<BrandMarketerFooter> {
         Row(
           children: <Widget>[
             PostType(
-              numOfDivisions: 3,
+              numOfDivisions: 4,
               bgColor: Colors.red[100]!,
               icon: const Icon(FontAwesomeIcons.images),
               index: 0,
@@ -34,9 +34,9 @@ class _BrandMarketerFooterState extends State<BrandMarketerFooter> {
               },
             ),
             PostType(
-              numOfDivisions: 3,
+              numOfDivisions: 4,
               bgColor: Colors.greenAccent[100]!,
-              icon: const Icon(FontAwesomeIcons.playCircle),
+              icon: const Icon(FontAwesomeIcons.file),
               index: 1,
               currentTab: selectedTab,
               onPress: () {
@@ -44,13 +44,23 @@ class _BrandMarketerFooterState extends State<BrandMarketerFooter> {
               },
             ),
             PostType(
-              numOfDivisions: 3,
+              numOfDivisions: 4,
               bgColor: Colors.brown[100]!,
-              icon: const Icon(FontAwesomeIcons.userFriends),
+              icon: const Icon(FontAwesomeIcons.meetup),
               index: 2,
               currentTab: selectedTab,
               onPress: () {
                 setState(() => selectedTab = 2);
+              },
+            ),
+            PostType(
+              numOfDivisions: 4,
+              bgColor: Colors.blue[100]!,
+              icon: const Icon(FontAwesomeIcons.userFriends),
+              index: 3,
+              currentTab: selectedTab,
+              onPress: () {
+                setState(() => selectedTab = 3);
               },
             ),
           ],
