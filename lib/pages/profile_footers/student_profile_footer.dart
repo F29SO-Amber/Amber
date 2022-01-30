@@ -46,7 +46,7 @@ class _StudentFooterState extends State<StudentFooter> {
             PostType(
               numOfDivisions: 3,
               bgColor: Colors.brown[100]!,
-              icon: const Icon(FontAwesomeIcons.userFriends),
+              icon: const Icon(FontAwesomeIcons.rocketchat),
               index: 2,
               currentTab: selectedTab,
               onPress: () {

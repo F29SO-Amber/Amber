@@ -27,16 +27,16 @@ class Publish extends StatelessWidget {
             List<String> list = [];
             switch (user.accountType) {
               case 'Artist':
-                list = ['Image', 'Article'];
+                list = ['Image', 'Article', 'Community', 'Public Group'];
                 break;
               case 'Brand Marketer':
-                list = ['Image', 'Article', 'Event'];
+                list = ['Image', 'Article', 'Event', 'Public Group'];
                 break;
               case 'Content Creator':
-                list = ['Image', 'Article'];
+                list = ['Image', 'Article', 'Public Group'];
                 break;
               case 'Student':
-                list = ['Image', 'Article'];
+                list = ['Image', 'Article', 'Public Group'];
                 break;
               default:
                 list = ['Image'];

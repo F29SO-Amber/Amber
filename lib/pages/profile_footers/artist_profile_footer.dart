@@ -24,7 +24,7 @@ class _ArtistFooterState extends State<ArtistFooter> {
         Row(
           children: <Widget>[
             PostType(
-              numOfDivisions: 3,
+              numOfDivisions: 4,
               bgColor: Colors.red[100]!,
               icon: const Icon(FontAwesomeIcons.palette),
               index: 0,
@@ -34,7 +34,7 @@ class _ArtistFooterState extends State<ArtistFooter> {
               },
             ),
             PostType(
-              numOfDivisions: 3,
+              numOfDivisions: 4,
               bgColor: Colors.greenAccent[100]!,
               icon: const Icon(FontAwesomeIcons.file),
               index: 1,
@@ -44,13 +44,23 @@ class _ArtistFooterState extends State<ArtistFooter> {
               },
             ),
             PostType(
-              numOfDivisions: 3,
-              bgColor: Colors.brown[100]!,
-              icon: const Icon(FontAwesomeIcons.userFriends),
+              numOfDivisions: 4,
+              bgColor: Colors.orange[100]!,
+              icon: const Icon(FontAwesomeIcons.rocketchat),
               index: 2,
               currentTab: selectedTab,
               onPress: () {
                 setState(() => selectedTab = 2);
+              },
+            ),
+            PostType(
+              numOfDivisions: 4,
+              bgColor: Colors.brown[100]!,
+              icon: const Icon(FontAwesomeIcons.userFriends),
+              index: 3,
+              currentTab: selectedTab,
+              onPress: () {
+                setState(() => selectedTab = 3);
               },
             ),
           ],

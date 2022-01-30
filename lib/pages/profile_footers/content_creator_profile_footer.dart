@@ -56,7 +56,7 @@ class _ContentCreatorFooterState extends State<ContentCreatorFooter> {
             PostType(
               numOfDivisions: 4,
               bgColor: Colors.brown[100]!,
-              icon: const Icon(FontAwesomeIcons.userFriends),
+              icon: const Icon(FontAwesomeIcons.rocketchat),
               index: 3,
               currentTab: selectedTab,
               onPress: () {
