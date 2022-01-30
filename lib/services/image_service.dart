@@ -10,14 +10,14 @@ class ImageService {
   final apiKey = 'm9invNolYWWbS1oLMBYmRvNgt0SDq49P';
   final picPurifyURL = 'https://www.picpurify.com/analyse/1.1';
 
-  static Future<File> chooseFromGallery() async {
+  static Future<File?> chooseFromGallery() async {
     XFile? xFile = await ImagePicker().pickImage(source: ImageSource.gallery);
-    return File('${xFile?.path}');
+    return (xFile != null) ? File(xFile.path) : null;
   }
 
-  static Future<File> chooseFromCamera() async {
+  static Future<File?> chooseFromCamera() async {
     XFile? xFile = await ImagePicker().pickImage(source: ImageSource.camera);
-    return File('${xFile?.path}');
+    return (xFile != null) ? File(xFile.path) : null;
   }
 
   static Future<File> compressImageFile(File file, String postID) async {

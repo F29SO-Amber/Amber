@@ -64,7 +64,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               child: GestureDetector(
                 onTap: () async {
                   file = await ImageService.chooseFromGallery();
-                  setState(() {});
+                  if (file != null) {
+                    setState(() {});
+                  }
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 20.0),
@@ -83,7 +85,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter some text';
-                  } else if (!RegExp(r'^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$')
+                  } else if (!RegExp(r'^(?=.{4,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$')
                       .hasMatch(value)) {
                     return 'Enter Valid Username';
                   }
