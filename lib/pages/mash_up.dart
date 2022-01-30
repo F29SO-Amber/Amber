@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:image_painter/image_painter.dart';
 import 'package:path_provider/path_provider.dart';
 
-import 'package:amber/screens/publish.dart';
+import 'package:amber/pages/publish_image.dart';
 import 'package:amber/utilities/constants.dart';
 
 class MashUpPost extends StatefulWidget {
@@ -28,7 +28,7 @@ class _MashUpPostState extends State<MashUpPost> {
       File(fullPath).writeAsBytesSync((await _imageKey.currentState?.exportImage())!);
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => PublishScreen(mashUpLink: fullPath)),
+        MaterialPageRoute(builder: (context) => PublishImageScreen(mashUpLink: fullPath)),
       );
     }
 

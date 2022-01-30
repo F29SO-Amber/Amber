@@ -15,11 +15,12 @@ class DatabaseService {
   static final _firestore = FirebaseFirestore.instance;
   static final usersRef = _firestore.collection('users');
   static final postsRef = _firestore.collection('posts');
+  static final eventsRef = _firestore.collection('events');
+  static final messagesRef = _firestore.collection('messages');
   static final hashtagsRef = _firestore.collection('hashtags');
   static final commentsRef = _firestore.collection('comments');
   static final followersRef = _firestore.collection('followers');
   static final followingRef = _firestore.collection('following');
-  static CollectionReference messagesRef = _firestore.collection('messages');
   static late String usernameresult;
 
   static Future<UserModel> getUser(String uid) async {

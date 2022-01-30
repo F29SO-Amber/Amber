@@ -1,6 +1,7 @@
-import 'package:amber/pages/publish_options.dart';
-import 'package:flutter/material.dart';
+import 'package:amber/pages/publish_event.dart';
 import 'package:amber/screens/publish.dart';
+import 'package:flutter/material.dart';
+import 'package:amber/pages/publish_image.dart';
 import 'package:amber/services/auth_service.dart';
 
 //Creating mutable state for the Publish Page Navigator
@@ -25,11 +26,13 @@ class _PublishPageNavigatorState extends State<PublishPageNavigator> {
           builder: (_) {
             switch (settings.name) {
               case '/':
-                return const PublishOptions();
-              case PublishScreen.id:
-                return const PublishScreen(mashUpLink: '');
+                return const Publish();
+              case PublishImageScreen.id:
+                return const PublishImageScreen(mashUpLink: '');
+              case PublishEventScreen.id:
+                return const PublishEventScreen();
               default:
-                return const PublishOptions();
+                return const Publish();
             }
           },
         );
