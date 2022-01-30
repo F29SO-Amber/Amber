@@ -1,7 +1,10 @@
+import 'package:amber/models/community.dart';
 import 'package:amber/models/post.dart';
 import 'package:amber/pages/user_posts.dart';
 import 'package:amber/services/database_service.dart';
 import 'package:amber/widgets/post_type.dart';
+import 'package:amber/widgets/profile_picture.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -66,51 +69,108 @@ class _ArtistFooterState extends State<ArtistFooter> {
           ],
         ),
         const SizedBox(),
-        StreamBuilder(
-          stream: DatabaseService.postsRef
-              .where('authorId', isEqualTo: widget.userUID)
-              .orderBy('timestamp', descending: true)
-              .snapshots(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return GridView.builder(
-                padding: const EdgeInsets.all(10).copyWith(bottom: 30),
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: (snapshot.data! as dynamic).docs.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  childAspectRatio: 1,
-                ),
-                itemBuilder: (context, index) {
-                  PostModel post = PostModel.fromDocument((snapshot.data! as dynamic).docs[index]);
-                  return GestureDetector(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        image:
-                            DecorationImage(image: NetworkImage(post.imageURL), fit: BoxFit.cover),
-                        shape: BoxShape.rectangle,
-                        borderRadius: BorderRadius.circular(11.0),
-                      ),
-                    ),
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => CurrentUserPosts(uid: widget.userUID, index: index),
+        if (selectedTab == 0)
+          StreamBuilder(
+            stream: DatabaseService.postsRef
+                .where('authorId', isEqualTo: widget.userUID)
+                .orderBy('timestamp', descending: true)
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return GridView.builder(
+                  padding: const EdgeInsets.all(10).copyWith(bottom: 30),
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: (snapshot.data! as dynamic).docs.length,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                    childAspectRatio: 1,
+                  ),
+                  itemBuilder: (context, index) {
+                    PostModel post =
+                        PostModel.fromDocument((snapshot.data! as dynamic).docs[index]);
+                    return GestureDetector(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: NetworkImage(post.imageURL), fit: BoxFit.cover),
+                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.circular(11.0),
                         ),
+                      ),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                CurrentUserPosts(uid: widget.userUID, index: index),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                );
+              } else {
+                return const Center(child: Text('No Posts'));
+              }
+            },
+          ),
+        if (selectedTab == 3)
+          StreamBuilder(
+            stream: DatabaseService.communityRef
+                .where('ownerID', isEqualTo: widget.userUID)
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData && snapshot.connectionState == ConnectionState.active) {
+                var list = (snapshot.data as QuerySnapshot).docs.toList();
+                return list.isEmpty
+                    ? const Center(
+                        child: Padding(
+                          padding: EdgeInsets.only(top: 20.0),
+                          child: Text('No events'),
+                        ),
+                      )
+                    : ListView.builder(
+                        reverse: true,
+                        padding: const EdgeInsets.all(10).copyWith(bottom: 30),
+                        itemCount: list.length,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: (BuildContext context, int index) {
+                          CommunityModel community =
+                              CommunityModel.fromDocument((snapshot.data! as dynamic).docs[index]);
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              ListTile(
+                                contentPadding: const EdgeInsets.symmetric(horizontal: 0),
+                                leading: ProfilePicture(
+                                  side: 100.0,
+                                  image: NetworkImage(community.communityPhotoURL),
+                                  borderRadius: 10,
+                                ),
+                                title: Text(
+                                  community.name,
+                                  style: const TextStyle(fontWeight: FontWeight.w700),
+                                ),
+                                // subtitle: Text(
+                                //   '${community.timeCreated}',
+                                //   style: const TextStyle(fontSize: 12.0),
+                                // ),
+                              ),
+                              const Divider(),
+                            ],
+                          );
+                        },
                       );
-                    },
-                  );
-                },
-              );
-            } else {
-              return const Center(child: Text('No Posts'));
-            }
-          },
-        ),
+              } else {
+                return const Center(child: CircularProgressIndicator());
+              }
+            },
+          ),
       ],
     );
   }

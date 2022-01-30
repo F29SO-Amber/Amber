@@ -35,11 +35,13 @@ class _PublishCommunityScreenState extends State<PublishCommunityScreen> {
   bool uploadButtonPresent = true;
   final _formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
+  final descriptionController = TextEditingController();
 
   @override
   void dispose() {
     super.dispose();
     nameController.dispose();
+    descriptionController.dispose();
   }
 
   @override
@@ -174,6 +176,20 @@ class _PublishCommunityScreenState extends State<PublishCommunityScreen> {
                     ),
                   ),
                   const Divider(),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    padding: const EdgeInsets.only(left: 15),
+                    child: TextFormField(
+                      controller: descriptionController,
+                      keyboardType: TextInputType.text,
+                      decoration: const InputDecoration(
+                        hintText: "Describe your community...",
+                        border: InputBorder.none,
+                        prefixIcon: Icon(FontAwesomeIcons.pen, color: kAppColor, size: 23),
+                      ),
+                    ),
+                  ),
+                  const Divider(),
                 ],
               ),
             ),
@@ -188,6 +204,7 @@ class _PublishCommunityScreenState extends State<PublishCommunityScreen> {
       file = null;
       nameController.text = '';
       uploadButtonPresent = true;
+      descriptionController.text = '';
     });
   }
 
@@ -205,8 +222,9 @@ class _PublishCommunityScreenState extends State<PublishCommunityScreen> {
         String communityID = const Uuid().v4();
         await compressImageFile(communityID);
         map['name'] = nameController.text;
-        map['ownerID'] = AuthService.currentUser.uid;
         map['timeCreated'] = Timestamp.now();
+        map['ownerID'] = AuthService.currentUser.uid;
+        map['description'] = descriptionController.text;
         map['communityPhotoURL'] = await uploadImage(communityID);
         await DatabaseService.communityRef.doc(communityID).set(map);
       }
