@@ -62,6 +62,10 @@ class Publish extends StatelessWidget {
                         switch (list[index]) {
                           case 'Event':
                             Navigator.pushNamed(context, PublishEventScreen.id);
+                            break;
+                          case 'Image':
+                            Navigator.pushNamed(context, PublishImageScreen.id);
+                            break;
                         }
                       },
                       child: ProfilePicture(
