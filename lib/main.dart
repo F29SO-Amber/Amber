@@ -40,11 +40,18 @@ class _MyAppState extends State<MyApp> {
       builder: EasyLoading.init(),
       debugShowCheckedModeBanner: false,
       title: 'Login Demo',
+      // theme: ThemeData(
+      //   colorScheme: ColorScheme.fromSwatch(
+      //     primarySwatch: createMaterialColor(const Color(0xff9eb7ff)),
+      //   ).copyWith(secondary: Colors.orange),
+      //   textSelectionTheme: const TextSelectionThemeData(cursorColor: Colors.orange),
+      // ),
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSwatch(
-          primarySwatch: createMaterialColor(const Color(0xff9eb7ff)),
-        ).copyWith(secondary: Colors.orange),
-        textSelectionTheme: const TextSelectionThemeData(cursorColor: Colors.orange),
+        brightness: Brightness.light,
+        primaryColor: Colors.amber,
+      ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
       ),
       initialRoute: LoginScreen.id,
       routes: {

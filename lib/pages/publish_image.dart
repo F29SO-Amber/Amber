@@ -62,19 +62,19 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
         backgroundColor: kAppColor,
         title: const Text(
           'Create a Post',
-          style: TextStyle(fontSize: 18, color: Colors.black54, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 18, color: Colors.white),
         ),
         actions: [
           IconButton(
             icon: const Icon(Icons.clear),
-            color: Colors.black54,
+            color: Colors.white,
             onPressed: () => disposeUserPostChanges(),
           ),
           Visibility(
             visible: uploadButtonPresent,
             child: IconButton(
               icon: const Icon(Icons.publish),
-              color: Colors.black54,
+              color: Colors.white,
               onPressed: () async {
                 setState(() => uploadButtonPresent = false);
                 EasyLoading.show(status: 'Uploading...');
@@ -160,7 +160,7 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
                                             Navigator.pop(context);
                                           },
                                           child: const ProfilePicture(
-                                              side: 100, path: 'assets/gallery.png'),
+                                              side: 100, path: 'assets/image.png'),
                                         ),
                                         Padding(
                                           padding: const EdgeInsets.symmetric(vertical: 10.0),

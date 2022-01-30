@@ -43,7 +43,7 @@ class Publish extends StatelessWidget {
                 break;
             }
             return GridView.builder(
-              padding: const EdgeInsets.all(10).copyWith(top: 30),
+              padding: const EdgeInsets.all(10).copyWith(top: 40),
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -70,7 +70,7 @@ class Publish extends StatelessWidget {
                       },
                       child: ProfilePicture(
                         side: MediaQuery.of(context).size.width * 0.3,
-                        path: 'assets/camera.png',
+                        path: 'assets/${list[index].toLowerCase()}.png',
                       ),
                     ),
                     Padding(

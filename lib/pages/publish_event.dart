@@ -148,7 +148,7 @@ class _PublishEventScreenState extends State<PublishEventScreen> {
                                             Navigator.pop(context);
                                           },
                                           child: const ProfilePicture(
-                                              side: 100, path: 'assets/gallery.png'),
+                                              side: 100, path: 'assets/image.png'),
                                         ),
                                         Padding(
                                           padding: const EdgeInsets.symmetric(vertical: 10.0),
