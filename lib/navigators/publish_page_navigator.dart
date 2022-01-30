@@ -1,3 +1,4 @@
+import 'package:amber/pages/publish_options.dart';
 import 'package:flutter/material.dart';
 import 'package:amber/screens/publish.dart';
 import 'package:amber/services/auth_service.dart';
@@ -21,7 +22,16 @@ class _PublishPageNavigatorState extends State<PublishPageNavigator> {
       onGenerateRoute: (RouteSettings settings) {
         return MaterialPageRoute(
           settings: settings,
-          builder: (_) => const PublishScreen(mashUpLink: ''),
+          builder: (_) {
+            switch (settings.name) {
+              case '/':
+                return const PublishOptions();
+              case PublishScreen.id:
+                return const PublishScreen(mashUpLink: '');
+              default:
+                return const PublishOptions();
+            }
+          },
         );
       },
     );
