@@ -1,4 +1,5 @@
 import 'package:amber/models/post.dart';
+import 'package:amber/widgets/post_widget.dart';
 import 'package:amber/widgets/profile_picture.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -54,11 +55,24 @@ class _DiscoverPageState extends State<DiscoverPage> {
                       scale: 0.9,
                       itemBuilder: (c, i) {
                         var post = PostModel.fromDocument((snapshot.data! as dynamic).docs[i]);
-                        return Container(
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: NetworkImage(post.imageURL), fit: BoxFit.cover),
-                            shape: BoxShape.rectangle,
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (_) {
+                              return Scaffold(
+                                appBar: AppBar(
+                                  backgroundColor: Colors.amber, //sets the color to amber
+                                  title: const Text(kAppName), //Title of the app
+                                ),
+                                body: UserPost(post: post),
+                              );
+                            }));
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image: NetworkImage(post.imageURL), fit: BoxFit.cover),
+                              shape: BoxShape.rectangle,
+                            ),
                           ),
                         );
                       },

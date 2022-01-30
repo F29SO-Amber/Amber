@@ -41,7 +41,6 @@ class _CurrentUserPostsState extends State<CurrentUserPosts> {
               itemPositionsListener: itemPositionsListener,
               initialScrollIndex: widget.index,
             );
-            // itemScrollController.jumpTo(index: 3);
             return list;
           } else {
             return const Center(child: CircularProgressIndicator());

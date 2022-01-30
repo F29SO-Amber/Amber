@@ -50,16 +50,13 @@ class _CommentsPageState extends State<CommentsPage> {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 var list = (snapshot.data as QuerySnapshot).docs.toList();
-                return Container(
-                  child: list.isEmpty
-                      ? const Center(
-                          child: Padding(
-                            padding: EdgeInsets.only(top: 20.0),
-                            child: Text('No comments'),
-                          ),
-                        )
-                      : Expanded(
-                          child: SingleChildScrollView(
+                return Expanded(
+                  child: Container(
+                    child: list.isEmpty
+                        ? const Center(
+                            child: Text('Be the first to comment!'),
+                          )
+                        : SingleChildScrollView(
                             child: ListView.builder(
                               reverse: true,
                               padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -101,7 +98,7 @@ class _CommentsPageState extends State<CommentsPage> {
                               },
                             ),
                           ),
-                        ),
+                  ),
                 );
               } else {
                 return const Center(child: CircularProgressIndicator());

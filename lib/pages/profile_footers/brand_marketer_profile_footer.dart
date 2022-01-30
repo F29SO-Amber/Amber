@@ -151,6 +151,7 @@ class _BrandMarketerFooterState extends State<BrandMarketerFooter> {
                                 leading: ProfilePicture(
                                   side: 100.0,
                                   image: NetworkImage(event.eventPhotoURL),
+                                  borderRadius: 10,
                                 ),
                                 title: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -166,7 +167,7 @@ class _BrandMarketerFooterState extends State<BrandMarketerFooter> {
                                   ],
                                 ),
                                 subtitle: Text(
-                                  event.startingTime,
+                                  '${event.venue} - ${event.startingTime}',
                                   style: const TextStyle(fontSize: 12.0),
                                 ),
                               ),
