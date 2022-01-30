@@ -21,6 +21,7 @@ class DatabaseService {
   static final commentsRef = _firestore.collection('comments');
   static final followersRef = _firestore.collection('followers');
   static final followingRef = _firestore.collection('following');
+  static final communityRef = _firestore.collection('community');
   static late String usernameresult;
 
   static Future<UserModel> getUser(String uid) async {

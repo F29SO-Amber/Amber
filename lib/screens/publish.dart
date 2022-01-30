@@ -1,4 +1,5 @@
 import 'package:amber/models/user.dart';
+import 'package:amber/pages/publish_community.dart';
 import 'package:amber/pages/publish_event.dart';
 import 'package:amber/pages/publish_image.dart';
 import 'package:amber/services/auth_service.dart';
@@ -65,6 +66,9 @@ class Publish extends StatelessWidget {
                             break;
                           case 'Image':
                             Navigator.pushNamed(context, PublishImageScreen.id);
+                            break;
+                          case 'Community':
+                            Navigator.pushNamed(context, PublishCommunityScreen.id);
                             break;
                         }
                       },

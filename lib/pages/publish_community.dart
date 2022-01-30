@@ -21,31 +21,25 @@ import 'package:amber/services/database_service.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
-class PublishEventScreen extends StatefulWidget {
-  static const id = '/publish_event';
+class PublishCommunityScreen extends StatefulWidget {
+  static const id = '/publish_community';
 
-  const PublishEventScreen({Key? key}) : super(key: key);
+  const PublishCommunityScreen({Key? key}) : super(key: key);
 
   @override
-  _PublishEventScreenState createState() => _PublishEventScreenState();
+  _PublishCommunityScreenState createState() => _PublishCommunityScreenState();
 }
 
-class _PublishEventScreenState extends State<PublishEventScreen> {
+class _PublishCommunityScreenState extends State<PublishCommunityScreen> {
   File? file;
   bool uploadButtonPresent = true;
   final _formKey = GlobalKey<FormState>();
-  final timeController = TextEditingController();
-  final venueController = TextEditingController();
-  final titleController = TextEditingController();
-  final descriptionController = TextEditingController();
+  final nameController = TextEditingController();
 
   @override
   void dispose() {
     super.dispose();
-    timeController.dispose();
-    titleController.dispose();
-    venueController.dispose();
-    descriptionController.dispose();
+    nameController.dispose();
   }
 
   @override
@@ -54,7 +48,7 @@ class _PublishEventScreenState extends State<PublishEventScreen> {
       appBar: AppBar(
         backgroundColor: kAppColor,
         title: const Text(
-          'Create an Event',
+          'Create a Community',
           style: TextStyle(fontSize: 18, color: Colors.white),
         ),
         actions: [
@@ -70,7 +64,7 @@ class _PublishEventScreenState extends State<PublishEventScreen> {
               color: Colors.white,
               onPressed: () async {
                 setState(() => uploadButtonPresent = false);
-                EasyLoading.show(status: 'Adding Event...');
+                EasyLoading.show(status: 'Creating Community...');
                 await addUserPost();
                 EasyLoading.dismiss();
                 disposeUserEventChanges();
@@ -170,54 +164,12 @@ class _PublishEventScreenState extends State<PublishEventScreen> {
                     width: MediaQuery.of(context).size.width,
                     padding: const EdgeInsets.only(left: 15),
                     child: TextFormField(
-                      controller: titleController,
+                      controller: nameController,
                       keyboardType: TextInputType.text,
                       decoration: const InputDecoration(
-                        hintText: "What's your event called...",
+                        hintText: "Name your community...",
                         border: InputBorder.none,
-                        prefixIcon: Icon(Icons.text_fields, color: kAppColor, size: 30),
-                      ),
-                    ),
-                  ),
-                  const Divider(),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    padding: const EdgeInsets.only(left: 15),
-                    child: TextFormField(
-                      controller: descriptionController,
-                      keyboardType: TextInputType.text,
-                      decoration: const InputDecoration(
-                        hintText: "Describe the event...",
-                        border: InputBorder.none,
-                        prefixIcon: Icon(Icons.create_sharp, color: kAppColor, size: 30),
-                      ),
-                    ),
-                  ),
-                  const Divider(),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    padding: const EdgeInsets.only(left: 15),
-                    child: TextFormField(
-                      controller: timeController,
-                      keyboardType: TextInputType.text,
-                      decoration: const InputDecoration(
-                        hintText: "When is it taking place...",
-                        border: InputBorder.none,
-                        prefixIcon: Icon(Icons.access_time_sharp, color: kAppColor, size: 30),
-                      ),
-                    ),
-                  ),
-                  const Divider(),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    padding: const EdgeInsets.only(left: 15),
-                    child: TextFormField(
-                      controller: venueController,
-                      keyboardType: TextInputType.text,
-                      decoration: const InputDecoration(
-                        hintText: "Where is it taking place...",
-                        border: InputBorder.none,
-                        prefixIcon: Icon(Icons.pin_drop, color: kAppColor, size: 30),
+                        prefixIcon: Icon(FontAwesomeIcons.userFriends, color: kAppColor, size: 23),
                       ),
                     ),
                   ),
@@ -234,11 +186,8 @@ class _PublishEventScreenState extends State<PublishEventScreen> {
   void disposeUserEventChanges() {
     setState(() {
       file = null;
-      timeController.text = '';
-      venueController.text = '';
-      titleController.text = '';
+      nameController.text = '';
       uploadButtonPresent = true;
-      descriptionController.text = '';
     });
   }
 
@@ -253,21 +202,20 @@ class _PublishEventScreenState extends State<PublishEventScreen> {
     if (_formKey.currentState!.validate()) {
       Map<String, Object?> map = {};
       if (file != null) {
-        String eventID = const Uuid().v4();
-        await compressImageFile(eventID);
-        map['userID'] = AuthService.currentUser.uid;
-        map['title'] = titleController.text;
-        map['description'] = descriptionController.text;
-        map['startingTime'] = timeController.text;
-        map['venue'] = venueController.text;
-        map['eventPhotoURL'] = await uploadImage(eventID);
-        await DatabaseService.eventsRef.doc(eventID).set(map);
+        String communityID = const Uuid().v4();
+        await compressImageFile(communityID);
+        map['name'] = nameController.text;
+        map['ownerID'] = AuthService.currentUser.uid;
+        map['timeCreated'] = Timestamp.now();
+        map['communityPhotoURL'] = await uploadImage(communityID);
+        await DatabaseService.communityRef.doc(communityID).set(map);
       }
     }
   }
 
   Future<String> uploadImage(String id) async {
-    TaskSnapshot ts = await FirebaseStorage.instance.ref().child('events').child(id).putFile(file!);
+    TaskSnapshot ts =
+        await FirebaseStorage.instance.ref().child('community').child(id).putFile(file!);
     return ts.ref.getDownloadURL();
   }
 }

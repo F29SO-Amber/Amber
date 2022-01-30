@@ -1,3 +1,4 @@
+import 'package:amber/pages/publish_community.dart';
 import 'package:amber/pages/publish_event.dart';
 import 'package:amber/screens/publish.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +32,8 @@ class _PublishPageNavigatorState extends State<PublishPageNavigator> {
                 return const PublishImageScreen(mashUpLink: '');
               case PublishEventScreen.id:
                 return const PublishEventScreen();
+              case PublishCommunityScreen.id:
+                return const PublishCommunityScreen();
               default:
                 return const Publish();
             }
