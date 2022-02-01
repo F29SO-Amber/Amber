@@ -1,3 +1,4 @@
+import 'package:amber/pages/chat.dart';
 import 'package:amber/pages/profile_footers/artist_profile_footer.dart';
 import 'package:amber/pages/profile_footers/brand_marketer_profile_footer.dart';
 import 'package:amber/pages/profile_footers/content_creator_profile_footer.dart';
@@ -256,7 +257,17 @@ class _ProfilePageState extends State<ProfilePage> {
                             CustomOutlinedButton(
                               buttonText: 'Message',
                               widthFactor: 0.45,
-                              onPress: () {},
+                              onPress: () {
+                                Navigator.of(context, rootNavigator: true).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => ChatPage(
+                                      chatID: user.email,
+                                      chatName: user.name,
+                                      url: user.profilePhotoURL,
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
                             (isFollowing)
                                 ? CustomElevatedButton(

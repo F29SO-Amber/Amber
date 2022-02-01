@@ -1,13 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 class ChatPage extends StatefulWidget {
-  const ChatPage({Key? key, required this.chatID, required this.chatName}) : super(key: key);
+  const ChatPage({Key? key, required this.chatID, required this.chatName, required this.url})
+      : super(key: key);
 
   final String chatID;
   final String chatName;
+  final String url;
 
   static const id = '/chat';
 
@@ -44,12 +47,13 @@ class _ChatPageState extends State<ChatPage> {
           children: [
             Padding(
               padding: EdgeInsets.only(right: MediaQuery.of(context).size.height * 0.02),
-              child: const CircleAvatar(),
+              child: CircleAvatar(
+                backgroundImage: NetworkImage(widget.url),
+              ),
             ),
             Text(
               widget.chatName,
-              style:
-                  const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 22),
+              style: GoogleFonts.dmSans(),
             ),
           ],
         ),

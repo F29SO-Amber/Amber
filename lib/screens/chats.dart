@@ -118,9 +118,10 @@ class _ChatsPageState extends State<ChatsPage> {
                             onTap: () {
                               Navigator.of(context, rootNavigator: true).push(
                                 MaterialPageRoute(
-                                  builder: (context) =>
-                                      // ChatPage(chatID: data['email'], chatName: data['name']),
-                                      const ChatTemp(),
+                                  builder: (context) => ChatPage(
+                                      chatID: data['email'],
+                                      chatName: data['name'],
+                                      url: data['profilePhotoURL']),
                                 ),
                               );
                             },
