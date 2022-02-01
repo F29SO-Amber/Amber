@@ -1,3 +1,4 @@
+import 'package:amber/pages/temp.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -104,7 +105,7 @@ class _ChatsPageState extends State<ChatsPage> {
                                         radius: 10,
                                         backgroundColor: Color(0xFF1F1A30),
                                         child: Text(
-                                          '1',
+                                          '',
                                           style:
                                               TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
                                         ),
@@ -118,7 +119,8 @@ class _ChatsPageState extends State<ChatsPage> {
                               Navigator.of(context, rootNavigator: true).push(
                                 MaterialPageRoute(
                                   builder: (context) =>
-                                      ChatPage(chatID: data['email'], chatName: data['name']),
+                                      // ChatPage(chatID: data['email'], chatName: data['name']),
+                                      const ChatTemp(),
                                 ),
                               );
                             },

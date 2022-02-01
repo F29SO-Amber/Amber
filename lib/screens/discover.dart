@@ -1,4 +1,6 @@
+import 'package:amber/models/hashtag.dart';
 import 'package:amber/models/post.dart';
+import 'package:amber/pages/posts.dart';
 import 'package:amber/widgets/post_widget.dart';
 import 'package:amber/widgets/profile_picture.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -96,14 +98,14 @@ class _DiscoverPageState extends State<DiscoverPage> {
                   var list = (snapshot.data as QuerySnapshot).docs.toList();
                   return Container(
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
-                    height: 196,
+                    height: 181,
                     child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: list.length,
                         itemBuilder: (context, index) {
                           UserModel user = UserModel.fromDocument(list[index]);
                           return SizedBox(
-                            width: 166,
+                            width: 151,
                             child: Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 8.0),
                               child: Column(
@@ -111,7 +113,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
                                   Expanded(
                                     child: GestureDetector(
                                       child: ProfilePicture(
-                                        side: 150,
+                                        side: 135,
                                         image: NetworkImage(user.profilePhotoURL),
                                       ),
                                       onTap: () {
@@ -142,6 +144,44 @@ class _DiscoverPageState extends State<DiscoverPage> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text('Explore Hashtags', style: GoogleFonts.dmSans(fontSize: 20)),
+            ),
+            ListView.builder(
+              reverse: true,
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              itemCount: Hashtag.hashtags.length,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemBuilder: (BuildContext context, int index) {
+                Hashtag tag = Hashtag.hashtags[index];
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    ListTile(
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 0),
+                      leading: Container(
+                        height: 35,
+                        width: 35,
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage('assets/image.png'), fit: BoxFit.cover),
+                          shape: BoxShape.rectangle,
+                        ),
+                      ),
+                      title: Text(
+                        tag.name,
+                        style: const TextStyle(fontWeight: FontWeight.w700),
+                      ),
+                      // onTap: () {
+                      //   Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(builder: (context) => Posts(tag: tag.name)),
+                      //   );
+                      // },
+                    ),
+                  ],
+                );
+              },
             ),
           ],
         ),
