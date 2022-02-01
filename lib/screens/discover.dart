@@ -28,13 +28,20 @@ class DiscoverPage extends StatefulWidget {
   they might be interested in following or having a glance at.
 */
 class _DiscoverPageState extends State<DiscoverPage> {
-  final List<int> numbers = [1, 2, 3, 5, 8, 13, 21, 34, 55];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.amber, //sets the color to amber
         title: const Text(kAppName), //Title of the app
+        actions: [
+          GestureDetector(
+            child: const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Icon(Icons.search),
+            ),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(

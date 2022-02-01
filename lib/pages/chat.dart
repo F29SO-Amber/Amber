@@ -166,33 +166,37 @@ class _ChatPageState extends State<ChatPage> {
                     ),
                   ],
                 ),
-                child: TextField(
-                  controller: myControllerMsg,
-                  cursorColor: Colors.white,
-                  style: const TextStyle(
-                      color: Colors.white, height: 1.4, fontWeight: FontWeight.w600),
-                  decoration: InputDecoration(
-                    // fillColor: field1Color,
-                    focusedBorder: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                      borderSide: BorderSide.none,
-                    ),
-                    border: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                      borderSide: BorderSide.none,
-                    ),
-                    filled: true,
-                    suffixIcon: InkWell(
-                      onTap: () {
-                        addData();
-                      },
-                      child: const Icon(
-                        Icons.send_rounded,
-                        color: Colors.white70,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: TextField(
+                    controller: myControllerMsg,
+                    cursorColor: Colors.white,
+                    style: const TextStyle(
+                        color: Colors.white, height: 1.4, fontWeight: FontWeight.w600),
+                    decoration: InputDecoration(
+                      // fillColor: field1Color,
+                      focusedBorder: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                        borderSide: BorderSide.none,
                       ),
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                        borderSide: BorderSide.none,
+                      ),
+                      filled: true,
+                      suffixIcon: InkWell(
+                        onTap: () {
+                          addData();
+                        },
+                        child: const Icon(
+                          Icons.send_rounded,
+                          color: Colors.white70,
+                        ),
+                      ),
+                      hintText: 'Message...',
+                      hintStyle:
+                          const TextStyle(color: Colors.white60, fontWeight: FontWeight.w400),
                     ),
-                    hintText: 'Message...',
-                    hintStyle: const TextStyle(color: Colors.white60, fontWeight: FontWeight.w400),
                   ),
                 ),
               ),

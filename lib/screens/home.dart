@@ -66,7 +66,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         bottomNavigationBar: ConvexAppBar(
           items: const [
             TabItem<IconData>(icon: Icons.home, title: 'Home'),
-            TabItem<IconData>(icon: Icons.map, title: "Discovery"),
+            TabItem<IconData>(icon: Icons.search, title: "Discovery"),
             TabItem<IconData>(icon: Icons.publish, title: "Create"),
             TabItem<IconData>(icon: Icons.message, title: 'Message'),
             TabItem<IconData>(icon: Icons.people, title: 'Profile'),
