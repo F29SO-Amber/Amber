@@ -76,46 +76,61 @@ class _ArtistFooterState extends State<ArtistFooter> {
                 .orderBy('timestamp', descending: true)
                 .snapshots(),
             builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return GridView.builder(
-                  padding: const EdgeInsets.all(10).copyWith(bottom: 30),
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: (snapshot.data! as dynamic).docs.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    childAspectRatio: 1,
-                  ),
-                  itemBuilder: (context, index) {
-                    PostModel post =
-                        PostModel.fromDocument((snapshot.data! as dynamic).docs[index]);
-                    return GestureDetector(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image: NetworkImage(post.imageURL), fit: BoxFit.cover),
-                          shape: BoxShape.rectangle,
-                          borderRadius: BorderRadius.circular(11.0),
+              if (snapshot.hasData && snapshot.connectionState == ConnectionState.active) {
+                var list = (snapshot.data as QuerySnapshot).docs.toList();
+                return list.isEmpty
+                    ? const Padding(
+                        padding: EdgeInsets.only(top: 120.0),
+                        child: Center(child: Text('No art pieces to display!')),
+                      )
+                    : GridView.builder(
+                        padding: const EdgeInsets.all(10).copyWith(bottom: 30),
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: (snapshot.data! as dynamic).docs.length,
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                          childAspectRatio: 1,
                         ),
-                      ),
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                CurrentUserPosts(uid: widget.userUID, index: index),
-                          ),
-                        );
-                      },
-                    );
-                  },
-                );
+                        itemBuilder: (context, index) {
+                          PostModel post = PostModel.fromDocument(list[index]);
+                          return GestureDetector(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image: NetworkImage(post.imageURL), fit: BoxFit.cover),
+                                shape: BoxShape.rectangle,
+                                borderRadius: BorderRadius.circular(11.0),
+                              ),
+                            ),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      CurrentUserPosts(uid: widget.userUID, index: index),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      );
               } else {
-                return const Center(child: Text('No Posts'));
+                return Container();
               }
             },
+          ),
+        if (selectedTab == 1)
+          const Padding(
+            padding: EdgeInsets.only(top: 120.0),
+            child: Center(child: Text('Articles - To Be Implemented')),
+          ),
+        if (selectedTab == 2)
+          const Padding(
+            padding: EdgeInsets.only(top: 120.0),
+            child: Center(child: Text('Public Groups - To Be Implemented')),
           ),
         if (selectedTab == 3)
           StreamBuilder(
@@ -126,11 +141,9 @@ class _ArtistFooterState extends State<ArtistFooter> {
               if (snapshot.hasData && snapshot.connectionState == ConnectionState.active) {
                 var list = (snapshot.data as QuerySnapshot).docs.toList();
                 return list.isEmpty
-                    ? const Center(
-                        child: Padding(
-                          padding: EdgeInsets.only(top: 20.0),
-                          child: Text('No events'),
-                        ),
+                    ? const Padding(
+                        padding: EdgeInsets.only(top: 120.0),
+                        child: Center(child: Text('No communities to display!')),
                       )
                     : ListView.builder(
                         reverse: true,
@@ -139,8 +152,7 @@ class _ArtistFooterState extends State<ArtistFooter> {
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         itemBuilder: (BuildContext context, int index) {
-                          CommunityModel community =
-                              CommunityModel.fromDocument((snapshot.data! as dynamic).docs[index]);
+                          CommunityModel community = CommunityModel.fromDocument(list[index]);
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -156,10 +168,10 @@ class _ArtistFooterState extends State<ArtistFooter> {
                                   community.name,
                                   style: const TextStyle(fontWeight: FontWeight.w700),
                                 ),
-                                // subtitle: Text(
-                                //   '${community.timeCreated}',
-                                //   style: const TextStyle(fontSize: 12.0),
-                                // ),
+                                subtitle: Text(
+                                  community.description,
+                                  style: const TextStyle(fontSize: 12.0),
+                                ),
                               ),
                               const Divider(),
                             ],
