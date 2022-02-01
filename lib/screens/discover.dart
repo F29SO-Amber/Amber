@@ -160,8 +160,8 @@ class _DiscoverPageState extends State<DiscoverPage> {
                     ListTile(
                       contentPadding: const EdgeInsets.symmetric(horizontal: 0),
                       leading: Container(
-                        height: 35,
-                        width: 35,
+                        height: 40,
+                        width: 40,
                         decoration: const BoxDecoration(
                           image: DecorationImage(
                               image: AssetImage('assets/image.png'), fit: BoxFit.cover),
@@ -170,7 +170,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
                       ),
                       title: Text(
                         tag.name,
-                        style: const TextStyle(fontWeight: FontWeight.w700),
+                        // style: const TextStyle(fontWeight: FontWeight.w700),
                       ),
                       // onTap: () {
                       //   Navigator.push(
