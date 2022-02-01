@@ -66,13 +66,13 @@ class _GroupChatHomeScreenState extends State<GroupChatHomeScreen> {
             onTap: () => Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (_) => GroupChatRoom(
-                  groupName: groupList[index]['name'],
+                  groupName: groupList[index]['username'],
                   groupChatId: groupList[index]['id'],
                 ),
               ),
             ),
             leading: Icon(Icons.group),
-            title: Text(groupList[index]['name']),
+            title: Text(groupList[index]['username']),
           );
         },
       ),

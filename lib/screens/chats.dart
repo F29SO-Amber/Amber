@@ -60,7 +60,7 @@ class _ChatsPageState extends State<ChatsPage> {
 
     await _firestore
         .collection('users')
-        .where("email", isEqualTo: _search.text)
+        .where("username", isEqualTo: _search.text)
         .get()
         .then((value) {
       setState(() {

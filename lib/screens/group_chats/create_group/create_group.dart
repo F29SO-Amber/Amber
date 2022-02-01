@@ -37,7 +37,7 @@ class _CreateGroupState extends State<CreateGroup> {
 
       await _firestore
           .collection('users')
-          .doc('email')
+          .doc('name')
           .collection('groups')
           .doc(groupId)
           .set({
@@ -46,8 +46,8 @@ class _CreateGroupState extends State<CreateGroup> {
       });
     }
 
-    await _firestore.collection('groups').doc(groupId).collection('chats').add({
-      "message": "${_auth.currentUser!.displayName} Created This Group.",
+    await _firestore.collection('groups').doc(groupId).collection('messages').add({
+      "message": "You have been added to a new group!",
       "type": "notify",
     });
 
