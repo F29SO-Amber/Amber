@@ -115,7 +115,10 @@ class _UserPostState extends State<UserPost> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => MashUpPost(imageURL: widget.post.imageURL),
+                        builder: (context) => MashUpPost(
+                          imageURL: widget.post.imageURL,
+                          ownerUsername: widget.post.authorUserName,
+                        ),
                       ),
                     );
                   },

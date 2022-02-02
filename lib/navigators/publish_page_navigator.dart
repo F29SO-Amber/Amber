@@ -29,7 +29,7 @@ class _PublishPageNavigatorState extends State<PublishPageNavigator> {
               case '/':
                 return const Publish();
               case PublishImageScreen.id:
-                return const PublishImageScreen(mashUpLink: '');
+                return const PublishImageScreen(mashUpDetails: null);
               case PublishEventScreen.id:
                 return const PublishEventScreen();
               case PublishCommunityScreen.id:

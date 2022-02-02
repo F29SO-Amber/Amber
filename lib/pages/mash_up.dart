@@ -8,8 +8,10 @@ import 'package:amber/utilities/constants.dart';
 
 class MashUpPost extends StatefulWidget {
   final String imageURL;
+  final String ownerUsername;
 
-  const MashUpPost({Key? key, required this.imageURL}) : super(key: key);
+  const MashUpPost({Key? key, required this.imageURL, required this.ownerUsername})
+      : super(key: key);
 
   @override
   State<MashUpPost> createState() => _MashUpPostState();
@@ -28,7 +30,9 @@ class _MashUpPostState extends State<MashUpPost> {
       File(fullPath).writeAsBytesSync((await _imageKey.currentState?.exportImage())!);
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => PublishImageScreen(mashUpLink: fullPath)),
+        MaterialPageRoute(
+          builder: (context) => PublishImageScreen(mashUpDetails: [fullPath, widget.ownerUsername]),
+        ),
       );
     }
 

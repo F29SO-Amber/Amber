@@ -23,9 +23,9 @@ import 'package:uuid/uuid.dart';
 
 class PublishImageScreen extends StatefulWidget {
   static const id = '/publish_image';
-  final String mashUpLink;
+  final List? mashUpDetails;
 
-  const PublishImageScreen({Key? key, required this.mashUpLink}) : super(key: key);
+  const PublishImageScreen({Key? key, this.mashUpDetails}) : super(key: key);
 
   @override
   _PublishImageScreenState createState() => _PublishImageScreenState();
@@ -43,8 +43,8 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
   void initState() {
     super.initState();
     // getLocation();
-    if (widget.mashUpLink.isNotEmpty) {
-      file = File(widget.mashUpLink);
+    if (widget.mashUpDetails != null) {
+      file = File(widget.mashUpDetails![0]);
     }
   }
 
@@ -80,7 +80,7 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
                 EasyLoading.show(status: 'Uploading...');
                 await addUserPost();
                 EasyLoading.dismiss();
-                if (widget.mashUpLink.isNotEmpty) {
+                if (widget.mashUpDetails != null) {
                   Navigator.pop(context);
                 }
                 disposeUserPostChanges();
@@ -103,8 +103,8 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: (widget.mashUpLink.isNotEmpty)
-                              ? FileImage(File(widget.mashUpLink))
+                          image: (widget.mashUpDetails != null)
+                              ? FileImage(File(widget.mashUpDetails![0]))
                               : (file == null)
                                   ? const AssetImage('assets/taptoselect.png')
                                   : FileImage(file!) as ImageProvider,
@@ -282,7 +282,9 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
         String postId = const Uuid().v4();
         await compressImageFile(postId);
         map['id'] = postId;
-        map['location'] = locationController.text;
+        map['location'] = (widget.mashUpDetails != null)
+            ? 'Mashed-up from ${widget.mashUpDetails![1]}'
+            : locationController.text;
         map['imageURL'] = await uploadImage(postId);
         map['caption'] = captionController.text;
         map['likes'] = {};
