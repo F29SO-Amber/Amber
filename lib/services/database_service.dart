@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:amber/models/community.dart';
 import 'package:amber/models/post.dart';
 import 'package:amber/models/user.dart';
 import 'package:amber/pages/login.dart';
@@ -26,6 +27,10 @@ class DatabaseService {
 
   static Future<UserModel> getUser(String uid) async {
     return UserModel.fromDocument(await usersRef.doc(uid).get());
+  }
+
+  static Future<CommunityModel> getCommunity(String uid) async {
+    return CommunityModel.fromDocument(await communityRef.doc(uid).get());
   }
 
   static Future<String?> isUserValueUnique(String username) async {

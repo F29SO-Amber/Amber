@@ -4,6 +4,7 @@ class CommunityModel {
   final String name;
   final String ownerID;
   final String description;
+  final String ownerUsername;
   final Timestamp timeCreated;
   final String communityPhotoURL;
 
@@ -12,6 +13,7 @@ class CommunityModel {
     required this.ownerID,
     required this.description,
     required this.timeCreated,
+    required this.ownerUsername,
     required this.communityPhotoURL,
   });
 
@@ -21,6 +23,7 @@ class CommunityModel {
       ownerID: doc['ownerID'],
       description: doc['description'],
       timeCreated: doc['timeCreated'],
+      ownerUsername: doc['ownerUsername'],
       communityPhotoURL: doc['communityPhotoURL'],
     );
   }

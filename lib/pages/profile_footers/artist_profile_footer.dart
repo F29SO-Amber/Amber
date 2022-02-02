@@ -1,7 +1,9 @@
 import 'package:amber/models/community.dart';
 import 'package:amber/models/post.dart';
+import 'package:amber/pages/community.dart';
 import 'package:amber/pages/user_posts.dart';
 import 'package:amber/services/database_service.dart';
+import 'package:amber/widgets/custom_outlined_button.dart';
 import 'package:amber/widgets/post_type.dart';
 import 'package:amber/widgets/profile_picture.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -171,6 +173,19 @@ class _ArtistFooterState extends State<ArtistFooter> {
                                 subtitle: Text(
                                   community.description,
                                   style: const TextStyle(fontSize: 12.0),
+                                ),
+                                trailing: CustomOutlinedButton(
+                                  widthFactor: 0.1,
+                                  onPress: () {
+                                    Navigator.of(context, rootNavigator: true).push(
+                                      MaterialPageRoute(
+                                        builder: (context) => CommunityPage(
+                                          communityID: list[index].id,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  buttonText: 'Join',
                                 ),
                               ),
                               const Divider(),
