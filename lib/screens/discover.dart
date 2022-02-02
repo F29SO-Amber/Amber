@@ -41,7 +41,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
               padding: EdgeInsets.all(8.0),
               child: Icon(Icons.search),
             ),
-            onTap: () => Navigator.of(context, rootNavigator: true).pushReplacement(
+            onTap: () => Navigator.of(context, rootNavigator: true).push(
                               MaterialPageRoute(builder: (context) =>  Search()),
                             )
           ),
