@@ -1,6 +1,7 @@
 import 'package:amber/models/hashtag.dart';
 import 'package:amber/models/post.dart';
 import 'package:amber/pages/posts.dart';
+import 'package:amber/pages/search.dart';
 import 'package:amber/widgets/post_widget.dart';
 import 'package:amber/widgets/profile_picture.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -40,6 +41,9 @@ class _DiscoverPageState extends State<DiscoverPage> {
               padding: EdgeInsets.all(8.0),
               child: Icon(Icons.search),
             ),
+            onTap: () => Navigator.of(context, rootNavigator: true).pushReplacement(
+                              MaterialPageRoute(builder: (context) =>  Search()),
+                            )
           ),
         ],
       ),

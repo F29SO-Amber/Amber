@@ -9,7 +9,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Search extends StatefulWidget {
+
   @override
+  static const id = '/searchpage';
   _SearchState createState() => _SearchState();
 }
 
