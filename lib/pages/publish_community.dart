@@ -120,9 +120,10 @@ class _PublishCommunityScreenState extends State<PublishCommunityScreen> {
                                       children: [
                                         GestureDetector(
                                           onTap: () async {
-                                            XFile? xFile = await ImagePicker()
-                                                .pickImage(source: ImageSource.camera);
-                                            setState(() => file = File('${xFile?.path}'));
+                                            file = await ImageService.chooseFromCamera();
+                                            if (file != null) {
+                                              setState(() {});
+                                            }
                                             Navigator.pop(context);
                                           },
                                           child: const ProfilePicture(
@@ -138,9 +139,10 @@ class _PublishCommunityScreenState extends State<PublishCommunityScreen> {
                                       children: [
                                         GestureDetector(
                                           onTap: () async {
-                                            XFile? xFile = await ImagePicker()
-                                                .pickImage(source: ImageSource.gallery);
-                                            setState(() => file = File('${xFile?.path}'));
+                                            file = await ImageService.chooseFromGallery();
+                                            if (file != null) {
+                                              setState(() {});
+                                            }
                                             Navigator.pop(context);
                                           },
                                           child: const ProfilePicture(
