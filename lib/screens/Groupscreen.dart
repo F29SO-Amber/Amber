@@ -1,37 +1,34 @@
-import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:amber/screens/add_members.dart';
+import 'package:amber/screens/chat_room.dart';
 import 'package:flutter/material.dart';
-import 'package:amber/utilities/constants.dart';
 
 class GroupChatHomeScreen extends StatefulWidget {
-  // const GroupChatHomeScreen({Key? key}) : super(key: key);
+  const GroupChatHomeScreen({Key? key}) : super(key: key);
 
   @override
   _GroupChatHomeScreenState createState() => _GroupChatHomeScreenState();
 }
 
 class _GroupChatHomeScreenState extends State<GroupChatHomeScreen> {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  bool isLoading = false;
-  int _index = 0;
-
-  List groupList = [];
-
+  bool isLoading = true;
   @override
   void initState() {
     super.initState();
     getAvailableGroups();
   }
 
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  List groupList = [];
+
   void getAvailableGroups() async {
     String uid = _auth.currentUser!.uid;
-
     await _firestore
-        .collection('users')
+        .collection("users")
         .doc(uid)
-        .collection('groups')
+        .collection("groups")
         .get()
         .then((value) {
       setState(() {
@@ -44,10 +41,10 @@ class _GroupChatHomeScreenState extends State<GroupChatHomeScreen> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: CupertinoColors.systemPink,
+        backgroundColor: Colors.white,
         title: Text("Groups"),
       ),
       body: isLoading
@@ -58,25 +55,36 @@ class _GroupChatHomeScreenState extends State<GroupChatHomeScreen> {
         child: CircularProgressIndicator(),
       )
           : ListView.builder(
-        itemCount: groupList.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            onTap: () => Navigator.of(context).push,
-            leading: Icon(Icons.group),
-            title: Text(groupList[index]['name']),
-          );
-        },
-      ),
-
-      backgroundColor: CupertinoColors.systemGrey6,
+          itemCount: groupList.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+              onTap: () {
+                Navigator.push;
+              },
+              leading: Icon(
+                Icons.groups,
+                color: Colors.orange,
+              ),
+              title: Container(
+                child: Text(
+                  groupList[index]["name"],
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+            );
+          }),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () => Navigator.of(context).push,
+        backgroundColor: Colors.orange,
+        onPressed: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (_) => AddMembersInGroup()));
+        },
+        child: Icon(
+          Icons.edit,
+          color: Colors.black,
+        ),
         tooltip: "Create Group",
       ),
     );
   }
-}
-
-class _index {
 }
