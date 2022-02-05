@@ -67,27 +67,6 @@ class _ChatPageState extends State<ChatPage> {
           color: Color(0XFFFFF9C4), //background color
           child: Column(
             children: [
-              // SizedBox(
-              //   height: 20,
-              // ),
-              // Padding(
-              //   padding: EdgeInsets.only(
-              //       bottom: MediaQuery.of(context).size.height * 0,
-              //       top: MediaQuery.of(context).size.height * 0.005),
-              //   child: Align(
-              //     alignment: Alignment.topLeft,
-              //     child: Padding(
-              //       padding: EdgeInsets.only(
-              //           top: MediaQuery.of(context).size.width * 0.06,
-              //           left: MediaQuery.of(context).size.width * 0.06),
-              //       // child: Text("${widget.chatmanname}",
-              //       //     style: TextStyle(
-              //       //         color: Colors.white,
-              //       //         fontWeight: FontWeight.bold,
-              //       //         fontSize: 30)),
-              //     ),
-              //   ),
-              // ),
               Expanded(
                 child: StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance

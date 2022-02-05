@@ -35,9 +35,9 @@ class GroupChatRoom extends StatelessWidget {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.white,
         title: Text(groupName),
         actions: [
           IconButton(
@@ -114,7 +114,7 @@ class GroupChatRoom extends StatelessWidget {
                         },
                         icon: Icon(
                           Icons.send,
-                          color: Colors.white,
+                          color: Colors.black,
                         ))
                   ],
                 )),
@@ -125,7 +125,6 @@ class GroupChatRoom extends StatelessWidget {
   }
 
   Widget messageTile(Size size, Map<String, dynamic> chatMap) {
-    return Builder(builder: (_) {
       if (chatMap['type'] == "text") {
         return Container(
           width: size.width,
@@ -163,45 +162,8 @@ class GroupChatRoom extends StatelessWidget {
                 ],
               )),
         );
-      } else if (chatMap['type'] == "img") {
-        return Container(
-          width: size.width,
-          alignment: chatMap['sendBy'] == _auth.currentUser!.displayName
-              ? Alignment.centerRight
-              : Alignment.centerLeft,
-          child: Container(
-            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 14),
-            margin: EdgeInsets.symmetric(vertical: 5, horizontal: 8),
-            height: size.height / 2,
-            child: Image.network(
-              chatMap['message'],
-            ),
-          ),
-        );
-      } else if (chatMap['type'] == "notify") {
-        return Container(
-          width: size.width,
-          alignment: Alignment.center,
-          child: Container(
-            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-            margin: EdgeInsets.symmetric(vertical: 5, horizontal: 8),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: Colors.deepPurple,
-            ),
-            child: Text(
-              chatMap['message'],
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        );
-      } else {
+      }  else {
         return SizedBox();
-      }
-    });
+      };
   }
 }

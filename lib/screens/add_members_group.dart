@@ -1,4 +1,4 @@
-import 'package:amber/screens/home.dart';
+import 'package:amber/screens/Groupscreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +45,7 @@ class _AddMembersInGroupState extends State<AddMembersInGrouplater> {
         .doc(widget.groupId)
         .set({"name": widget.groupName, "id": widget.groupId});
     _search.clear();
-    Navigator.push(context, MaterialPageRoute(builder: (_) => HomePage()));
+    Navigator.push(context, MaterialPageRoute(builder: (_) => GroupChatHomeScreen()));
   }
 
   void onSearch() async {
