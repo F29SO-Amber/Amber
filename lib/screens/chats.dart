@@ -92,12 +92,7 @@ class _ChatsPageState extends State<ChatsPage> {
         actions: <Widget>[
           IconButton(
             onPressed: () {
-              Navigator.of(context, rootNavigator: true).push(
-                MaterialPageRoute(
-                  builder: (context) =>
-                      GroupChatHomeScreen(),
-                ),
-              );
+              Navigator.of(context, rootNavigator: true).push;
             },
             icon: const Icon(Icons.chat),
             iconSize: 35,
@@ -277,6 +272,16 @@ class _ChatsPageState extends State<ChatsPage> {
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.orange,
+          child: Icon(
+            Icons.group,
+            color: Colors.black,
+          ),
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (_) => GroupChatHomeScreen()));
+          }),
     );
   }
 }

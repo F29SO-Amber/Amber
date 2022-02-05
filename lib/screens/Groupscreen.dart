@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:amber/screens/group_chats/create_group/add_members.dart';
-import 'package:amber/screens/group_chats/chat_room.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:amber/utilities/constants.dart';
@@ -63,14 +61,7 @@ class _GroupChatHomeScreenState extends State<GroupChatHomeScreen> {
         itemCount: groupList.length,
         itemBuilder: (context, index) {
           return ListTile(
-            onTap: () => Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => GroupChatRoom(
-                  groupName: groupList[index]['name'],
-                  groupChatId: groupList[index]['id'],
-                ),
-              ),
-            ),
+            onTap: () => Navigator.of(context).push,
             leading: Icon(Icons.group),
             title: Text(groupList[index]['name']),
           );
@@ -80,11 +71,7 @@ class _GroupChatHomeScreenState extends State<GroupChatHomeScreen> {
       backgroundColor: CupertinoColors.systemGrey6,
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () => Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (_) => AddMembersInGroup(),
-          ),
-        ),
+        onPressed: () => Navigator.of(context).push,
         tooltip: "Create Group",
       ),
     );
