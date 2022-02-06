@@ -18,7 +18,7 @@ class Publish extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: kAppColor,
-        title: const Text('Publish', style: TextStyle(fontSize: 18, color: Colors.white)),
+        title: const Text('Create', style: TextStyle(fontSize: 18, color: Colors.white)),
       ),
       body: FutureBuilder(
         future: DatabaseService.getUser(AuthService.currentUser.uid),
@@ -34,7 +34,7 @@ class Publish extends StatelessWidget {
                 list = ['Image', 'Article', 'Event', 'Public Group'];
                 break;
               case 'Content Creator':
-                list = ['Image', 'Article', 'Public Group'];
+                list = ['Image', 'Article', 'Thumbnail', 'Public Group'];
                 break;
               case 'Student':
                 list = ['Image', 'Article', 'Public Group'];

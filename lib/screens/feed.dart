@@ -17,7 +17,6 @@ class _FeedPageState extends State<FeedPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: createRandomColor(),
       appBar: AppBar(
         backgroundColor: Colors.amber,
         title: const Text(kAppName, style: TextStyle(fontSize: 18, color: Colors.white)),
