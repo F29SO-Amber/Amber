@@ -17,12 +17,9 @@ class _FeedPageState extends State<FeedPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.amber,
-        title: const Text(kAppName, style: TextStyle(fontSize: 18, color: Colors.white)),
-      ),
+      appBar: kAppBar,
       body: StreamBuilder(
-        stream: DatabaseService.getUserFeed().asStream(),
+        stream: DatabaseService.getUserFeed().asStream(), // TODO
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             return ListView(children: snapshot.data as List<UserPost>);

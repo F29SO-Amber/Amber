@@ -33,4 +33,19 @@ class UserModel {
       profilePhotoURL: doc['profilePhotoURL'],
     );
   }
+
+  List<String> getUserPostTypes() {
+    switch (accountType) {
+      case 'Artist':
+        return ['Image', 'Article', 'Community', 'Public Group'];
+      case 'Brand Marketer':
+        return ['Image', 'Article', 'Event', 'Public Group'];
+      case 'Content Creator':
+        return ['Image', 'Article', 'Thumbnail', 'Public Group'];
+      case 'Student':
+        return ['Image', 'Article', 'Public Group'];
+      default:
+        return ['Image'];
+    }
+  }
 }

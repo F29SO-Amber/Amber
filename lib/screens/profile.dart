@@ -1,28 +1,23 @@
-import 'package:amber/pages/chat.dart';
-import 'package:amber/pages/profile_footers/artist_profile_footer.dart';
-import 'package:amber/pages/profile_footers/brand_marketer_profile_footer.dart';
-import 'package:amber/pages/profile_footers/content_creator_profile_footer.dart';
-import 'package:amber/pages/profile_footers/student_profile_footer.dart';
-import 'package:amber/pages/user_list.dart';
-import 'package:amber/pages/user_posts.dart';
-import 'package:amber/pages/profile_footers/user_profile_footer.dart';
-import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import 'package:amber/pages/chat.dart';
 import 'package:amber/models/user.dart';
-import 'package:amber/models/post.dart';
 import 'package:amber/pages/login.dart';
-import 'package:amber/widgets/post_type.dart';
-import 'package:amber/utilities/constants.dart';
+import 'package:amber/pages/user_list.dart';
 import 'package:amber/pages/edit_profile.dart';
+import 'package:amber/utilities/constants.dart';
 import 'package:amber/services/auth_service.dart';
 import 'package:amber/widgets/profile_picture.dart';
 import 'package:amber/widgets/number_and_label.dart';
 import 'package:amber/services/database_service.dart';
 import 'package:amber/widgets/custom_outlined_button.dart';
 import 'package:amber/widgets/custom_elevated_button.dart';
+import 'package:amber/pages/profile_footers/user_profile_footer.dart';
+import 'package:amber/pages/profile_footers/artist_profile_footer.dart';
+import 'package:amber/pages/profile_footers/student_profile_footer.dart';
+import 'package:amber/pages/profile_footers/brand_marketer_profile_footer.dart';
+import 'package:amber/pages/profile_footers/content_creator_profile_footer.dart';
 
 // am2024@hw.ac.uk
 

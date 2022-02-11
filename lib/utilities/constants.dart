@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_login/flutter_login.dart';
 import 'dart:math' as math;
-
+import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_login/flutter_login.dart';
 
 const String kAppName = 'ᗩмвєя';
 const Color kAppColor = Colors.amber;
@@ -16,15 +15,19 @@ final LoginTheme kLoginTheme = LoginTheme(
     color: Colors.white,
     elevation: 5,
     margin: const EdgeInsets.only(top: 15),
-    shape: ContinuousRectangleBorder(
-      borderRadius: BorderRadius.circular(100.0),
-    ),
+    shape: ContinuousRectangleBorder(borderRadius: BorderRadius.circular(100.0)),
   ),
   inputTheme: InputDecorationTheme(
     filled: true,
     fillColor: const Color(0xffFFBF00).withOpacity(.2),
     contentPadding: EdgeInsets.zero,
   ),
+);
+
+final kAppBar = AppBar(
+  backgroundColor: kAppColor,
+  title: const Text(kAppName),
+  titleTextStyle: const TextStyle(color: Colors.white, letterSpacing: 3, fontSize: 25.0),
 );
 
 MaterialColor createMaterialColor(Color color) {

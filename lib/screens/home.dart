@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 
 import 'package:amber/navigators/feed_page_navigator.dart';
+import 'package:amber/navigators/test_page_navigator.dart';
 import 'package:amber/navigators/chats_page_navigator.dart';
 import 'package:amber/navigators/publish_page_navigator.dart';
 import 'package:amber/navigators/profile_page_navigator.dart';
@@ -24,13 +25,14 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 5, vsync: this);
+    _tabController = TabController(length: 6, vsync: this);
   }
 
   final List<GlobalKey<NavigatorState>> _navigatorKeys = [
     homePageNavigatorKey,
     discoverNavigatorKey,
-    postNavigatorKey,
+    createNavigatorKey,
+    testPageNavigatorKey,
     chatsNavigatorKey,
     profileNavigatorKey,
   ];
@@ -57,7 +59,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             children: const <Widget>[
               FeedPageNavigator(),
               DiscoverPageNavigator(),
-              PublishPageNavigator(),
+              CreatePageNavigator(),
+              TestPageNavigator(),
               ChatsPageNavigator(),
               ProfilePageNavigator(),
             ],
@@ -65,11 +68,12 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         ),
         bottomNavigationBar: ConvexAppBar(
           items: const [
-            TabItem<IconData>(icon: Icons.home, title: 'Home'),
-            TabItem<IconData>(icon: Icons.search, title: "Discovery"),
-            TabItem<IconData>(icon: Icons.publish, title: "Create"),
-            TabItem<IconData>(icon: Icons.message, title: 'Message'),
-            TabItem<IconData>(icon: Icons.people, title: 'Profile'),
+            TabItem<IconData>(icon: Icons.home),
+            TabItem<IconData>(icon: Icons.search),
+            TabItem<IconData>(icon: Icons.publish),
+            TabItem<IconData>(icon: Icons.admin_panel_settings_rounded),
+            TabItem<IconData>(icon: Icons.message),
+            TabItem<IconData>(icon: Icons.people),
           ],
           style: TabStyle.react,
           initialActiveIndex: _selectedIndex,

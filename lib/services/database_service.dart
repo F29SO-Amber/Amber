@@ -23,7 +23,6 @@ class DatabaseService {
   static final followersRef = _firestore.collection('followers');
   static final followingRef = _firestore.collection('following');
   static final communityRef = _firestore.collection('community');
-  static late String usernameresult;
 
   static Future<UserModel> getUser(String uid) async {
     return UserModel.fromDocument(await usersRef.doc(uid).get());
@@ -31,13 +30,6 @@ class DatabaseService {
 
   static Future<CommunityModel> getCommunity(String uid) async {
     return CommunityModel.fromDocument(await communityRef.doc(uid).get());
-  }
-
-  static Future<String?> isUserValueUnique(String username) async {
-    QuerySnapshot<Map<String, dynamic>> snapshot =
-        await _firestore.collection('users').where('username', isEqualTo: username).get();
-
-    LoginScreen.temp = snapshot.docs.isEmpty ? null : 'Nope';
   }
 
   static addUserData(SignupData data) {

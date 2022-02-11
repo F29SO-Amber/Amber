@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:device_preview/device_preview.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import 'package:amber/pages/login.dart';
@@ -11,13 +10,7 @@ import 'package:amber/utilities/constants.dart';
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(
-    // DevicePreview(
-    //   enabled: !kReleaseMode,
-    //   builder: (context) => const MyApp(),
-    // ),
-    const MyApp(),
-  );
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -28,12 +21,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  @override
-  void initState() {
-    super.initState();
-    // Authentication.easySignIn();
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -46,13 +33,6 @@ class _MyAppState extends State<MyApp> {
         ).copyWith(secondary: Colors.orange),
         textSelectionTheme: const TextSelectionThemeData(cursorColor: Colors.orange),
       ),
-      // theme: ThemeData(
-      //   brightness: Brightness.light,
-      //   primaryColor: Colors.amber,
-      // ),
-      // darkTheme: ThemeData(
-      //   brightness: Brightness.dark,
-      // ),
       initialRoute: LoginScreen.id,
       routes: {
         LoginScreen.id: (context) => const LoginScreen(),

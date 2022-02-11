@@ -1,48 +1,28 @@
-import 'package:amber/models/user.dart';
-import 'package:amber/pages/publish_community.dart';
-import 'package:amber/pages/publish_event.dart';
-import 'package:amber/pages/publish_image.dart';
-import 'package:amber/services/auth_service.dart';
-import 'package:amber/services/database_service.dart';
-import 'package:amber/utilities/constants.dart';
-import 'package:amber/widgets/profile_picture.dart';
 import 'package:flutter/material.dart';
 
-class Publish extends StatelessWidget {
-  static const id = '/publish';
+import 'package:amber/models/user.dart';
+import 'package:amber/pages/publish_event.dart';
+import 'package:amber/pages/publish_image.dart';
+import 'package:amber/utilities/constants.dart';
+import 'package:amber/services/auth_service.dart';
+import 'package:amber/widgets/profile_picture.dart';
+import 'package:amber/pages/publish_community.dart';
+import 'package:amber/services/database_service.dart';
 
-  const Publish({Key? key}) : super(key: key);
+class Create extends StatelessWidget {
+  static const id = '/create';
+
+  const Create({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: kAppColor,
-        title: const Text('Create', style: TextStyle(fontSize: 18, color: Colors.white)),
-      ),
+      appBar: kAppBar,
       body: FutureBuilder(
         future: DatabaseService.getUser(AuthService.currentUser.uid),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            var user = snapshot.data as UserModel;
-            List<String> list = [];
-            switch (user.accountType) {
-              case 'Artist':
-                list = ['Image', 'Article', 'Community', 'Public Group'];
-                break;
-              case 'Brand Marketer':
-                list = ['Image', 'Article', 'Event', 'Public Group'];
-                break;
-              case 'Content Creator':
-                list = ['Image', 'Article', 'Thumbnail', 'Public Group'];
-                break;
-              case 'Student':
-                list = ['Image', 'Article', 'Public Group'];
-                break;
-              default:
-                list = ['Image'];
-                break;
-            }
+            List<String> list = (snapshot.data as UserModel).getUserPostTypes();
             return GridView.builder(
               padding: const EdgeInsets.all(10).copyWith(top: 40),
               scrollDirection: Axis.vertical,

@@ -1,19 +1,17 @@
-import 'package:amber/models/hashtag.dart';
-import 'package:amber/models/post.dart';
-import 'package:amber/pages/posts.dart';
-import 'package:amber/pages/search.dart';
-import 'package:amber/widgets/post_widget.dart';
-import 'package:amber/widgets/profile_picture.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:card_swiper/card_swiper.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:amber/models/user.dart';
+import 'package:amber/models/post.dart';
+import 'package:amber/pages/search.dart';
+import 'package:amber/models/hashtag.dart';
 import 'package:amber/screens/profile.dart';
-import 'package:amber/widgets/user_card.dart';
+import 'package:amber/widgets/post_widget.dart';
 import 'package:amber/utilities/constants.dart';
+import 'package:amber/widgets/profile_picture.dart';
 import 'package:amber/services/database_service.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class DiscoverPage extends StatefulWidget {
   static const id = '/discover';
@@ -33,17 +31,16 @@ class _DiscoverPageState extends State<DiscoverPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.amber, //sets the color to amber
-        title: const Text(kAppName), //Title of the app
+        backgroundColor: Colors.amber,
+        title: const Text(kAppName),
+        titleTextStyle: const TextStyle(color: Colors.white, letterSpacing: 3, fontSize: 25.0),
         actions: [
-          GestureDetector(
-            child: const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Icon(Icons.search),
+          IconButton(
+            icon: const Icon(Icons.search),
+            color: Colors.white,
+            onPressed: () => Navigator.of(context, rootNavigator: true).push(
+              MaterialPageRoute(builder: (context) => Search()),
             ),
-            onTap: () => Navigator.of(context, rootNavigator: true).push(
-                              MaterialPageRoute(builder: (context) =>  Search()),
-                            )
           ),
         ],
       ),

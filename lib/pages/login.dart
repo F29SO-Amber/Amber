@@ -7,22 +7,16 @@ import 'package:amber/screens/home.dart';
 import 'package:amber/utilities/constants.dart';
 import 'package:amber/services/auth_service.dart';
 
-/*
- Login Page allows user to login into their existing accounts or have an option to create a new account.
-*/
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
-
   static const id = '/auth';
-  static String? temp;
+
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  String usernameTest = '';
-
   @override
   Widget build(BuildContext context) {
     return FlutterLogin(
@@ -30,25 +24,24 @@ class _LoginScreenState extends State<LoginScreen> {
       logo: const AssetImage('assets/logo.png'),
       loginAfterSignUp: false,
       theme: kLoginTheme,
-      onLogin: AuthService.authUser, //Authenticate login upon login
-      onSignup: AuthService.signupUser, //Sign up a new user
-      onRecoverPassword: AuthService.recoverPassword, //Forgot Password authentication
+      onLogin: AuthService.authUser,
+      onSignup: AuthService.signupUser,
+      savedEmail: 'am2024@hw.ac.uk',
+      savedPassword: '1234567',
+      onRecoverPassword: AuthService.recoverPassword,
       messages: LoginMessages(signUpSuccess: "Sign up successful!"),
       additionalSignupFields: [
         const UserFormField(
-          //Username Field
           keyName: 'username',
           displayName: 'Username',
           icon: Icon(FontAwesomeIcons.at),
         ),
         const UserFormField(
-          //Name field (For signup)
           keyName: 'name',
           displayName: 'Name',
           icon: Icon(FontAwesomeIcons.solidUser),
         ),
         UserFormField(
-          //Account type field (For signup)
           keyName: 'account_type',
           displayName: 'Account Type',
           icon: const Icon(FontAwesomeIcons.artstation),
@@ -61,7 +54,6 @@ class _LoginScreenState extends State<LoginScreen> {
           },
         ),
         UserFormField(
-          //Date of Birth field (For signup)
           keyName: 'dob',
           displayName: 'Date Of Birth',
           icon: const Icon(FontAwesomeIcons.calendarAlt),
@@ -76,12 +68,9 @@ class _LoginScreenState extends State<LoginScreen> {
           },
         ),
       ],
-      //Submit button function
       onSubmitAnimationCompleted: () {
         Navigator.pushReplacementNamed(context, HomePage.id);
       },
-
-      //Function validating user's email
       userValidator: (value) {
         if (!EmailValidator.validate(value!)) {
           return "Enter a valid Email";

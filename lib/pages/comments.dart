@@ -34,10 +34,7 @@ class _CommentsPageState extends State<CommentsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.amber,
-        title: const Text('Comments', style: TextStyle(fontSize: 18, color: Colors.white)),
-      ),
+      appBar: kAppBar,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -53,9 +50,7 @@ class _CommentsPageState extends State<CommentsPage> {
                 return Expanded(
                   child: Container(
                     child: list.isEmpty
-                        ? const Center(
-                            child: Text('Be the first to comment!'),
-                          )
+                        ? const Center(child: Text('Be the first to comment!'))
                         : SingleChildScrollView(
                             child: ListView.builder(
                               reverse: true,
@@ -120,8 +115,6 @@ class _CommentsPageState extends State<CommentsPage> {
                   onTap: () async {
                     if (commentController.text.trim().isNotEmpty) {
                       await DatabaseService.addUserComment(commentController.text, widget.postID);
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(const SnackBar(content: Text("Comment Posted!")));
                       commentController.text = '';
                       setState(() {});
                     }
