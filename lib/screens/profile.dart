@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:amber/pages/chat.dart';
 import 'package:amber/models/user.dart';
 import 'package:amber/pages/login.dart';
+import 'package:amber/pages/settings.dart';
 import 'package:amber/pages/user_list.dart';
 import 'package:amber/pages/edit_profile.dart';
 import 'package:amber/utilities/constants.dart';
@@ -118,12 +119,13 @@ class _ProfilePageState extends State<ProfilePage> {
                   padding: const EdgeInsets.only(right: 10.0),
                   child: (widget.userUID == AuthService.currentUser.uid)
                       ? GestureDetector(
-                          child: const Icon(Icons.logout_outlined, color: Colors.white),
+                          child: const Icon(Icons.settings, color: Colors.white),
                           onTap: () {
-                            AuthService.signOutUser();
-                            Navigator.of(context, rootNavigator: true).pushReplacement(
-                              MaterialPageRoute(builder: (context) => const LoginScreen()),
-                            );
+                            // AuthService.signOutUser();
+                            // Navigator.of(context, rootNavigator: true).pushReplacement(
+                            //   MaterialPageRoute(builder: (context) => const LoginScreen()),
+                            // );
+                            Navigator.pushNamed(context, SettingsPage.id);
                           },
                         )
                       : Container(),
