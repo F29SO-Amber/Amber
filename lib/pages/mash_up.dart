@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:amber/mash-up/collage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_painter/image_painter.dart';
 import 'package:path_provider/path_provider.dart';
@@ -6,11 +7,14 @@ import 'package:path_provider/path_provider.dart';
 import 'package:amber/pages/publish_image.dart';
 import 'package:amber/utilities/constants.dart';
 
+import 'collage.dart';
+
 class MashUpPost extends StatefulWidget {
   final String imageURL;
   final String ownerUsername;
 
-  const MashUpPost({Key? key, required this.imageURL, required this.ownerUsername})
+  const MashUpPost(
+      {Key? key, required this.imageURL, required this.ownerUsername})
       : super(key: key);
 
   @override
@@ -26,12 +30,15 @@ class _MashUpPostState extends State<MashUpPost> {
     void saveAndProceed() async {
       final directory = (await getApplicationDocumentsDirectory()).path;
       await Directory('$directory/sample').create(recursive: true);
-      final fullPath = '$directory/sample/${DateTime.now().millisecondsSinceEpoch}.png';
-      File(fullPath).writeAsBytesSync((await _imageKey.currentState?.exportImage())!);
+      final fullPath =
+          '$directory/sample/${DateTime.now().millisecondsSinceEpoch}.png';
+      File(fullPath)
+          .writeAsBytesSync((await _imageKey.currentState?.exportImage())!);
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => PublishImageScreen(mashUpDetails: [fullPath, widget.ownerUsername]),
+          builder: (context) => PublishImageScreen(
+              mashUpDetails: [fullPath, widget.ownerUsername]),
         ),
       );
     }
@@ -40,8 +47,16 @@ class _MashUpPostState extends State<MashUpPost> {
       key: _key,
       appBar: AppBar(
         backgroundColor: kAppColor,
-        title: const Text(kAppName, style: TextStyle(fontSize: 18, color: Colors.white)),
-        actions: [IconButton(icon: const Icon(Icons.done), onPressed: saveAndProceed)],
+        title: const Text(kAppName,
+            style: TextStyle(fontSize: 18, color: Colors.white)),
+        actions: [
+          IconButton(
+              icon: const Icon(Icons.app_registration_sharp),
+              onPressed: () => Navigator.of(context, rootNavigator: true).push(
+                    MaterialPageRoute(builder: (context) => CollagePage()),
+                  )),
+          IconButton(icon: const Icon(Icons.done), onPressed: saveAndProceed),
+        ],
       ),
       body: ImagePainter.network(
         widget.imageURL,
