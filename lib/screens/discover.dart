@@ -120,7 +120,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
                                 children: [
                                   Expanded(
                                     child: GestureDetector(
-                                      child: ProfilePicture(
+                                      child: CustomImage(
                                         side: 135,
                                         image: NetworkImage(user.profilePhotoURL),
                                       ),

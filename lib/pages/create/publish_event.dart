@@ -21,26 +21,30 @@ import 'package:amber/services/database_service.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
-class PublishCommunityScreen extends StatefulWidget {
-  static const id = '/publish_community';
+class PublishEventScreen extends StatefulWidget {
+  static const id = '/publish_event';
 
-  const PublishCommunityScreen({Key? key}) : super(key: key);
+  const PublishEventScreen({Key? key}) : super(key: key);
 
   @override
-  _PublishCommunityScreenState createState() => _PublishCommunityScreenState();
+  _PublishEventScreenState createState() => _PublishEventScreenState();
 }
 
-class _PublishCommunityScreenState extends State<PublishCommunityScreen> {
+class _PublishEventScreenState extends State<PublishEventScreen> {
   File? file;
   bool uploadButtonPresent = true;
   final _formKey = GlobalKey<FormState>();
-  final nameController = TextEditingController();
+  final timeController = TextEditingController();
+  final venueController = TextEditingController();
+  final titleController = TextEditingController();
   final descriptionController = TextEditingController();
 
   @override
   void dispose() {
     super.dispose();
-    nameController.dispose();
+    timeController.dispose();
+    titleController.dispose();
+    venueController.dispose();
     descriptionController.dispose();
   }
 
@@ -50,7 +54,7 @@ class _PublishCommunityScreenState extends State<PublishCommunityScreen> {
       appBar: AppBar(
         backgroundColor: kAppColor,
         title: const Text(
-          'Create a Community',
+          'Create an Event',
           style: TextStyle(fontSize: 18, color: Colors.white),
         ),
         actions: [
@@ -66,7 +70,7 @@ class _PublishCommunityScreenState extends State<PublishCommunityScreen> {
               color: Colors.white,
               onPressed: () async {
                 setState(() => uploadButtonPresent = false);
-                EasyLoading.show(status: 'Creating Community...');
+                EasyLoading.show(status: 'Adding Event...');
                 await addUserPost();
                 EasyLoading.dismiss();
                 disposeUserEventChanges();
@@ -126,7 +130,7 @@ class _PublishCommunityScreenState extends State<PublishCommunityScreen> {
                                             }
                                             Navigator.pop(context);
                                           },
-                                          child: const ProfilePicture(
+                                          child: const CustomImage(
                                               side: 100, path: 'assets/camera.png'),
                                         ),
                                         Padding(
@@ -145,7 +149,7 @@ class _PublishCommunityScreenState extends State<PublishCommunityScreen> {
                                             }
                                             Navigator.pop(context);
                                           },
-                                          child: const ProfilePicture(
+                                          child: const CustomImage(
                                               side: 100, path: 'assets/image.png'),
                                         ),
                                         Padding(
@@ -168,12 +172,12 @@ class _PublishCommunityScreenState extends State<PublishCommunityScreen> {
                     width: MediaQuery.of(context).size.width,
                     padding: const EdgeInsets.only(left: 15),
                     child: TextFormField(
-                      controller: nameController,
+                      controller: titleController,
                       keyboardType: TextInputType.text,
                       decoration: const InputDecoration(
-                        hintText: "Name your community...",
+                        hintText: "What's your event called...",
                         border: InputBorder.none,
-                        prefixIcon: Icon(FontAwesomeIcons.userFriends, color: kAppColor, size: 23),
+                        prefixIcon: Icon(Icons.text_fields, color: kAppColor, size: 30),
                       ),
                     ),
                   ),
@@ -185,9 +189,37 @@ class _PublishCommunityScreenState extends State<PublishCommunityScreen> {
                       controller: descriptionController,
                       keyboardType: TextInputType.text,
                       decoration: const InputDecoration(
-                        hintText: "Describe your community...",
+                        hintText: "Describe the event...",
                         border: InputBorder.none,
-                        prefixIcon: Icon(FontAwesomeIcons.pen, color: kAppColor, size: 23),
+                        prefixIcon: Icon(Icons.create_sharp, color: kAppColor, size: 30),
+                      ),
+                    ),
+                  ),
+                  const Divider(),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    padding: const EdgeInsets.only(left: 15),
+                    child: TextFormField(
+                      controller: timeController,
+                      keyboardType: TextInputType.text,
+                      decoration: const InputDecoration(
+                        hintText: "When is it taking place...",
+                        border: InputBorder.none,
+                        prefixIcon: Icon(Icons.access_time_sharp, color: kAppColor, size: 30),
+                      ),
+                    ),
+                  ),
+                  const Divider(),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    padding: const EdgeInsets.only(left: 15),
+                    child: TextFormField(
+                      controller: venueController,
+                      keyboardType: TextInputType.text,
+                      decoration: const InputDecoration(
+                        hintText: "Where is it taking place...",
+                        border: InputBorder.none,
+                        prefixIcon: Icon(Icons.pin_drop, color: kAppColor, size: 30),
                       ),
                     ),
                   ),
@@ -204,7 +236,9 @@ class _PublishCommunityScreenState extends State<PublishCommunityScreen> {
   void disposeUserEventChanges() {
     setState(() {
       file = null;
-      nameController.text = '';
+      timeController.text = '';
+      venueController.text = '';
+      titleController.text = '';
       uploadButtonPresent = true;
       descriptionController.text = '';
     });
@@ -221,21 +255,21 @@ class _PublishCommunityScreenState extends State<PublishCommunityScreen> {
     if (_formKey.currentState!.validate()) {
       Map<String, Object?> map = {};
       if (file != null) {
-        String communityID = const Uuid().v4();
-        await compressImageFile(communityID);
-        map['name'] = nameController.text;
-        map['timeCreated'] = Timestamp.now();
-        map['ownerID'] = AuthService.currentUser.uid;
+        String eventID = const Uuid().v4();
+        await compressImageFile(eventID);
+        map['userID'] = AuthService.currentUser.uid;
+        map['title'] = titleController.text;
         map['description'] = descriptionController.text;
-        map['communityPhotoURL'] = await uploadImage(communityID);
-        await DatabaseService.communityRef.doc(communityID).set(map);
+        map['startingTime'] = timeController.text;
+        map['venue'] = venueController.text;
+        map['eventPhotoURL'] = await uploadImage(eventID);
+        await DatabaseService.eventsRef.doc(eventID).set(map);
       }
     }
   }
 
   Future<String> uploadImage(String id) async {
-    TaskSnapshot ts =
-        await FirebaseStorage.instance.ref().child('community').child(id).putFile(file!);
+    TaskSnapshot ts = await FirebaseStorage.instance.ref().child('events').child(id).putFile(file!);
     return ts.ref.getDownloadURL();
   }
 }

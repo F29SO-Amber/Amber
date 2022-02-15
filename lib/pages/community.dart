@@ -46,8 +46,7 @@ class _CommunityPageState extends State<CommunityPage> {
                   const SizedBox(height: 5),
                   Padding(
                     padding: const EdgeInsets.all(20.0),
-                    child:
-                        ProfilePicture(side: 100, image: NetworkImage(community.communityPhotoURL)),
+                    child: CustomImage(side: 100, image: NetworkImage(community.communityPhotoURL)),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 3.0),

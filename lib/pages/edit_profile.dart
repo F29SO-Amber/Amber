@@ -71,8 +71,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 20.0),
                   child: (file == null)
-                      ? ProfilePicture(side: 100, image: NetworkImage(widget.user.profilePhotoURL))
-                      : ProfilePicture(side: 100, image: FileImage(file!)),
+                      ? CustomImage(side: 100, image: NetworkImage(widget.user.profilePhotoURL))
+                      : CustomImage(side: 100, image: FileImage(file!)),
                 ),
               ),
             ),

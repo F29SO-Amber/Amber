@@ -142,7 +142,7 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
                                             }
                                             Navigator.pop(context);
                                           },
-                                          child: const ProfilePicture(
+                                          child: const CustomImage(
                                               side: 100, path: 'assets/camera.png'),
                                         ),
                                         Padding(
@@ -161,7 +161,7 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
                                             }
                                             Navigator.pop(context);
                                           },
-                                          child: const ProfilePicture(
+                                          child: const CustomImage(
                                               side: 100, path: 'assets/image.png'),
                                         ),
                                         Padding(

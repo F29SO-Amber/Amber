@@ -1,8 +1,9 @@
-import 'package:amber/pages/publish_community.dart';
-import 'package:amber/pages/publish_event.dart';
+import 'package:amber/pages/create/publish_article.dart';
+import 'package:amber/pages/create/publish_community.dart';
+import 'package:amber/pages/create/publish_event.dart';
 import 'package:amber/screens/create.dart';
 import 'package:flutter/material.dart';
-import 'package:amber/pages/publish_image.dart';
+import 'package:amber/pages/create/publish_image.dart';
 import 'package:amber/services/auth_service.dart';
 
 //Creating mutable state for the Publish Page Navigator
@@ -34,6 +35,8 @@ class _CreatePageNavigatorState extends State<CreatePageNavigator> {
                 return const PublishEventScreen();
               case PublishCommunityScreen.id:
                 return const PublishCommunityScreen();
+              case PublishArticleScreen.id:
+                return const PublishArticleScreen();
               default:
                 return const Create();
             }

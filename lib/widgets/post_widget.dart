@@ -47,7 +47,7 @@ class _UserPostState extends State<UserPost> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: ProfilePicture(
+                    child: CustomImage(
                         side: 32, image: NetworkImage(widget.post.authorProfilePhotoURL)),
                   ),
                   Column(

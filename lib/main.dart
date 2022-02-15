@@ -1,4 +1,6 @@
+import 'package:amber/pages/mash_up_latest.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
@@ -22,6 +24,26 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   @override
+  void initState() {
+    super.initState();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+  }
+
+  @override
+  void dispose() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       builder: EasyLoading.init(),
@@ -33,10 +55,11 @@ class _MyAppState extends State<MyApp> {
         ).copyWith(secondary: Colors.orange),
         textSelectionTheme: const TextSelectionThemeData(cursorColor: Colors.orange),
       ),
-      initialRoute: LoginScreen.id,
+      initialRoute: MashUpScreen.id,
       routes: {
         LoginScreen.id: (context) => const LoginScreen(),
-        HomePage.id: (context) => const HomePage()
+        HomePage.id: (context) => const HomePage(),
+        MashUpScreen.id: (context) => const MashUpScreen(),
       },
     );
   }

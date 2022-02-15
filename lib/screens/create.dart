@@ -1,12 +1,13 @@
+import 'package:amber/pages/create/publish_article.dart';
 import 'package:flutter/material.dart';
 
 import 'package:amber/models/user.dart';
-import 'package:amber/pages/publish_event.dart';
-import 'package:amber/pages/publish_image.dart';
+import 'package:amber/pages/create/publish_event.dart';
+import 'package:amber/pages/create/publish_image.dart';
 import 'package:amber/utilities/constants.dart';
 import 'package:amber/services/auth_service.dart';
 import 'package:amber/widgets/profile_picture.dart';
-import 'package:amber/pages/publish_community.dart';
+import 'package:amber/pages/create/publish_community.dart';
 import 'package:amber/services/database_service.dart';
 
 class Create extends StatelessWidget {
@@ -50,9 +51,14 @@ class Create extends StatelessWidget {
                           case 'Community':
                             Navigator.pushNamed(context, PublishCommunityScreen.id);
                             break;
+                          case 'Article':
+                            Navigator.of(context, rootNavigator: true).pushReplacement(
+                              MaterialPageRoute(builder: (context) => const PublishArticleScreen()),
+                            );
+                            break;
                         }
                       },
-                      child: ProfilePicture(
+                      child: CustomImage(
                         side: MediaQuery.of(context).size.width * 0.3,
                         path: 'assets/${list[index].toLowerCase()}.png',
                       ),

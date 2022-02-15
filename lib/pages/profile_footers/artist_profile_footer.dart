@@ -161,7 +161,7 @@ class _ArtistFooterState extends State<ArtistFooter> {
                             children: [
                               ListTile(
                                 contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-                                leading: ProfilePicture(
+                                leading: CustomImage(
                                   side: 100.0,
                                   image: NetworkImage(community.communityPhotoURL),
                                   borderRadius: 10,

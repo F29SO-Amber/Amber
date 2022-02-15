@@ -155,7 +155,7 @@ class _BrandMarketerFooterState extends State<BrandMarketerFooter> {
                             children: [
                               ListTile(
                                 contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-                                leading: ProfilePicture(
+                                leading: CustomImage(
                                   side: 100.0,
                                   image: NetworkImage(event.eventPhotoURL),
                                   borderRadius: 10,

@@ -21,7 +21,6 @@ class _SettingsPageState extends State<SettingsPage> {
       backgroundColor: Colors.amber.shade50,
       body: ListView(
         padding: const EdgeInsets.all(20),
-        shrinkWrap: true,
         children: [
           const SizedBox(
             height: 20,
@@ -42,7 +41,7 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             child: Column(children: [
               SettingItem(
-                title: "Saved Messages",
+                title: "Saved Posts",
                 leadingIcon: Icons.bookmark_outline,
                 bgIconColor: Colors.blue,
                 onTap: () {
@@ -57,8 +56,8 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ),
               SettingItem(
-                title: "Recent Calls",
-                leadingIcon: Icons.call_outlined,
+                title: "Liked Posts",
+                leadingIcon: Icons.favorite_outline,
                 bgIconColor: Colors.green,
                 onTap: () {},
               ),
@@ -68,25 +67,6 @@ class _SettingsPageState extends State<SettingsPage> {
                   height: 0,
                   color: Colors.grey.withOpacity(0.8),
                 ),
-              ),
-              SettingItem(
-                title: "Devices",
-                leadingIcon: Icons.devices,
-                bgIconColor: Colors.orange,
-                onTap: () {},
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 45),
-                child: Divider(
-                  height: 0,
-                  color: Colors.grey.withOpacity(0.8),
-                ),
-              ),
-              SettingItem(
-                title: "Chat Folders",
-                leadingIcon: Icons.folder_open_outlined,
-                bgIconColor: Colors.lightBlue.shade300,
-                onTap: () {},
               ),
             ]),
           ),
@@ -133,19 +113,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ),
               SettingItem(
-                  title: "Data and Storage",
-                  leadingIcon: Icons.storage_outlined,
-                  bgIconColor: Colors.lightGreen,
-                  onTap: () {}),
-              Padding(
-                padding: const EdgeInsets.only(left: 45),
-                child: Divider(
-                  height: 0,
-                  color: Colors.grey.withOpacity(0.8),
-                ),
-              ),
-              SettingItem(
-                  title: "Appearance",
+                  title: "App Appearance",
                   leadingIcon: Icons.dark_mode_outlined,
                   bgIconColor: Colors.lightBlue,
                   onTap: () {}),
@@ -169,6 +137,18 @@ class _SettingsPageState extends State<SettingsPage> {
               ],
             ),
             child: Column(children: [
+              SettingItem(
+                  title: "Terms of Service",
+                  leadingIcon: Icons.rule,
+                  bgIconColor: Colors.amberAccent,
+                  onTap: () {}),
+              Padding(
+                padding: const EdgeInsets.only(left: 45),
+                child: Divider(
+                  height: 0,
+                  color: Colors.grey.withOpacity(0.8),
+                ),
+              ),
               SettingItem(
                 title: "Log Out",
                 leadingIcon: Icons.logout_outlined,
