@@ -1,59 +1,42 @@
-import 'dart:io';
-import 'dart:typed_data';
-
-import 'package:amber/services/image_service.dart';
-import 'package:amber/utilities/constants.dart';
 import 'package:amber/widgets/profile_picture.dart';
-import 'package:amber/widgets/widget_to_image.dart';
-import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
-import 'package:amber/utilities/utils.dart';
 
-class MashUpScreen extends StatefulWidget {
-  static const id = '/mash-up_screen';
+class ImageLayout extends StatefulWidget {
+  final List images;
+  final int index;
 
-  const MashUpScreen({Key? key}) : super(key: key);
+  const ImageLayout({Key? key, required this.index, required this.images}) : super(key: key);
 
   @override
-  _MashUpScreenState createState() => _MashUpScreenState();
+  _ImageLayoutState createState() => _ImageLayoutState();
 }
 
-class _MashUpScreenState extends State<MashUpScreen> {
+class _ImageLayoutState extends State<ImageLayout> {
   List images = [];
-  List collageTypes = [];
   int index = 0;
-  GlobalKey? _globalKey;
-  late Uint8List bytes;
 
   @override
   void initState() {
     super.initState();
-    images.add(const AssetImage("assets/plus.png"));
-    collageTypes.add(const CustomImage(
-      side: 120,
-      image: AssetImage("assets/1.png"),
-      borderRadius: 10,
-    ));
-    collageTypes.add(const CustomImage(
-      side: 120,
-      image: AssetImage("assets/2.png"),
-      borderRadius: 10,
-    ));
-    collageTypes.add(const CustomImage(
-      side: 120,
-      image: AssetImage("assets/4.png"),
-      borderRadius: 10,
-    ));
-    collageTypes.add(const CustomImage(
-      side: 120,
-      image: AssetImage("assets/5.png"),
-      borderRadius: 10,
-    ));
-    collageTypes.add(const CustomImage(
-      side: 120,
-      image: AssetImage("assets/9.png"),
-      borderRadius: 10,
-    ));
+    images = widget.images;
+    index = widget.index;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Widget? widget;
+    if (index == 1) widget = get2Layout();
+    if (index == 2) widget = get4Layout();
+    if (index == 3) widget = get5Layout();
+    if (index == 4) widget = get9Layout();
+    widget ??= get1Layout();
+    return Text((() {
+      if (index == 1) {
+        return "tis true";
+      } else {
+        return "anything but true";
+      }
+    })());
   }
 
   Widget get1Layout() {
@@ -271,115 +254,4 @@ class _MashUpScreenState extends State<MashUpScreen> {
       ),
     );
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: kAppColor,
-        title: const Text(kAppName),
-        titleTextStyle: const TextStyle(color: Colors.white, letterSpacing: 3, fontSize: 25.0),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.done),
-            color: Colors.white,
-            onPressed: () async {
-              final bytes = await Utils.capturePng(_globalKey!);
-              setState(() {
-                this.bytes = bytes;
-              });
-              setState(() => images.insert(images.length - 1, buildImage(bytes)));
-            },
-          ),
-        ],
-      ),
-      body: Column(
-        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          const SizedBox(height: 5),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  height: 110,
-                  child: GridView.builder(
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: MediaQuery.of(context).size.width ~/ 55,
-                      crossAxisSpacing: 5,
-                      mainAxisSpacing: 5,
-                      childAspectRatio: 1,
-                    ),
-                    itemCount: images.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 5.0),
-                        child: GestureDetector(
-                          child: CustomImage(
-                            side: 50,
-                            borderRadius: 10,
-                            image: images[index],
-                          ),
-                          onTap: () async {
-                            if (index == images.length - 1) {
-                              File? file = await ImageService.chooseFromGallery();
-                              if (file != null) {
-                                setState(() => images.insert(images.length - 1, FileImage(file)));
-                              }
-                            } else if (index < images.length - 1) {
-                              setState(() => images.removeAt(index));
-                            }
-                          },
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                WidgetToImage(
-                  builder: (key) {
-                    _globalKey = key;
-                    return Container(child: (() {
-                      if (index == 0) {
-                        return get1Layout();
-                      } else if (index == 1) {
-                        return get2Layout();
-                      } else if (index == 2) {
-                        return get4Layout();
-                      } else if (index == 3) {
-                        return get5Layout();
-                      } else if (index == 4) {
-                        return get9Layout();
-                      }
-                    })());
-                  },
-                ),
-                SizedBox(
-                  height: 120,
-                  child: Swiper(
-                    outer: false,
-                    itemHeight: 120,
-                    itemWidth: 120,
-                    viewportFraction: 0.3,
-                    scale: 0.3,
-                    itemCount: collageTypes.length,
-                    loop: false,
-                    itemBuilder: (c, i) => collageTypes[i],
-                    onIndexChanged: (i) => setState(() => index = i),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 20),
-        ],
-      ),
-    );
-  }
-
-  Object buildImage(Uint8List? bytes) =>
-      bytes != null ? MemoryImage(bytes) : const AssetImage("assets/1.png");
 }
