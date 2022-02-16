@@ -34,7 +34,7 @@ class UserModel {
     );
   }
 
-  List<String> getUserPostTypes() {
+  List<String> getCurrentUserPostTypes() {
     switch (accountType) {
       case 'Artist':
         return ['Image', 'Article', 'Community', 'Public Group'];

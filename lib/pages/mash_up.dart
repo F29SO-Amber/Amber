@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:amber/mash-up/collage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_painter/image_painter.dart';
 import 'package:path_provider/path_provider.dart';

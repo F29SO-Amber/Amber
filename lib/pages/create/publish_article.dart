@@ -20,7 +20,7 @@ class PublishArticleScreen extends StatefulWidget {
 }
 
 class _PublishArticleScreenState extends State<PublishArticleScreen> {
-  QuillController? _controller = QuillController.basic();
+  final QuillController? _controller = QuillController.basic();
   final FocusNode _focusNode = FocusNode();
 
   @override

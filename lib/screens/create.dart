@@ -23,7 +23,7 @@ class Create extends StatelessWidget {
         future: DatabaseService.getUser(AuthService.currentUser.uid),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            List<String> list = (snapshot.data as UserModel).getUserPostTypes();
+            List<String> list = (snapshot.data as UserModel).getCurrentUserPostTypes();
             return GridView.builder(
               padding: const EdgeInsets.all(10).copyWith(top: 40),
               scrollDirection: Axis.vertical,
