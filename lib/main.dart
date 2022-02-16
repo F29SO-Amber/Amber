@@ -55,7 +55,7 @@ class _MyAppState extends State<MyApp> {
         ).copyWith(secondary: Colors.orange),
         textSelectionTheme: const TextSelectionThemeData(cursorColor: Colors.orange),
       ),
-      initialRoute: MashUpScreen.id,
+      initialRoute: LoginScreen.id,
       routes: {
         LoginScreen.id: (context) => const LoginScreen(),
         HomePage.id: (context) => const HomePage(),

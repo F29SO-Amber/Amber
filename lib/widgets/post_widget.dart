@@ -1,6 +1,7 @@
 import 'package:amber/models/post.dart';
 import 'package:amber/pages/comments.dart';
 import 'package:amber/pages/mash_up.dart';
+import 'package:amber/pages/mash_up_latest.dart';
 import 'package:amber/services/auth_service.dart';
 import 'package:amber/services/database_service.dart';
 import 'package:amber/utilities/constants.dart';
@@ -35,7 +36,6 @@ class _UserPostState extends State<UserPost> {
     int score = widget.post.likes.values.toList().where((item) => item == true).length -
         widget.post.likes.values.toList().where((item) => item == false).length;
     int finalScore = score;
-    print(widget.post.likes.values.toList());
     return Container(
       color: Colors.white,
       child: Column(
@@ -112,15 +112,19 @@ class _UserPostState extends State<UserPost> {
               children: [
                 SlidableAction(
                   onPressed: (context) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => MashUpPost(
-                          imageURL: widget.post.imageURL,
-                          ownerUsername: widget.post.authorUserName,
-                        ),
-                      ),
+                    Navigator.of(context, rootNavigator: true).pushNamed(
+                      MashUpScreen.id,
+                      arguments: {'username': widget.post.authorUserName},
                     );
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) => MashUpPost(
+                    //       imageURL: widget.post.imageURL,
+                    //       ownerUsername: widget.post.authorUserName,
+                    //     ),
+                    //   ),
+                    // );
                   },
                   backgroundColor: const Color(0xFFFE4A49),
                   foregroundColor: Colors.white,

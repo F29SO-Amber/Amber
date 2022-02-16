@@ -39,7 +39,7 @@ class Utils {
       await screenshotImageFile.writeAsBytes(byteData!.buffer.asUint8List());
       return byteData.buffer.asUint8List();
     } catch (e) {
-      print("Capture Image Exception Main : " + e.toString());
+      debugPrint("Capture Image Exception Main : " + e.toString());
       throw Exception();
     }
   }

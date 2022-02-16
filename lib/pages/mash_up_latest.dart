@@ -8,52 +8,37 @@ import 'package:amber/widgets/widget_to_image.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:amber/utilities/utils.dart';
+import 'package:path_provider/path_provider.dart';
+
+import 'create/publish_image.dart';
 
 class MashUpScreen extends StatefulWidget {
+  final String? imageURL;
+
   static const id = '/mash-up_screen';
 
-  const MashUpScreen({Key? key}) : super(key: key);
+  const MashUpScreen({Key? key, this.imageURL}) : super(key: key);
 
   @override
   _MashUpScreenState createState() => _MashUpScreenState();
 }
 
 class _MashUpScreenState extends State<MashUpScreen> {
-  List images = [];
+  List images = [const AssetImage("assets/plus.png")];
   List collageTypes = [];
   int index = 0;
   GlobalKey? _globalKey;
   late Uint8List bytes;
+  String username = 'Tester';
 
   @override
   void initState() {
     super.initState();
-    images.add(const AssetImage("assets/plus.png"));
-    collageTypes.add(const CustomImage(
-      side: 120,
-      image: AssetImage("assets/1.png"),
-      borderRadius: 10,
-    ));
-    collageTypes.add(const CustomImage(
-      side: 120,
-      image: AssetImage("assets/2.png"),
-      borderRadius: 10,
-    ));
-    collageTypes.add(const CustomImage(
-      side: 120,
-      image: AssetImage("assets/4.png"),
-      borderRadius: 10,
-    ));
-    collageTypes.add(const CustomImage(
-      side: 120,
-      image: AssetImage("assets/5.png"),
-      borderRadius: 10,
-    ));
-    collageTypes.add(const CustomImage(
-      side: 120,
-      image: AssetImage("assets/9.png"),
-      borderRadius: 10,
-    ));
+    for (int x in [1, 2, 4, 5, 9]) {
+      collageTypes.add(
+        CustomImage(side: 120, image: AssetImage("assets/$x.png"), borderRadius: 10),
+      );
+    }
   }
 
   Widget get1Layout() {
@@ -274,6 +259,8 @@ class _MashUpScreenState extends State<MashUpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final Map? arguments = ModalRoute.of(context)?.settings.arguments as Map;
+    if (arguments != null) username = arguments['username'];
     return Scaffold(
       appBar: AppBar(
         backgroundColor: kAppColor,
@@ -288,13 +275,27 @@ class _MashUpScreenState extends State<MashUpScreen> {
               setState(() {
                 this.bytes = bytes;
               });
-              setState(() => images.insert(images.length - 1, buildImage(bytes)));
+              Directory dir;
+              if (Platform.isIOS) {
+                ///For iOS
+                dir = await getApplicationDocumentsDirectory();
+              } else {
+                ///For Android
+                dir = (await getExternalStorageDirectory())!;
+              }
+              final file = await File('${dir.path}/image.jpg').create();
+              file.writeAsBytesSync(this.bytes);
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PublishImageScreen(mashUpDetails: [file.path, username]),
+                ),
+              );
             },
           ),
         ],
       ),
       body: Column(
-        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           const SizedBox(height: 5),
           Expanded(
@@ -342,19 +343,22 @@ class _MashUpScreenState extends State<MashUpScreen> {
                 WidgetToImage(
                   builder: (key) {
                     _globalKey = key;
-                    return Container(child: (() {
-                      if (index == 0) {
-                        return get1Layout();
-                      } else if (index == 1) {
-                        return get2Layout();
-                      } else if (index == 2) {
-                        return get4Layout();
-                      } else if (index == 3) {
-                        return get5Layout();
-                      } else if (index == 4) {
-                        return get9Layout();
-                      }
-                    })());
+                    return Container(
+                      // https://stackoverflow.com/questions/49713189
+                      child: (() {
+                        if (index == 0) {
+                          return get1Layout();
+                        } else if (index == 1) {
+                          return get2Layout();
+                        } else if (index == 2) {
+                          return get4Layout();
+                        } else if (index == 3) {
+                          return get5Layout();
+                        } else if (index == 4) {
+                          return get9Layout();
+                        }
+                      })(),
+                    );
                   },
                 ),
                 SizedBox(
@@ -379,7 +383,4 @@ class _MashUpScreenState extends State<MashUpScreen> {
       ),
     );
   }
-
-  Object buildImage(Uint8List? bytes) =>
-      bytes != null ? MemoryImage(bytes) : const AssetImage("assets/1.png");
 }
