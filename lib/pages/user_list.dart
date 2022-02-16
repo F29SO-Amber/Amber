@@ -21,7 +21,8 @@ class UserList extends StatelessWidget {
             ? DatabaseService.getFollowersUIDs(userUID)
             : DatabaseService.getFollowingUID(userUID),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
+          // TODO: Keeps loading forever
+          if (snapshot.data != null) {
             List<UserCard> list = [];
             var a = snapshot.data as List<UserModel>;
             for (UserModel user in a) {

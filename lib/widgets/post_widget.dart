@@ -1,6 +1,5 @@
 import 'package:amber/models/post.dart';
 import 'package:amber/pages/comments.dart';
-import 'package:amber/pages/mash_up.dart';
 import 'package:amber/pages/mash_up_latest.dart';
 import 'package:amber/services/auth_service.dart';
 import 'package:amber/services/database_service.dart';
@@ -180,11 +179,13 @@ class _UserPostState extends State<UserPost> {
                 });
               },
               child: Container(
-                height: (MediaQuery.of(context).size.width / 16) * 9,
+                height: MediaQuery.of(context).size.width,
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
-                  image:
-                      DecorationImage(image: NetworkImage(widget.post.imageURL), fit: BoxFit.cover),
+                  image: DecorationImage(
+                    image: NetworkImage(widget.post.imageURL),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),

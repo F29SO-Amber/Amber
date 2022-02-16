@@ -6,14 +6,15 @@ class SettingItem extends StatelessWidget {
   final Color? bgIconColor;
   final String title;
   final GestureTapCallback? onTap;
-  const SettingItem(
-      {Key? key,
-      required this.title,
-      this.onTap,
-      this.leadingIcon,
-      this.leadingIconColor = Colors.white,
-      this.bgIconColor})
-      : super(key: key);
+
+  const SettingItem({
+    Key? key,
+    required this.title,
+    this.onTap,
+    this.leadingIcon,
+    this.leadingIconColor = Colors.white,
+    this.bgIconColor,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,42 +27,18 @@ class SettingItem extends StatelessWidget {
           children: leadingIcon != null
               ? [
                   Container(
-                    padding: EdgeInsets.all(5),
+                    padding: const EdgeInsets.all(5),
                     decoration:
                         BoxDecoration(color: bgIconColor, borderRadius: BorderRadius.circular(5)),
-                    child: Icon(
-                      leadingIcon,
-                      size: 24,
-                      color: leadingIconColor,
-                    ),
+                    child: Icon(leadingIcon, size: 24, color: leadingIconColor),
                   ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Expanded(
-                    child: Text(
-                      title,
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ),
-                  Icon(
-                    Icons.arrow_forward_ios,
-                    color: Colors.grey,
-                    size: 17,
-                  )
+                  const SizedBox(width: 10),
+                  Expanded(child: Text(title, style: const TextStyle(fontSize: 16))),
+                  const Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 17)
                 ]
               : [
-                  Expanded(
-                    child: Text(
-                      title,
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ),
-                  Icon(
-                    Icons.arrow_forward_ios,
-                    color: Colors.grey,
-                    size: 17,
-                  )
+                  Expanded(child: Text(title, style: const TextStyle(fontSize: 16))),
+                  const Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 17)
                 ],
         ),
       ),

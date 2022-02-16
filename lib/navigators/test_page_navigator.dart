@@ -1,6 +1,3 @@
-import 'package:amber/mash-up/collage.dart';
-import 'package:amber/mash-up/crop.dart';
-import 'package:amber/mash-up/draw.dart';
 import 'package:flutter/material.dart';
 import 'package:amber/screens/testing.dart';
 
@@ -25,12 +22,6 @@ class _TestPageNavigatorState extends State<TestPageNavigator> {
             switch (settings.name) {
               case '/':
                 return const Testing();
-              case Collage.id:
-                return const Collage();
-              case Crop.id:
-                return const Crop();
-              case Draw.id:
-                return const Draw();
               default:
                 return const Testing();
             }

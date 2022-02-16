@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-
-import '../utilities/constants.dart';
+import 'package:amber/utilities/constants.dart';
 
 class NumberAndLabel extends StatelessWidget {
-  const NumberAndLabel({Key? key, required this.number, required this.label}) : super(key: key);
-
   final String number;
   final String label;
+
+  const NumberAndLabel({Key? key, required this.number, required this.label}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
