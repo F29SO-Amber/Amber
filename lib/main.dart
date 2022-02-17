@@ -1,4 +1,3 @@
-import 'package:amber/pages/mash_up_latest.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -7,11 +6,13 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:amber/pages/login.dart';
 import 'package:amber/screens/home.dart';
 import 'package:amber/firebase_options.dart';
-import 'package:amber/utilities/constants.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:amber/pages/mash_up_latest.dart';
 
-Future main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Hive.initFlutter();
   runApp(const MyApp());
 }
 
@@ -25,11 +26,11 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
-    super.initState();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+    super.initState();
   }
 
   @override
@@ -48,13 +49,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       builder: EasyLoading.init(),
       debugShowCheckedModeBanner: false,
-      title: 'Login Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSwatch(
-          primarySwatch: createMaterialColor(const Color(0xff9eb7ff)),
-        ).copyWith(secondary: Colors.orange),
-        textSelectionTheme: const TextSelectionThemeData(cursorColor: Colors.orange),
-      ),
+      theme: ThemeData.light(),
       initialRoute: LoginScreen.id,
       routes: {
         LoginScreen.id: (context) => const LoginScreen(),

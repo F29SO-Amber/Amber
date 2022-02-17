@@ -18,7 +18,7 @@ class CustomOutlinedButton extends StatelessWidget {
       child: Text(buttonText),
       style: OutlinedButton.styleFrom(
         backgroundColor: Colors.amber.shade50,
-        fixedSize: Size(MediaQuery.of(context).size.width * widthFactor, 43),
+        fixedSize: Size(MediaQuery.of(context).size.width * widthFactor, 40),
         primary: Colors.black,
         side: BorderSide(width: 1.0, color: Colors.amber.shade500),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),

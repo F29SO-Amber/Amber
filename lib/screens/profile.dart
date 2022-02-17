@@ -141,7 +141,11 @@ class _ProfilePageState extends State<ProfilePage> {
                   const SizedBox(height: 5),
                   Padding(
                     padding: const EdgeInsets.all(20.0),
-                    child: CustomImage(side: 100, image: NetworkImage(user.profilePhotoURL)),
+                    child: CustomImage(
+                      side: 80,
+                      image: NetworkImage(user.profilePhotoURL),
+                      borderRadius: 25,
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 3.0),
