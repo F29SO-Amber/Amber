@@ -46,9 +46,9 @@ class _CreateGroupState extends State<CreateGroup> {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.amber.shade50,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.amber,
         title: Text("Group Name"),
       ),
       body: isLoading

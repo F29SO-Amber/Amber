@@ -120,7 +120,9 @@ class _GroupInfoState extends State<GroupInfo> {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
+    final Size size = MediaQuery
+        .of(context)
+        .size;
     return isLoading
         ? Container(
       height: size.height,
@@ -128,19 +130,25 @@ class _GroupInfoState extends State<GroupInfo> {
       alignment: Alignment.center,
       child: CircularProgressIndicator(),
     )
-        : SafeArea(
+        : Container(
       child: Scaffold(
-        backgroundColor: Colors.black,
+        appBar: AppBar(
+          backgroundColor: Colors.amber,
+          title: Text(widget.groupName),
+          titleTextStyle: TextStyle(color: Colors.white, fontSize: 30.0),
+
+        ),
+        backgroundColor: Colors.amber.shade50,
         body: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Align(
+              /* Align(
                   alignment: Alignment.centerLeft,
                   child: BackButton(
-                    color: Colors.white,
-                  )),
-              Container(
+                    color: Colors.black,
+                  )),*/
+             /* Container(
                 height: size.height / 8,
                 width: size.width / 1.1,
                 child: Row(
@@ -149,7 +157,7 @@ class _GroupInfoState extends State<GroupInfo> {
                       height: size.height / 11,
                       width: size.width / 11,
                       decoration: BoxDecoration(
-                          shape: BoxShape.circle, color: Colors.grey),
+                          shape: BoxShape.circle, color: Colors.black),
                       child: Icon(
                         Icons.group,
                         color: Colors.white,
@@ -164,14 +172,14 @@ class _GroupInfoState extends State<GroupInfo> {
                           child: Text(
                             widget.groupName,
                             style: TextStyle(
-                                color: Colors.white,
+                                color: Colors.black,
                                 fontSize: size.width / 16,
                                 fontWeight: FontWeight.w500),
                           )),
                     ),
                   ],
                 ),
-              ),
+              ),*/
               SizedBox(
                 height: size.height / 20,
               ),
@@ -180,7 +188,7 @@ class _GroupInfoState extends State<GroupInfo> {
                   child: Text(
                     "${membersList.length} Members",
                     style: TextStyle(
-                      color: Colors.white,
+                      color: Colors.black,
                       fontSize: size.width / 20,
                       fontWeight: FontWeight.w500,
                     ),
@@ -193,22 +201,23 @@ class _GroupInfoState extends State<GroupInfo> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (_) => AddMembersInGrouplater(
-                            groupId: widget.groupId,
-                            groupName: widget.groupName,
-                            membersList: membersList,
-                          )));
+                          builder: (_) =>
+                              AddMembersInGrouplater(
+                                groupId: widget.groupId,
+                                groupName: widget.groupName,
+                                membersList: membersList,
+                              )));
                 },
                 leading: Icon(
                   Icons.add,
-                  color: Colors.red,
+                  color: Colors.black,
                 ),
                 title: Text(
                   "Add Members",
                   style: TextStyle(
                       fontSize: size.width / 22,
                       fontWeight: FontWeight.w500,
-                      color: Colors.red),
+                      color: Colors.black),
                 ),
               ),
               Flexible(
@@ -221,25 +230,25 @@ class _GroupInfoState extends State<GroupInfo> {
                           onTap: () => showRemoveDialog(index),
                           leading: Icon(
                             Icons.account_circle,
-                            color: Colors.white,
+                            color: Colors.black,
                           ),
                           title: Text(
                             membersList[index]["name"],
                             style: TextStyle(
-                                color: Colors.white,
+                                color: Colors.black,
                                 fontSize: size.width / 22,
                                 fontWeight: FontWeight.w500),
                           ),
                           subtitle: Text(
                             membersList[index]["email"],
-                            style: TextStyle(color: Colors.white),
+                            style: TextStyle(color: Colors.black),
                           ),
                           trailing: Text(
                             membersList[index]["isAdmin"] ? "Admin" : "",
                             style: TextStyle(
                                 fontSize: size.width / 25,
                                 fontWeight: FontWeight.w500,
-                                color: Colors.red),
+                                color: Colors.black),
                           ),
                         );
                       })),
@@ -249,14 +258,14 @@ class _GroupInfoState extends State<GroupInfo> {
                 },
                 leading: Icon(
                   Icons.logout,
-                  color: Colors.red,
+                  color: Colors.black,
                 ),
                 title: Text(
                   "Leave Group",
                   style: TextStyle(
                       fontSize: size.width / 22,
                       fontWeight: FontWeight.w500,
-                      color: Colors.red),
+                      color: Colors.black),
                 ),
               )
             ],
@@ -265,4 +274,4 @@ class _GroupInfoState extends State<GroupInfo> {
       ),
     );
   }
-}
+  }

@@ -83,9 +83,9 @@ class _AddMembersInGroupState extends State<AddMembersInGrouplater> {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.amber.shade50,
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.amber,
         title: Text("Add Members"),
       ),
       body: SingleChildScrollView(
