@@ -208,6 +208,7 @@ class _GroupInfoState extends State<GroupInfo> {
                                 membersList: membersList,
                               )));
                 },
+
                 leading: Icon(
                   Icons.add,
                   color: Colors.black,

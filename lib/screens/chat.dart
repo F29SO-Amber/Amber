@@ -48,7 +48,7 @@ class _ChatPageState extends State<ChatPage> {
     return Scaffold(
         appBar: AppBar(
           titleSpacing: 0.0,
-          backgroundColor: Color(0xFF1F1A30),
+          backgroundColor: Colors.amber,
           title: Row(
             children: [
               Padding(
@@ -77,7 +77,7 @@ class _ChatPageState extends State<ChatPage> {
               .of(context)
               .size
               .height,
-          color: Color(0xFF1F1A30),
+          color: Colors.amber.shade50,
           child: Column(
             children: [
               // SizedBox(
