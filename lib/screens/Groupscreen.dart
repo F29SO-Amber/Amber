@@ -42,10 +42,12 @@ class _GroupChatHomeScreenState extends State<GroupChatHomeScreen> {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.amber.shade50,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor:Colors.amber,
         title: Text("Groups"),
+        titleTextStyle: TextStyle(color: Colors.white, fontSize: 30.0),
+
       ),
       body: isLoading
           ? Container(
@@ -58,6 +60,7 @@ class _GroupChatHomeScreenState extends State<GroupChatHomeScreen> {
           itemCount: groupList.length,
           itemBuilder: (context, index) {
             return ListTile(
+
               onTap: () {
                 Navigator.push(
                     context,
@@ -77,6 +80,7 @@ class _GroupChatHomeScreenState extends State<GroupChatHomeScreen> {
                   style: TextStyle(color: Colors.black),
                 ),
               ),
+
             );
           }),
       floatingActionButton: FloatingActionButton(
