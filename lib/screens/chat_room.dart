@@ -11,7 +11,6 @@ class GroupChatRoom extends StatefulWidget {
   final String groupChatId;
   final String groupName;
 
-  static const id = '/chat';
 
   @override
   State<GroupChatRoom> createState() => _GroupChatRoomState();
@@ -30,13 +29,12 @@ class _GroupChatRoomState extends State<GroupChatRoom> {
   final TextEditingController _message = TextEditingController();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  // FirebaseAuth auth = FirebaseAuth.instance;
+
   @override
   void onSendMessage() async {
     if (_message.text.isNotEmpty) {
       Map<String, dynamic> chatData = {
         "sendBy": FirebaseAuth.instance.currentUser!.email,
-        'to': widget.groupChatId,
         "message": _message.text,
         "type": "text",
         "time": FieldValue.serverTimestamp()
@@ -138,15 +136,15 @@ class _GroupChatRoomState extends State<GroupChatRoom> {
                             Map<String, dynamic> data =
                             document.data()! as Map<String, dynamic>;
                             if (FirebaseAuth.instance.currentUser!.email ==
-                                data['to']) {
-                              lefts = 0;
-                              rights = 0.2;
+                                data['sendBy']) {
+                              lefts = 0.2;
+                              rights = 0;
                               fieldColor = Color(0xFF39304d);
                               textColor = Colors.white;
                               dateColor = Colors.white70;
                             } else {
-                              lefts = 0.2;
-                              rights = 0;
+                              lefts = 0;
+                              rights = 0.2;
                               fieldColor = Color(0xFF0CF6E3);
                               textColor = Color(0xFF1F1A30);
                               dateColor = Colors.black87;
