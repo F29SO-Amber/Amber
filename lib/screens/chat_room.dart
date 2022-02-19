@@ -37,7 +37,7 @@ class _GroupChatRoomState extends State<GroupChatRoom> {
         "sendBy": FirebaseAuth.instance.currentUser!.email,
         "message": _message.text,
         "type": "text",
-        "time": FieldValue.serverTimestamp()
+        "time": DateTime.now(),
       };
       _message.clear();
 
@@ -149,6 +149,7 @@ class _GroupChatRoomState extends State<GroupChatRoom> {
                               textColor = Color(0xFF1F1A30);
                               dateColor = Colors.black87;
                             }
+                            DateTime myDateTime = (data['time']).toDate();
 
                             return Container(
                               margin: EdgeInsets.only(
@@ -168,13 +169,7 @@ class _GroupChatRoomState extends State<GroupChatRoom> {
                               decoration: BoxDecoration(
                                 color: fieldColor,
                                 borderRadius: BorderRadius.circular(20),
-                                // boxShadow: [
-                                //   BoxShadow(
-                                //     color: Color(0xFF39304d),
-                                //     blurRadius: 10,
-                                //     offset: Offset(0, 0), // Shadow position
-                                //   ),
-                                // ],
+
                               ),
                               child: ListTile(
                                 title: Text(
@@ -191,6 +186,12 @@ class _GroupChatRoomState extends State<GroupChatRoom> {
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
+                                      Text(
+                                        // DateTime.parse(timestamp.toDate().toString()),
+                                        "${DateFormat('hh:mm a').format(
+                                            myDateTime)}",
+                                        style: TextStyle(color: dateColor),
+                                      ),
                                     ],
                                   ),
                                 ),
