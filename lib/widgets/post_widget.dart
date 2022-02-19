@@ -1,14 +1,16 @@
-import 'package:amber/models/post.dart';
-import 'package:amber/pages/comments.dart';
-import 'package:amber/pages/mash_up_latest.dart';
-import 'package:amber/services/auth_service.dart';
-import 'package:amber/services/database_service.dart';
-import 'package:amber/utilities/constants.dart';
-import 'package:amber/widgets/profile_picture.dart';
+import 'package:amber/screens/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import 'package:amber/models/post.dart';
+import 'package:amber/pages/comments.dart';
+import 'package:amber/utilities/constants.dart';
+import 'package:amber/pages/mash_up_latest.dart';
+import 'package:amber/services/auth_service.dart';
+import 'package:amber/widgets/profile_picture.dart';
+import 'package:amber/services/database_service.dart';
 
 class UserPost extends StatefulWidget {
   final PostModel post;
@@ -21,6 +23,7 @@ class UserPost extends StatefulWidget {
 
 class _UserPostState extends State<UserPost> {
   late bool? isLiked;
+  int finalScore = 0;
 
   @override
   void initState() {
@@ -28,13 +31,12 @@ class _UserPostState extends State<UserPost> {
     isLiked = widget.post.likes.containsKey(AuthService.currentUser.uid)
         ? widget.post.likes[AuthService.currentUser.uid]
         : null;
+    finalScore = widget.post.likes.values.toList().where((item) => item == true).length -
+        widget.post.likes.values.toList().where((item) => item == false).length;
   }
 
   @override
   Widget build(BuildContext context) {
-    int score = widget.post.likes.values.toList().where((item) => item == true).length -
-        widget.post.likes.values.toList().where((item) => item == false).length;
-    int finalScore = score;
     return Container(
       color: Colors.white,
       child: Column(
@@ -47,12 +49,27 @@ class _UserPostState extends State<UserPost> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: CustomImage(
-                        side: 32, image: NetworkImage(widget.post.authorProfilePhotoURL)),
+                      side: 32,
+                      image: NetworkImage(widget.post.authorProfilePhotoURL),
+                    ),
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(widget.post.authorName, style: GoogleFonts.dmSans(fontSize: 15)),
+                      GestureDetector(
+                        child: Text(
+                          widget.post.authorName,
+                          style: GoogleFonts.dmSans(fontSize: 15),
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProfilePage(userUID: widget.post.authorId),
+                            ),
+                          );
+                        },
+                      ),
                       Text(widget.post.location,
                           style: kLightLabelTextStyle.copyWith(fontSize: 10)),
                     ],
@@ -63,13 +80,13 @@ class _UserPostState extends State<UserPost> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      DatabaseService.postsRef
-                          .doc(widget.post.id)
-                          .update({'likes.${AuthService.currentUser.uid}': true});
-                      setState(() {
-                        isLiked = true;
-                        finalScore = ++finalScore;
-                      });
+                      if (isLiked != true) {
+                        DatabaseService.postsRef
+                            .doc(widget.post.id)
+                            .update({'likes.${AuthService.currentUser.uid}': true});
+                        finalScore += 1;
+                        setState(() => isLiked = true);
+                      }
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -78,19 +95,16 @@ class _UserPostState extends State<UserPost> {
                           : const Icon(FontAwesomeIcons.arrowAltCircleUp),
                     ),
                   ),
-                  Text(
-                    '$finalScore',
-                  ),
-                  // const Text('0'),
+                  Text('$finalScore'),
                   GestureDetector(
                     onTap: () {
-                      DatabaseService.postsRef
-                          .doc(widget.post.id)
-                          .update({'likes.${AuthService.currentUser.uid}': false});
-                      setState(() {
-                        isLiked = false;
-                        finalScore = --finalScore;
-                      });
+                      if (isLiked != false) {
+                        DatabaseService.postsRef
+                            .doc(widget.post.id)
+                            .update({'likes.${AuthService.currentUser.uid}': false});
+                        finalScore -= 1;
+                        setState(() => isLiked = false);
+                      }
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -104,10 +118,8 @@ class _UserPostState extends State<UserPost> {
             ],
           ),
           Slidable(
-            // key: const ValueKey(0),
             startActionPane: ActionPane(
               motion: const DrawerMotion(),
-              // dismissible: DismissiblePane(onDismissed: () {}),
               children: [
                 SlidableAction(
                   onPressed: (context) {
@@ -115,15 +127,6 @@ class _UserPostState extends State<UserPost> {
                       MashUpScreen.id,
                       arguments: {'username': widget.post.authorUserName},
                     );
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => MashUpPost(
-                    //       imageURL: widget.post.imageURL,
-                    //       ownerUsername: widget.post.authorUserName,
-                    //     ),
-                    //   ),
-                    // );
                   },
                   backgroundColor: const Color(0xFFFE4A49),
                   foregroundColor: Colors.white,
@@ -141,7 +144,6 @@ class _UserPostState extends State<UserPost> {
             ),
             endActionPane: ActionPane(
               motion: const DrawerMotion(),
-              // dismissible: DismissiblePane(onDismissed: () {}),
               children: [
                 const SlidableAction(
                   onPressed: null,
@@ -171,12 +173,15 @@ class _UserPostState extends State<UserPost> {
             ),
             child: GestureDetector(
               onDoubleTap: () {
-                DatabaseService.postsRef
-                    .doc(widget.post.id)
-                    .update({'likes.${AuthService.currentUser.uid}': true});
-                setState(() {
-                  isLiked = true;
-                });
+                if (isLiked != true) {
+                  DatabaseService.postsRef
+                      .doc(widget.post.id)
+                      .update({'likes.${AuthService.currentUser.uid}': true});
+                  finalScore += 1;
+                  setState(() {
+                    isLiked = true;
+                  });
+                }
               },
               child: Container(
                 height: MediaQuery.of(context).size.width,

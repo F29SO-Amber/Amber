@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:amber/services/database_service.dart';
+import 'package:hive/hive.dart';
 
 class AuthService {
   static final _auth = FirebaseAuth.instance;
@@ -12,7 +13,10 @@ class AuthService {
         email: data.name,
         password: data.password,
       );
+      await Hive.openBox('user');
+      Hive.box('user').put('status', 'logged-in');
       currentUser = authResult.user!;
+      return null;
     } on FirebaseAuthException catch (e) {
       return e.message;
     }
@@ -25,8 +29,10 @@ class AuthService {
         password: data.password!,
       );
       currentUser = authResult.user!;
-
       DatabaseService.addUserData(data);
+      await Hive.openBox('user');
+      Hive.box('user').put('email', data.name!);
+      Hive.box('user').put('password', data.password!);
       return null;
     } on FirebaseAuthException catch (e) {
       return e.message;

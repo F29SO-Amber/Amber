@@ -3,6 +3,7 @@ import 'package:amber/services/auth_service.dart';
 import 'package:amber/utilities/constants.dart';
 import 'package:amber/widgets/setting_item.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
 class SettingsPage extends StatefulWidget {
   static const id = '/settings';
@@ -153,8 +154,10 @@ class _SettingsPageState extends State<SettingsPage> {
                 title: "Log Out",
                 leadingIcon: Icons.logout_outlined,
                 bgIconColor: Colors.grey.shade400,
-                onTap: () {
+                onTap: () async {
                   AuthService.signOutUser();
+                  await Hive.openBox('user');
+                  Hive.box('user').put('status', 'logged-out');
                   Navigator.of(context, rootNavigator: true).pushReplacement(
                     MaterialPageRoute(builder: (context) => const LoginScreen()),
                   );

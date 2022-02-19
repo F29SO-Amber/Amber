@@ -24,6 +24,7 @@ dependencies:
   firebase_auth:
   flutter_login:
   image_painter:
+  flutter_form_bloc:
   flutter_quill:
   firebase_core:
   image_picker:

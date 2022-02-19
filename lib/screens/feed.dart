@@ -21,16 +21,6 @@ class _FeedPageState extends State<FeedPage> {
         backgroundColor: kAppColor,
         title: const Text(kAppName),
         titleTextStyle: const TextStyle(color: Colors.white, letterSpacing: 3, fontSize: 25.0),
-        // actions: [
-        //   IconButton(
-        //       icon: Icon(MyApp.themeNotifier.value == ThemeMode.light
-        //           ? Icons.dark_mode
-        //           : Icons.light_mode),
-        //       onPressed: () {
-        //         MyApp.themeNotifier.value =
-        //             MyApp.themeNotifier.value == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
-        //       })
-        // ],
       ),
       body: StreamBuilder(
         stream: DatabaseService.getUserFeed().asStream(), // TODO

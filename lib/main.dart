@@ -13,6 +13,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await Hive.initFlutter();
+  await Hive.openBox('user');
   runApp(const MyApp());
 }
 
@@ -50,6 +51,7 @@ class _MyAppState extends State<MyApp> {
       builder: EasyLoading.init(),
       debugShowCheckedModeBanner: false,
       theme: ThemeData.light(),
+      // initialRoute: Hive.box('user').get('status') == 'logged-in' ? HomePage.id : LoginScreen.id,
       initialRoute: LoginScreen.id,
       routes: {
         LoginScreen.id: (context) => const LoginScreen(),

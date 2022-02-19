@@ -121,10 +121,6 @@ class _ProfilePageState extends State<ProfilePage> {
                       ? GestureDetector(
                           child: const Icon(Icons.settings, color: Colors.white),
                           onTap: () {
-                            // AuthService.signOutUser();
-                            // Navigator.of(context, rootNavigator: true).pushReplacement(
-                            //   MaterialPageRoute(builder: (context) => const LoginScreen()),
-                            // );
                             Navigator.pushNamed(context, SettingsPage.id);
                           },
                         )
