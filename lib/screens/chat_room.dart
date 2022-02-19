@@ -135,16 +135,16 @@ class _GroupChatRoomState extends State<GroupChatRoom> {
                               .map((DocumentSnapshot document) {
                             Map<String, dynamic> data =
                             document.data()! as Map<String, dynamic>;
-                            if (FirebaseAuth.instance.currentUser!.email ==
+                            if (_auth.currentUser!.displayName ==
                                 data['sendBy']) {
-                              lefts = 0.2;
-                              rights = 0;
+                              lefts = 0;
+                              rights = 0.2;
                               fieldColor = Color(0xFF39304d);
                               textColor = Colors.white;
                               dateColor = Colors.white70;
                             } else {
-                              lefts = 0;
-                              rights = 0.2;
+                              lefts = 0.2;
+                              rights = 0;
                               fieldColor = Color(0xFF0CF6E3);
                               textColor = Color(0xFF1F1A30);
                               dateColor = Colors.black87;
