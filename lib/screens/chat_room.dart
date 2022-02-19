@@ -88,24 +88,20 @@ class _GroupChatRoomState extends State<GroupChatRoom> {
           ],
         ),
         body: Container(
-          width: MediaQuery
-              .of(context)
-              .size
-              .width,
-          height: MediaQuery
-              .of(context)
-              .size
-              .height,
+
           color: Colors.amber.shade50,
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Expanded(
+
                 child: StreamBuilder<QuerySnapshot>(
                   stream: _firestore
                       .collection("groups")
                       .doc(widget.groupChatId)
                       .collection("chats")
-                      .orderBy('time', descending: true)
+                      .orderBy('time')
                       .snapshots(),
                   builder: (BuildContext context,
                       AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -121,6 +117,22 @@ class _GroupChatRoomState extends State<GroupChatRoom> {
                       print(snapshot.data!.docs.length);
                       return Padding(
                         padding: EdgeInsets.only(
+                            left:8.0,top:2,bottom: 2),
+                        child: ListView.builder(
+                            itemCount: snapshot.data!.docs.length,
+                            itemBuilder: (context, index) {
+                              Map<String, dynamic> chatMap =
+                              snapshot.data!.docs[index].data()
+                              as Map<String, dynamic>;
+
+                              return messageTile(size, chatMap);
+                              DateTime myDateTime = (chatMap['time2']).toDate();
+                            }),
+                      );
+                    } else{
+
+                      return Container(
+                        padding: EdgeInsets.only(
                             left: MediaQuery
                                 .of(context)
                                 .size
@@ -135,42 +147,9 @@ class _GroupChatRoomState extends State<GroupChatRoom> {
                               .map((DocumentSnapshot document) {
                             Map<String, dynamic> data =
                             document.data()! as Map<String, dynamic>;
-                            if (_auth.currentUser!.displayName ==
-                                data['sendBy']) {
-                              lefts = 0;
-                              rights = 0.2;
-                              fieldColor = Color(0xFF39304d);
-                              textColor = Colors.white;
-                              dateColor = Colors.white70;
-                            } else {
-                              lefts = 0.2;
-                              rights = 0;
-                              fieldColor = Color(0xFF0CF6E3);
-                              textColor = Color(0xFF1F1A30);
-                              dateColor = Colors.black87;
-                            }
-                            DateTime myDateTime = (data['time']).toDate();
+                            DateTime myDateTime = (data['time2']).toDate();
 
                             return Container(
-                              margin: EdgeInsets.only(
-                                  top: MediaQuery
-                                      .of(context)
-                                      .size
-                                      .height * 0.02,
-                                  left: MediaQuery
-                                      .of(context)
-                                      .size
-                                      .width * lefts,
-                                  right:
-                                  MediaQuery
-                                      .of(context)
-                                      .size
-                                      .width * rights),
-                              decoration: BoxDecoration(
-                                color: fieldColor,
-                                borderRadius: BorderRadius.circular(20),
-
-                              ),
                               child: ListTile(
                                 title: Text(
                                   data['message'],
@@ -200,8 +179,6 @@ class _GroupChatRoomState extends State<GroupChatRoom> {
                           }).toList(),
                         ),
                       );
-                    } else{
-                      return Container();
                     }
                   },
                 ),
@@ -285,20 +262,59 @@ class _GroupChatRoomState extends State<GroupChatRoom> {
   Widget messageTile(Size size, Map<String, dynamic> chatMap) {
     return Builder(builder: (_) {
       if (chatMap['type'] == "text") {
+        DateTime myDateTime = (chatMap['time']).toDate();
         return Container(
-          width: size.width,
-          alignment: chatMap['sendBy'] == _auth.currentUser!.displayName
+          margin: EdgeInsets.only(
+              top: MediaQuery
+                  .of(context)
+                  .size
+                  .height * 0.02,
+              left: MediaQuery
+                  .of(context)
+                  .size
+                  .width * lefts,
+              right:
+              MediaQuery
+                  .of(context)
+                  .size
+                  .width * rights),
+
+          alignment: chatMap['sendBy'] == FirebaseAuth.instance.currentUser!.email
               ? Alignment.centerRight
               : Alignment.centerLeft,
+          
           child: Container(
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 14),
-              margin: EdgeInsets.symmetric(vertical: 5, horizontal: 8),
+              padding: EdgeInsets.only(
+                  left: MediaQuery
+                      .of(context)
+                      .size
+                      .width * 0.06,
+                  right: MediaQuery
+                      .of(context)
+                      .size
+                      .width * 0.06),
+              margin: EdgeInsets.only(
+                  top: MediaQuery
+                      .of(context)
+                      .size
+                      .height * 0.02,
+                  left: MediaQuery
+                      .of(context)
+                      .size
+                      .width * lefts,
+                  right:
+                  MediaQuery
+                      .of(context)
+                      .size
+                      .width * rights),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                color: Colors.pink,
+                color: fieldColor,
+                borderRadius: BorderRadius.circular(20),
               ),
               child: Column(
+
                 children: [
+
                   Text(
                     chatMap['sendBy'],
                     style: TextStyle(
@@ -318,6 +334,13 @@ class _GroupChatRoomState extends State<GroupChatRoom> {
                       color: Colors.white,
                     ),
                   ),
+                  Text(
+                    // DateTime.parse(timestamp.toDate().toString()),
+                    "${DateFormat('hh:mm a').format(
+                        myDateTime)}",
+                    style: TextStyle(color: dateColor),
+                  ),
+
                 ],
               )),
         );
