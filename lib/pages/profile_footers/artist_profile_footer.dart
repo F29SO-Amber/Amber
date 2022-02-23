@@ -10,6 +10,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../../services/auth_service.dart';
+
 class ArtistFooter extends StatefulWidget {
   final String userUID;
 
@@ -125,9 +127,26 @@ class _ArtistFooterState extends State<ArtistFooter> {
             },
           ),
         if (selectedTab == 1)
-          const Padding(
-            padding: EdgeInsets.only(top: 120.0),
-            child: Center(child: Text('Articles - To Be Implemented')),
+          StreamBuilder(
+            stream: DatabaseService.articlesRef
+                .where('authorId', isEqualTo: widget.userUID)
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData && snapshot.connectionState == ConnectionState.active) {
+                var list = (snapshot.data as QuerySnapshot).docs.toList();
+                return list.isEmpty
+                    ? const Padding(
+                        padding: EdgeInsets.only(top: 120.0),
+                        child: Center(child: Text('No articles to display!')),
+                      )
+                    : const Padding(
+                        padding: EdgeInsets.only(top: 120.0),
+                        child: Center(child: Text('There are articles to display!')),
+                      );
+              } else {
+                return const Center(child: CircularProgressIndicator());
+              }
+            },
           ),
         if (selectedTab == 2)
           const Padding(

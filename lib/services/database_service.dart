@@ -17,6 +17,7 @@ class DatabaseService {
   static final usersRef = _firestore.collection('users');
   static final postsRef = _firestore.collection('posts');
   static final eventsRef = _firestore.collection('events');
+  static final articlesRef = _firestore.collection('articles');
   static final messagesRef = _firestore.collection('messages');
   static final hashtagsRef = _firestore.collection('hashtags');
   static final commentsRef = _firestore.collection('comments');

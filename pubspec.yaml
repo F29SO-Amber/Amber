@@ -17,6 +17,7 @@ dependencies:
   http:
   timeago:
   provider:
+  whiteboard:
   card_swiper:
   hive_flutter:
   google_fonts:

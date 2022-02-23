@@ -1,16 +1,15 @@
 import 'dart:io';
 import 'dart:typed_data';
-
-import 'package:amber/services/image_service.dart';
-import 'package:amber/utilities/constants.dart';
-import 'package:amber/widgets/profile_picture.dart';
-import 'package:amber/widgets/widget_to_image.dart';
-import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
-import 'package:amber/utilities/utils.dart';
+import 'package:card_swiper/card_swiper.dart';
 import 'package:path_provider/path_provider.dart';
 
-import 'create/publish_image.dart';
+import 'package:amber/utilities/utils.dart';
+import 'package:amber/utilities/constants.dart';
+import 'package:amber/services/image_service.dart';
+import 'package:amber/widgets/profile_picture.dart';
+import 'package:amber/widgets/widget_to_image.dart';
+import 'package:amber/pages/create/publish_image.dart';
 
 class MashUpScreen extends StatefulWidget {
   final String? imageURL;

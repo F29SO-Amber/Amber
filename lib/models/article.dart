@@ -4,39 +4,30 @@ class ArticleModel {
   final String id;
   final String authorId;
   final String imageURL;
-  final String caption;
-  final Map likes;
-  final String location;
+  final String text;
+  // final Map likes;
   final Timestamp timestamp;
-  final String authorName;
   final String authorUserName;
-  final String authorProfilePhotoURL;
 
   ArticleModel({
-    required this.authorName,
+    required this.text,
     required this.authorUserName,
-    required this.authorProfilePhotoURL,
     required this.id,
-    required this.location,
     required this.imageURL,
-    required this.caption,
-    required this.likes,
     required this.authorId,
     required this.timestamp,
+    // required this.likes,
   });
 
   factory ArticleModel.fromDocument(DocumentSnapshot doc) {
     return ArticleModel(
       id: doc.id,
       imageURL: doc['imageURL'],
-      caption: doc['caption'],
-      likes: doc['likes'],
+      text: doc['text'],
+      // likes: doc['likes'],
       authorId: doc['authorId'],
       timestamp: doc['timestamp'],
-      location: doc['location'],
       authorUserName: doc['authorUserName'],
-      authorProfilePhotoURL: doc['authorProfilePhotoURL'],
-      authorName: doc['authorName'],
     );
   }
 }
