@@ -1,6 +1,8 @@
 import 'package:amber/utilities/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:whiteboard/whiteboard.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
+import 'package:amber/screens/start_page.dart';
 
 class Testing extends StatefulWidget {
   const Testing({Key? key}) : super(key: key);
@@ -11,27 +13,11 @@ class Testing extends StatefulWidget {
 
 class _TestingState extends State<Testing> {
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Whiteboard'),
-      ),
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        child: Column(
-          children: [
-            Expanded(
-              child: WhiteBoard(),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => Provider<Firestore>(
+    create: (_) => Firestore.instance,
+    child: MaterialApp(
+      title: 'Whiteboard Demo',
+      home: StartPage(),
+    ),
+  );
 }
