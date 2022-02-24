@@ -9,7 +9,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Search extends StatefulWidget {
-
   @override
   static const id = '/searchpage';
   _SearchState createState() => _SearchState();
@@ -110,8 +109,7 @@ class _SearchState extends State<Search> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: buildSearchField(),
-      body:
-          searchResultsFuture == null ? buildNoContent() : buildSearchResults(),
+      body: searchResultsFuture == null ? buildNoContent() : buildSearchResults(),
     );
   }
 }
@@ -130,20 +128,16 @@ class UserResult extends StatelessWidget {
             // onTap: () => print("tapped"),
             onTap: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ProfilePage(userUID: user.id)));
+                  context, MaterialPageRoute(builder: (context) => ProfilePage(userUID: user.id)));
             },
             child: ListTile(
               leading: CircleAvatar(
                 backgroundColor: Colors.grey,
-                backgroundImage:
-                    CachedNetworkImageProvider(user.profilePhotoURL),
+                backgroundImage: CachedNetworkImageProvider(user.imageUrl),
               ),
               title: Text(
-                user.name,
-                style:
-                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                user.firstName,
+                style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
               ),
               subtitle: Text(
                 user.username,

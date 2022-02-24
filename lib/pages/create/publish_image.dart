@@ -291,9 +291,9 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
         map['likes'] = {};
         map['authorId'] = AuthService.currentUser.uid;
         map['timestamp'] = Timestamp.now();
-        map['authorName'] = user.name;
+        map['authorName'] = user.firstName;
         map['authorUserName'] = user.username;
-        map['authorProfilePhotoURL'] = user.profilePhotoURL;
+        map['authorProfilePhotoURL'] = user.imageUrl;
         await DatabaseService.postsRef.doc(postId).set(map);
         for (Hashtag tag in _selectedHashtags) {
           addPostHashtag(postId, tag.name);

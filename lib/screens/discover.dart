@@ -129,7 +129,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
                                         child: GestureDetector(
                                           child: CustomImage(
                                             side: 135,
-                                            image: NetworkImage(user.profilePhotoURL),
+                                            image: NetworkImage(user.imageUrl),
                                           ),
                                           onTap: () {
                                             Navigator.push(
@@ -143,7 +143,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
-                                        child: Text(user.name, style: kLightLabelTextStyle),
+                                        child: Text(user.firstName, style: kLightLabelTextStyle),
                                       ),
                                     ],
                                   ),

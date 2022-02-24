@@ -85,9 +85,16 @@ class _PublishArticleScreenState extends State<PublishArticleScreen> {
             ),
           ),
           Expanded(
-            child: QuillEditor.basic(
+            child: QuillEditor(
               controller: _controller,
-              readOnly: false, // true for view only mode
+              readOnly: true,
+              autoFocus: true,
+              expands: false,
+              padding: EdgeInsets.zero,
+              placeholder: 'Start typing...',
+              scrollController: ScrollController(),
+              focusNode: FocusNode(),
+              scrollable: true,
             ),
           ),
           Container(

@@ -32,14 +32,14 @@ class UserCard extends StatelessWidget {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(left: 8.0, right: 15.0),
-                        child: CustomImage(side: 40, image: NetworkImage(user.profilePhotoURL)),
+                        child: CustomImage(side: 40, image: NetworkImage(user.imageUrl)),
                       ),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            user.name,
+                            user.firstName,
                             style: GoogleFonts.dmSans(
                               fontSize: 15,
                               fontWeight: FontWeight.w500,

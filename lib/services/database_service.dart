@@ -38,8 +38,12 @@ class DatabaseService {
     map.addAll({
       'id': AuthService.currentUser.uid,
       'email': '${data.name}',
-      'time_created': Timestamp.now(),
-      'profilePhotoURL':
+      'timeCreated': Timestamp.now(),
+      'createdAt': DateTime.now().millisecondsSinceEpoch,
+      'lastSeen': DateTime.now().millisecondsSinceEpoch,
+      'role': 'user',
+      'updatedAt': DateTime.now().millisecondsSinceEpoch,
+      'imageUrl':
           'https://firebasestorage.googleapis.com/v0/b/f29so-group-5-amber.appspot.com/o/images%2Fsnapchat-bitmoji-featured.jpeg?alt=media&token=99a93201-9511-48c1-9420-0aa3ea6a2cb7',
     });
     data.additionalSignupData?.forEach((key, value) {
@@ -75,9 +79,9 @@ class DatabaseService {
     map['likes'] = {};
     map['authorId'] = AuthService.currentUser.uid;
     map['timestamp'] = Timestamp.now();
-    map['authorName'] = user.name;
+    map['authorName'] = user.firstName;
     map['authorUserName'] = user.username;
-    map['authorProfilePhotoURL'] = user.profilePhotoURL;
+    map['authorProfilePhotoURL'] = user.imageUrl;
     await DatabaseService.postsRef.doc(postID).set(map);
   }
 
@@ -103,7 +107,7 @@ class DatabaseService {
     map['username'] = user.username;
     map['text'] = comment;
     map['timestamp'] = Timestamp.now();
-    map['profilePhotoURL'] = user.profilePhotoURL;
+    map['profilePhotoURL'] = user.imageUrl;
     await DatabaseService.commentsRef.doc(postID).collection('comments').doc().set(map);
   }
 

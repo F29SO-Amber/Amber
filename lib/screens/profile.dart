@@ -106,7 +106,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return FutureBuilder(
       future: DatabaseService.getUser(widget.userUID),
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
+        if (snapshot.connectionState == ConnectionState.done && snapshot.data != null) {
           var user = snapshot.data as UserModel;
           return Scaffold(
             appBar: AppBar(
@@ -139,7 +139,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     padding: const EdgeInsets.all(20.0),
                     child: CustomImage(
                       side: 80,
-                      image: NetworkImage(user.profilePhotoURL),
+                      image: NetworkImage(user.imageUrl),
                       borderRadius: 25,
                     ),
                   ),
@@ -148,7 +148,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('${user.name} ', style: kDarkLabelTextStyle),
+                        Text('${user.firstName} ', style: kDarkLabelTextStyle),
                         (followerCount != null && (followerCount?.length)! > 3)
                             ? const Icon(Icons.verified, color: Colors.amber, size: 22)
                             : Container(),

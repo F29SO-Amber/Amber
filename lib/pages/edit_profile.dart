@@ -32,7 +32,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   void initState() {
     super.initState();
     usernameController.text = widget.user.username;
-    nameController.text = widget.user.name;
+    nameController.text = widget.user.firstName;
   }
 
   @override
@@ -71,7 +71,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 20.0),
                   child: (file == null)
-                      ? CustomImage(side: 100, image: NetworkImage(widget.user.profilePhotoURL))
+                      ? CustomImage(side: 100, image: NetworkImage(widget.user.imageUrl))
                       : CustomImage(side: 100, image: FileImage(file!)),
                 ),
               ),

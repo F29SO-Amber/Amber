@@ -37,8 +37,8 @@ class _LoginScreenState extends State<LoginScreen> {
               theme: kLoginTheme,
               onLogin: AuthService.authUser,
               onSignup: AuthService.signupUser,
-              savedEmail: box.get('email'),
-              savedPassword: box.get('password'),
+              savedEmail: box.get('email') ?? '',
+              savedPassword: box.get('password') ?? '',
               onRecoverPassword: AuthService.recoverPassword,
               messages: LoginMessages(signUpSuccess: "Sign up successful!"),
               additionalSignupFields: [
@@ -48,7 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   icon: Icon(FontAwesomeIcons.at),
                 ),
                 const UserFormField(
-                  keyName: 'name',
+                  keyName: 'firstName',
                   displayName: 'Name',
                   icon: Icon(FontAwesomeIcons.solidUser),
                 ),
