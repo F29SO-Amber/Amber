@@ -1,6 +1,8 @@
+import 'package:amber/models/article.dart';
 import 'package:amber/models/community.dart';
 import 'package:amber/models/post.dart';
 import 'package:amber/pages/community.dart';
+import 'package:amber/pages/create/publish_article.dart';
 import 'package:amber/pages/user_posts.dart';
 import 'package:amber/services/database_service.dart';
 import 'package:amber/widgets/custom_outlined_button.dart';
@@ -139,9 +141,49 @@ class _ArtistFooterState extends State<ArtistFooter> {
                         padding: EdgeInsets.only(top: 120.0),
                         child: Center(child: Text('No articles to display!')),
                       )
-                    : const Padding(
-                        padding: EdgeInsets.only(top: 120.0),
-                        child: Center(child: Text('There are articles to display!')),
+                    : ListView.builder(
+                        reverse: true,
+                        padding: const EdgeInsets.all(10).copyWith(bottom: 30),
+                        itemCount: list.length,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: (BuildContext context, int index) {
+                          ArticleModel article = ArticleModel.fromDocument(list[index]);
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              ListTile(
+                                contentPadding: const EdgeInsets.symmetric(horizontal: 0),
+                                leading: CustomImage(
+                                  side: 100.0,
+                                  image: NetworkImage(article.imageURL),
+                                  borderRadius: 10,
+                                ),
+                                title: Text(
+                                  article.authorUserName,
+                                  style: const TextStyle(fontWeight: FontWeight.w700),
+                                ),
+                                subtitle: Text(
+                                  '${article.timestamp}',
+                                  style: const TextStyle(fontSize: 12.0),
+                                ),
+                                trailing: CustomOutlinedButton(
+                                  widthFactor: 0.19,
+                                  onPress: () {
+                                    Navigator.of(context, rootNavigator: true).push(
+                                      MaterialPageRoute(
+                                        builder: (context) => const PublishArticleScreen(),
+                                      ),
+                                    );
+                                  },
+                                  buttonText: 'Read',
+                                ),
+                              ),
+                              const Divider(),
+                            ],
+                          );
+                        },
                       );
               } else {
                 return const Center(child: CircularProgressIndicator());
