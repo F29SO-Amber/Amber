@@ -13,6 +13,10 @@ dependencies:
   uuid:
   hive:
   image:
+  faker:
+  flutter_firebase_chat_core:
+  mime: ^1.0.1
+  open_file: ^3.2.1
   intl:
   http:
   timeago:

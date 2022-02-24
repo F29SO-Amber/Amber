@@ -32,8 +32,6 @@ class PublishArticleScreen extends StatefulWidget {
 class _PublishArticleScreenState extends State<PublishArticleScreen> {
   File? file;
   bool uploadButtonPresent = true;
-  final _formKey = GlobalKey<FormState>();
-  final headingController = TextEditingController();
   final QuillController _controller = QuillController.basic();
 
   @override
@@ -66,47 +64,25 @@ class _PublishArticleScreenState extends State<PublishArticleScreen> {
       ),
       body: Column(
         children: [
-          Row(
-            children: [
-              GestureDetector(
-                child: Container(
-                  height: 130 * 9 / 16,
-                  width: 130,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: (file == null)
-                          ? const AssetImage('assets/taptoselect.png')
-                          : FileImage(file!) as ImageProvider,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                onTap: () async {
-                  file = await ImageService.chooseFromGallery();
-                  if (file != null) {
-                    setState(() {});
-                  }
-                },
-              ),
-              Form(
-                key: _formKey,
-                child: Expanded(
-                  child: Container(
-                    // width: MediaQuery.of(context).size.width,
-                    padding: const EdgeInsets.only(left: 15),
-                    child: TextFormField(
-                      controller: headingController,
-                      keyboardType: TextInputType.text,
-                      decoration: const InputDecoration(
-                        hintText: "Write a heading...",
-                        border: InputBorder.none,
-                        // prefixIcon: Icon(Icons.create_sharp, color: kAppColor, size: 30),
-                      ),
-                    ),
-                  ),
+          GestureDetector(
+            onTap: () async {
+              file = await ImageService.chooseFromGallery();
+              if (file != null) {
+                setState(() {});
+              }
+            },
+            child: Container(
+              height: MediaQuery.of(context).size.width * 9 / 16,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: (file == null)
+                      ? const AssetImage('assets/taptoselect.png')
+                      : FileImage(file!) as ImageProvider,
+                  fit: BoxFit.cover,
                 ),
               ),
-            ],
+            ),
           ),
           Expanded(
             child: QuillEditor.basic(

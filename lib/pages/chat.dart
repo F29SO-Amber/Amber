@@ -1,209 +1,159 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:amber/services/auth_service.dart';
+import 'package:amber/services/database_service.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 
-class ChatPage extends StatefulWidget {
-  const ChatPage({Key? key, required this.chatID, required this.chatName, required this.url})
-      : super(key: key);
+import '../utilities/constants.dart';
 
-  final String chatID;
-  final String chatName;
-  final String url;
+class ChatScreen extends StatefulWidget {
+  static const String id = 'chat_screen';
 
-  static const id = '/chat';
-
+  const ChatScreen({Key? key}) : super(key: key);
   @override
-  State<ChatPage> createState() => _ChatPageState();
+  _ChatScreenState createState() => _ChatScreenState();
 }
 
-class _ChatPageState extends State<ChatPage> {
-  double lefts = 0;
-  double rights = 0;
-  Color fieldColor = const Color(0xFF39304d);
-  Color textColor = const Color(0xFF1F1A30);
-  Color dateColor = Colors.black87;
-  final myControllerMsg = TextEditingController();
-
-  Future<void> addData() async {
-    await FirebaseFirestore.instance.collection('messages').add({
-      'token': '${FirebaseAuth.instance.currentUser!.email}|${widget.chatID}',
-      'from': FirebaseAuth.instance.currentUser!.email,
-      'to': widget.chatID,
-      'time2': DateTime.now(),
-      'message': myControllerMsg.text,
-    });
-    myControllerMsg.clear();
-  }
+class _ChatScreenState extends State<ChatScreen> {
+  final messageTextController = TextEditingController();
+  late String messageText;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        titleSpacing: 0.0,
-        backgroundColor: Colors.amber, // top bar color
-        title: Row(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(right: MediaQuery.of(context).size.height * 0.02),
-              child: CircleAvatar(
-                backgroundImage: NetworkImage(widget.url),
+        leading: null,
+        title: const Text('⚡️Chat'),
+        backgroundColor: Colors.lightBlueAccent,
+      ),
+      body: SafeArea(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            MessagesStream(),
+            Container(
+              decoration: kMessageContainerDecoration,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Expanded(
+                    child: TextField(
+                      controller: messageTextController,
+                      onChanged: (value) {
+                        messageText = value;
+                      },
+                      decoration: kMessageTextFieldDecoration,
+                    ),
+                  ),
+                  FlatButton(
+                    onPressed: () {
+                      messageTextController.clear();
+                      DatabaseService.messagesRef.add({
+                        'text': messageText,
+                        'sender': AuthService.currentUser.email,
+                      });
+                    },
+                    child: const Text('Send', style: kSendButtonTextStyle),
+                  ),
+                ],
               ),
-            ),
-            Text(
-              widget.chatName,
-              style: GoogleFonts.dmSans(),
             ),
           ],
         ),
       ),
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        color: const Color(0XFFFFF9C4),
-        child: Column(
-          children: [
-            Expanded(
-              child: StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection('messages')
-                    .where('token', whereIn: [
-                      '${FirebaseAuth.instance.currentUser!.email}|${widget.chatID}',
-                      '${widget.chatID}|${FirebaseAuth.instance.currentUser!.email}'
-                    ])
-                    .orderBy('time2', descending: true)
-                    .snapshots(),
-                builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (snapshot.hasError) {
-                    return const Text("Error");
-                  }
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                  return Padding(
-                    padding: EdgeInsets.only(
-                        left: MediaQuery.of(context).size.width * 0.06,
-                        right: MediaQuery.of(context).size.width * 0.06),
-                    child: ListView(
-                      reverse: true,
-                      children: snapshot.data!.docs.map((DocumentSnapshot document) {
-                        Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
-                        if (FirebaseAuth.instance.currentUser!.email == data['to']) {
-                          lefts = 0;
-                          rights = 0.2;
-                          fieldColor = const Color(0xFF5C6BC0);
-                          textColor = Colors.white;
-                          dateColor = Colors.white70;
-                        } else {
-                          lefts = 0.2;
-                          rights = 0;
-                          fieldColor = const Color(0xFF64B5F6);
-                          textColor = const Color(0xFF1F1A30);
-                          dateColor = Colors.black87;
-                        }
-                        DateTime myDateTime = (data['time2']).toDate();
+    );
+  }
+}
 
-                        return Container(
-                          margin: EdgeInsets.only(
-                              top: MediaQuery.of(context).size.height * 0.02,
-                              left: MediaQuery.of(context).size.width * lefts,
-                              right: MediaQuery.of(context).size.width * rights),
-                          decoration: BoxDecoration(
-                            color: fieldColor,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: ListTile(
-                            title: Text(
-                              data['message'],
-                              style: TextStyle(color: textColor),
-                            ),
-                            trailing: Padding(
-                              padding: EdgeInsets.only(
-                                  bottom: MediaQuery.of(context).size.height * 0.008),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Text(
-                                    DateFormat('hh:mm a').format(myDateTime),
-                                    style: TextStyle(color: dateColor),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  );
-                },
+class MessagesStream extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: DatabaseService.messagesRef.snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const Center(
+            child: CircularProgressIndicator(
+              backgroundColor: Colors.lightBlueAccent,
+            ),
+          );
+        }
+        final messages = snapshot.data?.docs.reversed;
+        List<MessageBubble> messageBubbles = [];
+        for (var message in messages!) {
+          // final messageText = message.data['text'];
+          // final messageSender = message.data['sender'];
+          //
+          // final currentUser = loggedInUser.email;
+
+          // final messageBubble = MessageBubble(
+          //   sender: messageSender,
+          //   text: messageText,
+          //   isMe: currentUser == messageSender,
+          // );
+
+          // messageBubbles.add(messageBubble);
+        }
+        return Expanded(
+          child: ListView(
+            reverse: true,
+            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
+            children: messageBubbles,
+          ),
+        );
+      },
+    );
+  }
+}
+
+class MessageBubble extends StatelessWidget {
+  const MessageBubble({Key? key, required this.sender, required this.text, required this.isMe})
+      : super(key: key);
+
+  final String sender;
+  final String text;
+  final bool isMe;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(10.0),
+      child: Column(
+        crossAxisAlignment: isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            sender,
+            style: TextStyle(
+              fontSize: 12.0,
+              color: Colors.black54,
+            ),
+          ),
+          Material(
+            borderRadius: isMe
+                ? BorderRadius.only(
+                    topLeft: Radius.circular(30.0),
+                    bottomLeft: Radius.circular(30.0),
+                    bottomRight: Radius.circular(30.0))
+                : BorderRadius.only(
+                    bottomLeft: Radius.circular(30.0),
+                    bottomRight: Radius.circular(30.0),
+                    topRight: Radius.circular(30.0),
+                  ),
+            elevation: 5.0,
+            color: isMe ? Colors.lightBlueAccent : Colors.white,
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+              child: Text(
+                text,
+                style: TextStyle(
+                  color: isMe ? Colors.white : Colors.black54,
+                  fontSize: 15.0,
+                ),
               ),
             ),
-            Container(
-              margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.02),
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.width * 0.15,
-              decoration: const BoxDecoration(
-                color: Color(0xFF39304d),
-                // borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: Color(0xFF39304d),
-                    blurRadius: 10,
-                    offset: Offset(0, 0), // Shadow position
-                  ),
-                ],
-              ),
-              child: Container(
-                decoration: const BoxDecoration(
-                  color: Color(0xFFFFA726), // message
-                  // borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color(0xFFFFA726),
-                      // blurRadius: blurRadius1,
-                      offset: Offset(0, 0), // Shadow position
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: TextField(
-                    controller: myControllerMsg,
-                    cursorColor: Colors.white,
-                    style: const TextStyle(
-                        color: Colors.white, height: 1.4, fontWeight: FontWeight.w600),
-                    decoration: InputDecoration(
-                      // fillColor: field1Color,
-                      focusedBorder: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                        borderSide: BorderSide.none,
-                      ),
-                      border: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                        borderSide: BorderSide.none,
-                      ),
-                      filled: true,
-                      suffixIcon: InkWell(
-                        onTap: () {
-                          addData();
-                        },
-                        child: const Icon(
-                          Icons.send_rounded,
-                          color: Colors.white70,
-                        ),
-                      ),
-                      hintText: 'Message...',
-                      hintStyle:
-                          const TextStyle(color: Colors.white60, fontWeight: FontWeight.w400),
-                    ),
-                  ),
-                ),
-              ),
-            )
-            // ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

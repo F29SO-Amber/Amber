@@ -255,15 +255,15 @@ class _ProfilePageState extends State<ProfilePage> {
                               buttonText: 'Message',
                               widthFactor: 0.45,
                               onPress: () {
-                                Navigator.of(context, rootNavigator: true).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => ChatPage(
-                                      chatID: user.email,
-                                      chatName: user.name,
-                                      url: user.profilePhotoURL,
-                                    ),
-                                  ),
-                                );
+                                // Navigator.of(context, rootNavigator: true).push(
+                                //   MaterialPageRoute(
+                                //     builder: (context) => ChatPage(
+                                //       chatID: user.email,
+                                //       chatName: user.name,
+                                //       url: user.profilePhotoURL,
+                                //     ),
+                                //   ),
+                                // );
                               },
                             ),
                             (isFollowing)

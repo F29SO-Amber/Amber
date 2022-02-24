@@ -1,3 +1,4 @@
+import 'package:amber/pages/chat/rooms.dart';
 import 'package:flutter/material.dart';
 
 import 'package:amber/screens/chats.dart';
@@ -19,7 +20,7 @@ class _ChatsPageNavigatorState extends State<ChatsPageNavigator> {
     return Navigator(
       key: chatsNavigatorKey,
       onGenerateRoute: (RouteSettings settings) {
-        return MaterialPageRoute(settings: settings, builder: (_) => const ChatsPage());
+        return MaterialPageRoute(settings: settings, builder: (_) => const RoomsPage());
       },
     );
   }

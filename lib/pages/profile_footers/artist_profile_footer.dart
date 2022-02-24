@@ -1,6 +1,7 @@
 import 'package:amber/models/article.dart';
 import 'package:amber/models/community.dart';
 import 'package:amber/models/post.dart';
+import 'package:amber/pages/article.dart';
 import 'package:amber/pages/community.dart';
 import 'package:amber/pages/create/publish_article.dart';
 import 'package:amber/pages/user_posts.dart';
@@ -173,7 +174,7 @@ class _ArtistFooterState extends State<ArtistFooter> {
                                   onPress: () {
                                     Navigator.of(context, rootNavigator: true).push(
                                       MaterialPageRoute(
-                                        builder: (context) => const PublishArticleScreen(),
+                                        builder: (context) => ArticleScreen(article: article),
                                       ),
                                     );
                                   },
