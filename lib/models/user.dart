@@ -8,25 +8,25 @@ class UserModel {
   final String dob;
   final String accountType;
   final Timestamp timeCreated;
-  final int createdAt;
+  // final int createdAt;
   final String imageUrl;
-  final int lastSeen;
+  // final int lastSeen;
   final String role;
-  final int updatedAt;
+  // final int updatedAt;
 
   const UserModel({
     required this.id,
     required this.firstName,
     required this.email,
     required this.username,
-    required this.createdAt,
+    // required this.createdAt,
     required this.dob,
     required this.accountType,
     required this.timeCreated,
     required this.imageUrl,
-    required this.lastSeen,
+    // required this.lastSeen,
     required this.role,
-    required this.updatedAt,
+    // required this.updatedAt,
   });
 
   factory UserModel.fromDocument(DocumentSnapshot doc) {
@@ -37,12 +37,12 @@ class UserModel {
       username: doc['username'],
       dob: doc['dob'],
       accountType: doc['account_type'],
-      createdAt: doc['createdAt'],
+      // createdAt: doc['createdAt'],
       timeCreated: doc['timeCreated'],
       imageUrl: doc['imageUrl'],
-      lastSeen: doc['lastSeen'],
+      // lastSeen: doc['lastSeen'],
       role: doc['role'],
-      updatedAt: doc['updatedAt'],
+      // updatedAt: doc['updatedAt'],
     );
   }
 
