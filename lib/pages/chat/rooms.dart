@@ -22,13 +22,12 @@ class _RoomsPageState extends State<RoomsPage> {
 
   @override
   void initState() {
-    initializeFlutterFire();
+    checkUserAuthState();
     super.initState();
   }
 
-  void initializeFlutterFire() async {
+  void checkUserAuthState() async {
     try {
-      await Firebase.initializeApp();
       FirebaseAuth.instance.authStateChanges().listen((User? user) {
         setState(() {
           _user = user;
@@ -42,10 +41,6 @@ class _RoomsPageState extends State<RoomsPage> {
         _error = true;
       });
     }
-  }
-
-  void logout() async {
-    await FirebaseAuth.instance.signOut();
   }
 
   Widget _buildAvatar(types.Room room) {
@@ -109,10 +104,6 @@ class _RoomsPageState extends State<RoomsPage> {
                   },
           ),
         ],
-        leading: IconButton(
-          icon: const Icon(Icons.logout),
-          onPressed: _user == null ? null : logout,
-        ),
         systemOverlayStyle: SystemUiOverlayStyle.light,
         title: const Text('Rooms'),
       ),
