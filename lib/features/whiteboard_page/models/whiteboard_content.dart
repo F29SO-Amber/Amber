@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'package:ambertesting/features/whiteboard_page/models/line.dart';
+import 'package:amber/features/whiteboard_page/models/line.dart';
 
 part 'whiteboard_content.g.dart';
 

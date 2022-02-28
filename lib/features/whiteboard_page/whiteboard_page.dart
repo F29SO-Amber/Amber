@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:ambertesting/features/whiteboard_page/whiteboard_view_model.dart';
-import 'package:ambertesting/features/whiteboard_page/widgets/tool_buttons.dart';
-import 'package:ambertesting/features/whiteboard_page/widgets/whiteboard_view.dart';
+import 'package:amber/features/whiteboard_page/whiteboard_view_model.dart';
+import 'package:amber/features/whiteboard_page/widgets/tool_buttons.dart';
+import 'package:amber/features/whiteboard_page/widgets/whiteboard_view.dart';
 
 class WhiteboardPage extends StatelessWidget {
   const WhiteboardPage({Key? key}) : super(key: key);
