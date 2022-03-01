@@ -1,3 +1,4 @@
+import 'package:amber/drawing_page.dart';
 import 'package:flutter/material.dart';
 import 'package:amber/screens/testing.dart';
 
@@ -21,9 +22,9 @@ class _TestPageNavigatorState extends State<TestPageNavigator> {
           builder: (_) {
             switch (settings.name) {
               case '/':
-                return const Testing();
+                return DrawingPage();
               default:
-                return const Testing();
+                return DrawingPage();
             }
           },
         );
