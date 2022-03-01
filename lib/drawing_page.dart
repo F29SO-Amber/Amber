@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
-import 'package:drawing_app/drawn_line.dart';
-import 'package:drawing_app/sketcher.dart';
+import 'package:amber/drawn_line.dart';
+import 'package:amber/sketcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -21,14 +21,18 @@ class _DrawingPageState extends State<DrawingPage> {
   Color selectedColor = Colors.black;
   double selectedWidth = 5.0;
 
-  StreamController<List<DrawnLine?>> linesStreamController = StreamController<List<DrawnLine?>>.broadcast();
-  StreamController<DrawnLine?> currentLineStreamController = StreamController<DrawnLine?>.broadcast();
+  StreamController<List<DrawnLine?>> linesStreamController =
+      StreamController<List<DrawnLine?>>.broadcast();
+  StreamController<DrawnLine?> currentLineStreamController =
+      StreamController<DrawnLine?>.broadcast();
 
   Future<void> save() async {
     try {
-      RenderRepaintBoundary boundary = _globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+      RenderRepaintBoundary boundary = _globalKey.currentContext!
+          .findRenderObject() as RenderRepaintBoundary;
       ui.Image image = await boundary.toImage();
-      ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+      ByteData? byteData =
+          await image.toByteData(format: ui.ImageByteFormat.png);
       Uint8List? pngBytes = byteData?.buffer.asUint8List();
       var saved = await ImageGallerySaver.saveImage(
         pngBytes!,
@@ -164,7 +168,8 @@ class _DrawingPageState extends State<DrawingPage> {
         child: Container(
           width: strokeWidth * 2,
           height: strokeWidth * 2,
-          decoration: BoxDecoration(color: selectedColor, borderRadius: BorderRadius.circular(50.0)),
+          decoration: BoxDecoration(
+              color: selectedColor, borderRadius: BorderRadius.circular(50.0)),
         ),
       ),
     );
