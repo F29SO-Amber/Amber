@@ -1,4 +1,5 @@
-import 'package:amber/mash-up/drawing_page.dart';
+// import 'package:amber/mash-up/drawing_page.dart';
+import 'package:amber/pages/error.dart';
 import 'package:flutter/material.dart';
 import 'package:amber/screens/testing.dart';
 
@@ -22,9 +23,9 @@ class _TestPageNavigatorState extends State<TestPageNavigator> {
           builder: (_) {
             switch (settings.name) {
               case '/':
-                return DrawingPage();
+                return ErrorScreen();
               default:
-                return DrawingPage();
+                return ErrorScreen();
             }
           },
         );

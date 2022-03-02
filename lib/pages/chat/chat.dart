@@ -13,10 +13,7 @@ import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 
 class ChatPage extends StatefulWidget {
-  const ChatPage({
-    Key? key,
-    required this.room,
-  }) : super(key: key);
+  const ChatPage({Key? key, required this.room}) : super(key: key);
 
   final types.Room room;
 
@@ -27,7 +24,7 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   bool _isAttachmentUploading = false;
 
-  void _handleAtachmentPressed() {
+  void _handleAttachmentPressed() {
     showModalBottomSheet<void>(
       context: context,
       builder: (BuildContext context) {
@@ -205,13 +202,13 @@ class _ChatPageState extends State<ChatPage> {
                 child: Chat(
                   isAttachmentUploading: _isAttachmentUploading,
                   messages: snapshot.data ?? [],
-                  onAttachmentPressed: _handleAtachmentPressed,
+                  onAttachmentPressed: _handleAttachmentPressed,
                   onMessageTap: _handleMessageTap,
                   onPreviewDataFetched: _handlePreviewDataFetched,
                   onSendPressed: _handleSendPressed,
-                  user: types.User(
-                    id: FirebaseChatCore.instance.firebaseUser?.uid ?? '',
-                  ),
+                  showUserNames: true,
+                  showUserAvatars: true,
+                  user: types.User(id: FirebaseChatCore.instance.firebaseUser?.uid ?? ''),
                 ),
               );
             },

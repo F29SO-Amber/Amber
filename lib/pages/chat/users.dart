@@ -5,20 +5,31 @@ import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'chat.dart';
 import 'util.dart';
 
-class UsersPage extends StatelessWidget {
+class UsersPage extends StatefulWidget {
   const UsersPage({Key? key}) : super(key: key);
 
-  void _handlePressed(types.User otherUser, BuildContext context) async {
-    final room = await FirebaseChatCore.instance.createRoom(otherUser);
+  @override
+  State<UsersPage> createState() => _UsersPageState();
+}
 
-    Navigator.of(context).pop();
-    await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => ChatPage(
-          room: room,
-        ),
-      ),
-    );
+class _UsersPageState extends State<UsersPage> {
+  final List<types.User> users = [];
+
+  void _handlePressed(BuildContext context) async {
+    if (users.length == 1) {
+      final room = await FirebaseChatCore.instance.createRoom(users[0]);
+      Navigator.of(context).pop();
+      await Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => ChatPage(room: room)),
+      );
+    } else if (users.length > 1) {
+      final room = await FirebaseChatCore.instance.createGroupRoom(
+        name: 'Test Group',
+        users: users,
+      );
+      Navigator.of(context).pop();
+      await Navigator.of(context).push(MaterialPageRoute(builder: (_) => ChatPage(room: room)));
+    }
   }
 
   Widget _buildAvatar(types.User user) {
@@ -48,6 +59,12 @@ class UsersPage extends StatelessWidget {
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.light,
         title: const Text('Users'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.create),
+            onPressed: () => _handlePressed(context),
+          )
+        ],
       ),
       body: StreamBuilder<List<types.User>>(
         stream: FirebaseChatCore.instance.users(),
@@ -56,9 +73,7 @@ class UsersPage extends StatelessWidget {
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return Container(
               alignment: Alignment.center,
-              margin: const EdgeInsets.only(
-                bottom: 200,
-              ),
+              margin: const EdgeInsets.only(bottom: 200),
               child: const Text('No users'),
             );
           }
@@ -67,16 +82,20 @@ class UsersPage extends StatelessWidget {
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
               final user = snapshot.data![index];
-
+              // bool isSelected = false;
               return GestureDetector(
                 onTap: () {
-                  _handlePressed(user, context);
+                  setState(() {
+                    if (!users.contains(user)) {
+                      users.add(user);
+                    } else {
+                      users.remove(user);
+                    }
+                  });
                 },
                 child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  color: users.contains(user) ? Colors.amber.shade50 : Colors.white,
                   child: Row(
                     children: [
                       _buildAvatar(user),
