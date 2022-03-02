@@ -1,9 +1,10 @@
+import 'package:amber/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
+import '../../utilities/constants.dart';
 import 'chat.dart';
-import 'util.dart';
 
 class UsersPage extends StatefulWidget {
   const UsersPage({Key? key}) : super(key: key);
@@ -26,6 +27,10 @@ class _UsersPageState extends State<UsersPage> {
       final room = await FirebaseChatCore.instance.createGroupRoom(
         name: 'Test Group',
         users: users,
+        imageUrl: 'https://bit.ly/3sB5zcK',
+        metadata: {
+          'createdBy': AuthService.currentUser.uid,
+        },
       );
       Navigator.of(context).pop();
       await Navigator.of(context).push(MaterialPageRoute(builder: (_) => ChatPage(room: room)));
@@ -57,11 +62,11 @@ class _UsersPageState extends State<UsersPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        systemOverlayStyle: SystemUiOverlayStyle.light,
-        title: const Text('Users'),
+        title: const Text('Rooms'),
+        backgroundColor: kAppColor,
         actions: [
           IconButton(
-            icon: const Icon(Icons.create),
+            icon: const Icon(Icons.done),
             onPressed: () => _handlePressed(context),
           )
         ],

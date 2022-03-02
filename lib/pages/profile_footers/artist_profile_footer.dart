@@ -1,6 +1,8 @@
+import 'package:amber/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
 import 'package:amber/models/post.dart';
 import 'package:amber/pages/article.dart';
@@ -190,9 +192,32 @@ class _ArtistFooterState extends State<ArtistFooter> {
             },
           ),
         if (selectedTab == 2)
-          const Padding(
-            padding: EdgeInsets.only(top: 120.0),
-            child: Center(child: Text('Public Groups - To Be Implemented')),
+          StreamBuilder(
+            stream: DatabaseService.roomsRef
+                .where('metadata', isEqualTo: {'createdBy': widget.userUID}).snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData && snapshot.connectionState == ConnectionState.active) {
+                var list = (snapshot.data as QuerySnapshot).docs.toList();
+                return list.isEmpty
+                    ? const Padding(
+                        padding: EdgeInsets.only(top: 120.0),
+                        child: Center(child: Text('No public groups to display!')),
+                      )
+                    : ListView.builder(
+                        reverse: true,
+                        padding: const EdgeInsets.all(10).copyWith(bottom: 30),
+                        itemCount: list.length,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: (BuildContext context, int index) {
+                          // types.Room room = types.Room.fromJson(list[index]);
+                          return Text(list[index]['name']);
+                        },
+                      );
+              } else {
+                return const Center(child: CircularProgressIndicator());
+              }
+            },
           ),
         if (selectedTab == 3)
           StreamBuilder(

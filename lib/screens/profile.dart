@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:amber/pages/chat.dart';
 import 'package:amber/models/user.dart';
-import 'package:amber/pages/login.dart';
 import 'package:amber/pages/settings.dart';
 import 'package:amber/pages/user_list.dart';
 import 'package:amber/pages/edit_profile.dart';
@@ -20,12 +18,6 @@ import 'package:amber/pages/profile_footers/student_profile_footer.dart';
 import 'package:amber/pages/profile_footers/brand_marketer_profile_footer.dart';
 import 'package:amber/pages/profile_footers/content_creator_profile_footer.dart';
 
-// am2024@hw.ac.uk
-
-/*
-  Profile page will allow the user to view all the content posted by or collaborated in a project of the particular username,
-  Also features a follow and message function.
-*/
 class ProfilePage extends StatefulWidget {
   static const id = '/profile';
   final String userUID;
@@ -115,17 +107,12 @@ class _ProfilePageState extends State<ProfilePage> {
                 style: const TextStyle(fontSize: 18, color: Colors.white),
               ),
               actions: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 10.0),
-                  child: (widget.userUID == AuthService.currentUser.uid)
-                      ? GestureDetector(
-                          child: const Icon(Icons.settings, color: Colors.white),
-                          onTap: () {
-                            Navigator.pushNamed(context, SettingsPage.id);
-                          },
-                        )
-                      : Container(),
-                ),
+                (widget.userUID == AuthService.currentUser.uid)
+                    ? IconButton(
+                        onPressed: () => Navigator.pushNamed(context, SettingsPage.id),
+                        icon: const Icon(Icons.settings),
+                      )
+                    : Container(),
               ],
               backgroundColor: kAppColor,
             ),
@@ -255,15 +242,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               buttonText: 'Message',
                               widthFactor: 0.45,
                               onPress: () {
-                                // Navigator.of(context, rootNavigator: true).push(
-                                //   MaterialPageRoute(
-                                //     builder: (context) => ChatPage(
-                                //       chatID: user.email,
-                                //       chatName: user.name,
-                                //       url: user.profilePhotoURL,
-                                //     ),
-                                //   ),
-                                // );
+                                // TODO
                               },
                             ),
                             (isFollowing)

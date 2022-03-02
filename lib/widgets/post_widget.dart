@@ -137,20 +137,23 @@ class _UserPostState extends State<UserPost> {
                   onPressed: null,
                   backgroundColor: Color(0xFF21B7CA),
                   foregroundColor: Colors.white,
-                  icon: Icons.share,
-                  label: 'Share',
+                  icon: Icons.report,
+                  label: 'Report',
                 ),
               ],
             ),
             endActionPane: ActionPane(
               motion: const DrawerMotion(),
               children: [
-                const SlidableAction(
-                  onPressed: null,
-                  backgroundColor: Color(0xFF7BC043),
+                SlidableAction(
+                  backgroundColor: Colors.deepOrange,
                   foregroundColor: Colors.white,
-                  icon: Icons.report,
-                  label: 'Report',
+                  icon: Icons.delete,
+                  label: 'Delete',
+                  onPressed: (context) {
+                    DatabaseService.postsRef.doc(widget.post.id).delete();
+                    setState(() {});
+                  },
                 ),
                 SlidableAction(
                   onPressed: (context) {

@@ -86,4 +86,10 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       onWillPop: _systemBackButtonPressed,
     );
   }
+
+  setIndex(i) {
+    setState(() {
+      _selectedIndex = i;
+    });
+  }
 }

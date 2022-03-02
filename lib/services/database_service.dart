@@ -16,6 +16,7 @@ class DatabaseService {
   static final _firestore = FirebaseFirestore.instance;
   static final usersRef = _firestore.collection('users');
   static final postsRef = _firestore.collection('posts');
+  static final roomsRef = _firestore.collection('rooms');
   static final eventsRef = _firestore.collection('events');
   static final articlesRef = _firestore.collection('articles');
   static final messagesRef = _firestore.collection('messages');

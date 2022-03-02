@@ -1,12 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
+import '../../utilities/constants.dart';
 import 'chat.dart';
 import 'users.dart';
-import 'util.dart';
 
 class RoomsPage extends StatefulWidget {
   const RoomsPage({Key? key}) : super(key: key);
@@ -28,18 +26,10 @@ class _RoomsPageState extends State<RoomsPage> {
 
   void checkUserAuthState() async {
     try {
-      FirebaseAuth.instance.authStateChanges().listen((User? user) {
-        setState(() {
-          _user = user;
-        });
-      });
-      setState(() {
-        _initialized = true;
-      });
+      FirebaseAuth.instance.authStateChanges().listen((User? user) => setState(() => _user = user));
+      setState(() => _initialized = true);
     } catch (e) {
-      setState(() {
-        _error = true;
-      });
+      setState(() => _error = true);
     }
   }
 
@@ -53,9 +43,7 @@ class _RoomsPageState extends State<RoomsPage> {
         );
 
         color = getUserAvatarNameColor(otherUser);
-      } catch (e) {
-        // Do nothing if other user is not found
-      }
+      } catch (e) {}
     }
 
     final hasImage = room.imageUrl != null;
@@ -79,40 +67,32 @@ class _RoomsPageState extends State<RoomsPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (_error) {
-      return Container();
-    }
-
-    if (!_initialized) {
+    if (_error | !_initialized) {
       return Container();
     }
 
     return Scaffold(
       appBar: AppBar(
+        title: const Text('Rooms'),
+        backgroundColor: kAppColor,
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: _user == null
                 ? null
-                : () {
-                    Navigator.of(context).push(
+                : () => Navigator.of(context).push(
                       MaterialPageRoute(
                         fullscreenDialog: true,
                         builder: (context) => const UsersPage(),
                       ),
-                    );
-                  },
+                    ),
           ),
         ],
-        systemOverlayStyle: SystemUiOverlayStyle.light,
-        title: const Text('Rooms'),
       ),
       body: _user == null
           ? Container(
               alignment: Alignment.center,
-              margin: const EdgeInsets.only(
-                bottom: 200,
-              ),
+              margin: const EdgeInsets.only(bottom: 200),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -131,9 +111,7 @@ class _RoomsPageState extends State<RoomsPage> {
                 if (!snapshot.hasData || snapshot.data!.isEmpty) {
                   return Container(
                     alignment: Alignment.center,
-                    margin: const EdgeInsets.only(
-                      bottom: 200,
-                    ),
+                    margin: const EdgeInsets.only(bottom: 200),
                     child: const Text('No rooms'),
                   );
                 }
@@ -145,19 +123,12 @@ class _RoomsPageState extends State<RoomsPage> {
 
                     return GestureDetector(
                       onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => ChatPage(
-                              room: room,
-                            ),
-                          ),
+                        Navigator.of(context, rootNavigator: true).push(
+                          MaterialPageRoute(builder: (context) => ChatPage(room: room)),
                         );
                       },
                       child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
-                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                         child: Row(
                           children: [
                             _buildAvatar(room),
