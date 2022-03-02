@@ -64,24 +64,6 @@ class DatabaseService {
     return posts;
   }
 
-  static Future<void> addUserPost(file, caption, location) async {
-    Map<String, Object?> map = {};
-    String postID = const Uuid().v4();
-    UserModel user = await getUser(AuthService.currentUser.uid);
-    // File compressedFile = await ImageService.compressImageFile(file, postID);
-    map['id'] = postID;
-    map['location'] = location;
-    map['imageURL'] = await StorageService.uploadImage(postID, file);
-    map['caption'] = caption;
-    map['likes'] = {};
-    map['authorId'] = AuthService.currentUser.uid;
-    map['timestamp'] = Timestamp.now();
-    map['authorName'] = user.firstName;
-    map['authorUserName'] = user.username;
-    map['authorProfilePhotoURL'] = user.imageUrl;
-    await DatabaseService.postsRef.doc(postID).set(map);
-  }
-
   static Future<List<UserPost>> getUserFeed() async {
     QuerySnapshot followingUsers =
         await followingRef.doc(AuthService.currentUser.uid).collection('userFollowing').get();

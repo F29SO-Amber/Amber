@@ -121,7 +121,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     Map<String, Object?> map = {};
                     if (file != null) {
                       map['profilePhotoURL'] =
-                          await StorageService.uploadProfileImage(widget.user.id, file!);
+                          await StorageService.uploadImage(widget.user.id, file!, 'profile');
                     }
                     map['name'] = nameController.text;
                     map['username'] = usernameController.text;

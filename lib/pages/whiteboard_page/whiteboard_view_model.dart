@@ -4,9 +4,9 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
 import 'package:uuid/uuid.dart';
-import 'package:amber/features/whiteboard_page/models/line.dart';
-import 'package:amber/features/whiteboard_page/models/point.dart';
-import 'package:amber/features/whiteboard_page/models/whiteboard_content.dart';
+import 'package:amber/models/draw/line.dart';
+import 'package:amber/models/draw/point.dart';
+import 'package:amber/models/draw/whiteboard_content.dart';
 
 enum Tool { pen, eraser }
 

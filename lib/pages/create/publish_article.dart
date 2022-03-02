@@ -1,28 +1,22 @@
+import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
-
-import 'package:amber/utilities/constants.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_quill/flutter_quill.dart' hide Text;
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:tuple/tuple.dart';
 import 'package:uuid/uuid.dart';
+import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_quill/flutter_quill.dart' hide Text;
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
-import '../../models/user.dart';
-import '../../services/auth_service.dart';
-import '../../services/database_service.dart';
-import '../../services/image_service.dart';
+import 'package:amber/models/user.dart';
+import 'package:amber/utilities/constants.dart';
+import 'package:amber/services/auth_service.dart';
+import 'package:amber/services/image_service.dart';
+import 'package:amber/services/storage_service.dart';
+import 'package:amber/services/database_service.dart';
 
 class PublishArticleScreen extends StatefulWidget {
   static const id = '/publish_article';
+
   const PublishArticleScreen({Key? key}) : super(key: key);
 
   @override
@@ -30,8 +24,8 @@ class PublishArticleScreen extends StatefulWidget {
 }
 
 class _PublishArticleScreenState extends State<PublishArticleScreen> {
-  File? file;
-  bool uploadButtonPresent = true;
+  File? _file;
+  bool _uploadButtonPresent = true;
   final QuillController _controller = QuillController.basic();
 
   @override
@@ -44,19 +38,19 @@ class _PublishArticleScreenState extends State<PublishArticleScreen> {
           IconButton(
             icon: const Icon(Icons.clear),
             color: Colors.white,
-            onPressed: () => disposeUserPostChanges(),
+            onPressed: () => _disposeUserArticleChanges(),
           ),
           Visibility(
-            visible: uploadButtonPresent,
+            visible: _uploadButtonPresent,
             child: IconButton(
               icon: const Icon(Icons.publish),
               color: Colors.white,
               onPressed: () async {
-                setState(() => uploadButtonPresent = false);
+                setState(() => _uploadButtonPresent = false);
                 EasyLoading.show(status: 'Uploading...');
                 await addUserArticle();
                 EasyLoading.dismiss();
-                disposeUserPostChanges();
+                _disposeUserArticleChanges();
               },
             ),
           ),
@@ -66,8 +60,8 @@ class _PublishArticleScreenState extends State<PublishArticleScreen> {
         children: [
           GestureDetector(
             onTap: () async {
-              file = await ImageService.chooseFromGallery();
-              if (file != null) {
+              _file = await ImageService.chooseFromGallery();
+              if (_file != null) {
                 setState(() {});
               }
             },
@@ -76,9 +70,9 @@ class _PublishArticleScreenState extends State<PublishArticleScreen> {
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: (file == null)
+                  image: (_file == null)
                       ? const AssetImage('assets/taptoselect.png')
-                      : FileImage(file!) as ImageProvider,
+                      : FileImage(_file!) as ImageProvider,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -97,11 +91,7 @@ class _PublishArticleScreenState extends State<PublishArticleScreen> {
               scrollable: true,
             ),
           ),
-          Container(
-            color: Colors.black,
-            width: double.infinity,
-            height: 1,
-          ),
+          Container(color: Colors.black, width: double.infinity, height: 1),
           QuillToolbar.basic(
             controller: _controller,
             showImageButton: false,
@@ -115,15 +105,15 @@ class _PublishArticleScreenState extends State<PublishArticleScreen> {
     );
   }
 
-  disposeUserPostChanges() {}
+  _disposeUserArticleChanges() {}
 
   Future<void> addUserArticle() async {
     UserModel user = await DatabaseService.getUser(AuthService.currentUser.uid);
     Map<String, Object?> map = {};
-    if (file != null) {
+    if (_file != null) {
       String articleID = const Uuid().v4();
       map['id'] = articleID;
-      map['imageURL'] = await uploadImage(articleID);
+      map['imageURL'] = await StorageService.uploadImage(articleID, _file!, 'articles');
       map['text'] = jsonEncode(_controller.document.toDelta().toJson());
       map['authorId'] = AuthService.currentUser.uid;
       map['timestamp'] = Timestamp.now();
@@ -131,11 +121,5 @@ class _PublishArticleScreenState extends State<PublishArticleScreen> {
       await DatabaseService.articlesRef.doc(articleID).set(map);
       // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Image Posted!")));
     }
-  }
-
-  Future<String> uploadImage(String pID) async {
-    TaskSnapshot ts =
-        await FirebaseStorage.instance.ref().child('articles').child(pID).putFile(file!);
-    return ts.ref.getDownloadURL();
   }
 }

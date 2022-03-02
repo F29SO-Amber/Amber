@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:amber/features/whiteboard_page/whiteboard_view_model.dart';
-import 'package:amber/features/whiteboard_page/widgets/tool_buttons.dart';
-import 'package:amber/features/whiteboard_page/widgets/whiteboard_view.dart';
+import 'package:amber/pages/whiteboard_page/whiteboard_view_model.dart';
+import 'package:amber/widgets/tool_buttons.dart';
+import 'package:amber/widgets/whiteboard_view.dart';
 
 class WhiteboardPage extends StatelessWidget {
   const WhiteboardPage({Key? key}) : super(key: key);
@@ -11,7 +11,7 @@ class WhiteboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<WhiteboardViewModel>(
-      builder: (context, viewmodel, _) => Scaffold(
+      builder: (context, viewModel, _) => Scaffold(
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(16),
@@ -19,12 +19,12 @@ class WhiteboardPage extends StatelessWidget {
               child: Stack(
                 children: <Widget>[
                   WhiteboardView(
-                    lines: viewmodel.lines,
-                    onGestureStart: viewmodel.onGestureStart,
-                    onGestureUpdate: viewmodel.onGestureUpdate,
-                    onGestureEnd: viewmodel.onGestureEnd,
+                    lines: viewModel.lines,
+                    onGestureStart: viewModel.onGestureStart,
+                    onGestureUpdate: viewModel.onGestureUpdate,
+                    onGestureEnd: viewModel.onGestureEnd,
                   ),
-                  ToolButtons(viewmodel: viewmodel),
+                  ToolButtons(viewmodel: viewModel),
                 ],
               ),
             ),
@@ -36,6 +36,7 @@ class WhiteboardPage extends StatelessWidget {
 }
 
 class WhiteboardPageRoute extends MaterialPageRoute<void> {
+  static const id = 'wpageroute';
   WhiteboardPageRoute(String id)
       : super(
           builder: (context) => ChangeNotifierProvider<WhiteboardViewModel>(

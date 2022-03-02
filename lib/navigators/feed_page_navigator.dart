@@ -2,6 +2,8 @@ import 'package:amber/pages/mash_up_latest.dart';
 import 'package:flutter/material.dart';
 import 'package:amber/screens/feed.dart';
 
+import '../pages/error.dart';
+
 //Creating mutable state for the Feed Page Navigator
 class FeedPageNavigator extends StatefulWidget {
   const FeedPageNavigator({Key? key}) : super(key: key);
@@ -27,7 +29,7 @@ class _FeedPageNavigatorState extends State<FeedPageNavigator> {
               case MashUpScreen.id:
                 return const MashUpScreen();
               default:
-                return const FeedPage();
+                return const ErrorScreen();
             }
           },
         );

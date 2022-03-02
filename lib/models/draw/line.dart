@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:amber/features/whiteboard_page/models/point.dart';
+import 'package:amber/models/draw/point.dart';
 
 part 'line.g.dart';
 

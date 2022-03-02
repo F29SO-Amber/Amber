@@ -1,8 +1,8 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:amber/features/whiteboard_page/models/line.dart';
-import 'package:amber/features/whiteboard_page/models/point.dart';
+import 'package:amber/models/draw/line.dart';
+import 'package:amber/models/draw/point.dart';
 
 const aspectRatio = 9 / 16;
 

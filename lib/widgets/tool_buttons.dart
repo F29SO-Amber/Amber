@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:amber/features/whiteboard_page/whiteboard_view_model.dart';
+import 'package:amber/pages/whiteboard_page/whiteboard_view_model.dart';
 
 class ToolButtons extends StatelessWidget {
   final WhiteboardViewModel viewmodel;

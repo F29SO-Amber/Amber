@@ -1,11 +1,7 @@
 import 'dart:io';
-import 'package:amber/services/image_service.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:uuid/uuid.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:image/image.dart' as image;
-import 'package:image_picker/image_picker.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
@@ -15,13 +11,14 @@ import 'package:amber/models/user.dart';
 import 'package:amber/models/hashtag.dart';
 import 'package:amber/utilities/constants.dart';
 import 'package:amber/services/auth_service.dart';
+import 'package:amber/services/image_service.dart';
 import 'package:amber/widgets/profile_picture.dart';
+import 'package:amber/services/storage_service.dart';
 import 'package:amber/services/database_service.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:uuid/uuid.dart';
 
 class PublishImageScreen extends StatefulWidget {
   static const id = '/publish_image';
+
   final List? mashUpDetails;
 
   const PublishImageScreen({Key? key, this.mashUpDetails}) : super(key: key);
@@ -31,27 +28,26 @@ class PublishImageScreen extends StatefulWidget {
 }
 
 class _PublishImageScreenState extends State<PublishImageScreen> {
-  File? file;
+  File? _file;
   List _selectedHashtags = [];
-  bool uploadButtonPresent = true;
+  bool _uploadButtonPresent = true;
   final _formKey = GlobalKey<FormState>();
-  final captionController = TextEditingController();
-  final locationController = TextEditingController();
+  final _captionController = TextEditingController();
+  final _locationController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    // getLocation();
     if (widget.mashUpDetails != null) {
-      file = File(widget.mashUpDetails![0]);
+      _file = File(widget.mashUpDetails![0]);
     }
   }
 
   @override
   void dispose() {
     super.dispose();
-    captionController.dispose();
-    locationController.dispose();
+    _captionController.dispose();
+    _locationController.dispose();
   }
 
   @override
@@ -59,30 +55,27 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: kAppColor,
-        title: const Text(
-          'Create a Post',
-          style: TextStyle(fontSize: 18, color: Colors.white),
-        ),
+        title: const Text('Create a Post', style: TextStyle(fontSize: 18, color: Colors.white)),
         actions: [
           IconButton(
             icon: const Icon(Icons.clear),
             color: Colors.white,
-            onPressed: () => disposeUserPostChanges(),
+            onPressed: () => _disposeUserPostChanges(),
           ),
           Visibility(
-            visible: uploadButtonPresent,
+            visible: _uploadButtonPresent,
             child: IconButton(
               icon: const Icon(Icons.publish),
               color: Colors.white,
               onPressed: () async {
-                setState(() => uploadButtonPresent = false);
+                setState(() => _uploadButtonPresent = false);
                 EasyLoading.show(status: 'Uploading...');
-                await addUserPost();
+                await _addUserPost();
                 EasyLoading.dismiss();
                 if (widget.mashUpDetails != null) {
                   Navigator.pop(context);
                 }
-                disposeUserPostChanges();
+                _disposeUserPostChanges();
               },
             ),
           ),
@@ -104,9 +97,9 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
                         image: DecorationImage(
                           image: (widget.mashUpDetails != null)
                               ? FileImage(File(widget.mashUpDetails![0]))
-                              : (file == null)
+                              : (_file == null)
                                   ? const AssetImage('assets/taptoselect.png')
-                                  : FileImage(file!) as ImageProvider,
+                                  : FileImage(_file!) as ImageProvider,
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -135,8 +128,8 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
                                       children: [
                                         GestureDetector(
                                           onTap: () async {
-                                            file = await ImageService.chooseFromCamera();
-                                            if (file != null) {
+                                            _file = await ImageService.chooseFromCamera();
+                                            if (_file != null) {
                                               setState(() {});
                                             }
                                             Navigator.pop(context);
@@ -154,8 +147,8 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
                                       children: [
                                         GestureDetector(
                                           onTap: () async {
-                                            file = await ImageService.chooseFromGallery();
-                                            if (file != null) {
+                                            _file = await ImageService.chooseFromGallery();
+                                            if (_file != null) {
                                               setState(() {});
                                             }
                                             Navigator.pop(context);
@@ -182,7 +175,7 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
                     width: MediaQuery.of(context).size.width,
                     padding: const EdgeInsets.only(left: 15, top: 20),
                     child: TextFormField(
-                      controller: captionController,
+                      controller: _captionController,
                       keyboardType: TextInputType.text,
                       decoration: const InputDecoration(
                         hintText: "Write a caption...",
@@ -196,7 +189,7 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
                     width: MediaQuery.of(context).size.width,
                     padding: const EdgeInsets.only(left: 15),
                     child: TextFormField(
-                      controller: locationController,
+                      controller: _locationController,
                       keyboardType: TextInputType.text,
                       decoration: const InputDecoration(
                         //hintText: "Locate your post...",
@@ -257,37 +250,29 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
     );
   }
 
-  void disposeUserPostChanges() {
+  void _disposeUserPostChanges() {
     setState(() {
-      file = null;
-      locationController.text = '';
-      captionController.text = '';
+      _file = null;
+      _locationController.text = '';
+      _captionController.text = '';
       _selectedHashtags = [];
-      uploadButtonPresent = true;
+      _uploadButtonPresent = true;
       _selectedHashtags.clear();
     });
   }
 
-  Future<void> compressImageFile(String postID) async {
-    image.Image? imageFile = image.decodeImage(file!.readAsBytesSync());
-    final compressedImageFile = File('${(await getTemporaryDirectory()).path}/img_$postID.jpg')
-      ..writeAsBytesSync(image.encodeJpg(imageFile!, quality: 85));
-    setState(() => file = compressedImageFile);
-  }
-
-  Future<void> addUserPost() async {
+  Future<void> _addUserPost() async {
     UserModel user = await DatabaseService.getUser(AuthService.currentUser.uid);
     if (_formKey.currentState!.validate()) {
       Map<String, Object?> map = {};
-      if (file != null) {
+      if (_file != null) {
         String postId = const Uuid().v4();
-        await compressImageFile(postId);
         map['id'] = postId;
         map['location'] = (widget.mashUpDetails != null)
             ? 'Mashed-up from ${widget.mashUpDetails![1]}'
-            : locationController.text;
-        map['imageURL'] = await uploadImage(postId);
-        map['caption'] = captionController.text;
+            : _locationController.text;
+        map['imageURL'] = await StorageService.uploadImage(postId, _file!, 'posts');
+        map['caption'] = _captionController.text;
         map['likes'] = {};
         map['authorId'] = AuthService.currentUser.uid;
         map['timestamp'] = Timestamp.now();
@@ -296,27 +281,17 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
         map['authorProfilePhotoURL'] = user.imageUrl;
         await DatabaseService.postsRef.doc(postId).set(map);
         for (Hashtag tag in _selectedHashtags) {
-          addPostHashtag(postId, tag.name);
+          _addPostHashtag(postId, tag.name);
         }
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Image Posted!")));
       }
     }
   }
 
-  Future<void> addPostHashtag(postId, hashtag) async {
+  Future<void> _addPostHashtag(postId, hashtag) async {
     Map<String, Object?> map = {};
     map['post_id'] = postId;
     map['hashtag'] = hashtag;
     await DatabaseService.hashtagsRef.doc().set(map);
   }
-
-  Future<String> uploadImage(String pID) async {
-    TaskSnapshot ts = await FirebaseStorage.instance.ref().child('posts').child(pID).putFile(file!);
-    return ts.ref.getDownloadURL();
-  }
-
-// void getLocation() async {
-//   Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-//   print(position);
-// }
 }

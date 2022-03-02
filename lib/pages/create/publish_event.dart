@@ -1,24 +1,15 @@
 import 'dart:io';
-import 'package:amber/services/image_service.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:uuid/uuid.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:image/image.dart' as image;
-import 'package:image_picker/image_picker.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:multi_select_flutter/multi_select_flutter.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'package:amber/models/user.dart';
-import 'package:amber/models/hashtag.dart';
 import 'package:amber/utilities/constants.dart';
 import 'package:amber/services/auth_service.dart';
+import 'package:amber/services/image_service.dart';
 import 'package:amber/widgets/profile_picture.dart';
+import 'package:amber/services/storage_service.dart';
 import 'package:amber/services/database_service.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:uuid/uuid.dart';
 
 class PublishEventScreen extends StatefulWidget {
   static const id = '/publish_event';
@@ -30,21 +21,21 @@ class PublishEventScreen extends StatefulWidget {
 }
 
 class _PublishEventScreenState extends State<PublishEventScreen> {
-  File? file;
-  bool uploadButtonPresent = true;
+  File? _file;
+  bool _uploadButtonPresent = true;
   final _formKey = GlobalKey<FormState>();
-  final timeController = TextEditingController();
-  final venueController = TextEditingController();
-  final titleController = TextEditingController();
-  final descriptionController = TextEditingController();
+  final _timeController = TextEditingController();
+  final _venueController = TextEditingController();
+  final _titleController = TextEditingController();
+  final _descriptionController = TextEditingController();
 
   @override
   void dispose() {
     super.dispose();
-    timeController.dispose();
-    titleController.dispose();
-    venueController.dispose();
-    descriptionController.dispose();
+    _timeController.dispose();
+    _titleController.dispose();
+    _venueController.dispose();
+    _descriptionController.dispose();
   }
 
   @override
@@ -52,27 +43,24 @@ class _PublishEventScreenState extends State<PublishEventScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: kAppColor,
-        title: const Text(
-          'Create an Event',
-          style: TextStyle(fontSize: 18, color: Colors.white),
-        ),
+        title: const Text('Create an Event', style: TextStyle(fontSize: 18, color: Colors.white)),
         actions: [
           IconButton(
             icon: const Icon(Icons.clear),
             color: Colors.white,
-            onPressed: () => disposeUserEventChanges(),
+            onPressed: () => _disposeUserEventChanges(),
           ),
           Visibility(
-            visible: uploadButtonPresent,
+            visible: _uploadButtonPresent,
             child: IconButton(
               icon: const Icon(Icons.publish),
               color: Colors.white,
               onPressed: () async {
-                setState(() => uploadButtonPresent = false);
+                setState(() => _uploadButtonPresent = false);
                 EasyLoading.show(status: 'Adding Event...');
-                await addUserPost();
+                await _addUserEvent();
                 EasyLoading.dismiss();
-                disposeUserEventChanges();
+                _disposeUserEventChanges();
               },
             ),
           ),
@@ -92,9 +80,9 @@ class _PublishEventScreenState extends State<PublishEventScreen> {
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: (file == null)
+                          image: (_file == null)
                               ? const AssetImage('assets/taptoselect.png')
-                              : FileImage(file!) as ImageProvider,
+                              : FileImage(_file!) as ImageProvider,
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -123,8 +111,8 @@ class _PublishEventScreenState extends State<PublishEventScreen> {
                                       children: [
                                         GestureDetector(
                                           onTap: () async {
-                                            file = await ImageService.chooseFromCamera();
-                                            if (file != null) {
+                                            _file = await ImageService.chooseFromCamera();
+                                            if (_file != null) {
                                               setState(() {});
                                             }
                                             Navigator.pop(context);
@@ -142,8 +130,8 @@ class _PublishEventScreenState extends State<PublishEventScreen> {
                                       children: [
                                         GestureDetector(
                                           onTap: () async {
-                                            file = await ImageService.chooseFromGallery();
-                                            if (file != null) {
+                                            _file = await ImageService.chooseFromGallery();
+                                            if (_file != null) {
                                               setState(() {});
                                             }
                                             Navigator.pop(context);
@@ -171,7 +159,7 @@ class _PublishEventScreenState extends State<PublishEventScreen> {
                     width: MediaQuery.of(context).size.width,
                     padding: const EdgeInsets.only(left: 15),
                     child: TextFormField(
-                      controller: titleController,
+                      controller: _titleController,
                       keyboardType: TextInputType.text,
                       decoration: const InputDecoration(
                         hintText: "What's your event called...",
@@ -185,7 +173,7 @@ class _PublishEventScreenState extends State<PublishEventScreen> {
                     width: MediaQuery.of(context).size.width,
                     padding: const EdgeInsets.only(left: 15),
                     child: TextFormField(
-                      controller: descriptionController,
+                      controller: _descriptionController,
                       keyboardType: TextInputType.text,
                       decoration: const InputDecoration(
                         hintText: "Describe the event...",
@@ -199,7 +187,7 @@ class _PublishEventScreenState extends State<PublishEventScreen> {
                     width: MediaQuery.of(context).size.width,
                     padding: const EdgeInsets.only(left: 15),
                     child: TextFormField(
-                      controller: timeController,
+                      controller: _timeController,
                       keyboardType: TextInputType.text,
                       decoration: const InputDecoration(
                         hintText: "When is it taking place...",
@@ -213,7 +201,7 @@ class _PublishEventScreenState extends State<PublishEventScreen> {
                     width: MediaQuery.of(context).size.width,
                     padding: const EdgeInsets.only(left: 15),
                     child: TextFormField(
-                      controller: venueController,
+                      controller: _venueController,
                       keyboardType: TextInputType.text,
                       decoration: const InputDecoration(
                         hintText: "Where is it taking place...",
@@ -232,43 +220,30 @@ class _PublishEventScreenState extends State<PublishEventScreen> {
     );
   }
 
-  void disposeUserEventChanges() {
+  void _disposeUserEventChanges() {
     setState(() {
-      file = null;
-      timeController.text = '';
-      venueController.text = '';
-      titleController.text = '';
-      uploadButtonPresent = true;
-      descriptionController.text = '';
+      _file = null;
+      _timeController.text = '';
+      _venueController.text = '';
+      _titleController.text = '';
+      _uploadButtonPresent = true;
+      _descriptionController.text = '';
     });
   }
 
-  Future<void> compressImageFile(String postID) async {
-    image.Image? imageFile = image.decodeImage(file!.readAsBytesSync());
-    final compressedImageFile = File('${(await getTemporaryDirectory()).path}/img_$postID.jpg')
-      ..writeAsBytesSync(image.encodeJpg(imageFile!, quality: 85));
-    setState(() => file = compressedImageFile);
-  }
-
-  Future<void> addUserPost() async {
+  Future<void> _addUserEvent() async {
     if (_formKey.currentState!.validate()) {
       Map<String, Object?> map = {};
-      if (file != null) {
+      if (_file != null) {
         String eventID = const Uuid().v4();
-        await compressImageFile(eventID);
         map['userID'] = AuthService.currentUser.uid;
-        map['title'] = titleController.text;
-        map['description'] = descriptionController.text;
-        map['startingTime'] = timeController.text;
-        map['venue'] = venueController.text;
-        map['eventPhotoURL'] = await uploadImage(eventID);
+        map['title'] = _titleController.text;
+        map['description'] = _descriptionController.text;
+        map['startingTime'] = _timeController.text;
+        map['venue'] = _venueController.text;
+        map['eventPhotoURL'] = await StorageService.uploadImage(eventID, _file!, 'events');
         await DatabaseService.eventsRef.doc(eventID).set(map);
       }
     }
-  }
-
-  Future<String> uploadImage(String id) async {
-    TaskSnapshot ts = await FirebaseStorage.instance.ref().child('events').child(id).putFile(file!);
-    return ts.ref.getDownloadURL();
   }
 }

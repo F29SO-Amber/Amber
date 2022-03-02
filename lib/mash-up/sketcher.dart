@@ -1,4 +1,4 @@
-import 'package:amber/drawn_line.dart';
+import 'package:amber/mash-up/drawn_line.dart';
 import 'package:flutter/material.dart';
 
 class Sketcher extends CustomPainter {
@@ -15,7 +15,7 @@ class Sketcher extends CustomPainter {
 
     for (int i = 0; i < lines.length; ++i) {
       if (lines[i] == null) continue;
-      for (int j = 0; j < lines[i]!.path.length- 1; ++j) {
+      for (int j = 0; j < lines[i]!.path.length - 1; ++j) {
         if (lines[i]!.path[j] != null && lines[i]!.path[j + 1] != null) {
           paint.color = lines[i]!.color;
           paint.strokeWidth = lines[i]!.width;

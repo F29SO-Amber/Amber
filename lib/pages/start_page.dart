@@ -1,7 +1,6 @@
+import 'package:amber/pages/whiteboard_page/whiteboard_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:uuid/uuid.dart';
-import 'package:amber/features/whiteboard_page/whiteboard_page.dart';
 
 class StartPage extends StatefulWidget {
   @override
