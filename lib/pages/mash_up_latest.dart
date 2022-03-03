@@ -9,7 +9,7 @@ import 'package:amber/utilities/constants.dart';
 import 'package:amber/services/image_service.dart';
 import 'package:amber/widgets/profile_picture.dart';
 import 'package:amber/widgets/widget_to_image.dart';
-import 'package:amber/pages/create/publish_image.dart';
+import 'package:amber/screens/create/publish_image.dart';
 
 class MashUpScreen extends StatefulWidget {
   final String? imageURL;

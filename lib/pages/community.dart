@@ -10,6 +10,8 @@ import 'package:amber/services/database_service.dart';
 import 'package:amber/widgets/custom_elevated_button.dart';
 import 'package:amber/widgets/custom_outlined_button.dart';
 
+// TODO: Create communities
+
 class CommunityPage extends StatefulWidget {
   static const id = '/community';
   final String communityID;

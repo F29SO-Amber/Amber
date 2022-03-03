@@ -15,6 +15,8 @@ class AuthService {
       );
       await Hive.openBox('user');
       Hive.box('user').put('status', 'logged-in');
+      Hive.box('user').put('email', data.name);
+      Hive.box('user').put('password', data.password);
       currentUser = authResult.user!;
       return null;
     } on FirebaseAuthException catch (e) {
@@ -52,6 +54,9 @@ class AuthService {
   static Future<String?> signOutUser() async {
     try {
       await _auth.signOut();
+      await Hive.openBox('user');
+      Hive.box('user').put('status', 'logged-out');
+      Hive.close();
       return null;
     } on FirebaseAuthException catch (e) {
       return e.message;

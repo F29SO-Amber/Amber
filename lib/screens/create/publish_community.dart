@@ -4,11 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'package:amber/models/user.dart';
-import 'package:amber/models/hashtag.dart';
 import 'package:amber/utilities/constants.dart';
 import 'package:amber/services/auth_service.dart';
 import 'package:amber/services/image_service.dart';
@@ -16,38 +13,28 @@ import 'package:amber/widgets/profile_picture.dart';
 import 'package:amber/services/storage_service.dart';
 import 'package:amber/services/database_service.dart';
 
-class PublishImageScreen extends StatefulWidget {
-  static const id = '/publish_image';
+class PublishCommunityScreen extends StatefulWidget {
+  static const id = '/publish_community';
 
-  final List? mashUpDetails;
-
-  const PublishImageScreen({Key? key, this.mashUpDetails}) : super(key: key);
+  const PublishCommunityScreen({Key? key}) : super(key: key);
 
   @override
-  _PublishImageScreenState createState() => _PublishImageScreenState();
+  _PublishCommunityScreenState createState() => _PublishCommunityScreenState();
 }
 
-class _PublishImageScreenState extends State<PublishImageScreen> {
+class _PublishCommunityScreenState extends State<PublishCommunityScreen> {
   File? _file;
-  List _selectedHashtags = [];
   bool _uploadButtonPresent = true;
   final _formKey = GlobalKey<FormState>();
-  final _captionController = TextEditingController();
-  final _locationController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    if (widget.mashUpDetails != null) {
-      _file = File(widget.mashUpDetails![0]);
-    }
-  }
+  final _nameController = TextEditingController();
+  final _descriptionController = TextEditingController();
 
   @override
   void dispose() {
     super.dispose();
-    _captionController.dispose();
-    _locationController.dispose();
+    _nameController.dispose();
+    _descriptionController.dispose();
+    disposeUserEventChanges();
   }
 
   @override
@@ -55,12 +42,13 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: kAppColor,
-        title: const Text('Create a Post', style: TextStyle(fontSize: 18, color: Colors.white)),
+        title:
+            const Text('Create a Community', style: TextStyle(fontSize: 18, color: Colors.white)),
         actions: [
           IconButton(
             icon: const Icon(Icons.clear),
             color: Colors.white,
-            onPressed: () => _disposeUserPostChanges(),
+            onPressed: () => disposeUserEventChanges(),
           ),
           Visibility(
             visible: _uploadButtonPresent,
@@ -69,13 +57,10 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
               color: Colors.white,
               onPressed: () async {
                 setState(() => _uploadButtonPresent = false);
-                EasyLoading.show(status: 'Uploading...');
-                await _addUserPost();
+                EasyLoading.show(status: 'Creating Community...');
+                await _addUserCommunity();
                 EasyLoading.dismiss();
-                if (widget.mashUpDetails != null) {
-                  Navigator.pop(context);
-                }
-                _disposeUserPostChanges();
+                disposeUserEventChanges();
               },
             ),
           ),
@@ -91,15 +76,13 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
                 children: [
                   GestureDetector(
                     child: Container(
-                      height: MediaQuery.of(context).size.width,
+                      height: (MediaQuery.of(context).size.width / 16) * 9,
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: (widget.mashUpDetails != null)
-                              ? FileImage(File(widget.mashUpDetails![0]))
-                              : (_file == null)
-                                  ? const AssetImage('assets/taptoselect.png')
-                                  : FileImage(_file!) as ImageProvider,
+                          image: (_file == null)
+                              ? const AssetImage('assets/taptoselect.png')
+                              : FileImage(_file!) as ImageProvider,
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -171,16 +154,17 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
                       ),
                     ),
                   ),
+                  const SizedBox(height: 20),
                   Container(
                     width: MediaQuery.of(context).size.width,
-                    padding: const EdgeInsets.only(left: 15, top: 20),
+                    padding: const EdgeInsets.only(left: 15),
                     child: TextFormField(
-                      controller: _captionController,
+                      controller: _nameController,
                       keyboardType: TextInputType.text,
                       decoration: const InputDecoration(
-                        hintText: "Write a caption...",
+                        hintText: "Name your community...",
                         border: InputBorder.none,
-                        prefixIcon: Icon(Icons.create_sharp, color: kAppColor, size: 30),
+                        prefixIcon: Icon(FontAwesomeIcons.userFriends, color: kAppColor, size: 23),
                       ),
                     ),
                   ),
@@ -189,55 +173,13 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
                     width: MediaQuery.of(context).size.width,
                     padding: const EdgeInsets.only(left: 15),
                     child: TextFormField(
-                      controller: _locationController,
+                      controller: _descriptionController,
                       keyboardType: TextInputType.text,
                       decoration: const InputDecoration(
-                        //hintText: "Locate your post...",
-                        hintText: "Add a location...",
+                        hintText: "Describe your community...",
                         border: InputBorder.none,
-                        prefixIcon: Icon(Icons.pin_drop_outlined, color: kAppColor, size: 30),
-                        suffixIcon: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 15.0),
-                          child: Icon(Icons.my_location, color: kAppColor, size: 30),
-                        ),
+                        prefixIcon: Icon(FontAwesomeIcons.pen, color: kAppColor, size: 23),
                       ),
-                    ),
-                  ),
-                  const Divider(),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 28, right: 7),
-                    child: Row(
-                      children: [
-                        const Icon(FontAwesomeIcons.hashtag, color: kAppColor, size: 25),
-                        Expanded(
-                          child: MultiSelectBottomSheetField(
-                            buttonIcon: const Icon(FontAwesomeIcons.arrowDown, color: kAppColor),
-                            decoration: BoxDecoration(border: Border.all(color: Colors.white)),
-                            initialChildSize: 0.4,
-                            listType: MultiSelectListType.CHIP,
-                            searchable: true,
-                            buttonText: Text(
-                              (_selectedHashtags.isEmpty)
-                                  ? "Select your favorite Hashtags..."
-                                  : "Your selected Hashtags:",
-                              style: const TextStyle(fontSize: 16, color: Colors.black54),
-                            ),
-                            title: const Text("Hashtags"),
-                            items: Hashtag.hashtags
-                                .map((tag) => MultiSelectItem<Hashtag>(tag, tag.name))
-                                .toList(),
-                            onConfirm: (values) {
-                              _selectedHashtags = values;
-                              setState(() {});
-                            },
-                            chipDisplay: MultiSelectChipDisplay(
-                              onTap: (value) {
-                                setState(() => _selectedHashtags.remove(value));
-                              },
-                            ),
-                          ),
-                        ),
-                      ],
                     ),
                   ),
                   const Divider(),
@@ -250,48 +192,28 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
     );
   }
 
-  void _disposeUserPostChanges() {
+  void disposeUserEventChanges() {
     setState(() {
       _file = null;
-      _locationController.text = '';
-      _captionController.text = '';
-      _selectedHashtags = [];
+      _nameController.text = '';
       _uploadButtonPresent = true;
-      _selectedHashtags.clear();
+      _descriptionController.text = '';
     });
   }
 
-  Future<void> _addUserPost() async {
-    UserModel user = await DatabaseService.getUser(AuthService.currentUser.uid);
+  Future<void> _addUserCommunity() async {
     if (_formKey.currentState!.validate()) {
       Map<String, Object?> map = {};
       if (_file != null) {
-        String postId = const Uuid().v4();
-        map['id'] = postId;
-        map['location'] = (widget.mashUpDetails != null)
-            ? 'Mashed-up from ${widget.mashUpDetails![1]}'
-            : _locationController.text;
-        map['imageURL'] = await StorageService.uploadImage(postId, _file!, 'posts');
-        map['caption'] = _captionController.text;
-        map['likes'] = {};
-        map['authorId'] = AuthService.currentUser.uid;
-        map['timestamp'] = Timestamp.now();
-        map['authorName'] = user.firstName;
-        map['authorUserName'] = user.username;
-        map['authorProfilePhotoURL'] = user.imageUrl;
-        await DatabaseService.postsRef.doc(postId).set(map);
-        for (Hashtag tag in _selectedHashtags) {
-          _addPostHashtag(postId, tag.name);
-        }
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Image Posted!")));
+        String communityID = const Uuid().v4();
+        map['name'] = _nameController.text;
+        map['timeCreated'] = Timestamp.now();
+        map['ownerID'] = AuthService.currentUser.uid;
+        map['description'] = _descriptionController.text;
+        map['communityPhotoURL'] =
+            await StorageService.uploadImage(communityID, _file!, 'communities');
+        await DatabaseService.communityRef.doc(communityID).set(map);
       }
     }
-  }
-
-  Future<void> _addPostHashtag(postId, hashtag) async {
-    Map<String, Object?> map = {};
-    map['post_id'] = postId;
-    map['hashtag'] = hashtag;
-    await DatabaseService.hashtagsRef.doc().set(map);
   }
 }

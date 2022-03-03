@@ -1,6 +1,6 @@
 import 'package:amber/pages/mash_up_latest.dart';
 import 'package:flutter/material.dart';
-import 'package:amber/screens/feed.dart';
+import 'package:amber/screens/feed/feed.dart';
 
 import '../pages/error.dart';
 

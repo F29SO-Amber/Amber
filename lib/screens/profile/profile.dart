@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:amber/models/user.dart';
 import 'package:amber/pages/settings.dart';
 import 'package:amber/pages/user_list.dart';
-import 'package:amber/pages/edit_profile.dart';
+import 'package:amber/screens/profile/edit_profile.dart';
 import 'package:amber/utilities/constants.dart';
 import 'package:amber/services/auth_service.dart';
 import 'package:amber/widgets/profile_picture.dart';
@@ -12,11 +12,11 @@ import 'package:amber/widgets/number_and_label.dart';
 import 'package:amber/services/database_service.dart';
 import 'package:amber/widgets/custom_outlined_button.dart';
 import 'package:amber/widgets/custom_elevated_button.dart';
-import 'package:amber/pages/profile_footers/user_profile_footer.dart';
-import 'package:amber/pages/profile_footers/artist_profile_footer.dart';
-import 'package:amber/pages/profile_footers/student_profile_footer.dart';
-import 'package:amber/pages/profile_footers/brand_marketer_profile_footer.dart';
-import 'package:amber/pages/profile_footers/content_creator_profile_footer.dart';
+import 'package:amber/screens/profile/user_profile_footer.dart';
+import 'package:amber/screens/profile/artist_profile_footer.dart';
+import 'package:amber/screens/profile/student_profile_footer.dart';
+import 'package:amber/screens/profile/brand_marketer_profile_footer.dart';
+import 'package:amber/screens/profile/content_creator_profile_footer.dart';
 
 class ProfilePage extends StatefulWidget {
   static const id = '/profile';
@@ -242,10 +242,10 @@ class _ProfilePageState extends State<ProfilePage> {
                               buttonText: 'Message',
                               widthFactor: 0.45,
                               onPress: () {
-                                // TODO
+                                // TODO: Take the user to the corresponding room
                               },
                             ),
-                            (isFollowing)
+                            (isFollowing) // TODO: Avoid entire widget tree rebuild
                                 ? CustomElevatedButton(
                                     buttonText: 'Unfollow',
                                     widthFactor: 0.45,

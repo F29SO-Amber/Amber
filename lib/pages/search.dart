@@ -1,5 +1,5 @@
 import 'package:amber/models/user.dart';
-import 'package:amber/screens/profile.dart';
+import 'package:amber/screens/profile/profile.dart';
 import 'package:amber/services/auth_service.dart';
 import 'package:amber/services/database_service.dart';
 import 'package:amber/widgets/progress.dart';

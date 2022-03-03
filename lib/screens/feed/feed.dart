@@ -23,6 +23,7 @@ class _FeedPageState extends State<FeedPage> {
         titleTextStyle: const TextStyle(color: Colors.white, letterSpacing: 3, fontSize: 25.0),
       ),
       body: StreamBuilder(
+        // TODO: Use firebase functions
         stream: DatabaseService.getUserFeed().asStream(), // TODO
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {

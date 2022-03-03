@@ -20,7 +20,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  int _selectedIndex = 0;
+  int _selectedIndex = 0; // TODO: Research the auto change navigator issue
 
   @override
   void initState() {
@@ -85,11 +85,5 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       ),
       onWillPop: _systemBackButtonPressed,
     );
-  }
-
-  setIndex(i) {
-    setState(() {
-      _selectedIndex = i;
-    });
   }
 }

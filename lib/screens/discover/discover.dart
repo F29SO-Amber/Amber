@@ -7,12 +7,15 @@ import 'package:amber/models/user.dart';
 import 'package:amber/models/post.dart';
 import 'package:amber/pages/search.dart';
 import 'package:amber/models/hashtag.dart';
-import 'package:amber/screens/profile.dart';
+import 'package:amber/screens/profile/profile.dart';
 import 'package:amber/widgets/post_widget.dart';
 import 'package:amber/utilities/constants.dart';
 import 'package:amber/widgets/profile_picture.dart';
 import 'package:amber/services/database_service.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
+
+// TODO: Create search bar
+// TODO: Create discover algorithms
 
 class DiscoverPage extends StatefulWidget {
   static const id = '/discover';

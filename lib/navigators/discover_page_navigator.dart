@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:amber/screens/discover.dart';
+import 'package:amber/screens/discover/discover.dart';
 
 //Creating mutable state for the Discovery Page Navigator
 class DiscoverPageNavigator extends StatefulWidget {

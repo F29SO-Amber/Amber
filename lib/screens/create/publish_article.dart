@@ -29,6 +29,12 @@ class _PublishArticleScreenState extends State<PublishArticleScreen> {
   final QuillController _controller = QuillController.basic();
 
   @override
+  void dispose() {
+    _disposeUserArticleChanges();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -81,7 +87,7 @@ class _PublishArticleScreenState extends State<PublishArticleScreen> {
           Expanded(
             child: QuillEditor(
               controller: _controller,
-              readOnly: true,
+              readOnly: false,
               autoFocus: true,
               expands: false,
               padding: EdgeInsets.zero,
@@ -105,7 +111,13 @@ class _PublishArticleScreenState extends State<PublishArticleScreen> {
     );
   }
 
-  _disposeUserArticleChanges() {}
+  void _disposeUserArticleChanges() {
+    setState(() {
+      _file = null;
+      _controller.clear();
+      _controller.dispose();
+    });
+  }
 
   Future<void> addUserArticle() async {
     UserModel user = await DatabaseService.getUser(AuthService.currentUser.uid);
@@ -119,7 +131,6 @@ class _PublishArticleScreenState extends State<PublishArticleScreen> {
       map['timestamp'] = Timestamp.now();
       map['authorUserName'] = user.username;
       await DatabaseService.articlesRef.doc(articleID).set(map);
-      // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Image Posted!")));
     }
   }
 }

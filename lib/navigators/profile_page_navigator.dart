@@ -1,7 +1,7 @@
-import 'package:amber/pages/login.dart';
+import 'package:amber/screens/auth/login.dart';
 import 'package:amber/pages/settings.dart';
 import 'package:flutter/material.dart';
-import 'package:amber/screens/profile.dart';
+import 'package:amber/screens/profile/profile.dart';
 import 'package:amber/services/auth_service.dart';
 
 //Creating mutable state for the Profile Page Navigator

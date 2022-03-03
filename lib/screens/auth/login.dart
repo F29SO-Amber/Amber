@@ -38,6 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
             messages: LoginMessages(signUpSuccess: "Sign up successful!"),
             additionalSignupFields: [
               const UserFormField(
+                // TODO: Only allow unique username
                 keyName: 'username',
                 displayName: 'Username',
                 icon: Icon(FontAwesomeIcons.at),

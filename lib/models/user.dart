@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserModel {
+  // TODO: Update User Model properly
   final String id;
   final String firstName;
   final String email;

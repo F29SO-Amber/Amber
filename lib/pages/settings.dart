@@ -1,4 +1,4 @@
-import 'package:amber/pages/login.dart';
+import 'package:amber/screens/auth/login.dart';
 import 'package:amber/services/auth_service.dart';
 import 'package:amber/utilities/constants.dart';
 import 'package:amber/widgets/setting_item.dart';

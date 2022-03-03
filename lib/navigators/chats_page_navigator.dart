@@ -1,4 +1,4 @@
-import 'package:amber/pages/chat/rooms.dart';
+import 'package:amber/screens/chat/rooms.dart';
 import 'package:flutter/material.dart';
 
 class ChatsPageNavigator extends StatefulWidget {

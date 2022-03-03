@@ -5,9 +5,10 @@ class ArticleModel {
   final String authorId;
   final String imageURL;
   final String text;
-  // final Map likes;
+  // final Map likes; TODO: Add likes and comments to articles
   final Timestamp timestamp;
   final String authorUserName;
+  // TODO: Should Articles have a heading
 
   ArticleModel({
     required this.text,
