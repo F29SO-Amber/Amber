@@ -566,13 +566,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.0"
-  flutter_nsfw:
-    dependency: "direct main"
-    description:
-      name: flutter_nsfw
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.4"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:

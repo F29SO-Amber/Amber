@@ -15,7 +15,7 @@ dependencies:
   image:
   faker:
   flutter_firebase_chat_core:
-  flutter_nsfw: ^0.0.4
+#  flutter_nsfw: ^0.0.4
   mime: ^1.0.1
   open_file: ^3.2.1
   intl:

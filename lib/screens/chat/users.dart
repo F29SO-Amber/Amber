@@ -33,7 +33,8 @@ class _UsersPageState extends State<UsersPage> {
         },
       );
       Navigator.of(context).pop();
-      await Navigator.of(context).push(MaterialPageRoute(builder: (_) => ChatPage(room: room)));
+      await Navigator.of(context, rootNavigator: true)
+          .push(MaterialPageRoute(builder: (_) => ChatPage(room: room)));
     }
   }
 
