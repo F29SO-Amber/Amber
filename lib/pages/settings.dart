@@ -40,36 +40,38 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ],
             ),
-            child: Column(children: [
-              SettingItem(
-                title: "Saved Posts",
-                leadingIcon: Icons.bookmark_outline,
-                bgIconColor: Colors.blue,
-                onTap: () {
-                  // Get.toNamed('/space');
-                },
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 45),
-                child: Divider(
-                  height: 0,
-                  color: Colors.grey.withOpacity(0.8),
+            child: Column(
+              children: [
+                SettingItem(
+                  title: "Saved Posts",
+                  leadingIcon: Icons.bookmark_outline,
+                  bgIconColor: Colors.blue,
+                  onTap: () {
+                    // Get.toNamed('/space');
+                  },
                 ),
-              ),
-              SettingItem(
-                title: "Liked Posts",
-                leadingIcon: Icons.favorite_outline,
-                bgIconColor: Colors.green,
-                onTap: () {},
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 45),
-                child: Divider(
-                  height: 0,
-                  color: Colors.grey.withOpacity(0.8),
+                Padding(
+                  padding: const EdgeInsets.only(left: 45),
+                  child: Divider(
+                    height: 0,
+                    color: Colors.grey.withOpacity(0.8),
+                  ),
                 ),
-              ),
-            ]),
+                SettingItem(
+                  title: "Liked Posts",
+                  leadingIcon: Icons.favorite_outline,
+                  bgIconColor: Colors.green,
+                  onTap: () {},
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 45),
+                  child: Divider(
+                    height: 0,
+                    color: Colors.grey.withOpacity(0.8),
+                  ),
+                ),
+              ],
+            ),
           ),
           const SizedBox(
             height: 20,

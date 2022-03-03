@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:amber/screens/chat/room_info.dart';
+import 'package:amber/widgets/profile_picture.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +35,21 @@ class _ChatPageState extends State<ChatPage> {
       builder: (context, snapshot) {
         return Scaffold(
           appBar: AppBar(
-            title: Text('${widget.room.name}'),
+            title: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                CustomImage(side: 35, image: NetworkImage('${widget.room.imageUrl}')),
+                const SizedBox(width: 10),
+                GestureDetector(
+                  child: Text('${widget.room.name}'),
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => RoomInfo(room: widget.room)),
+                    );
+                  },
+                ),
+              ],
+            ),
             backgroundColor: kAppColor,
           ),
           body: StreamBuilder<List<types.Message>>(
