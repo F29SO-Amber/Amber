@@ -1,4 +1,5 @@
 import 'package:amber/screens/home.dart';
+import 'package:amber/services/auth_service.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,7 +17,7 @@ class MemberInfo extends StatefulWidget {
 class _MemberInfoState extends State<MemberInfo> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  List membersList = [];
+  List usersCollectionName = [];
   bool isLoading = false;
   @override
   void initState() {
@@ -26,8 +27,8 @@ class _MemberInfoState extends State<MemberInfo> {
 
   bool checkAdmin() {
     bool isAdmin = false;
-    membersList.forEach((element) {
-      if (element["uid"] == _auth.currentUser!.uid) {
+    usersCollectionName.forEach((element) {
+      if (element["uid"] == AuthService.currentUser.uid) {
         isAdmin = true;
       }
     });
@@ -40,15 +41,16 @@ class _MemberInfoState extends State<MemberInfo> {
         isLoading = true;
       });
       String uid = _auth.currentUser!.uid;
-      for (int i = 0; i < membersList.length; i++) {
-        if (membersList[i]["uid"] == uid) {
-          membersList.removeAt(i);
+      for (int i = 0; i < usersCollectionName.length; i++) {
+        if (usersCollectionName[i]["uid"] == uid) {
+          usersCollectionName.removeAt(i);
         }
       }
 
       await _firestore
           .collection('rooms')
-          .doc(widget.room.id);
+          .doc(widget.room.id)
+          .update({"rooms": usersCollectionName});
 
       await _firestore
           .collection("users")
@@ -77,16 +79,16 @@ class _MemberInfoState extends State<MemberInfo> {
   }
 
   void removeUser(int index) async {
-    if (checkAdmin() && _auth.currentUser!.uid != membersList[index]["uid"]) {
-      String uid = membersList[index]["uid"];
-      membersList.removeAt(index);
+    if (checkAdmin() && _auth.currentUser!.uid != usersCollectionName[index]["uid"]) {
+      String uid = usersCollectionName[index]["uid"];
+      usersCollectionName.removeAt(index);
       setState(() {
         isLoading = true;
       });
       await _firestore
           .collection("rooms")
           .doc(widget.room.id)
-          .update({"members": membersList});
+          .update({"rooms": usersCollectionName});
 
       await _firestore
           .collection("users")
@@ -110,7 +112,7 @@ class _MemberInfoState extends State<MemberInfo> {
         .get()
         .then((value) {
       setState(() {
-        membersList = value["members"];
+        usersCollectionName = value["rooms"];
         isLoading = false;
       });
     });
@@ -141,50 +143,14 @@ class _MemberInfoState extends State<MemberInfo> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              /* Align(
-                  alignment: Alignment.centerLeft,
-                  child: BackButton(
-                    color: Colors.black,
-                  )),*/
-              /* Container(
-                height: size.height / 8,
-                width: size.width / 1.1,
-                child: Row(
-                  children: [
-                    Container(
-                      height: size.height / 11,
-                      width: size.width / 11,
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle, color: Colors.black),
-                      child: Icon(
-                        Icons.group,
-                        color: Colors.white,
-                        size: size.width / 10,
-                      ),
-                    ),
-                    SizedBox(
-                      width: size.width / 20,
-                    ),
-                    Expanded(
-                      child: Container(
-                          child: Text(
-                            widget.groupName,
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: size.width / 16,
-                                fontWeight: FontWeight.w500),
-                          )),
-                    ),
-                  ],
-                ),
-              ),*/
+
               SizedBox(
                 height: size.height / 20,
               ),
               Container(
                   width: size.width / 1.1,
                   child: Text(
-                    "${membersList.length} Members",
+                    "${usersCollectionName.length} Members",
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: size.width / 20,
@@ -213,7 +179,7 @@ class _MemberInfoState extends State<MemberInfo> {
               ),
               Flexible(
                   child: ListView.builder(
-                      itemCount: membersList.length,
+                      itemCount: usersCollectionName.length,
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
@@ -224,18 +190,18 @@ class _MemberInfoState extends State<MemberInfo> {
                             color: Colors.black,
                           ),
                           title: Text(
-                            membersList[index]["name"],
+                            usersCollectionName[index]["name"],
                             style: TextStyle(
                                 color: Colors.black,
                                 fontSize: size.width / 22,
                                 fontWeight: FontWeight.w500),
                           ),
                           subtitle: Text(
-                            membersList[index]["email"],
+                            usersCollectionName[index]["email"],
                             style: TextStyle(color: Colors.black),
                           ),
                           trailing: Text(
-                            membersList[index]["isAdmin"] ? "Admin" : "",
+                            usersCollectionName[index]["isAdmin"] ? "Admin" : "",
                             style: TextStyle(
                                 fontSize: size.width / 25,
                                 fontWeight: FontWeight.w500,
