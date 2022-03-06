@@ -1,4 +1,4 @@
-import 'package:amber/screens/chat/room_members.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
@@ -52,9 +52,7 @@ class _RoomInfoState extends State<RoomInfo> {
                     leadingIcon: Icons.people,
                     bgIconColor: Colors.green,
                     onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => MemberInfo(room: widget.room)),
-                      );
+
                     },
                   ),
                 ],
