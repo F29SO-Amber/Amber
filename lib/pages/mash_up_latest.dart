@@ -12,6 +12,7 @@ import 'package:amber/widgets/profile_picture.dart';
 import 'package:amber/widgets/widget_to_image.dart';
 import 'package:amber/screens/create/publish_image.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MashUpScreen extends StatefulWidget {
   final String? imageURL;
@@ -152,7 +153,7 @@ class _MashUpScreenState extends State<MashUpScreen> {
                               quarterTurns: 1,
                               child: Slider(
                                 min: 1.0,
-                                max: 5.0,
+                                max: 10.0,
                                 label: "Stroke $strokeWidth",
                                 activeColor: selectedColor,
                                 value: strokeWidth,
@@ -237,40 +238,28 @@ class _MashUpScreenState extends State<MashUpScreen> {
                           ],
                         ),
                         Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
                             IconButton(
-                                icon: Icon(
-                                  Icons.color_lens,
-                                  color: selectedColor,
-                                ),
-                                onPressed: () {
-                                  selectColor();
-                                }),
-                            RotatedBox(
-                              quarterTurns: 1,
-                              child: Slider(
-                                min: 1.0,
-                                max: 5.0,
-                                label: "Stroke $strokeWidth",
-                                activeColor: selectedColor,
-                                value: strokeWidth,
-                                onChanged: (double value) {
-                                  setState(() {
-                                    strokeWidth = value;
-                                  });
-                                },
-                              ),
+                              icon: Icon(FontAwesomeIcons.square, color: selectedColor),
+                              onPressed: () {},
                             ),
                             IconButton(
-                                icon: const Icon(
-                                  Icons.layers_clear,
-                                  color: Colors.black,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    points.clear();
-                                  });
-                                }),
+                              icon: Icon(FontAwesomeIcons.square, color: selectedColor),
+                              onPressed: () {},
+                            ),
+                            IconButton(
+                              icon: Icon(FontAwesomeIcons.square, color: selectedColor),
+                              onPressed: () {},
+                            ),
+                            IconButton(
+                              icon: Icon(FontAwesomeIcons.square, color: selectedColor),
+                              onPressed: () {},
+                            ),
+                            IconButton(
+                              icon: Icon(FontAwesomeIcons.square, color: selectedColor),
+                              onPressed: () {},
+                            ),
                           ],
                         ),
                       ],
