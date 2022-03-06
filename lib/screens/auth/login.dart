@@ -17,6 +17,19 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
+class PWValidator {
+  static bool validate(String PW) {
+    RegExp exp =
+        RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
+
+    if (exp.hasMatch(PW)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+}
+
 class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
