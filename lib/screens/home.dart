@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 
 import 'package:amber/navigators/feed_page_navigator.dart';
-import 'package:amber/navigators/test_page_navigator.dart';
 import 'package:amber/navigators/chats_page_navigator.dart';
 import 'package:amber/navigators/publish_page_navigator.dart';
 import 'package:amber/navigators/profile_page_navigator.dart';
@@ -32,7 +31,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     homePageNavigatorKey,
     discoverNavigatorKey,
     createNavigatorKey,
-    testPageNavigatorKey,
     chatsNavigatorKey,
     profileNavigatorKey,
   ];
@@ -60,7 +58,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               FeedPageNavigator(),
               DiscoverPageNavigator(),
               CreatePageNavigator(),
-              TestPageNavigator(),
               ChatsPageNavigator(),
               ProfilePageNavigator(),
             ],
@@ -71,7 +68,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             TabItem<IconData>(icon: Icons.home),
             TabItem<IconData>(icon: Icons.search),
             TabItem<IconData>(icon: Icons.publish),
-            TabItem<IconData>(icon: Icons.admin_panel_settings_rounded),
             TabItem<IconData>(icon: Icons.message),
             TabItem<IconData>(icon: Icons.people),
           ],

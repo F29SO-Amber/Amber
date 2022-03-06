@@ -14,6 +14,9 @@ import 'package:amber/screens/create/publish_image.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../mash-up/drawing_area.dart';
+import '../mash-up/sketcher.dart';
+
 class MashUpScreen extends StatefulWidget {
   final String? imageURL;
   final String? username;
@@ -62,15 +65,11 @@ class _MashUpScreenState extends State<MashUpScreen> {
             color: Colors.white,
             onPressed: () async {
               final bytes = await Utils.capturePng(_globalKey!);
-              setState(() {
-                this.bytes = bytes;
-              });
+              setState(() => this.bytes = bytes);
               Directory dir;
               if (Platform.isIOS) {
-                ///For iOS
                 dir = await getApplicationDocumentsDirectory();
               } else {
-                ///For Android
                 dir = (await getExternalStorageDirectory())!;
               }
               final file = await File('${dir.path}/image.jpg').create();
@@ -142,10 +141,7 @@ class _MashUpScreenState extends State<MashUpScreen> {
                         Column(
                           children: <Widget>[
                             IconButton(
-                                icon: Icon(
-                                  Icons.color_lens,
-                                  color: selectedColor,
-                                ),
+                                icon: Icon(Icons.color_lens, color: selectedColor),
                                 onPressed: () {
                                   selectColor();
                                 }),
@@ -158,21 +154,14 @@ class _MashUpScreenState extends State<MashUpScreen> {
                                 activeColor: selectedColor,
                                 value: strokeWidth,
                                 onChanged: (double value) {
-                                  setState(() {
-                                    strokeWidth = value;
-                                  });
+                                  setState(() => strokeWidth = value);
                                 },
                               ),
                             ),
                             IconButton(
-                                icon: const Icon(
-                                  Icons.layers_clear,
-                                  color: Colors.black,
-                                ),
+                                icon: const Icon(Icons.layers_clear, color: Colors.black),
                                 onPressed: () {
-                                  setState(() {
-                                    points.clear();
-                                  });
+                                  setState(() => points.clear());
                                 }),
                           ],
                         ),
@@ -221,15 +210,13 @@ class _MashUpScreenState extends State<MashUpScreen> {
                                   });
                                 },
                                 onPanEnd: (details) {
-                                  setState(() {
-                                    points.add(null);
-                                  });
+                                  setState(() => points.add(null));
                                 },
                                 child: SizedBox.expand(
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.all(Radius.circular(20.0)),
                                     child: CustomPaint(
-                                      painter: MyCustomPainter(points: points),
+                                      painter: Sketcher(points: points),
                                     ),
                                   ),
                                 ),
@@ -299,18 +286,15 @@ class _MashUpScreenState extends State<MashUpScreen> {
             child: BlockPicker(
               pickerColor: selectedColor,
               onColorChanged: (color) {
-                this.setState(() {
-                  selectedColor = color;
-                });
+                setState(() => selectedColor = color);
               },
             ),
           ),
           actions: <Widget>[
-            FlatButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text("Close"))
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text("Close"),
+            )
           ],
         );
       },
@@ -531,39 +515,5 @@ class _MashUpScreenState extends State<MashUpScreen> {
         ],
       ),
     );
-  }
-}
-
-class DrawingArea {
-  Offset point;
-  Paint areaPaint;
-
-  DrawingArea({required this.point, required this.areaPaint});
-}
-
-class MyCustomPainter extends CustomPainter {
-  List<DrawingArea?> points;
-
-  MyCustomPainter({required this.points});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    Paint background = Paint()..color = Colors.transparent;
-    Rect rect = Rect.fromLTWH(0, 0, size.width, size.height);
-    canvas.drawRect(rect, background);
-    canvas.clipRect(rect);
-
-    for (int x = 0; x < points.length - 1; x++) {
-      if (points[x] != null && points[x + 1] != null) {
-        canvas.drawLine(points[x]!.point, points[x + 1]!.point, points[x]!.areaPaint);
-      } else if (points[x] != null && points[x + 1] == null) {
-        canvas.drawPoints(PointMode.points, [points[x]!.point], points[x]!.areaPaint);
-      }
-    }
-  }
-
-  @override
-  bool shouldRepaint(MyCustomPainter oldDelegate) {
-    return true;
   }
 }
