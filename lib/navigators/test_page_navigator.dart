@@ -1,7 +1,6 @@
 // import 'package:amber/mash-up/drawing_page.dart';
 import 'package:amber/pages/error.dart';
 import 'package:flutter/material.dart';
-import 'package:amber/screens/testing.dart';
 
 import '../mash-up/drawing_page.dart';
 

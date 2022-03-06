@@ -1,5 +1,7 @@
+import 'package:amber/screens/chat/members.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 
 import '../../utilities/constants.dart';
 import '../../widgets/profile_picture.dart';
@@ -51,7 +53,19 @@ class _RoomInfoState extends State<RoomInfo> {
                     leadingIcon: Icons.people,
                     bgIconColor: Colors.green,
                     onTap: () {
-                      // Get.toNamed('/space');
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => Members(room: widget.room)),
+                      );
+                    },
+                  ),
+                  SettingItem(
+                    title: "Leave Group",
+                    leadingIcon: Icons.logout,
+                    bgIconColor: Colors.red,
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => Members(room: widget.room)),
+                      );
                     },
                   ),
                 ],

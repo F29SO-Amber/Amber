@@ -12,7 +12,7 @@ import 'package:amber/widgets/post_widget.dart';
 import 'package:amber/utilities/constants.dart';
 import 'package:amber/widgets/profile_picture.dart';
 import 'package:amber/services/database_service.dart';
-import 'package:material_floating_search_bar/material_floating_search_bar.dart';
+// import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
 // TODO: Create search bar
 // TODO: Create discover algorithms

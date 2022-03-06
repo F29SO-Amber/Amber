@@ -123,10 +123,21 @@ class _UserPostState extends State<UserPost> {
               children: [
                 SlidableAction(
                   onPressed: (context) {
-                    Navigator.of(context, rootNavigator: true).pushNamed(
-                      MashUpScreen.id,
-                      arguments: {'username': widget.post.authorUserName},
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => MashUpScreen(
+                          imageURL: widget.post.imageURL,
+                          username: widget.post.authorUserName,
+                        ),
+                      ),
                     );
+                    // Navigator.of(context, rootNavigator: true).pushNamed(
+                    //   MashUpScreen.id,
+                    //   arguments: {
+                    //     'username': widget.post.authorUserName,
+                    //     'imageURL': widget.post.imageURL,
+                    //   },
+                    // );
                   },
                   backgroundColor: const Color(0xFFFE4A49),
                   foregroundColor: Colors.white,

@@ -48,7 +48,8 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
     super.dispose();
     _captionController.dispose();
     _locationController.dispose();
-    _disposeUserPostChanges();
+    debugPrint('cllaed');
+    // _disposeUserPostChanges(false);
   }
 
   @override
@@ -61,7 +62,7 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
           IconButton(
             icon: const Icon(Icons.clear),
             color: Colors.white,
-            onPressed: () => _disposeUserPostChanges(),
+            onPressed: () => _disposeUserPostChanges(true),
           ),
           Visibility(
             visible: _uploadButtonPresent,
@@ -73,10 +74,10 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
                 EasyLoading.show(status: 'Uploading...');
                 await _addUserPost();
                 EasyLoading.dismiss();
+                _disposeUserPostChanges(true);
                 if (widget.mashUpDetails != null) {
                   Navigator.pop(context);
                 }
-                _disposeUserPostChanges();
               },
             ),
           ),
@@ -251,15 +252,14 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
     );
   }
 
-  void _disposeUserPostChanges() {
-    setState(() {
-      _file = null;
-      _locationController.text = '';
-      _captionController.text = '';
-      _selectedHashtags = [];
-      _uploadButtonPresent = true;
-      _selectedHashtags.clear();
-    });
+  void _disposeUserPostChanges(bool reset) {
+    _file = null;
+    _locationController.text = '';
+    _captionController.text = '';
+    _selectedHashtags = [];
+    _uploadButtonPresent = true;
+    _selectedHashtags.clear();
+    if (reset) setState(() {});
   }
 
   Future<void> _addUserPost() async {

@@ -21,6 +21,7 @@ class WhiteboardView extends StatelessWidget {
   final void Function(Point point, Point previousPoint) onGestureUpdate;
   final VoidCallback onGestureEnd;
 
+  @override
   Widget build(BuildContext context) => Material(
         elevation: 4,
         child: AspectRatio(

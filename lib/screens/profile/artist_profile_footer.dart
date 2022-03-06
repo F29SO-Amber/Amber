@@ -2,6 +2,7 @@ import 'package:amber/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
 import 'package:amber/models/post.dart';
@@ -187,7 +188,60 @@ class _ArtistFooterState extends State<ArtistFooter> {
                         },
                       );
               } else {
-                return const Center(child: CircularProgressIndicator());
+                return Expanded(
+                  child: Shimmer.fromColors(
+                    baseColor: Colors.grey[300]!,
+                    highlightColor: Colors.grey[100]!,
+                    enabled: true,
+                    child: ListView.builder(
+                      itemBuilder: (_, __) => Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Container(
+                              width: 48.0,
+                              height: 48.0,
+                              color: Colors.white,
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 8.0),
+                            ),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Container(
+                                    width: double.infinity,
+                                    height: 8.0,
+                                    color: Colors.white,
+                                  ),
+                                  const Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 2.0),
+                                  ),
+                                  Container(
+                                    width: double.infinity,
+                                    height: 8.0,
+                                    color: Colors.white,
+                                  ),
+                                  const Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 2.0),
+                                  ),
+                                  Container(
+                                    width: 40.0,
+                                    height: 8.0,
+                                    color: Colors.white,
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      itemCount: 6,
+                    ),
+                  ),
+                );
               }
             },
           ),
