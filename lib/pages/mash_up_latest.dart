@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:path_provider/path_provider.dart';
@@ -10,6 +11,7 @@ import 'package:amber/services/image_service.dart';
 import 'package:amber/widgets/profile_picture.dart';
 import 'package:amber/widgets/widget_to_image.dart';
 import 'package:amber/screens/create/publish_image.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 class MashUpScreen extends StatefulWidget {
   final String? imageURL;
@@ -29,6 +31,9 @@ class _MashUpScreenState extends State<MashUpScreen> {
   int index = 0;
   GlobalKey? _globalKey;
   late Uint8List bytes;
+  List<DrawingArea?> points = [];
+  Color selectedColor = Colors.black;
+  double strokeWidth = 2.0;
 
   @override
   void initState() {
@@ -130,21 +135,145 @@ class _MashUpScreenState extends State<MashUpScreen> {
                 WidgetToImage(
                   builder: (key) {
                     _globalKey = key;
-                    return Container(
-                      // https://stackoverflow.com/questions/49713189
-                      child: (() {
-                        if (index == 0) {
-                          return get1Layout();
-                        } else if (index == 1) {
-                          return get2Layout();
-                        } else if (index == 2) {
-                          return get4Layout();
-                        } else if (index == 3) {
-                          return get5Layout();
-                        } else if (index == 4) {
-                          return get9Layout();
-                        }
-                      })(),
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          children: <Widget>[
+                            IconButton(
+                                icon: Icon(
+                                  Icons.color_lens,
+                                  color: selectedColor,
+                                ),
+                                onPressed: () {
+                                  selectColor();
+                                }),
+                            RotatedBox(
+                              quarterTurns: 1,
+                              child: Slider(
+                                min: 1.0,
+                                max: 5.0,
+                                label: "Stroke $strokeWidth",
+                                activeColor: selectedColor,
+                                value: strokeWidth,
+                                onChanged: (double value) {
+                                  setState(() {
+                                    strokeWidth = value;
+                                  });
+                                },
+                              ),
+                            ),
+                            IconButton(
+                                icon: const Icon(
+                                  Icons.layers_clear,
+                                  color: Colors.black,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    points.clear();
+                                  });
+                                }),
+                          ],
+                        ),
+                        Stack(
+                          children: [
+                            Container(
+                              // https://stackoverflow.com/questions/49713189
+                              child: (() {
+                                if (index == 0) {
+                                  return get1Layout();
+                                } else if (index == 1) {
+                                  return get2Layout();
+                                } else if (index == 2) {
+                                  return get4Layout();
+                                } else if (index == 3) {
+                                  return get5Layout();
+                                } else if (index == 4) {
+                                  return get9Layout();
+                                }
+                              })(),
+                            ),
+                            SizedBox(
+                              width: 250,
+                              height: 250,
+                              child: GestureDetector(
+                                onPanDown: (details) {
+                                  setState(() {
+                                    points.add(DrawingArea(
+                                        point: details.localPosition,
+                                        areaPaint: Paint()
+                                          ..strokeCap = StrokeCap.round
+                                          ..isAntiAlias = true
+                                          ..color = selectedColor
+                                          ..strokeWidth = strokeWidth));
+                                  });
+                                },
+                                onPanUpdate: (details) {
+                                  setState(() {
+                                    points.add(DrawingArea(
+                                        point: details.localPosition,
+                                        areaPaint: Paint()
+                                          ..strokeCap = StrokeCap.round
+                                          ..isAntiAlias = true
+                                          ..color = selectedColor
+                                          ..strokeWidth = strokeWidth));
+                                  });
+                                },
+                                onPanEnd: (details) {
+                                  setState(() {
+                                    points.add(null);
+                                  });
+                                },
+                                child: SizedBox.expand(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                                    child: CustomPaint(
+                                      painter: MyCustomPainter(points: points),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: <Widget>[
+                            IconButton(
+                                icon: Icon(
+                                  Icons.color_lens,
+                                  color: selectedColor,
+                                ),
+                                onPressed: () {
+                                  selectColor();
+                                }),
+                            RotatedBox(
+                              quarterTurns: 1,
+                              child: Slider(
+                                min: 1.0,
+                                max: 5.0,
+                                label: "Stroke $strokeWidth",
+                                activeColor: selectedColor,
+                                value: strokeWidth,
+                                onChanged: (double value) {
+                                  setState(() {
+                                    strokeWidth = value;
+                                  });
+                                },
+                              ),
+                            ),
+                            IconButton(
+                                icon: const Icon(
+                                  Icons.layers_clear,
+                                  color: Colors.black,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    points.clear();
+                                  });
+                                }),
+                          ],
+                        ),
+                      ],
                     );
                   },
                 ),
@@ -171,8 +300,36 @@ class _MashUpScreenState extends State<MashUpScreen> {
     );
   }
 
+  void selectColor() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Color Chooser'),
+          content: SingleChildScrollView(
+            child: BlockPicker(
+              pickerColor: selectedColor,
+              onColorChanged: (color) {
+                this.setState(() {
+                  selectedColor = color;
+                });
+              },
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text("Close"))
+          ],
+        );
+      },
+    );
+  }
+
   Widget get1Layout() {
-    double side = MediaQuery.of(context).size.width;
+    double side = 250;
     return SizedBox(
       height: side,
       width: side,
@@ -186,7 +343,7 @@ class _MashUpScreenState extends State<MashUpScreen> {
   }
 
   Widget get2Layout() {
-    double side = MediaQuery.of(context).size.width;
+    double side = 250;
     return SizedBox(
       height: side,
       width: side,
@@ -210,7 +367,7 @@ class _MashUpScreenState extends State<MashUpScreen> {
   }
 
   Widget get4Layout() {
-    double side = MediaQuery.of(context).size.width;
+    double side = 250;
     return SizedBox(
       height: side,
       width: side,
@@ -254,7 +411,7 @@ class _MashUpScreenState extends State<MashUpScreen> {
   }
 
   Widget get5Layout() {
-    double side = MediaQuery.of(context).size.width;
+    double side = 250;
     return SizedBox(
       height: side,
       width: side,
@@ -310,7 +467,7 @@ class _MashUpScreenState extends State<MashUpScreen> {
   }
 
   Widget get9Layout() {
-    double side = MediaQuery.of(context).size.width;
+    double side = 250;
     return SizedBox(
       height: side,
       width: side,
@@ -385,5 +542,39 @@ class _MashUpScreenState extends State<MashUpScreen> {
         ],
       ),
     );
+  }
+}
+
+class DrawingArea {
+  Offset point;
+  Paint areaPaint;
+
+  DrawingArea({required this.point, required this.areaPaint});
+}
+
+class MyCustomPainter extends CustomPainter {
+  List<DrawingArea?> points;
+
+  MyCustomPainter({required this.points});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint background = Paint()..color = Colors.transparent;
+    Rect rect = Rect.fromLTWH(0, 0, size.width, size.height);
+    canvas.drawRect(rect, background);
+    canvas.clipRect(rect);
+
+    for (int x = 0; x < points.length - 1; x++) {
+      if (points[x] != null && points[x + 1] != null) {
+        canvas.drawLine(points[x]!.point, points[x + 1]!.point, points[x]!.areaPaint);
+      } else if (points[x] != null && points[x + 1] == null) {
+        canvas.drawPoints(PointMode.points, [points[x]!.point], points[x]!.areaPaint);
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(MyCustomPainter oldDelegate) {
+    return true;
   }
 }

@@ -4,6 +4,7 @@ import 'dart:ui' as ui;
 
 import 'package:amber/mash-up/drawn_line.dart';
 import 'package:amber/mash-up/sketcher.dart';
+import 'package:amber/utilities/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -18,6 +19,7 @@ class _DrawingPageState extends State<DrawingPage> {
   GlobalKey _globalKey = new GlobalKey();
   List<DrawnLine?> lines = <DrawnLine?>[];
   DrawnLine? line;
+  double side = 300;
   Color selectedColor = Colors.black;
   double selectedWidth = 5.0;
 
@@ -25,25 +27,6 @@ class _DrawingPageState extends State<DrawingPage> {
       StreamController<List<DrawnLine?>>.broadcast();
   StreamController<DrawnLine?> currentLineStreamController =
       StreamController<DrawnLine?>.broadcast();
-
-  Future<void> save() async {
-    try {
-      RenderRepaintBoundary boundary =
-          _globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
-      ui.Image image = await boundary.toImage();
-      ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-      Uint8List? pngBytes = byteData?.buffer.asUint8List();
-      var saved = await ImageGallerySaver.saveImage(
-        pngBytes!,
-        quality: 100,
-        name: DateTime.now().toIso8601String() + ".png",
-        isReturnImagePathOfIOS: true,
-      );
-      print(saved);
-    } catch (e) {
-      print(e);
-    }
-  }
 
   Future<void> clear() async {
     setState(() {
@@ -55,34 +38,40 @@ class _DrawingPageState extends State<DrawingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.yellow[50],
-      body: Stack(
+      appBar: kAppBar,
+      body: Column(
         children: [
-          buildAllPaths(context),
-          buildCurrentPath(context),
-          buildStrokeToolbar(),
           buildColorToolbar(),
+          buildStrokeToolbar(),
+          Center(
+            child: Stack(
+              children: [
+                buildAllPaths(context),
+                buildCurrentPath(context),
+              ],
+            ),
+          ),
         ],
       ),
     );
   }
 
   Widget buildCurrentPath(BuildContext context) {
-    return GestureDetector(
-      onPanStart: onPanStart,
-      onPanUpdate: onPanUpdate,
-      onPanEnd: onPanEnd,
-      child: RepaintBoundary(
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          padding: EdgeInsets.all(4.0),
-          color: Colors.transparent,
-          alignment: Alignment.topLeft,
+    return RepaintBoundary(
+      child: Container(
+        width: side,
+        height: side,
+        padding: EdgeInsets.all(4.0),
+        color: Colors.transparent,
+        child: GestureDetector(
+          onPanStart: onPanStart,
+          onPanUpdate: onPanUpdate,
+          onPanEnd: onPanEnd,
           child: StreamBuilder<DrawnLine?>(
             stream: currentLineStreamController.stream,
             builder: (context, snapshot) {
               return CustomPaint(
+                size: Size(side, side),
                 painter: Sketcher(
                   lines: [line],
                 ),
@@ -98,15 +87,15 @@ class _DrawingPageState extends State<DrawingPage> {
     return RepaintBoundary(
       key: _globalKey,
       child: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        color: Colors.transparent,
+        width: side,
+        height: side,
+        color: Colors.red.shade50,
         padding: EdgeInsets.all(4.0),
-        alignment: Alignment.topLeft,
         child: StreamBuilder<List<DrawnLine?>>(
           stream: linesStreamController.stream,
           builder: (context, snapshot) {
             return CustomPaint(
+              size: Size(side, side),
               painter: Sketcher(
                 lines: lines,
               ),
@@ -140,18 +129,14 @@ class _DrawingPageState extends State<DrawingPage> {
   }
 
   Widget buildStrokeToolbar() {
-    return Positioned(
-      bottom: 120.0,
-      left: 10.0,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          buildStrokeButton(5.0),
-          buildStrokeButton(10.0),
-          buildStrokeButton(15.0),
-        ],
-      ),
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        buildStrokeButton(5.0),
+        buildStrokeButton(10.0),
+        buildStrokeButton(15.0),
+      ],
     );
   }
 
@@ -175,30 +160,22 @@ class _DrawingPageState extends State<DrawingPage> {
   }
 
   Widget buildColorToolbar() {
-    return Positioned(
-      top: 40.0,
-      right: 10.0,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          buildClearButton(),
-          Divider(
-            height: 10.0,
-          ),
-          buildSaveButton(),
-          Divider(
-            height: 20.0,
-          ),
-          buildColorButton(Colors.red),
-          buildColorButton(Colors.blueAccent),
-          buildColorButton(Colors.deepOrange),
-          buildColorButton(Colors.green),
-          buildColorButton(Colors.lightBlue),
-          buildColorButton(Colors.black),
-          buildColorButton(Colors.white),
-        ],
-      ),
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        buildClearButton(),
+        Divider(
+          height: 10.0,
+        ),
+        buildColorButton(Colors.red),
+        buildColorButton(Colors.blueAccent),
+        // buildColorButton(Colors.deepOrange),
+        // buildColorButton(Colors.green),
+        // buildColorButton(Colors.lightBlue),
+        buildColorButton(Colors.black),
+        buildColorButton(Colors.white),
+      ],
     );
   }
 
@@ -215,19 +192,6 @@ class _DrawingPageState extends State<DrawingPage> {
             selectedColor = color;
           });
         },
-      ),
-    );
-  }
-
-  Widget buildSaveButton() {
-    return GestureDetector(
-      onTap: save,
-      child: CircleAvatar(
-        child: Icon(
-          Icons.save,
-          size: 20.0,
-          color: Colors.amber,
-        ),
       ),
     );
   }
