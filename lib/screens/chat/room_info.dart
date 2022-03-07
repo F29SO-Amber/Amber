@@ -76,7 +76,11 @@ class _RoomInfoState extends State<RoomInfo> {
                               builder: (_) => UsersPage(oldMembers: widget.room.users),
                             ),
                           );
-                          DatabaseService.roomsRef.doc(widget.room.id).update({'userIds': result});
+                          // var map = {};
+                          // (result as List<String>).map((e) => map[e] = 'user');
+                          await DatabaseService.roomsRef
+                              .doc(widget.room.id)
+                              .update({'userIds': result});
                           setState(() {});
                         },
                       ),

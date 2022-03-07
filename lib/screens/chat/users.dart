@@ -44,7 +44,7 @@ class _UsersPageState extends State<UsersPage> {
         );
       }
     } else {
-      Navigator.pop(context, users.map((e) => e.id));
+      Navigator.pop(context, users.map((e) => e.id).toList());
     }
   }
 
