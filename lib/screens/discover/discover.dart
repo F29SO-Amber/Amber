@@ -26,10 +26,6 @@ class DiscoverPage extends StatefulWidget {
   State<DiscoverPage> createState() => _DiscoverPageState();
 }
 
-/*
-  Discover Page helps users to discover various other users and communities that
-  they might be interested in following or having a glance at.
-*/
 class _DiscoverPageState extends State<DiscoverPage> {
   @override
   Widget build(BuildContext context) {

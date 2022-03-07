@@ -19,7 +19,8 @@ class _UsersPageState extends State<UsersPage> {
   void _handlePressed(BuildContext context) async {
     if (users.length == 1) {
       final room = await FirebaseChatCore.instance.createRoom(users[0]);
-      await Navigator.of(context).pushReplacement(
+      Navigator.pop(context);
+      await Navigator.of(context, rootNavigator: true).push(
         MaterialPageRoute(builder: (context) => ChatPage(room: room)),
       );
     } else if (users.length > 1) {
@@ -29,7 +30,8 @@ class _UsersPageState extends State<UsersPage> {
         imageUrl: 'https://bit.ly/3sB5zcK',
         metadata: {'createdBy': AuthService.currentUser.uid},
       );
-      await Navigator.of(context, rootNavigator: true).pushReplacement(
+      Navigator.pop(context);
+      await Navigator.of(context, rootNavigator: true).push(
         MaterialPageRoute(builder: (_) => ChatPage(room: room)),
       );
     }

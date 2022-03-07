@@ -23,15 +23,19 @@ class _MembersState extends State<Members> {
   }
 
   void onLeavingGroup() async {
-    List<String> list = widget.room.users.map((e) => e.id).toList();
-    list.remove(AuthService.currentUser.uid);
-    await FirebaseFirestore.instance
-        .collection('rooms')
-        .doc(widget.room.id)
-        .update({'userIds': list});
+    if (widget.room.metadata!['createdBy'] != AuthService.currentUser.uid) {
+      List<String> list = widget.room.users.map((e) => e.id).toList();
+      list.remove(AuthService.currentUser.uid);
+      await FirebaseFirestore.instance
+          .collection('rooms')
+          .doc(widget.room.id)
+          .update({'userIds': list});
 
-    Navigator.pushAndRemoveUntil(
-        context, MaterialPageRoute(builder: (_) => const RoomsPage()), (route) => false);
+      Navigator.pushAndRemoveUntil(
+          context, MaterialPageRoute(builder: (_) => const RoomsPage()), (route) => false);
+    } else {
+      // TODO: Show alert that an admin can't leave
+    }
   }
 
   @override
