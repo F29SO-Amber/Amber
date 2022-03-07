@@ -1,3 +1,4 @@
+import 'package:amber/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:amber/screens/chat/users.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -18,123 +19,102 @@ class Members extends StatefulWidget {
 
 class _MembersState extends State<Members> {
   Future<void> deleteUserFromFirestore(String userId) async {
-  await FirebaseFirestore.instance
-      .collection('rooms')
-      .doc(widget.room.id)
-      .delete();
-}
+    await FirebaseFirestore.instance.collection('rooms').doc(widget.room.id).delete();
+  }
+
   void onLeavingGroup() async {
-    String uid = FirebaseAuth.instance.currentUser!.uid;
-    for (int i = 0; i < widget.room.users.length; i++) {
-      if (widget.room.users[i] == uid) {
-        widget.room.users.removeAt(i);
-      }
-    }
+    List<String> list = widget.room.users.map((e) => e.id).toList();
+    list.remove(AuthService.currentUser.uid);
     await FirebaseFirestore.instance
         .collection('rooms')
         .doc(widget.room.id)
-        .update({'rooms': widget.room.users});
+        .update({'userIds': list});
 
-    await FirebaseFirestore.instance
-        .collection("users")
-        .doc(uid)
-        .collection("rooms")
-        .doc(widget.room.id)
-        .delete();
-    Navigator.pushAndRemoveUntil(context,
-        MaterialPageRoute(builder: (_) => RoomsPage()), (route) => false);
-
+    Navigator.pushAndRemoveUntil(
+        context, MaterialPageRoute(builder: (_) => const RoomsPage()), (route) => false);
   }
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: kAppBar,
       body: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-
-              children: [
-                SizedBox(
-                  height: size.height / 20,
-                ),
-                Container(
-                    width: size.width / 1.1,
-                    child: Text(
-                      "${widget.room.users.length} Members",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: size.width / 20,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    )),
-                SizedBox(
-                  height: size.height / 20,
-                ),
-                ListTile(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) =>
-                                UsersPage()));
-                  },
-
-                  leading: Icon(
-                    Icons.add,
-                    color: Colors.black,
-                  ),
-                  title: Text(
-                    "Add Members",
-                    style: TextStyle(
-                        fontSize: size.width / 22,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black),
-                  ),
-                ),
-                Flexible(
-                    child: ListView.builder(
-                      itemCount: widget.room.users.length,
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        final user = widget.room.users[index];
-                        // bool isSelected = false;
-                        return Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          child: Row(
-                            children: [
-                              _buildAvatar(user),
-                              Text(getUserName(user)),
-                            ],
-                          ),
-                        );
-                      })),
-                Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Column(
-                    children: [
-                      ListTile(
-                        onTap: () {
-                          deleteUserFromFirestore(widget.room.id);
-                        },
-                        leading: Icon(
-                          Icons.logout,
-                          color: Colors.black,
-                        ),
-                        title: Text(
-                          "Leave Group",
-                          style: TextStyle(
-                              fontSize: size.width / 22,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.black),
-                        ),
-                      )
-                    ],
-                  ),
-                )
-              ],
-
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              height: size.height / 20,
             ),
+            Container(
+                width: size.width / 1.1,
+                child: Text(
+                  "${widget.room.users.length} Members",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: size.width / 20,
+                    fontWeight: FontWeight.w500,
+                  ),
+                )),
+            SizedBox(
+              height: size.height / 20,
+            ),
+            ListTile(
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (_) => UsersPage()));
+              },
+              leading: Icon(
+                Icons.add,
+                color: Colors.black,
+              ),
+              title: Text(
+                "Add Members",
+                style: TextStyle(
+                    fontSize: size.width / 22, fontWeight: FontWeight.w500, color: Colors.black),
+              ),
+            ),
+            Flexible(
+                child: ListView.builder(
+                    itemCount: widget.room.users.length,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      final user = widget.room.users[index];
+                      // bool isSelected = false;
+                      return Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        child: Row(
+                          children: [
+                            _buildAvatar(user),
+                            Text(getUserName(user)),
+                          ],
+                        ),
+                      );
+                    })),
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Column(
+                children: [
+                  ListTile(
+                    onTap: () {
+                      onLeavingGroup();
+                    },
+                    leading: Icon(
+                      Icons.logout,
+                      color: Colors.black,
+                    ),
+                    title: Text(
+                      "Leave Group",
+                      style: TextStyle(
+                          fontSize: size.width / 22,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black),
+                    ),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -157,7 +137,6 @@ class _MembersState extends State<Members> {
               )
             : null,
       ),
-
     );
   }
 }

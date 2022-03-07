@@ -39,7 +39,9 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
   void initState() {
     super.initState();
     if (widget.mashUpDetails != null) {
-      _file = File(widget.mashUpDetails![0]);
+      setState(() {
+        _file = File(widget.mashUpDetails![0]);
+      });
     }
   }
 
@@ -48,8 +50,7 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
     super.dispose();
     _captionController.dispose();
     _locationController.dispose();
-    debugPrint('cllaed');
-    // _disposeUserPostChanges(false);
+    _disposeUserPostChanges(false);
   }
 
   @override

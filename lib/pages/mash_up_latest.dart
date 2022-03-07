@@ -132,40 +132,40 @@ class _MashUpScreenState extends State<MashUpScreen> {
                     },
                   ),
                 ),
-                WidgetToImage(
-                  builder: (key) {
-                    _globalKey = key;
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          children: <Widget>[
-                            IconButton(
-                                icon: Icon(Icons.color_lens, color: selectedColor),
-                                onPressed: () {
-                                  selectColor();
-                                }),
-                            RotatedBox(
-                              quarterTurns: 1,
-                              child: Slider(
-                                min: 1.0,
-                                max: 10.0,
-                                label: "Stroke $strokeWidth",
-                                activeColor: selectedColor,
-                                value: strokeWidth,
-                                onChanged: (double value) {
-                                  setState(() => strokeWidth = value);
-                                },
-                              ),
-                            ),
-                            IconButton(
-                                icon: const Icon(Icons.layers_clear, color: Colors.black),
-                                onPressed: () {
-                                  setState(() => points.clear());
-                                }),
-                          ],
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Column(
+                      children: <Widget>[
+                        IconButton(
+                            icon: Icon(Icons.color_lens, color: selectedColor),
+                            onPressed: () {
+                              selectColor();
+                            }),
+                        RotatedBox(
+                          quarterTurns: 1,
+                          child: Slider(
+                            min: 1.0,
+                            max: 10.0,
+                            label: "Stroke $strokeWidth",
+                            activeColor: selectedColor,
+                            value: strokeWidth,
+                            onChanged: (double value) {
+                              setState(() => strokeWidth = value);
+                            },
+                          ),
                         ),
-                        Stack(
+                        IconButton(
+                            icon: const Icon(Icons.layers_clear, color: Colors.black),
+                            onPressed: () {
+                              setState(() => points.clear());
+                            }),
+                      ],
+                    ),
+                    WidgetToImage(
+                      builder: (key) {
+                        _globalKey = key;
+                        return Stack(
                           children: [
                             Container(
                               // https://stackoverflow.com/questions/49713189
@@ -223,35 +223,35 @@ class _MashUpScreenState extends State<MashUpScreen> {
                               ),
                             ),
                           ],
+                        );
+                      },
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        IconButton(
+                          icon: Icon(FontAwesomeIcons.square, color: selectedColor),
+                          onPressed: () {},
                         ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            IconButton(
-                              icon: Icon(FontAwesomeIcons.square, color: selectedColor),
-                              onPressed: () {},
-                            ),
-                            IconButton(
-                              icon: Icon(FontAwesomeIcons.square, color: selectedColor),
-                              onPressed: () {},
-                            ),
-                            IconButton(
-                              icon: Icon(FontAwesomeIcons.square, color: selectedColor),
-                              onPressed: () {},
-                            ),
-                            IconButton(
-                              icon: Icon(FontAwesomeIcons.square, color: selectedColor),
-                              onPressed: () {},
-                            ),
-                            IconButton(
-                              icon: Icon(FontAwesomeIcons.square, color: selectedColor),
-                              onPressed: () {},
-                            ),
-                          ],
+                        IconButton(
+                          icon: Icon(FontAwesomeIcons.square, color: selectedColor),
+                          onPressed: () {},
+                        ),
+                        IconButton(
+                          icon: Icon(FontAwesomeIcons.square, color: selectedColor),
+                          onPressed: () {},
+                        ),
+                        IconButton(
+                          icon: Icon(FontAwesomeIcons.square, color: selectedColor),
+                          onPressed: () {},
+                        ),
+                        IconButton(
+                          icon: Icon(FontAwesomeIcons.square, color: selectedColor),
+                          onPressed: () {},
                         ),
                       ],
-                    );
-                  },
+                    ),
+                  ],
                 ),
                 SizedBox(
                   height: 120,

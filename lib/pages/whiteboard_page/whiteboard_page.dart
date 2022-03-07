@@ -24,7 +24,7 @@ class WhiteboardPage extends StatelessWidget {
                     onGestureUpdate: viewModel.onGestureUpdate,
                     onGestureEnd: viewModel.onGestureEnd,
                   ),
-                  ToolButtons(viewmodel: viewModel),
+                  ToolButtons(viewModel: viewModel),
                 ],
               ),
             ),

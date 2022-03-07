@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:amber/pages/whiteboard_page/whiteboard_view_model.dart';
 
 class ToolButtons extends StatelessWidget {
-  final WhiteboardViewModel viewmodel;
+  final WhiteboardViewModel viewModel;
 
-  const ToolButtons({Key? key, required this.viewmodel}) : assert(viewmodel != null);
+  const ToolButtons({Key? key, required this.viewModel});
 
   @override
   Widget build(BuildContext context) {
@@ -13,13 +13,13 @@ class ToolButtons extends StatelessWidget {
       children: <Widget>[
         IconButton(
           icon: Icon(Icons.edit),
-          color: viewmodel.tool == Tool.pen ? Colors.black : Colors.black54,
-          onPressed: () => viewmodel.selectTool(Tool.pen),
+          color: viewModel.tool == Tool.pen ? Colors.black : Colors.black54,
+          onPressed: () => viewModel.selectTool(Tool.pen),
         ),
         IconButton(
           icon: Icon(Icons.delete_outline),
-          color: viewmodel.tool == Tool.eraser ? Colors.black : Colors.black54,
-          onPressed: () => viewmodel.selectTool(Tool.eraser),
+          color: viewModel.tool == Tool.eraser ? Colors.black : Colors.black54,
+          onPressed: () => viewModel.selectTool(Tool.eraser),
         ),
       ],
     );
