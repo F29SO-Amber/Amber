@@ -18,10 +18,6 @@ class Members extends StatefulWidget {
 }
 
 class _MembersState extends State<Members> {
-  Future<void> deleteUserFromFirestore(String userId) async {
-    await FirebaseFirestore.instance.collection('rooms').doc(widget.room.id).delete();
-  }
-
   void onLeavingGroup() async {
     if (widget.room.metadata!['createdBy'] != AuthService.currentUser.uid) {
       List<String> list = widget.room.users.map((e) => e.id).toList();

@@ -7,33 +7,44 @@ import '../../utilities/constants.dart';
 import 'chat.dart';
 
 class UsersPage extends StatefulWidget {
-  const UsersPage({Key? key}) : super(key: key);
+  final List<types.User>? oldMembers;
+  const UsersPage({Key? key, this.oldMembers}) : super(key: key);
 
   @override
   State<UsersPage> createState() => _UsersPageState();
 }
 
 class _UsersPageState extends State<UsersPage> {
-  final List<types.User> users = [];
+  late List<types.User> users;
+
+  @override
+  void initState() {
+    users = widget.oldMembers != null ? widget.oldMembers! : [];
+    super.initState();
+  }
 
   void _handlePressed(BuildContext context) async {
-    if (users.length == 1) {
-      final room = await FirebaseChatCore.instance.createRoom(users[0]);
-      Navigator.pop(context);
-      await Navigator.of(context, rootNavigator: true).push(
-        MaterialPageRoute(builder: (context) => ChatPage(room: room)),
-      );
-    } else if (users.length > 1) {
-      final room = await FirebaseChatCore.instance.createGroupRoom(
-        name: 'Test Group',
-        users: users,
-        imageUrl: 'https://bit.ly/3sB5zcK',
-        metadata: {'createdBy': AuthService.currentUser.uid},
-      );
-      Navigator.pop(context);
-      await Navigator.of(context, rootNavigator: true).push(
-        MaterialPageRoute(builder: (_) => ChatPage(room: room)),
-      );
+    if (widget.oldMembers == null) {
+      if (users.length == 1) {
+        final room = await FirebaseChatCore.instance.createRoom(users[0]);
+        Navigator.pop(context);
+        await Navigator.of(context, rootNavigator: true).push(
+          MaterialPageRoute(builder: (context) => ChatPage(room: room)),
+        );
+      } else if (users.length > 1) {
+        final room = await FirebaseChatCore.instance.createGroupRoom(
+          name: 'Test Group',
+          users: users,
+          imageUrl: 'https://bit.ly/3sB5zcK',
+          metadata: {'createdBy': AuthService.currentUser.uid},
+        );
+        Navigator.pop(context);
+        await Navigator.of(context, rootNavigator: true).push(
+          MaterialPageRoute(builder: (_) => ChatPage(room: room)),
+        );
+      }
+    } else {
+      Navigator.pop(context, users.map((e) => e.id));
     }
   }
 
@@ -94,7 +105,9 @@ class _UsersPageState extends State<UsersPage> {
                     if (!users.contains(user)) {
                       users.add(user);
                     } else {
+                      // if (widget.oldMembers != null && !(widget.oldMembers!).contains(user)) {
                       users.remove(user);
+                      // }
                     }
                   });
                 },
