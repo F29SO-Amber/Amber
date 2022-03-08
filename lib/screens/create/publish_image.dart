@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:amber/models/community.dart';
+import 'package:amber/user_data.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -47,10 +49,9 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
 
   @override
   void dispose() {
-    super.dispose();
     _captionController.dispose();
     _locationController.dispose();
-    _disposeUserPostChanges(false);
+    super.dispose();
   }
 
   @override
@@ -70,16 +71,107 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
             child: IconButton(
               icon: const Icon(Icons.publish),
               color: Colors.white,
-              onPressed: () async {
-                setState(() => _uploadButtonPresent = false);
-                EasyLoading.show(status: 'Uploading...');
-                await _addUserPost();
-                EasyLoading.dismiss();
-                _disposeUserPostChanges(true);
-                if (widget.mashUpDetails != null) {
-                  Navigator.pop(context);
-                }
-              },
+              onPressed: () => showMaterialModalBottomSheet(
+                expand: false,
+                context: context,
+                backgroundColor: Colors.transparent,
+                builder: (context) => Material(
+                  child: SafeArea(
+                    top: false,
+                    child: SizedBox(
+                      height: 500,
+                      width: MediaQuery.of(context).size.width,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 25.0),
+                              child: Text('Post media to:', style: kDarkLabelTextStyle),
+                            ),
+                            FutureBuilder(
+                              future: DatabaseService.followingRef
+                                  .doc(AuthService.currentUser.uid)
+                                  .collection('userCommunities')
+                                  .get(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  var list = (snapshot.data as QuerySnapshot).docs.toList();
+                                  return list.isEmpty
+                                      ? const Padding(
+                                          padding: EdgeInsets.only(top: 120.0),
+                                          child: Center(child: Text('No communities to display!')),
+                                        )
+                                      : GridView.builder(
+                                          // padding: const EdgeInsets.all(10).copyWith(top: 40),
+                                          scrollDirection: Axis.vertical,
+                                          shrinkWrap: true,
+                                          physics: const NeverScrollableScrollPhysics(),
+                                          itemCount: list.length,
+                                          gridDelegate:
+                                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 2,
+                                            crossAxisSpacing: 0,
+                                            mainAxisSpacing: 0,
+                                            childAspectRatio: 1,
+                                          ),
+                                          itemBuilder: (BuildContext context, int index) {
+                                            return StreamBuilder(
+                                              stream: DatabaseService.communityRef
+                                                  .doc(list[index] as String)
+                                                  .snapshots(),
+                                              builder: (context, snapshot) {
+                                                if (snapshot.hasData &&
+                                                    snapshot.connectionState ==
+                                                        ConnectionState.active) {
+                                                  CommunityModel community =
+                                                      snapshot.data as CommunityModel;
+                                                  return Column(
+                                                    children: [
+                                                      GestureDetector(
+                                                        onTap: () async {},
+                                                        child: CustomImage(
+                                                          side: MediaQuery.of(context).size.width *
+                                                              0.8 /
+                                                              3,
+                                                          image: NetworkImage(
+                                                              community.communityPhotoURL),
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                        padding: const EdgeInsets.only(top: 10.0),
+                                                        child: Text(community.name,
+                                                            style: kLightLabelTextStyle),
+                                                      ),
+                                                    ],
+                                                  );
+                                                } else {
+                                                  return const Center(
+                                                      child: CircularProgressIndicator());
+                                                }
+                                              },
+                                            );
+                                          },
+                                        );
+                                } else {
+                                  return const Center(child: CircularProgressIndicator());
+                                }
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              // onPressed: () async {
+              // setState(() => _uploadButtonPresent = false);
+              // EasyLoading.show(status: 'Uploading...');
+              // await _addUserPost();
+              // EasyLoading.dismiss();
+              // _disposeUserPostChanges(true);
+              // Navigator.pop(context);
+              // },
             ),
           ),
         ],
@@ -98,11 +190,9 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: (widget.mashUpDetails != null)
-                              ? FileImage(File(widget.mashUpDetails![0]))
-                              : (_file == null)
-                                  ? const AssetImage('assets/taptoselect.png')
-                                  : FileImage(_file!) as ImageProvider,
+                          image: (_file == null)
+                              ? const AssetImage('assets/taptoselect.png')
+                              : FileImage(_file!) as ImageProvider,
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -195,7 +285,6 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
                       controller: _locationController,
                       keyboardType: TextInputType.text,
                       decoration: const InputDecoration(
-                        //hintText: "Locate your post...",
                         hintText: "Add a location...",
                         border: InputBorder.none,
                         prefixIcon: Icon(Icons.pin_drop_outlined, color: kAppColor, size: 30),

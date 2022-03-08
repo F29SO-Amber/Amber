@@ -1,3 +1,5 @@
+import 'package:amber/pages/user_list.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -9,6 +11,8 @@ import 'package:amber/widgets/number_and_label.dart';
 import 'package:amber/services/database_service.dart';
 import 'package:amber/widgets/custom_elevated_button.dart';
 import 'package:amber/widgets/custom_outlined_button.dart';
+
+import '../services/auth_service.dart';
 
 // TODO: Create communities
 
@@ -24,6 +28,69 @@ class CommunityPage extends StatefulWidget {
 
 class _CommunityPageState extends State<CommunityPage> {
   int selectedTab = 0;
+  bool isFollowing = false;
+  String? followerCount;
+
+  @override
+  void initState() {
+    super.initState();
+    checkIfFollowing();
+  }
+
+  Future<void> checkIfFollowing() async {
+    DocumentSnapshot doc = await DatabaseService.followersRef
+        .doc(widget.communityID)
+        .collection('communityFollowers')
+        .doc(AuthService.currentUser.uid)
+        .get();
+    setState(() {
+      isFollowing = doc.exists;
+    });
+  }
+
+  Future<void> unfollowCommunity() async {
+    setState(() => isFollowing = false);
+    //remove follower
+    DatabaseService.followersRef
+        .doc(widget.communityID)
+        .collection('communityFollowers')
+        .doc(AuthService.currentUser.uid)
+        .get()
+        .then((doc) {
+      if (doc.exists) {
+        doc.reference.delete();
+      }
+    });
+    //remove following
+    DatabaseService.followingRef
+        .doc(AuthService.currentUser.uid)
+        .collection('userCommunities')
+        .doc(widget.communityID)
+        .get()
+        .then(
+      (doc) {
+        if (doc.exists) {
+          doc.reference.delete();
+        }
+      },
+    );
+  }
+
+  Future<void> followCommunity() async {
+    setState(() => isFollowing = true);
+    //updates the followers collection of the followed user
+    DatabaseService.followersRef
+        .doc(widget.communityID)
+        .collection('communityFollowers')
+        .doc(AuthService.currentUser.uid)
+        .set({});
+    //updates the following collection of the currentUser
+    DatabaseService.followingRef
+        .doc(AuthService.currentUser.uid)
+        .collection('userCommunities')
+        .doc(widget.communityID)
+        .set({});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,10 +130,50 @@ class _CommunityPageState extends State<CommunityPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    children: const [
-                      NumberAndLabel(number: '12', label: '  Posts  '),
-                      NumberAndLabel(number: '128', label: 'Followers'),
-                      NumberAndLabel(number: '2.4K', label: 'Likes'),
+                    children: [
+                      StreamBuilder(
+                        stream: DatabaseService.postsRef
+                            .where('authorId', isEqualTo: widget.communityID)
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return NumberAndLabel(
+                              number: '${(snapshot.data as QuerySnapshot).docs.length}',
+                              label: '   Posts   ',
+                            );
+                          } else {
+                            return const NumberAndLabel(number: '0', label: '  Posts  ');
+                          }
+                        },
+                      ),
+                      StreamBuilder(
+                        stream: DatabaseService.followersRef
+                            .doc(widget.communityID)
+                            .collection('communityFollowers')
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            followerCount = '${(snapshot.data as QuerySnapshot).docs.length}';
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) =>
+                                        UserList(userUID: widget.communityID, followers: true),
+                                  ),
+                                );
+                              },
+                              child: NumberAndLabel(
+                                number: '${(snapshot.data as QuerySnapshot).docs.length}',
+                                label: 'Followers',
+                              ),
+                            );
+                          } else {
+                            return const NumberAndLabel(number: '0', label: 'Followers');
+                          }
+                        },
+                      ),
+                      const NumberAndLabel(number: '2.4K', label: 'Likes'),
                     ],
                   ),
                   const SizedBox(height: 20),
@@ -75,48 +182,34 @@ class _CommunityPageState extends State<CommunityPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       CustomOutlinedButton(
-                        buttonText: 'Message',
-                        widthFactor: 0.45,
-                        onPress: () {
-                          // Navigator.of(context, rootNavigator: true).push(
-                          //   MaterialPageRoute(
-                          //     builder: (context) => ChatPage(
-                          //       chatID: user.email,
-                          //       chatName: user.name,
-                          //       url: user.profilePhotoURL,
-                          //     ),
-                          //   ),
-                          // );
-                        },
-                      ),
-                      CustomElevatedButton(
-                        buttonText: 'Join Community',
+                        buttonText: 'Message Creator',
                         widthFactor: 0.45,
                         onPress: () {},
                       ),
+                      (isFollowing) // TODO: Avoid entire widget tree rebuild
+                          ? CustomElevatedButton(
+                              buttonText: 'Leave Community',
+                              widthFactor: 0.45,
+                              onPress: unfollowCommunity,
+                            )
+                          : CustomElevatedButton(
+                              buttonText: 'Join Community',
+                              widthFactor: 0.45,
+                              onPress: followCommunity,
+                            ),
                     ],
                   ),
                   const SizedBox(height: 20),
                   Row(
                     children: <Widget>[
                       PostType(
-                        numOfDivisions: 2,
+                        numOfDivisions: 1,
                         bgColor: Colors.red[100]!,
                         icon: const Icon(FontAwesomeIcons.images),
                         index: 0,
                         currentTab: selectedTab,
                         onPress: () {
-                          setState(() => selectedTab = 0);
-                        },
-                      ),
-                      PostType(
-                        numOfDivisions: 2,
-                        bgColor: Colors.greenAccent[100]!,
-                        icon: const Icon(FontAwesomeIcons.rocketchat),
-                        index: 1,
-                        currentTab: selectedTab,
-                        onPress: () {
-                          setState(() => selectedTab = 1);
+                          // setState(() => selectedTab = 0);
                         },
                       ),
                     ],

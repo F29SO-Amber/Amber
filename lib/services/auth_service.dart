@@ -1,3 +1,4 @@
+import 'package:amber/user_data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:amber/services/database_service.dart';
@@ -18,6 +19,7 @@ class AuthService {
       Hive.box('user').put('email', data.name);
       Hive.box('user').put('password', data.password);
       currentUser = authResult.user!;
+      UserData.currentUser = await DatabaseService.getUser(currentUser.uid);
       return null;
     } on FirebaseAuthException catch (e) {
       return e.message;

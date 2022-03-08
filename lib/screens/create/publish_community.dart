@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:amber/user_data.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -34,7 +35,6 @@ class _PublishCommunityScreenState extends State<PublishCommunityScreen> {
     super.dispose();
     _nameController.dispose();
     _descriptionController.dispose();
-    disposeUserEventChanges();
   }
 
   @override
@@ -210,6 +210,7 @@ class _PublishCommunityScreenState extends State<PublishCommunityScreen> {
         map['timeCreated'] = Timestamp.now();
         map['ownerID'] = AuthService.currentUser.uid;
         map['description'] = _descriptionController.text;
+        map['ownerUsername'] = UserData.currentUser!.username;
         map['communityPhotoURL'] =
             await StorageService.uploadImage(communityID, _file!, 'communities');
         await DatabaseService.communityRef.doc(communityID).set(map);

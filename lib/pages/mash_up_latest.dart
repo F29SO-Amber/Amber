@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui';
 import 'package:flutter/material.dart';
@@ -53,6 +55,16 @@ class _MashUpScreenState extends State<MashUpScreen> {
   }
 
   @override
+  void dispose() {
+    // String json = jsonEncode(points);
+    var json = jsonEncode(points.map((e) => e?.toJson()).toList());
+    debugPrint(json);
+    var decoded = jsonDecode(json);
+    debugPrint('${identical(points, decoded)}');
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -72,7 +84,7 @@ class _MashUpScreenState extends State<MashUpScreen> {
               } else {
                 dir = (await getExternalStorageDirectory())!;
               }
-              final file = await File('${dir.path}/image.jpg').create();
+              final file = await File('${dir.path}/${Random().nextInt(10000)}.jpg').create();
               file.writeAsBytesSync(this.bytes);
               Navigator.pushReplacement(
                 context,
@@ -190,23 +202,24 @@ class _MashUpScreenState extends State<MashUpScreen> {
                                 onPanDown: (details) {
                                   setState(() {
                                     points.add(DrawingArea(
-                                        point: details.localPosition,
-                                        areaPaint: Paint()
-                                          ..strokeCap = StrokeCap.round
-                                          ..isAntiAlias = true
-                                          ..color = selectedColor
-                                          ..strokeWidth = strokeWidth));
+                                      point: details.localPosition,
+                                      strokeWidth: strokeWidth,
+                                      color: selectedColor.value,
+                                    ));
                                   });
                                 },
                                 onPanUpdate: (details) {
                                   setState(() {
                                     points.add(DrawingArea(
-                                        point: details.localPosition,
-                                        areaPaint: Paint()
-                                          ..strokeCap = StrokeCap.round
-                                          ..isAntiAlias = true
-                                          ..color = selectedColor
-                                          ..strokeWidth = strokeWidth));
+                                      point: details.localPosition,
+                                      strokeWidth: strokeWidth,
+                                      color: selectedColor.value,
+                                    ));
+                                    // areaPaint: Paint()
+                                    //   ..strokeCap = StrokeCap.round
+                                    //   ..isAntiAlias = true
+                                    //   ..color = selectedColor
+                                    //   ..strokeWidth = strokeWidth));
                                   });
                                 },
                                 onPanEnd: (details) {
@@ -214,7 +227,7 @@ class _MashUpScreenState extends State<MashUpScreen> {
                                 },
                                 child: SizedBox.expand(
                                   child: ClipRRect(
-                                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                                    borderRadius: const BorderRadius.all(Radius.circular(20.0)),
                                     child: CustomPaint(
                                       painter: Sketcher(points: points),
                                     ),

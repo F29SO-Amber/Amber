@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CommunityModel {
+  final String id;
   final String name;
   final String ownerID;
   final String description;
@@ -9,6 +10,7 @@ class CommunityModel {
   final String communityPhotoURL;
 
   const CommunityModel({
+    required this.id,
     required this.name,
     required this.ownerID,
     required this.description,
@@ -19,6 +21,7 @@ class CommunityModel {
 
   factory CommunityModel.fromDocument(DocumentSnapshot doc) {
     return CommunityModel(
+      id: doc.id,
       name: doc['name'],
       ownerID: doc['ownerID'],
       description: doc['description'],

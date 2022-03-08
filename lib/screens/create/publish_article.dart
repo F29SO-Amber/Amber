@@ -30,7 +30,6 @@ class _PublishArticleScreenState extends State<PublishArticleScreen> {
 
   @override
   void dispose() {
-    _disposeUserArticleChanges();
     super.dispose();
   }
 

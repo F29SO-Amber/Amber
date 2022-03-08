@@ -1,8 +1,20 @@
 import 'package:flutter/material.dart';
 
 class DrawingArea {
-  Offset point;
-  Paint areaPaint;
+  final Offset point;
+  final double strokeWidth;
+  final int color;
 
-  DrawingArea({required this.point, required this.areaPaint});
+  DrawingArea({required this.point, required this.strokeWidth, required this.color});
+
+  Map<String, dynamic> toJson() => {
+        'x': point.dx,
+        'y': point.dy,
+        'color': color,
+        'strokeWidth': strokeWidth,
+      };
+  DrawingArea.fromJson(Map<String, dynamic> json)
+      : point = Offset(json['x'], json['y']),
+        strokeWidth = json['strokeWidth'],
+        color = json['color'];
 }

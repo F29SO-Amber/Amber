@@ -11,9 +11,19 @@ class Sketcher extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     for (int x = 0; x < points.length - 1; x++) {
       if (points[x] != null && points[x + 1] != null) {
-        canvas.drawLine(points[x]!.point, points[x + 1]!.point, points[x]!.areaPaint);
+        Paint paint = Paint()
+          ..strokeCap = StrokeCap.round
+          ..isAntiAlias = true
+          ..color = Color(points[x]!.color)
+          ..strokeWidth = points[x]!.strokeWidth;
+        canvas.drawLine(points[x]!.point, points[x + 1]!.point, paint);
       } else if (points[x] != null && points[x + 1] == null) {
-        canvas.drawPoints(PointMode.points, [points[x]!.point], points[x]!.areaPaint);
+        Paint paint = Paint()
+          ..strokeCap = StrokeCap.round
+          ..isAntiAlias = true
+          ..color = Color(points[x]!.color)
+          ..strokeWidth = points[x]!.strokeWidth;
+        canvas.drawPoints(PointMode.points, [points[x]!.point], paint);
       }
     }
   }

@@ -36,7 +36,6 @@ class _PublishEventScreenState extends State<PublishEventScreen> {
     _titleController.dispose();
     _venueController.dispose();
     _descriptionController.dispose();
-    _disposeUserEventChanges();
   }
 
   @override

@@ -91,6 +91,20 @@ class DatabaseService {
     await DatabaseService.commentsRef.doc(postID).collection('comments').doc().set(map);
   }
 
+  static Future<List<CommunityModel>> getUserCommunities(String id) async {
+    QuerySnapshot communityIDs = await DatabaseService.followingRef
+        .doc(AuthService.currentUser.uid)
+        .collection('userCommunities')
+        .get();
+
+    List ids = communityIDs.docs.map((e) => (e.id)).toList();
+    List<CommunityModel> communities = [];
+    for (String x in ids) {
+      communities.add(await DatabaseService.getCommunity(x));
+    }
+    return communities;
+  }
+
   static Future<List<UserModel>> getFollowersUIDs(String id) async {
     QuerySnapshot followers =
         await DatabaseService.followersRef.doc(id).collection('userFollowers').get();

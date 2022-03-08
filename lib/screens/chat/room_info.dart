@@ -94,7 +94,7 @@ class _RoomInfoState extends State<RoomInfo> {
                           )
                         : SettingItem(
                             title:
-                                "Delete ${widget.room.type == types.RoomType.group ? 'Group' : ''}Chat",
+                                "Delete ${widget.room.type == types.RoomType.group ? 'Group ' : ''}Chat",
                             leadingIcon: Icons.delete,
                             bgIconColor: Colors.red,
                             onTap: () => deleteRoom(widget.room.id),
@@ -139,38 +139,11 @@ class _RoomInfoState extends State<RoomInfo> {
           .update({'userIds': list});
 
       Navigator.pushAndRemoveUntil(
-          context, MaterialPageRoute(builder: (_) => const RoomsPage()), (route) => false);
-    } else {
-      // TODO: Show alert that an admin can't leave
+        context,
+        MaterialPageRoute(builder: (_) => const RoomsPage()),
+        (route) => false,
+      );
     }
-  }
-
-  void updateRoom(types.Room room) async {
-    if (AuthService.currentUser == null) return;
-
-    final roomMap = room.toJson();
-    roomMap.removeWhere((key, value) =>
-        key == 'createdAt' || key == 'id' || key == 'lastMessages' || key == 'users');
-
-    if (room.type == types.RoomType.direct) {
-      roomMap['imageUrl'] = null;
-      roomMap['name'] = null;
-    }
-
-    roomMap['lastMessages'] = room.lastMessages?.map((m) {
-      final messageMap = m.toJson();
-
-      messageMap.removeWhere((key, value) =>
-          key == 'author' || key == 'createdAt' || key == 'id' || key == 'updatedAt');
-
-      messageMap['authorId'] = m.author.id;
-
-      return messageMap;
-    }).toList();
-    roomMap['updatedAt'] = FieldValue.serverTimestamp();
-    roomMap['userIds'] = room.users.map((u) => u.id).toList();
-
-    await DatabaseService.roomsRef.doc(room.id).update(roomMap);
   }
 
   Future<void> deleteRoom(String roomId) async {
