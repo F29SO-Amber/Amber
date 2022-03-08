@@ -20,6 +20,7 @@ dependencies:
   open_file: ^3.2.1
   intl:
   http:
+  lottie:
   timeago:
   provider:
   whiteboard:

@@ -1,4 +1,6 @@
 import 'package:amber/screens/auth/login.dart';
+import 'package:amber/pages/privacy_policy.dart';
+import 'package:amber/pages/error.dart';
 import 'package:amber/services/auth_service.dart';
 import 'package:amber/utilities/constants.dart';
 import 'package:amber/widgets/setting_item.dart';
@@ -119,7 +121,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   title: "App Appearance",
                   leadingIcon: Icons.dark_mode_outlined,
                   bgIconColor: Colors.lightBlue,
-                  onTap: () {}),
+                  onTap: () async {}),
             ]),
           ),
           const SizedBox(
@@ -144,7 +146,11 @@ class _SettingsPageState extends State<SettingsPage> {
                   title: "Terms of Service",
                   leadingIcon: Icons.rule,
                   bgIconColor: Colors.amberAccent,
-                  onTap: () {}),
+                onTap: () async {
+                  Navigator.of(context, rootNavigator: true).pushReplacement(
+                    MaterialPageRoute(builder: (context) => PrivacyPolicy()),
+                  );
+                },),
               Padding(
                 padding: const EdgeInsets.only(left: 45),
                 child: Divider(
