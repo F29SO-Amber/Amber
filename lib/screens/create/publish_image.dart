@@ -89,69 +89,75 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
                               child: Text('Post media to:', style: kDarkLabelTextStyle),
                             ),
                             FutureBuilder(
-                              future: DatabaseService.followingRef
-                                  .doc(AuthService.currentUser.uid)
-                                  .collection('userCommunities')
-                                  .get(),
+                              future:
+                                  DatabaseService.getUserCommunities(AuthService.currentUser.uid),
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
-                                  var list = (snapshot.data as QuerySnapshot).docs.toList();
-                                  return list.isEmpty
-                                      ? const Padding(
-                                          padding: EdgeInsets.only(top: 120.0),
-                                          child: Center(child: Text('No communities to display!')),
-                                        )
-                                      : GridView.builder(
-                                          // padding: const EdgeInsets.all(10).copyWith(top: 40),
-                                          scrollDirection: Axis.vertical,
-                                          shrinkWrap: true,
-                                          physics: const NeverScrollableScrollPhysics(),
-                                          itemCount: list.length,
-                                          gridDelegate:
-                                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                            crossAxisCount: 2,
-                                            crossAxisSpacing: 0,
-                                            mainAxisSpacing: 0,
-                                            childAspectRatio: 1,
+                                  var communities = snapshot.data as List<CommunityModel>;
+                                  List<dynamic> list = [UserData.currentUser!, ...communities];
+                                  return GridView.builder(
+                                    scrollDirection: Axis.vertical,
+                                    shrinkWrap: true,
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    itemCount: list.length,
+                                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      crossAxisSpacing: 0,
+                                      mainAxisSpacing: 0,
+                                      childAspectRatio: 1,
+                                    ),
+                                    itemBuilder: (BuildContext context, int index) {
+                                      if (index == 0) {
+                                        UserModel user = list[index];
+                                        return GestureDetector(
+                                          child: Column(
+                                            children: [
+                                              CustomImage(
+                                                  side: 100, image: NetworkImage(user.imageUrl)),
+                                              Padding(
+                                                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                                child:
+                                                    Text('My Profile', style: kLightLabelTextStyle),
+                                              ),
+                                            ],
                                           ),
-                                          itemBuilder: (BuildContext context, int index) {
-                                            return StreamBuilder(
-                                              stream: DatabaseService.communityRef
-                                                  .doc(list[index] as String)
-                                                  .snapshots(),
-                                              builder: (context, snapshot) {
-                                                if (snapshot.hasData &&
-                                                    snapshot.connectionState ==
-                                                        ConnectionState.active) {
-                                                  CommunityModel community =
-                                                      snapshot.data as CommunityModel;
-                                                  return Column(
-                                                    children: [
-                                                      GestureDetector(
-                                                        onTap: () async {},
-                                                        child: CustomImage(
-                                                          side: MediaQuery.of(context).size.width *
-                                                              0.8 /
-                                                              3,
-                                                          image: NetworkImage(
-                                                              community.communityPhotoURL),
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding: const EdgeInsets.only(top: 10.0),
-                                                        child: Text(community.name,
-                                                            style: kLightLabelTextStyle),
-                                                      ),
-                                                    ],
-                                                  );
-                                                } else {
-                                                  return const Center(
-                                                      child: CircularProgressIndicator());
-                                                }
-                                              },
-                                            );
+                                          onTap: () async {
+                                            setState(() => _uploadButtonPresent = false);
+                                            EasyLoading.show(status: 'Uploading...');
+                                            await _addUserPost(false, '');
+                                            EasyLoading.dismiss();
+                                            _disposeUserPostChanges(true);
+                                            Navigator.pop(context);
                                           },
                                         );
+                                      } else {
+                                        CommunityModel community = list[index];
+                                        return GestureDetector(
+                                          child: Column(
+                                            children: [
+                                              CustomImage(
+                                                side: MediaQuery.of(context).size.width * 0.8 / 3,
+                                                image: NetworkImage(community.communityPhotoURL),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(top: 10.0),
+                                                child: Text(community.name,
+                                                    style: kLightLabelTextStyle),
+                                              ),
+                                            ],
+                                          ),
+                                          onTap: () async {
+                                            setState(() => _uploadButtonPresent = false);
+                                            EasyLoading.show(status: 'Uploading...');
+                                            await _addUserPost(true, community.id);
+                                            EasyLoading.dismiss();
+                                            _disposeUserPostChanges(true);
+                                            Navigator.pop(context);
+                                          },
+                                        );
+                                      }
+                                    },
+                                  );
                                 } else {
                                   return const Center(child: CircularProgressIndicator());
                                 }
@@ -352,7 +358,7 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
     if (reset) setState(() {});
   }
 
-  Future<void> _addUserPost() async {
+  Future<void> _addUserPost(bool forCommunity, String communityID) async {
     UserModel user = await DatabaseService.getUser(AuthService.currentUser.uid);
     if (_formKey.currentState!.validate()) {
       Map<String, Object?> map = {};
@@ -366,6 +372,7 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
         map['caption'] = _captionController.text;
         map['likes'] = {};
         map['authorId'] = AuthService.currentUser.uid;
+        map['forCommunity'] = forCommunity ? communityID : 'No';
         map['timestamp'] = Timestamp.now();
         map['authorName'] = user.firstName;
         map['authorUserName'] = user.username;

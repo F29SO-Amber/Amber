@@ -11,6 +11,7 @@ class PostModel {
   final String authorName;
   final String authorUserName;
   final String authorProfilePhotoURL;
+  final String forCommunity;
 
   PostModel({
     required this.authorName,
@@ -19,6 +20,7 @@ class PostModel {
     required this.id,
     required this.location,
     required this.imageURL,
+    required this.forCommunity,
     required this.caption,
     required this.likes,
     required this.authorId,
@@ -32,6 +34,7 @@ class PostModel {
       caption: doc['caption'],
       likes: doc['likes'],
       authorId: doc['authorId'],
+      forCommunity: doc['forCommunity'],
       timestamp: doc['timestamp'],
       location: doc['location'],
       authorUserName: doc['authorUserName'],
