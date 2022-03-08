@@ -109,8 +109,11 @@ class _BrandMarketerFooterState extends State<BrandMarketerFooter> {
                             onTap: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (context) =>
-                                      CurrentUserPosts(uid: widget.userUID, index: index),
+                                  builder: (context) => CurrentUserPosts(
+                                    uid: widget.userUID,
+                                    index: index,
+                                    coll: 'authorId',
+                                  ),
                                 ),
                               );
                             },

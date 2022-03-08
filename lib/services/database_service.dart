@@ -50,11 +50,11 @@ class DatabaseService {
     usersRef.doc(AuthService.currentUser.uid).set(map);
   }
 
-  static Future<List<UserPost>> getUserPosts(String uid) async {
+  static Future<List<UserPost>> getUserPosts(String coll, String id) async {
     List<UserPost> posts = [];
     posts.addAll(
       ((await DatabaseService.postsRef
-                  .where('authorId', isEqualTo: uid)
+                  .where(coll, isEqualTo: id)
                   .orderBy('timestamp', descending: true)
                   .get())
               .docs)

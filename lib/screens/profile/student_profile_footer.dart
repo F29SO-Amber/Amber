@@ -97,8 +97,11 @@ class _StudentFooterState extends State<StudentFooter> {
                             onTap: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (context) =>
-                                      CurrentUserPosts(uid: widget.userUID, index: index),
+                                  builder: (context) => CurrentUserPosts(
+                                    uid: widget.userUID,
+                                    index: index,
+                                    coll: 'authorId',
+                                  ),
                                 ),
                               );
                             },

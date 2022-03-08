@@ -107,8 +107,11 @@ class _ContentCreatorFooterState extends State<ContentCreatorFooter> {
                             onTap: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (context) =>
-                                      CurrentUserPosts(uid: widget.userUID, index: index),
+                                  builder: (context) => CurrentUserPosts(
+                                    uid: widget.userUID,
+                                    index: index,
+                                    coll: 'authorId',
+                                  ),
                                 ),
                               );
                             },

@@ -6,10 +6,12 @@ import 'package:amber/services/database_service.dart';
 
 class CurrentUserPosts extends StatefulWidget {
   static const id = '/CurrentUserPosts';
+  final String coll;
   final String uid;
   final int index;
 
-  const CurrentUserPosts({Key? key, required this.uid, required this.index}) : super(key: key);
+  const CurrentUserPosts({Key? key, required this.uid, required this.index, required this.coll})
+      : super(key: key);
 
   @override
   State<CurrentUserPosts> createState() => _CurrentUserPostsState();
@@ -31,7 +33,7 @@ class _CurrentUserPostsState extends State<CurrentUserPosts> {
         ),
       ),
       body: StreamBuilder(
-        stream: DatabaseService.getUserPosts(widget.uid).asStream(),
+        stream: DatabaseService.getUserPosts(widget.coll, widget.uid).asStream(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             ScrollablePositionedList list = ScrollablePositionedList.builder(

@@ -252,7 +252,10 @@ class _CommunityPageState extends State<CommunityPage> {
                                       Navigator.of(context).push(
                                         MaterialPageRoute(
                                           builder: (context) => CurrentUserPosts(
-                                              uid: widget.communityID, index: index),
+                                            coll: 'forCommunity',
+                                            uid: widget.communityID,
+                                            index: index,
+                                          ),
                                         ),
                                       );
                                     },
