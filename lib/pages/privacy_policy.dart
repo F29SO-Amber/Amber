@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:amber/utilities/constants.dart';
+import 'package:amber/pages/settings.dart';
 
 class PrivacyPolicy extends StatefulWidget {
   const PrivacyPolicy({Key? key}) : super(key: key);
@@ -15,8 +16,16 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
   Widget build(BuildContext context) {
     final screen = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: kAppBar,
-      backgroundColor: Colors.amber.shade50,
+      appBar: AppBar(
+        title: const Text(kAppName),
+        titleTextStyle: const TextStyle(color: Colors.white, letterSpacing: 3, fontSize: 25.0),
+        leading: IconButton(icon: Icon(Icons.arrow_back), onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (_) => SettingsPage()),
+          );
+        },),
+        backgroundColor: kAppColor,
+      ),
       body: SafeArea(
           child: SingleChildScrollView(
             child: Container(

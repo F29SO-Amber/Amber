@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:amber/pages/animations.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:amber/utilities/constants.dart';
+import 'package:amber/pages/settings.dart';
 import 'package:lottie/lottie.dart';
 
 
@@ -26,8 +28,16 @@ class ErrorScreen extends StatelessWidget {
     final currentHeight = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Scaffold(
-        appBar: kAppBar,
-        backgroundColor: Colors.amber.shade50,
+        appBar: AppBar(
+          title: const Text(kAppName),
+          titleTextStyle: const TextStyle(color: Colors.white, letterSpacing: 3, fontSize: 25.0),
+          leading: IconButton(icon: Icon(Icons.arrow_back), onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => SettingsPage()),
+            );
+          },),
+          backgroundColor: kAppColor,
+        ),
         body: Container(
           width: currentWidth,
           height: currentHeight,
@@ -37,7 +47,7 @@ class ErrorScreen extends StatelessWidget {
             children: [
               TopAnime(
                 1,
-                25,
+                10,
                 curve: Curves.fastOutSlowIn,
                 child: Lottie.asset('assets/404-error-robot.json',
                           animate: false),
@@ -62,11 +72,10 @@ class ErrorScreen extends StatelessWidget {
                         child: Text(
                           "The page you are looking for was moved, removed renamed or might never existed.",
                           textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w300,
-                            color: Color(0xfffdfdfd),
-                          ),
+                          style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.normal, fontSize: 18,
+                            color: Color(0xfffdfdfd),),
+
                         ),
                       ),
                     ],
