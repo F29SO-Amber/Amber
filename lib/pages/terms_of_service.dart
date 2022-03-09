@@ -3,14 +3,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:amber/utilities/constants.dart';
 import 'package:amber/pages/settings.dart';
 
-class PrivacyPolicy extends StatefulWidget {
-  const PrivacyPolicy({Key? key}) : super(key: key);
+class TermsofService extends StatefulWidget {
+  const TermsofService({Key? key}) : super(key: key);
 
   @override
-  _PrivacyPolicyState createState() => _PrivacyPolicyState();
+  _TermsofServiceState createState() => _TermsofServiceState();
 }
 
-class _PrivacyPolicyState extends State<PrivacyPolicy> {
+class _TermsofServiceState extends State<TermsofService> {
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +38,7 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
                   ),
                   Align(
                     alignment: Alignment.center, // Align however you like (i.e .centerRight, centerLeft)
-                    child: Text("Privacy Policy",
+                    child: Text("Terms of Service",
                       style: GoogleFonts.poppins(
                           fontWeight: FontWeight.bold, fontSize: 30),
                     ),
@@ -68,7 +68,7 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
                   Text(
                     'Interpretation and Definitions',
                     style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.bold, fontSize: 30),
+                        fontWeight: FontWeight.bold, fontSize: 22),
                   ),
                   SizedBox(
                     height: 15,
@@ -85,7 +85,7 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
                   Text(
                     'Security of Your Personal Data',
                     style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.bold, fontSize: 30),
+                        fontWeight: FontWeight.bold, fontSize: 22),
                   ),
                   SizedBox(
                     height: 15,
@@ -102,7 +102,7 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
                   Text(
                     'Contact Us',
                     style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.bold, fontSize: 30),
+                        fontWeight: FontWeight.bold, fontSize: 22),
                   ),
                   SizedBox(
                     height: 15,
@@ -117,9 +117,9 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
                     height: 20,
                   ),
                   Text(
-                    'Changes to this Privacy Policy',
+                    'Changes to this Terms of Service',
                     style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.bold, fontSize: 30),
+                        fontWeight: FontWeight.bold, fontSize: 22),
                   ),
                   SizedBox(
                     height: 15,

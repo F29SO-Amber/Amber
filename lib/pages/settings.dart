@@ -1,5 +1,5 @@
 import 'package:amber/screens/auth/login.dart';
-import 'package:amber/pages/privacy_policy.dart';
+import 'package:amber/pages/terms_of_service.dart';
 import 'package:amber/pages/error.dart';
 import 'package:amber/services/auth_service.dart';
 import 'package:amber/utilities/constants.dart';
@@ -148,7 +148,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   bgIconColor: Colors.amberAccent,
                 onTap: () async {
                   Navigator.of(context, rootNavigator: true).pushReplacement(
-                    MaterialPageRoute(builder: (context) => PrivacyPolicy()),
+                    MaterialPageRoute(builder: (context) => TermsofService()),
                   );
                 },),
               Padding(
