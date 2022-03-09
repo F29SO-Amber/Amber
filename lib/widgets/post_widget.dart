@@ -2,6 +2,8 @@ import 'package:amber/screens/profile/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:mailer/mailer.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:amber/models/post.dart';
@@ -70,7 +72,10 @@ class _UserPostState extends State<UserPost> {
                           );
                         },
                       ),
-                      Text(widget.post.location,
+                      Text(
+                          widget.post.location.isEmpty
+                              ? timeago.format(widget.post.timestamp.toDate())
+                              : widget.post.location,
                           style: kLightLabelTextStyle.copyWith(fontSize: 10)),
                     ],
                   ),
@@ -84,7 +89,7 @@ class _UserPostState extends State<UserPost> {
                         DatabaseService.postsRef
                             .doc(widget.post.id)
                             .update({'likes.${AuthService.currentUser.uid}': true});
-                        finalScore += 1;
+                        // finalScore += 1;
                         setState(() => isLiked = true);
                       }
                     },
@@ -95,14 +100,15 @@ class _UserPostState extends State<UserPost> {
                           : const Icon(FontAwesomeIcons.arrowAltCircleUp),
                     ),
                   ),
-                  Text('$finalScore'),
+                  Text(
+                      '${isLiked != null ? (isLiked! ? finalScore + 1 : finalScore - 1) : finalScore}'),
                   GestureDetector(
                     onTap: () {
                       if (isLiked != false) {
                         DatabaseService.postsRef
                             .doc(widget.post.id)
                             .update({'likes.${AuthService.currentUser.uid}': false});
-                        finalScore -= 1;
+                        // finalScore -= 1;
                         setState(() => isLiked = false);
                       }
                     },
@@ -122,31 +128,24 @@ class _UserPostState extends State<UserPost> {
               motion: const DrawerMotion(),
               children: [
                 SlidableAction(
-                  onPressed: (context) {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => MashUpScreen(
-                          imageURL: widget.post.imageURL,
-                          username: widget.post.authorUserName,
-                        ),
-                      ),
-                    );
-                    // Navigator.of(context, rootNavigator: true).pushNamed(
-                    //   MashUpScreen.id,
-                    //   arguments: {
-                    //     'username': widget.post.authorUserName,
-                    //     'imageURL': widget.post.imageURL,
-                    //   },
-                    // );
-                  },
                   backgroundColor: const Color(0xFFFE4A49),
                   foregroundColor: Colors.white,
                   icon: FontAwesomeIcons.retweet,
                   label: 'Mash-up',
+                  onPressed: (context) {
+                    // Navigator.of(context).push(
+                    //   MaterialPageRoute(
+                    //     builder: (_) => MashUpScreen(
+                    //       imageURL: widget.post.imageURL,
+                    //       username: widget.post.authorUserName,
+                    //     ),
+                    //   ),
+                    // );
+                  },
                 ),
-                const SlidableAction(
-                  onPressed: null,
-                  backgroundColor: Color(0xFF21B7CA),
+                SlidableAction(
+                  onPressed: (context) async {},
+                  backgroundColor: const Color(0xFF21B7CA),
                   foregroundColor: Colors.white,
                   icon: Icons.report,
                   label: 'Report',

@@ -23,58 +23,58 @@ void main() {
 
   group('Password', () {
     test('pwtest1', () {
-      expect(PWValidator.validatepw('aAABB2!a'), true);
+      expect(PWValidator.validatePassword('aAABB2!a'), true);
     });
     test('pwtest2', () {
-      expect(PWValidator.validatepw('aaa'), false);
+      expect(PWValidator.validatePassword('aaa'), false);
     });
     test('pwtest2', () {
-      expect(PWValidator.validatepw(''), false);
+      expect(PWValidator.validatePassword(''), false);
     });
   });
 
   group('Account Type', () {
     test('acctest1', () {
-      expect(PWValidator.validateacc('Artist'), true);
+      expect(PWValidator.validateAccount('Artist'), true);
     });
     test('acctest2', () {
-      expect(PWValidator.validateacc('Student'), true);
+      expect(PWValidator.validateAccount('Student'), true);
     });
     test('acctest3', () {
-      expect(PWValidator.validateacc('Content Creator'), true);
+      expect(PWValidator.validateAccount('Content Creator'), true);
     });
     test('acctest4', () {
-      expect(PWValidator.validateacc('Brand Marketer'), true);
+      expect(PWValidator.validateAccount('Brand Marketer'), true);
     });
     test('acctest5', () {
-      expect(PWValidator.validateacc('Personal'), true);
+      expect(PWValidator.validateAccount('Personal'), true);
     });
     test('acctest6', () {
-      expect(PWValidator.validateacc('aaaa'), false);
+      expect(PWValidator.validateAccount('aaaa'), false);
     });
     test('acctest7', () {
-      expect(PWValidator.validateacc(''), false);
+      expect(PWValidator.validateAccount(''), false);
     });
   });
 
   group('Date of Birth', () {
     test('dobtest0', () {
-      expect(PWValidator.validatedob('01/12/21'), true);
+      expect(PWValidator.validateDOB('01/12/21'), true);
     });
     test('dobtest1', () {
-      expect(PWValidator.validatedob('10102002'), false);
+      expect(PWValidator.validateDOB('10102002'), false);
     });
     test('dobtest2', () {
-      expect(PWValidator.validatedob('10)10)10'), false);
+      expect(PWValidator.validateDOB('10)10)10'), false);
     });
     test('dobtest3', () {
-      expect(PWValidator.validatedob('10/11/2200'), true);
+      expect(PWValidator.validateDOB('10/11/2200'), true);
     });
     test('dobtest4', () {
-      expect(PWValidator.validatedob('aa.aa.111a'), false);
+      expect(PWValidator.validateDOB('aa.aa.111a'), false);
     });
     test('dobtest5', () {
-      expect(PWValidator.validatedob('1.1.2001'), true);
+      expect(PWValidator.validateDOB('1.1.2001'), true);
     });
   });
 }

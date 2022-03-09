@@ -71,113 +71,116 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
             child: IconButton(
               icon: const Icon(Icons.publish),
               color: Colors.white,
-              onPressed: () => showMaterialModalBottomSheet(
-                expand: false,
-                context: context,
-                backgroundColor: Colors.transparent,
-                builder: (context) => Material(
-                  child: SafeArea(
-                    top: false,
-                    child: SizedBox(
-                      height: 500,
-                      width: MediaQuery.of(context).size.width,
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(top: 25.0),
-                              child: Text('Post media to:', style: kDarkLabelTextStyle),
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  showMaterialModalBottomSheet(
+                    expand: false,
+                    context: context,
+                    backgroundColor: Colors.transparent,
+                    builder: (context) => Material(
+                      child: SafeArea(
+                        top: false,
+                        child: SizedBox(
+                          height: 500,
+                          width: MediaQuery.of(context).size.width,
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 25.0),
+                                  child: Text('Post media to:', style: kDarkLabelTextStyle),
+                                ),
+                                FutureBuilder(
+                                  future: DatabaseService.getUserCommunities(
+                                      AuthService.currentUser.uid),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      var communities = snapshot.data as List<CommunityModel>;
+                                      List<dynamic> list = [UserData.currentUser!, ...communities];
+                                      return GridView.builder(
+                                        scrollDirection: Axis.vertical,
+                                        shrinkWrap: true,
+                                        physics: const NeverScrollableScrollPhysics(),
+                                        itemCount: list.length,
+                                        gridDelegate:
+                                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 2,
+                                          crossAxisSpacing: 0,
+                                          mainAxisSpacing: 0,
+                                          childAspectRatio: 1,
+                                        ),
+                                        itemBuilder: (BuildContext context, int index) {
+                                          if (index == 0) {
+                                            UserModel user = list[index];
+                                            return GestureDetector(
+                                              child: Column(
+                                                children: [
+                                                  CustomImage(
+                                                      side: 100,
+                                                      image: NetworkImage(user.imageUrl)),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.symmetric(vertical: 10.0),
+                                                    child: Text('My Profile',
+                                                        style: kLightLabelTextStyle),
+                                                  ),
+                                                ],
+                                              ),
+                                              onTap: () async {
+                                                setState(() => _uploadButtonPresent = false);
+                                                EasyLoading.show(status: 'Uploading...');
+                                                await _addUserPost(false, '');
+                                                EasyLoading.dismiss();
+                                                _disposeUserPostChanges(true);
+                                                Navigator.pop(context);
+                                              },
+                                            );
+                                          } else {
+                                            CommunityModel community = list[index];
+                                            return GestureDetector(
+                                              child: Column(
+                                                children: [
+                                                  CustomImage(
+                                                    side:
+                                                        MediaQuery.of(context).size.width * 0.8 / 3,
+                                                    image:
+                                                        NetworkImage(community.communityPhotoURL),
+                                                  ),
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(top: 10.0),
+                                                    child: Text(community.name,
+                                                        style: kLightLabelTextStyle),
+                                                  ),
+                                                ],
+                                              ),
+                                              onTap: () async {
+                                                setState(() => _uploadButtonPresent = false);
+                                                EasyLoading.show(status: 'Uploading...');
+                                                await _addUserPost(true, community.id);
+                                                EasyLoading.dismiss();
+                                                _disposeUserPostChanges(true);
+                                                Navigator.pop(context);
+                                              },
+                                            );
+                                          }
+                                        },
+                                      );
+                                    } else {
+                                      return const Center(child: CircularProgressIndicator());
+                                    }
+                                  },
+                                ),
+                              ],
                             ),
-                            FutureBuilder(
-                              future:
-                                  DatabaseService.getUserCommunities(AuthService.currentUser.uid),
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  var communities = snapshot.data as List<CommunityModel>;
-                                  List<dynamic> list = [UserData.currentUser!, ...communities];
-                                  return GridView.builder(
-                                    scrollDirection: Axis.vertical,
-                                    shrinkWrap: true,
-                                    physics: const NeverScrollableScrollPhysics(),
-                                    itemCount: list.length,
-                                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2,
-                                      crossAxisSpacing: 0,
-                                      mainAxisSpacing: 0,
-                                      childAspectRatio: 1,
-                                    ),
-                                    itemBuilder: (BuildContext context, int index) {
-                                      if (index == 0) {
-                                        UserModel user = list[index];
-                                        return GestureDetector(
-                                          child: Column(
-                                            children: [
-                                              CustomImage(
-                                                  side: 100, image: NetworkImage(user.imageUrl)),
-                                              Padding(
-                                                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                                                child:
-                                                    Text('My Profile', style: kLightLabelTextStyle),
-                                              ),
-                                            ],
-                                          ),
-                                          onTap: () async {
-                                            setState(() => _uploadButtonPresent = false);
-                                            EasyLoading.show(status: 'Uploading...');
-                                            await _addUserPost(false, '');
-                                            EasyLoading.dismiss();
-                                            _disposeUserPostChanges(true);
-                                            Navigator.pop(context);
-                                          },
-                                        );
-                                      } else {
-                                        CommunityModel community = list[index];
-                                        return GestureDetector(
-                                          child: Column(
-                                            children: [
-                                              CustomImage(
-                                                side: MediaQuery.of(context).size.width * 0.8 / 3,
-                                                image: NetworkImage(community.communityPhotoURL),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(top: 10.0),
-                                                child: Text(community.name,
-                                                    style: kLightLabelTextStyle),
-                                              ),
-                                            ],
-                                          ),
-                                          onTap: () async {
-                                            setState(() => _uploadButtonPresent = false);
-                                            EasyLoading.show(status: 'Uploading...');
-                                            await _addUserPost(true, community.id);
-                                            EasyLoading.dismiss();
-                                            _disposeUserPostChanges(true);
-                                            Navigator.pop(context);
-                                          },
-                                        );
-                                      }
-                                    },
-                                  );
-                                } else {
-                                  return const Center(child: CircularProgressIndicator());
-                                }
-                              },
-                            ),
-                          ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ),
-              ),
-              // onPressed: () async {
-              // setState(() => _uploadButtonPresent = false);
-              // EasyLoading.show(status: 'Uploading...');
-              // await _addUserPost();
-              // EasyLoading.dismiss();
-              // _disposeUserPostChanges(true);
-              // Navigator.pop(context);
-              // },
+                  );
+                } else {
+                  debugPrint('Not validated');
+                }
+              },
             ),
           ),
         ],
@@ -276,6 +279,14 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
                     child: TextFormField(
                       controller: _captionController,
                       keyboardType: TextInputType.text,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Caption cannot be empty';
+                        } else if (_captionController.text.length > 20) {
+                          return 'Max Caption length is 20';
+                        }
+                        return null;
+                      },
                       decoration: const InputDecoration(
                         hintText: "Write a caption...",
                         border: InputBorder.none,
@@ -290,6 +301,12 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
                     child: TextFormField(
                       controller: _locationController,
                       keyboardType: TextInputType.text,
+                      validator: (value) {
+                        if (_locationController.text.length > 20) {
+                          return 'Max Location length is 20';
+                        }
+                        return null;
+                      },
                       decoration: const InputDecoration(
                         hintText: "Add a location...",
                         border: InputBorder.none,
@@ -360,29 +377,27 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
 
   Future<void> _addUserPost(bool forCommunity, String communityID) async {
     UserModel user = await DatabaseService.getUser(AuthService.currentUser.uid);
-    if (_formKey.currentState!.validate()) {
-      Map<String, Object?> map = {};
-      if (_file != null) {
-        String postId = const Uuid().v4();
-        map['id'] = postId;
-        map['location'] = (widget.mashUpDetails != null)
-            ? 'Mashed-up from ${widget.mashUpDetails![1]}'
-            : _locationController.text;
-        map['imageURL'] = await StorageService.uploadImage(postId, _file!, 'posts');
-        map['caption'] = _captionController.text;
-        map['likes'] = {};
-        map['authorId'] = AuthService.currentUser.uid;
-        map['forCommunity'] = forCommunity ? communityID : 'No';
-        map['timestamp'] = Timestamp.now();
-        map['authorName'] = user.firstName;
-        map['authorUserName'] = user.username;
-        map['authorProfilePhotoURL'] = user.imageUrl;
-        await DatabaseService.postsRef.doc(postId).set(map);
-        for (Hashtag tag in _selectedHashtags) {
-          _addPostHashtag(postId, tag.name);
-        }
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Image Posted!")));
+    Map<String, Object?> map = {};
+    if (_file != null) {
+      String postId = const Uuid().v4();
+      map['id'] = postId;
+      map['location'] = (widget.mashUpDetails != null)
+          ? 'Mashed-up from ${widget.mashUpDetails![1]}'
+          : _locationController.text;
+      map['imageURL'] = await StorageService.uploadImage(postId, _file!, 'posts');
+      map['caption'] = _captionController.text;
+      map['likes'] = {};
+      map['authorId'] = AuthService.currentUser.uid;
+      map['forCommunity'] = forCommunity ? communityID : 'No';
+      map['timestamp'] = Timestamp.now();
+      map['authorName'] = user.firstName;
+      map['authorUserName'] = user.username;
+      map['authorProfilePhotoURL'] = user.imageUrl;
+      await DatabaseService.postsRef.doc(postId).set(map);
+      for (Hashtag tag in _selectedHashtags) {
+        _addPostHashtag(postId, tag.name);
       }
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Image Posted!")));
     }
   }
 

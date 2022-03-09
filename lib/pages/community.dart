@@ -135,7 +135,7 @@ class _CommunityPageState extends State<CommunityPage> {
                     children: [
                       StreamBuilder(
                         stream: DatabaseService.postsRef
-                            .where('authorId', isEqualTo: widget.communityID)
+                            .where('forCommunity', isEqualTo: widget.communityID)
                             .snapshots(),
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {

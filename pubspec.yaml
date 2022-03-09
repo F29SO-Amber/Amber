@@ -18,6 +18,7 @@ dependencies:
 #  flutter_nsfw: ^0.0.4
   mime: ^1.0.1
   open_file: ^3.2.1
+  mailer: ^5.1.0
   intl:
   http:
   lottie:
