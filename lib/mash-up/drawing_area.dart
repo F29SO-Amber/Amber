@@ -13,8 +13,13 @@ class DrawingArea {
         'color': color,
         'strokeWidth': strokeWidth,
       };
-  DrawingArea.fromJson(Map<String, dynamic> json)
-      : point = Offset(json['x'], json['y']),
-        strokeWidth = json['strokeWidth'],
-        color = json['color'];
+
+  DrawingArea? fromJson(Map<String, dynamic> json) {
+    return json.isEmpty
+        ? null
+        : DrawingArea(
+            point: Offset(json['x'], json['y']),
+            strokeWidth: json['strokeWidth'],
+            color: json['color']);
+  }
 }

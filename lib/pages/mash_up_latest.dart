@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:path_provider/path_provider.dart';
@@ -22,10 +21,12 @@ import '../mash-up/sketcher.dart';
 class MashUpScreen extends StatefulWidget {
   final String? imageURL;
   final String? username;
+  final Map? mashupDetails;
 
   static const id = '/mash-up_screen';
 
-  const MashUpScreen({Key? key, this.imageURL, this.username}) : super(key: key);
+  const MashUpScreen({Key? key, this.imageURL, this.username, this.mashupDetails})
+      : super(key: key);
 
   @override
   _MashUpScreenState createState() => _MashUpScreenState();
@@ -223,7 +224,7 @@ class _MashUpScreenState extends State<MashUpScreen> {
                                   });
                                 },
                                 onPanEnd: (details) {
-                                  setState(() => points.add(null));
+                                  // setState(() => points.add(null));
                                 },
                                 child: SizedBox.expand(
                                   child: ClipRRect(
