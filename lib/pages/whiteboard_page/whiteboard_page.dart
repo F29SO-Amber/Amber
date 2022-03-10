@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:amber/pages/whiteboard_page/whiteboard_view_model.dart';
 import 'package:amber/widgets/tool_buttons.dart';
-import 'package:amber/widgets/whiteboard_view.dart';
+import 'package:amber/pages/whiteboard_page/whiteboard_view.dart';
 
 class WhiteboardPage extends StatelessWidget {
   const WhiteboardPage({Key? key}) : super(key: key);

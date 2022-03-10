@@ -15,7 +15,7 @@ import 'package:amber/screens/create/publish_image.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../mash-up/drawing_area.dart';
+import '../mash-up/squiggle.dart';
 import '../mash-up/sketcher.dart';
 
 class MashUpScreen extends StatefulWidget {
@@ -38,7 +38,7 @@ class _MashUpScreenState extends State<MashUpScreen> {
   int index = 0;
   GlobalKey? _globalKey;
   late Uint8List bytes;
-  List<DrawingArea?> points = [];
+  List<Squiggle?> points = [];
   Color selectedColor = Colors.black;
   double strokeWidth = 2.0;
 
@@ -58,10 +58,10 @@ class _MashUpScreenState extends State<MashUpScreen> {
   @override
   void dispose() {
     // String json = jsonEncode(points);
-    var json = jsonEncode(points.map((e) => e?.toJson()).toList());
-    debugPrint(json);
-    var decoded = jsonDecode(json);
-    debugPrint('${identical(points, decoded)}');
+    // var json = jsonEncode(points.map((e) => e?.toJson()).toList());
+    // debugPrint(json);
+    // var decoded = jsonDecode(json);
+    // debugPrint('${identical(points, decoded)}');
     super.dispose();
   }
 
@@ -202,8 +202,9 @@ class _MashUpScreenState extends State<MashUpScreen> {
                               child: GestureDetector(
                                 onPanDown: (details) {
                                   setState(() {
-                                    points.add(DrawingArea(
-                                      point: details.localPosition,
+                                    points.add(Squiggle(
+                                      dx: details.localPosition.dx,
+                                      dy: details.localPosition.dy,
                                       strokeWidth: strokeWidth,
                                       color: selectedColor.value,
                                     ));
@@ -211,8 +212,9 @@ class _MashUpScreenState extends State<MashUpScreen> {
                                 },
                                 onPanUpdate: (details) {
                                   setState(() {
-                                    points.add(DrawingArea(
-                                      point: details.localPosition,
+                                    points.add(Squiggle(
+                                      dx: details.localPosition.dx,
+                                      dy: details.localPosition.dy,
                                       strokeWidth: strokeWidth,
                                       color: selectedColor.value,
                                     ));

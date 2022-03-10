@@ -1,9 +1,9 @@
 import 'dart:ui';
-import 'drawing_area.dart';
+import 'squiggle.dart';
 import 'package:flutter/material.dart';
 
 class Sketcher extends CustomPainter {
-  List<DrawingArea?> points;
+  List<Squiggle?> points;
 
   Sketcher({required this.points});
 
@@ -16,14 +16,15 @@ class Sketcher extends CustomPainter {
           ..isAntiAlias = true
           ..color = Color(points[x]!.color)
           ..strokeWidth = points[x]!.strokeWidth;
-        canvas.drawLine(points[x]!.point, points[x + 1]!.point, paint);
+        canvas.drawLine(Offset(points[x]!.dx, points[x]!.dy),
+            Offset(points[x + 1]!.dx, points[x + 1]!.dy), paint);
       } else if (points[x] != null && points[x + 1] == null) {
         Paint paint = Paint()
           ..strokeCap = StrokeCap.round
           ..isAntiAlias = true
           ..color = Color(points[x]!.color)
           ..strokeWidth = points[x]!.strokeWidth;
-        canvas.drawPoints(PointMode.points, [points[x]!.point], paint);
+        canvas.drawPoints(PointMode.points, [Offset(points[x]!.dx, points[x]!.dy)], paint);
       }
     }
   }

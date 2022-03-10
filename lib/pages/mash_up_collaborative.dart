@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
+import 'package:amber/mash-up/squiggles.dart';
 import 'package:amber/services/database_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,7 @@ import 'package:amber/screens/create/publish_image.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../mash-up/drawing_area.dart';
+import '../mash-up/squiggle.dart';
 import '../mash-up/sketcher.dart';
 
 class CollaborativeMashUpScreen extends StatefulWidget {
@@ -40,9 +41,10 @@ class _CollaborativeMashUpScreenState extends State<CollaborativeMashUpScreen> {
   int index = 0;
   GlobalKey? _globalKey;
   late Uint8List bytes;
-  List<DrawingArea?> points = [];
+  List<Squiggle?> points = [];
   Color selectedColor = Colors.black;
   double strokeWidth = 2.0;
+  static int x = 0;
 
   @override
   void initState() {
@@ -60,7 +62,7 @@ class _CollaborativeMashUpScreenState extends State<CollaborativeMashUpScreen> {
   @override
   void dispose() {
     // String json = jsonEncode(points);
-    // var json = jsonEncode(points.map((e) => e?.toJson()).toList());
+    // var json = jsonEncode(points.map((e) => e == null ? {} : e.toJson()).toList());
     // debugPrint(json);
     // var decoded = jsonDecode(json);
     // debugPrint('${identical(points, decoded)}');
@@ -106,13 +108,20 @@ class _CollaborativeMashUpScreenState extends State<CollaborativeMashUpScreen> {
               .collection('posts')
               .doc(widget.mashupDetails!['postId'])
               .snapshots(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              if (!((snapshot.data! as DocumentSnapshot)['points'] == '')) {
-                points = (jsonDecode((snapshot.data! as DocumentSnapshot)['points'])
-                    as List<DrawingArea?>);
-              }
-              // print('data: ${(snapshot.data! as DocumentSnapshot)['points']}');
+          builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+            if (snapshot.hasData && snapshot.data != null) {
+              print(x++);
+              // List x = (snapshot.data! as DocumentSnapshot)['squiggles'];
+              // points = (jsonDecode((snapshot.data! as DocumentSnapshot)['points']))
+              //     as List<DrawingArea?>;
+              // final content = Squiggles.fromJson(snapshot.data as Map);
+              // points = content.squiggles;
+              // for (Map<String, dynamic>? y in x) {
+              //   y == null ? points.add(null) : points.add(Squiggle.fromJson(y));
+              // }
+              points = Squiggles.fromJson(snapshot.data?.data() as Map).squiggles;
+              // print(snapshot.data!.runtimeType);
+              // print('data: !$x!');
               return Column(
                 children: [
                   const SizedBox(height: 5),
@@ -217,27 +226,24 @@ class _CollaborativeMashUpScreenState extends State<CollaborativeMashUpScreen> {
                                       height: 250,
                                       child: GestureDetector(
                                         onPanDown: (details) {
-                                          setState(() {
-                                            points.add(DrawingArea(
-                                              point: details.localPosition,
-                                              strokeWidth: strokeWidth,
-                                              color: selectedColor.value,
-                                            ));
-                                          });
+                                          // setState(() {
+                                          points.add(Squiggle(
+                                            dx: details.localPosition.dx,
+                                            dy: details.localPosition.dy,
+                                            strokeWidth: strokeWidth,
+                                            color: selectedColor.value,
+                                          ));
+                                          // });
                                         },
                                         onPanUpdate: (details) {
-                                          setState(() {
-                                            points.add(DrawingArea(
-                                              point: details.localPosition,
-                                              strokeWidth: strokeWidth,
-                                              color: selectedColor.value,
-                                            ));
-                                            // areaPaint: Paint()
-                                            //   ..strokeCap = StrokeCap.round
-                                            //   ..isAntiAlias = true
-                                            //   ..color = selectedColor
-                                            //   ..strokeWidth = strokeWidth));
-                                          });
+                                          // setState(() {
+                                          points.add(Squiggle(
+                                            dx: details.localPosition.dx,
+                                            dy: details.localPosition.dy,
+                                            strokeWidth: strokeWidth,
+                                            color: selectedColor.value,
+                                          ));
+                                          // });
                                         },
                                         onPanEnd: (details) {
                                           setState(() => points.add(null));
@@ -245,7 +251,8 @@ class _CollaborativeMashUpScreenState extends State<CollaborativeMashUpScreen> {
                                               .doc(widget.mashupDetails!['roomId'])
                                               .collection('posts')
                                               .doc(widget.mashupDetails!['postId'])
-                                              .update({'points': jsonEncode(points)});
+                                              .set(Squiggles(points).toJson());
+                                          // points = [];
                                         },
                                         child: SizedBox.expand(
                                           child: ClipRRect(

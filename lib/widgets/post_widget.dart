@@ -165,15 +165,12 @@ class _UserPostState extends State<UserPost> {
                                         List<dynamic> list = [
                                           UserData.currentUser!,
                                           ...snapshot.data!
-                                              .where((room) => room.type == types.RoomType.group)
                                         ];
                                         return GridView.builder(
                                           scrollDirection: Axis.vertical,
                                           shrinkWrap: true,
                                           physics: const NeverScrollableScrollPhysics(),
-                                          itemCount: snapshot.data!
-                                              .where((room) => room.type == types.RoomType.group)
-                                              .length,
+                                          itemCount: snapshot.data!.length,
                                           gridDelegate:
                                               const SliverGridDelegateWithFixedCrossAxisCount(
                                             crossAxisCount: 2,
@@ -232,7 +229,7 @@ class _UserPostState extends State<UserPost> {
                                                       .doc(room.id)
                                                       .collection('posts')
                                                       .doc(widget.post.id)
-                                                      .set({'points': ''});
+                                                      .set({'squiggles': []});
                                                   Navigator.of(context).push(
                                                     MaterialPageRoute(
                                                       builder: (_) => CollaborativeMashUpScreen(
