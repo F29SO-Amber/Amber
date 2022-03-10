@@ -1,3 +1,4 @@
+import 'package:amber/screens/chat/mashed_up_posts.dart';
 import 'package:amber/screens/chat/members.dart';
 import 'package:amber/screens/chat/users.dart';
 import 'package:amber/services/auth_service.dart';
@@ -61,7 +62,11 @@ class _RoomInfoState extends State<RoomInfo> {
                       leadingIcon: Icons.post_add,
                       bgIconColor: Colors.blue,
                       onTap: () {
-                        // Get.toNamed('/space');
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => MashedUpPosts(room: widget.room),
+                          ),
+                        );
                       },
                     ),
                     if (widget.room.type == types.RoomType.group &&

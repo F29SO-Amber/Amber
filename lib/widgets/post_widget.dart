@@ -225,11 +225,18 @@ class _UserPostState extends State<UserPost> {
                                                   ],
                                                 ),
                                                 onTap: () async {
-                                                  DatabaseService.roomsRef
-                                                      .doc(room.id)
-                                                      .collection('posts')
-                                                      .doc(widget.post.id)
-                                                      .set({'squiggles': []});
+                                                  if (!(await DatabaseService.roomsRef
+                                                          .doc(room.id)
+                                                          .collection('posts')
+                                                          .doc(widget.post.id)
+                                                          .get())
+                                                      .exists) {
+                                                    DatabaseService.roomsRef
+                                                        .doc(room.id)
+                                                        .collection('posts')
+                                                        .doc(widget.post.id)
+                                                        .set({'squiggles': []});
+                                                  }
                                                   Navigator.of(context).push(
                                                     MaterialPageRoute(
                                                       builder: (_) => CollaborativeMashUpScreen(
