@@ -51,6 +51,13 @@ class _ChatPageState extends State<ChatPage> {
               ],
             ),
             backgroundColor: kAppColor,
+            actions: [
+              if (widget.room.type == types.RoomType.direct)
+                IconButton(
+                  icon: const Icon(Icons.call),
+                  onPressed: () {},
+                )
+            ],
           ),
           body: StreamBuilder<List<types.Message>>(
             initialData: const [],
