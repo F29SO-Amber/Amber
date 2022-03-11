@@ -57,10 +57,10 @@ exports.onDeleteFollower = functions.firestore
           .collection("timelinePosts")
           .where("authorId", "==", userId);
 
-    // 3) Get followed users posts
+    // 3) Get timeline users posts
     const querySnapshot = await timelinePostsRef.get();
 
-    // 4) Add each user post to following user's timeline
+    // 4) Delete the selected posts
     querySnapshot.forEach(doc => {
       if (doc.exists) {
         doc.ref.delete();

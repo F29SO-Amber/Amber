@@ -22,6 +22,7 @@ class DatabaseService {
   static final messagesRef = _firestore.collection('messages');
   static final hashtagsRef = _firestore.collection('hashtags');
   static final commentsRef = _firestore.collection('comments');
+  static final timelineRef = _firestore.collection('timeline');
   static final followersRef = _firestore.collection('followers');
   static final followingRef = _firestore.collection('following');
   static final communityRef = _firestore.collection('community');

@@ -1,3 +1,4 @@
+import 'package:amber/pages/error.dart';
 import 'package:flutter/material.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -42,7 +43,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
             icon: const Icon(Icons.search),
             color: Colors.white,
             onPressed: () => Navigator.of(context, rootNavigator: true).push(
-              MaterialPageRoute(builder: (context) => Search()),
+              MaterialPageRoute(builder: (context) => ErrorScreen()),
             ),
           ),
         ],

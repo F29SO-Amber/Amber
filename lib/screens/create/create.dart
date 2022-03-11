@@ -60,7 +60,7 @@ class Create extends StatelessWidget {
                       },
                       child: CustomImage(
                         side: MediaQuery.of(context).size.width * 0.3,
-                        path: 'assets/${list[index].toLowerCase()}.png',
+                        path: 'assets/create/${list[index].toLowerCase()}.png',
                       ),
                     ),
                     Padding(

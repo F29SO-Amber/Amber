@@ -27,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
           Box box = snapshot.data as Box;
           return FlutterLogin(
             title: kAppName,
-            logo: const AssetImage('assets/logo.png'),
+            logo: const AssetImage('assets/logo/logo.png'),
             loginAfterSignUp: false,
             theme: kLoginTheme,
             onLogin: AuthService.authUser,
