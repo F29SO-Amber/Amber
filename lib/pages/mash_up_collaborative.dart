@@ -54,7 +54,7 @@ class _CollaborativeMashUpScreenState extends State<CollaborativeMashUpScreen> {
     }
     for (int x in [1, 2, 4, 5, 9]) {
       collageTypes.add(
-        CustomImage(side: 120, image: AssetImage("assets/$x.png"), borderRadius: 10),
+        CustomImage(side: 120, image: AssetImage("assets/layouts/$x.png"), borderRadius: 10),
       );
     }
   }

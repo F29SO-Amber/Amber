@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:amber/pages/error.dart';
 import 'package:flutter/material.dart';
 import 'package:card_swiper/card_swiper.dart';
@@ -160,41 +162,42 @@ class _DiscoverPageState extends State<DiscoverPage> {
                   padding: const EdgeInsets.all(8.0),
                   child: Text('Explore Hashtags', style: GoogleFonts.dmSans(fontSize: 20)),
                 ),
-                ListView.builder(
-                  reverse: true,
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  itemCount: Hashtag.hashtags.length,
+                GridView.builder(
+                  padding: const EdgeInsets.only(top: 10, bottom: 30),
+                  scrollDirection: Axis.vertical,
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (BuildContext context, int index) {
+                  itemCount: Hashtag.hashtags.length,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 0,
+                    mainAxisSpacing: 0,
+                    childAspectRatio: 1,
+                  ),
+                  itemBuilder: (context, index) {
                     Hashtag tag = Hashtag.hashtags[index];
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        ListTile(
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-                          leading: Container(
-                            height: 40,
-                            width: 40,
-                            decoration: const BoxDecoration(
+                    return GestureDetector(
+                      child: Stack(
+                        alignment: Alignment.bottomLeft,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
                               image: DecorationImage(
-                                  image: AssetImage('assets/image.png'), fit: BoxFit.cover),
+                                image: NetworkImage(
+                                    'https://picsum.photos/100/100?random=${Random().nextInt(1000)}'),
+                                fit: BoxFit.cover,
+                                colorFilter: ColorFilter.mode(
+                                  Colors.black.withOpacity(0.75),
+                                  BlendMode.dstATop,
+                                ),
+                              ),
                               shape: BoxShape.rectangle,
+                              borderRadius: BorderRadius.circular(0),
                             ),
                           ),
-                          title: Text(
-                            tag.name,
-                            // style: const TextStyle(fontWeight: FontWeight.w700),
-                          ),
-                          // onTap: () {
-                          //   Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(builder: (context) => Posts(tag: tag.name)),
-                          //   );
-                          // },
-                        ),
-                      ],
+                          Text(tag.name, style: const TextStyle(color: Colors.white, fontSize: 15)),
+                        ],
+                      ),
                     );
                   },
                 ),
