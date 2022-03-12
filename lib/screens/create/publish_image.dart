@@ -1,6 +1,5 @@
+// Package Imports
 import 'dart:io';
-import 'package:amber/models/community.dart';
-import 'package:amber/user_data.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,9 +7,13 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
+// Local Imports
+import 'package:amber/user_data.dart';
 import 'package:amber/models/user.dart';
 import 'package:amber/models/hashtag.dart';
+import 'package:amber/models/community.dart';
 import 'package:amber/utilities/constants.dart';
 import 'package:amber/services/auth_service.dart';
 import 'package:amber/services/image_service.dart';
@@ -22,8 +25,11 @@ class PublishImageScreen extends StatefulWidget {
   static const id = '/publish_image';
 
   final List? mashUpDetails;
+  final types.Room? room;
+  final String? postId;
 
-  const PublishImageScreen({Key? key, this.mashUpDetails}) : super(key: key);
+  const PublishImageScreen({Key? key, this.mashUpDetails, this.room, this.postId})
+      : super(key: key);
 
   @override
   _PublishImageScreenState createState() => _PublishImageScreenState();
@@ -39,12 +45,10 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
 
   @override
   void initState() {
-    super.initState();
     if (widget.mashUpDetails != null) {
-      setState(() {
-        _file = File(widget.mashUpDetails![0]);
-      });
+      setState(() => _file = File(widget.mashUpDetails![0]));
     }
+    super.initState();
   }
 
   @override
@@ -133,6 +137,7 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
                                                 EasyLoading.dismiss();
                                                 _disposeUserPostChanges(true);
                                                 Navigator.pop(context);
+                                                Navigator.pop(context);
                                               },
                                             );
                                           } else {
@@ -159,6 +164,7 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
                                                 await _addUserPost(true, community.id);
                                                 EasyLoading.dismiss();
                                                 _disposeUserPostChanges(true);
+                                                Navigator.pop(context);
                                                 Navigator.pop(context);
                                               },
                                             );
@@ -376,28 +382,59 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
   }
 
   Future<void> _addUserPost(bool forCommunity, String communityID) async {
-    UserModel user = await DatabaseService.getUser(AuthService.currentUser.uid);
-    Map<String, Object?> map = {};
-    if (_file != null) {
-      String postId = const Uuid().v4();
-      map['id'] = postId;
-      map['location'] = (widget.mashUpDetails != null)
-          ? 'Mashed-up from ${widget.mashUpDetails![1]}'
-          : _locationController.text;
-      map['imageURL'] = await StorageService.uploadImage(postId, _file!, 'posts');
-      map['caption'] = _captionController.text;
-      map['likes'] = {};
-      map['authorId'] = AuthService.currentUser.uid;
-      map['forCommunity'] = forCommunity ? communityID : 'No';
-      map['timestamp'] = Timestamp.now();
-      map['authorName'] = user.firstName;
-      map['authorUserName'] = user.username;
-      map['authorProfilePhotoURL'] = user.imageUrl;
-      await DatabaseService.postsRef.doc(postId).set(map);
-      for (Hashtag tag in _selectedHashtags) {
-        _addPostHashtag(postId, tag.name);
+    // UserModel user = await DatabaseService.getUser(AuthService.currentUser.uid);
+    if (widget.room != null) {
+      for (types.User user in widget.room!.users) {
+        Map<String, Object?> map = {};
+        if (_file != null) {
+          String postId = const Uuid().v4();
+          map['id'] = postId;
+          map['location'] = (widget.mashUpDetails != null)
+              ? 'Mashed-up from ${widget.mashUpDetails![1]}'
+              : _locationController.text;
+          map['imageURL'] = await StorageService.uploadImage(postId, _file!, 'posts');
+          map['caption'] = _captionController.text;
+          map['likes'] = {};
+          map['authorId'] = user.id;
+          map['forCommunity'] = forCommunity ? communityID : 'No';
+          map['timestamp'] = Timestamp.now();
+          map['authorName'] =
+              forCommunity ? 'Collaboratively with ${widget.room!.name}' : user.firstName;
+          map['authorUserName'] = user.firstName;
+          map['authorProfilePhotoURL'] = user.imageUrl;
+          await DatabaseService.postsRef.doc(postId).set(map);
+          for (Hashtag tag in _selectedHashtags) {
+            _addPostHashtag(postId, tag.name);
+          }
+          if (forCommunity) {
+            break;
+          }
+        }
       }
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Image Posted!")));
+      DatabaseService.roomsRef.doc(widget.room!.id).collection('posts').doc(widget.postId).delete();
+    } else {
+      Map<String, Object?> map = {};
+      if (_file != null) {
+        String postId = const Uuid().v4();
+        map['id'] = postId;
+        map['location'] = (widget.mashUpDetails != null)
+            ? 'Mashed-up from ${widget.mashUpDetails![1]}'
+            : _locationController.text;
+        map['imageURL'] = await StorageService.uploadImage(postId, _file!, 'posts');
+        map['caption'] = _captionController.text;
+        map['likes'] = {};
+        map['authorId'] = AuthService.currentUser.uid;
+        map['forCommunity'] = forCommunity ? communityID : 'No';
+        map['timestamp'] = Timestamp.now();
+        map['authorName'] = UserData.currentUser!.firstName;
+        map['authorUserName'] = UserData.currentUser!.username;
+        map['authorProfilePhotoURL'] = UserData.currentUser!.imageUrl;
+        await DatabaseService.postsRef.doc(postId).set(map);
+        for (Hashtag tag in _selectedHashtags) {
+          _addPostHashtag(postId, tag.name);
+        }
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Image Posted!")));
+      }
     }
   }
 

@@ -6,6 +6,7 @@ import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
 import '../../pages/mash_up_collaborative.dart';
 import '../../services/database_service.dart';
+import '../../widgets/profile_picture.dart';
 
 class MashedUpPosts extends StatefulWidget {
   final types.Room room;
@@ -44,14 +45,37 @@ class _MashedUpPostsState extends State<MashedUpPosts> {
                                 builder: (_) => CollaborativeMashUpScreen(
                                   imageURL: post.imageURL,
                                   username: post.authorUserName,
-                                  mashupDetails: {'roomId': widget.room.id, 'postId': list[index]},
+                                  mashupDetails: {'roomId': widget.room, 'postId': post},
                                 ),
                               ),
                             );
                           },
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(list[index]),
+                          child: GridView.builder(
+                            padding: const EdgeInsets.all(10).copyWith(top: 40),
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: list.length,
+                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 20,
+                              mainAxisSpacing: 20,
+                              childAspectRatio: 1,
+                            ),
+                            itemBuilder: (context, index) {
+                              return Column(
+                                children: [
+                                  CustomImage(
+                                    side: MediaQuery.of(context).size.width * 0.3,
+                                    image: NetworkImage(post.imageURL),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                    child: Text(post.authorUserName, style: kLightLabelTextStyle),
+                                  ),
+                                ],
+                              );
+                            },
                           ),
                         );
                       } else {
