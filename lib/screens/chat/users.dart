@@ -1,4 +1,5 @@
 import 'package:amber/services/auth_service.dart';
+import 'package:amber/user_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
@@ -33,7 +34,7 @@ class _UsersPageState extends State<UsersPage> {
         );
       } else if (users.length > 1) {
         final room = await FirebaseChatCore.instance.createGroupRoom(
-          name: 'Test Group',
+          name: '${UserData.currentUser!.firstName}\'s Group',
           users: users,
           imageUrl: 'https://bit.ly/3sB5zcK',
           metadata: {'createdBy': AuthService.currentUser.uid},

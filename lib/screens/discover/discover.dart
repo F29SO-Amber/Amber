@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:amber/pages/error.dart';
 import 'package:flutter/material.dart';
 import 'package:card_swiper/card_swiper.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -183,13 +184,8 @@ class _DiscoverPageState extends State<DiscoverPage> {
                           Container(
                             decoration: BoxDecoration(
                               image: DecorationImage(
-                                image: NetworkImage(
-                                    'https://picsum.photos/100/100?random=${Random().nextInt(1000)}'),
+                                image: AssetImage('assets/hashtags/${tag.name.substring(1)}.jpeg'),
                                 fit: BoxFit.cover,
-                                colorFilter: ColorFilter.mode(
-                                  Colors.black.withOpacity(0.75),
-                                  BlendMode.dstATop,
-                                ),
                               ),
                               shape: BoxShape.rectangle,
                               borderRadius: BorderRadius.circular(0),

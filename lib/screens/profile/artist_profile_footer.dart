@@ -1,9 +1,13 @@
 import 'package:amber/services/auth_service.dart';
+import 'package:amber/utilities/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:timeago/timeago.dart' as timeago;
 
 import 'package:amber/models/post.dart';
 import 'package:amber/pages/article.dart';
@@ -155,35 +159,45 @@ class _ArtistFooterState extends State<ArtistFooter> {
                         itemBuilder: (BuildContext context, int index) {
                           ArticleModel article = ArticleModel.fromDocument(list[index]);
                           return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              ListTile(
-                                contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-                                leading: CustomImage(
-                                  side: 100.0,
-                                  image: NetworkImage(article.imageURL),
-                                  borderRadius: 10,
-                                ),
-                                title: Text(
-                                  article.authorUserName,
-                                  style: const TextStyle(fontWeight: FontWeight.w700),
-                                ),
-                                subtitle: Text(
-                                  '${article.timestamp}',
-                                  style: const TextStyle(fontSize: 12.0),
-                                ),
-                                trailing: CustomOutlinedButton(
-                                  widthFactor: 0.19,
-                                  onPress: () {
-                                    Navigator.of(context, rootNavigator: true).push(
-                                      MaterialPageRoute(
-                                        builder: (context) => ArticleScreen(article: article),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      CustomImage(
+                                        image: NetworkImage(article.imageURL),
+                                        height: 50,
+                                        width: 50,
+                                        borderRadius: 5,
                                       ),
-                                    );
-                                  },
-                                  buttonText: 'Read',
-                                ),
+                                      const SizedBox(width: 10),
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            article.authorUserName,
+                                            style: const TextStyle(fontSize: 17),
+                                          ),
+                                          Text(
+                                            timeago.format(article.timestamp.toDate()),
+                                            style: kLightLabelTextStyle,
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  GestureDetector(
+                                    child: const Icon(Icons.open_in_new, size: 25),
+                                    onTap: () {
+                                      Navigator.of(context, rootNavigator: true).push(
+                                        MaterialPageRoute(
+                                          builder: (context) => ArticleScreen(article: article),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
                               ),
                               const Divider(),
                             ],
@@ -196,12 +210,13 @@ class _ArtistFooterState extends State<ArtistFooter> {
             },
           ),
         if (selectedTab == 2)
-          StreamBuilder(
-            stream: DatabaseService.roomsRef
-                .where('metadata', isEqualTo: {'createdBy': widget.userUID}).snapshots(),
+          StreamBuilder<List<types.Room>>(
+            stream: FirebaseChatCore.instance.rooms(),
             builder: (context, snapshot) {
               if (snapshot.hasData && snapshot.connectionState == ConnectionState.active) {
-                var list = (snapshot.data as QuerySnapshot).docs.toList();
+                List list = snapshot.data!
+                    .where((element) => element.type == types.RoomType.group)
+                    .toList();
                 return list.isEmpty
                     ? const Padding(
                         padding: EdgeInsets.only(top: 120.0),
@@ -214,8 +229,51 @@ class _ArtistFooterState extends State<ArtistFooter> {
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         itemBuilder: (BuildContext context, int index) {
-                          // types.Room room = types.Room.fromJson(list[index]);
-                          return Text(list[index]['name']);
+                          final room = list[index] as types.Room;
+                          return Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      CustomImage(
+                                        image: NetworkImage(room.imageUrl!),
+                                        height: 50,
+                                        width: 50,
+                                        borderRadius: 5,
+                                      ),
+                                      const SizedBox(width: 10),
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            room.name!,
+                                            style: const TextStyle(fontSize: 17),
+                                          ),
+                                          Text(
+                                            '${room.users.length} members',
+                                            style: kLightLabelTextStyle,
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  GestureDetector(
+                                    child: const Icon(Icons.add_circle, size: 30),
+                                    onTap: () async {
+                                      List users = room.users.map((e) => e.id).toList();
+                                      await DatabaseService.roomsRef
+                                          .doc(room.id)
+                                          .update({'userIds': users});
+                                      EasyLoading.showSuccess('Success!');
+                                    },
+                                  ),
+                                ],
+                              ),
+                              const Divider(),
+                            ],
+                          );
                         },
                       );
               } else {
@@ -245,37 +303,47 @@ class _ArtistFooterState extends State<ArtistFooter> {
                         itemBuilder: (BuildContext context, int index) {
                           CommunityModel community = CommunityModel.fromDocument(list[index]);
                           return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              ListTile(
-                                contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-                                leading: CustomImage(
-                                  side: 100.0,
-                                  image: NetworkImage(community.communityPhotoURL),
-                                  borderRadius: 10,
-                                ),
-                                title: Text(
-                                  community.name,
-                                  style: const TextStyle(fontWeight: FontWeight.w700),
-                                ),
-                                subtitle: Text(
-                                  community.description,
-                                  style: const TextStyle(fontSize: 12.0),
-                                ),
-                                trailing: CustomOutlinedButton(
-                                  widthFactor: 0.1,
-                                  onPress: () {
-                                    Navigator.of(context, rootNavigator: true).push(
-                                      MaterialPageRoute(
-                                        builder: (context) => CommunityPage(
-                                          communityID: list[index].id,
-                                        ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      CustomImage(
+                                        image: NetworkImage(community.communityPhotoURL),
+                                        height: 50,
+                                        width: 50,
+                                        borderRadius: 5,
                                       ),
-                                    );
-                                  },
-                                  buttonText: 'Join',
-                                ),
+                                      const SizedBox(width: 10),
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            community.name,
+                                            style: const TextStyle(fontSize: 17),
+                                          ),
+                                          Text(
+                                            community.description,
+                                            style: kLightLabelTextStyle,
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  GestureDetector(
+                                    child: const Icon(Icons.add_circle, size: 30),
+                                    onTap: () {
+                                      Navigator.of(context, rootNavigator: true).push(
+                                        MaterialPageRoute(
+                                          builder: (context) => CommunityPage(
+                                            communityID: list[index].id,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
                               ),
                               const Divider(),
                             ],

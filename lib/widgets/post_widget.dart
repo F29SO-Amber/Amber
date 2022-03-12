@@ -1,6 +1,7 @@
 import 'package:amber/pages/mash_up_collaborative.dart';
 import 'package:amber/screens/profile/profile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -271,7 +272,7 @@ class _UserPostState extends State<UserPost> {
                   },
                 ),
                 SlidableAction(
-                  onPressed: (context) async {},
+                  onPressed: (context) => EasyLoading.showSuccess('Post successfully reported!'),
                   backgroundColor: const Color(0xFF21B7CA),
                   foregroundColor: Colors.white,
                   icon: Icons.report,

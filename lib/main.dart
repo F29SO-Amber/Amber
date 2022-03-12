@@ -9,12 +9,28 @@ import 'package:amber/firebase_options.dart';
 import 'package:amber/screens/auth/login.dart';
 import 'package:amber/pages/mash_up_latest.dart';
 
+import 'custom_animation.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await Hive.initFlutter();
   await Hive.openBox('user');
   runApp(const MyApp());
+  EasyLoading.instance
+    ..displayDuration = const Duration(milliseconds: 2000)
+    ..indicatorType = EasyLoadingIndicatorType.fadingCircle
+    ..loadingStyle = EasyLoadingStyle.dark
+    ..indicatorSize = 45.0
+    ..radius = 10.0
+    ..progressColor = Colors.yellow
+    ..backgroundColor = Colors.green
+    ..indicatorColor = Colors.yellow
+    ..textColor = Colors.yellow
+    ..maskColor = Colors.blue.withOpacity(0.5)
+    ..userInteractions = true
+    ..dismissOnTap = false
+    ..customAnimation = CustomAnimation();
 }
 
 class MyApp extends StatefulWidget {
