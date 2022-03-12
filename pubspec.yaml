@@ -12,29 +12,24 @@ dependencies:
     sdk: flutter
   uuid:
   hive:
-  image:
-  faker:
   flutter_firebase_chat_core:
 #  flutter_nsfw: ^0.0.4
   mime: ^1.0.1
   open_file: ^3.2.1
-  intl:
-  http:
+  mailer: ^5.1.0
+  lottie:
   timeago:
-  provider:
-  whiteboard:
   card_swiper:
   hive_flutter:
   google_fonts:
   path_provider:
   firebase_auth:
   flutter_login:
-  image_painter:
-  flutter_form_bloc:
   flutter_quill: 4.0.0
   firebase_core:
   image_picker:
   flutter_chat_ui:
+  file_picker: ^4.5.1
   flutter_colorpicker:
   cloud_firestore:
   email_validator:
@@ -43,12 +38,9 @@ dependencies:
   convex_bottom_bar:
   modal_bottom_sheet:
   flutter_easyloading:
-  cached_network_image:
-  image_collage_widget:
   multi_select_flutter:
   scrollable_positioned_list:
   material_floating_search_bar:
-  image_gallery_saver:
   shimmer:
 #  flutter_native_splash: ^1.3.2
 #
@@ -64,9 +56,11 @@ dev_dependencies:
   flutter_lints: ^1.0.0
   test:
   hive_generator:
-  build_runner:
 
 flutter:
   uses-material-design: true
   assets:
     - assets/
+    - assets/create/
+    - assets/layouts/
+    - assets/logo/

@@ -5,6 +5,8 @@ import 'package:amber/widgets/post_widget.dart';
 import 'package:amber/utilities/constants.dart';
 import 'package:amber/services/database_service.dart';
 
+import '../../models/post.dart';
+
 class FeedPage extends StatefulWidget {
   static const id = '/feed';
 
@@ -24,11 +26,20 @@ class _FeedPageState extends State<FeedPage> {
         titleTextStyle: const TextStyle(color: Colors.white, letterSpacing: 3, fontSize: 25.0),
       ),
       body: StreamBuilder(
-        // TODO: Use firebase functions
-        stream: DatabaseService.getUserFeed().asStream(), // TODO
+        stream: DatabaseService.timelineRef
+            .doc(UserData.currentUser!.id)
+            .collection('timelinePosts')
+            .snapshots()
+            .map((snapshot) => snapshot.docs.map((e) => PostModel.fromDocument(e))),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return ListView(children: snapshot.data as List<UserPost>);
+          if (snapshot.hasData) {
+            List list = (snapshot.data as dynamic).toList() as List;
+            return ListView.builder(
+              itemCount: list.length,
+              itemBuilder: (context, index) {
+                return UserPost(post: list[index]);
+              },
+            );
           } else {
             return const Center(child: CircularProgressIndicator());
           }

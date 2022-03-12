@@ -1,4 +1,6 @@
 import 'package:amber/screens/auth/login.dart';
+import 'package:amber/pages/terms_of_service.dart';
+import 'package:amber/pages/error.dart';
 import 'package:amber/services/auth_service.dart';
 import 'package:amber/utilities/constants.dart';
 import 'package:amber/widgets/setting_item.dart';
@@ -119,7 +121,11 @@ class _SettingsPageState extends State<SettingsPage> {
                   title: "App Appearance",
                   leadingIcon: Icons.dark_mode_outlined,
                   bgIconColor: Colors.lightBlue,
-                  onTap: () {}),
+                  onTap: () async {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => const ErrorScreen()),
+                    );
+                  }),
             ]),
           ),
           const SizedBox(
@@ -141,10 +147,15 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             child: Column(children: [
               SettingItem(
-                  title: "Terms of Service",
-                  leadingIcon: Icons.rule,
-                  bgIconColor: Colors.amberAccent,
-                  onTap: () {}),
+                title: "Terms of Service",
+                leadingIcon: Icons.rule,
+                bgIconColor: Colors.amberAccent,
+                onTap: () async {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => const TermsofService()),
+                  );
+                },
+              ),
               Padding(
                 padding: const EdgeInsets.only(left: 45),
                 child: Divider(

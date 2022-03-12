@@ -17,44 +17,6 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class PWValidator {
-  static bool validatepw(String PW) {
-    RegExp exp =
-        RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
-
-    if (exp.hasMatch(PW)) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  static bool validateacc(String acc) {
-    RegExp exp = RegExp(
-                      r"^(Artist|Student|Content Creator|Brand Marketer|Personal)",
-                      caseSensitive: false);
-
-    if (exp.hasMatch(acc)) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  static bool validatedob(String dob) {
-   RegExp exp = RegExp(
-                      r"^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$",
-                      caseSensitive: true,
-                      multiLine: false);
-
-    if (exp.hasMatch(dob)) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-}
-
 class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
@@ -65,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
           Box box = snapshot.data as Box;
           return FlutterLogin(
             title: kAppName,
-            logo: const AssetImage('assets/logo.png'),
+            logo: const AssetImage('assets/logo/logo.png'),
             loginAfterSignUp: false,
             theme: kLoginTheme,
             onLogin: AuthService.authUser,
@@ -138,5 +100,26 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       },
     );
+  }
+}
+
+class PWValidator {
+  static bool validatePassword(String pass) {
+    RegExp exp = RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
+    return exp.hasMatch(pass) ? true : false;
+  }
+
+  static bool validateAccount(String acc) {
+    RegExp exp =
+        RegExp(r"^(Artist|Student|Content Creator|Brand Marketer|Personal)", caseSensitive: false);
+    return exp.hasMatch(acc) ? true : false;
+  }
+
+  static bool validateDOB(String dob) {
+    RegExp exp = RegExp(
+        r"^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$",
+        caseSensitive: true,
+        multiLine: false);
+    return exp.hasMatch(dob) ? true : false;
   }
 }

@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:path_provider/path_provider.dart';
@@ -16,16 +15,18 @@ import 'package:amber/screens/create/publish_image.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../mash-up/drawing_area.dart';
+import '../mash-up/squiggle.dart';
 import '../mash-up/sketcher.dart';
 
 class MashUpScreen extends StatefulWidget {
   final String? imageURL;
   final String? username;
+  final Map? mashupDetails;
 
   static const id = '/mash-up_screen';
 
-  const MashUpScreen({Key? key, this.imageURL, this.username}) : super(key: key);
+  const MashUpScreen({Key? key, this.imageURL, this.username, this.mashupDetails})
+      : super(key: key);
 
   @override
   _MashUpScreenState createState() => _MashUpScreenState();
@@ -37,7 +38,7 @@ class _MashUpScreenState extends State<MashUpScreen> {
   int index = 0;
   GlobalKey? _globalKey;
   late Uint8List bytes;
-  List<DrawingArea?> points = [];
+  List<Squiggle?> points = [];
   Color selectedColor = Colors.black;
   double strokeWidth = 2.0;
 
@@ -49,7 +50,7 @@ class _MashUpScreenState extends State<MashUpScreen> {
     }
     for (int x in [1, 2, 4, 5, 9]) {
       collageTypes.add(
-        CustomImage(side: 120, image: AssetImage("assets/$x.png"), borderRadius: 10),
+        CustomImage(side: 120, image: AssetImage("assets/layouts/$x.png"), borderRadius: 10),
       );
     }
   }
@@ -57,10 +58,10 @@ class _MashUpScreenState extends State<MashUpScreen> {
   @override
   void dispose() {
     // String json = jsonEncode(points);
-    var json = jsonEncode(points.map((e) => e?.toJson()).toList());
-    debugPrint(json);
-    var decoded = jsonDecode(json);
-    debugPrint('${identical(points, decoded)}');
+    // var json = jsonEncode(points.map((e) => e?.toJson()).toList());
+    // debugPrint(json);
+    // var decoded = jsonDecode(json);
+    // debugPrint('${identical(points, decoded)}');
     super.dispose();
   }
 
@@ -201,8 +202,9 @@ class _MashUpScreenState extends State<MashUpScreen> {
                               child: GestureDetector(
                                 onPanDown: (details) {
                                   setState(() {
-                                    points.add(DrawingArea(
-                                      point: details.localPosition,
+                                    points.add(Squiggle(
+                                      dx: details.localPosition.dx,
+                                      dy: details.localPosition.dy,
                                       strokeWidth: strokeWidth,
                                       color: selectedColor.value,
                                     ));
@@ -210,8 +212,9 @@ class _MashUpScreenState extends State<MashUpScreen> {
                                 },
                                 onPanUpdate: (details) {
                                   setState(() {
-                                    points.add(DrawingArea(
-                                      point: details.localPosition,
+                                    points.add(Squiggle(
+                                      dx: details.localPosition.dx,
+                                      dy: details.localPosition.dy,
                                       strokeWidth: strokeWidth,
                                       color: selectedColor.value,
                                     ));
@@ -223,7 +226,7 @@ class _MashUpScreenState extends State<MashUpScreen> {
                                   });
                                 },
                                 onPanEnd: (details) {
-                                  setState(() => points.add(null));
+                                  // setState(() => points.add(null));
                                 },
                                 child: SizedBox.expand(
                                   child: ClipRRect(
