@@ -1,14 +1,14 @@
-import 'package:amber/screens/create/publish_article.dart';
 import 'package:flutter/material.dart';
 
 import 'package:amber/models/user.dart';
-import 'package:amber/screens/create/publish_event.dart';
-import 'package:amber/screens/create/publish_image.dart';
 import 'package:amber/utilities/constants.dart';
 import 'package:amber/services/auth_service.dart';
 import 'package:amber/widgets/profile_picture.dart';
-import 'package:amber/screens/create/publish_community.dart';
 import 'package:amber/services/database_service.dart';
+import 'package:amber/screens/create/publish_event.dart';
+import 'package:amber/screens/create/publish_image.dart';
+import 'package:amber/screens/create/publish_article.dart';
+import 'package:amber/screens/create/publish_community.dart';
 
 class Create extends StatelessWidget {
   static const id = '/create';

@@ -159,6 +159,7 @@ class _UserPostState extends State<UserPost> {
                                   ),
                                   StreamBuilder<List<types.Room>>(
                                     stream: FirebaseChatCore.instance.rooms(),
+                                    // stream: DatabaseService.roomsRef.,
                                     initialData: const [],
                                     builder: (context, snapshot) {
                                       if (snapshot.hasData) {
@@ -170,7 +171,7 @@ class _UserPostState extends State<UserPost> {
                                           scrollDirection: Axis.vertical,
                                           shrinkWrap: true,
                                           physics: const NeverScrollableScrollPhysics(),
-                                          itemCount: snapshot.data!.length,
+                                          itemCount: snapshot.data!.length + 1,
                                           gridDelegate:
                                               const SliverGridDelegateWithFixedCrossAxisCount(
                                             crossAxisCount: 2,
@@ -179,6 +180,7 @@ class _UserPostState extends State<UserPost> {
                                             childAspectRatio: 1,
                                           ),
                                           itemBuilder: (context, index) {
+                                            debugPrint('${snapshot.data!.length}');
                                             if (index == 0) {
                                               UserModel user = list[index];
                                               return GestureDetector(
@@ -243,8 +245,8 @@ class _UserPostState extends State<UserPost> {
                                                         imageURL: widget.post.imageURL,
                                                         username: widget.post.authorUserName,
                                                         mashupDetails: {
-                                                          'roomId': room.id,
-                                                          'postId': widget.post.id
+                                                          'roomId': room,
+                                                          'postId': widget.post
                                                         },
                                                       ),
                                                     ),

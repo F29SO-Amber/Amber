@@ -3,12 +3,14 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 import 'package:amber/mash-up/squiggles.dart';
+import 'package:amber/models/post.dart';
 import 'package:amber/services/database_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:card_swiper/card_swiper.dart';
+import 'package:flutter_chat_types/src/room.dart';
 import 'package:path_provider/path_provider.dart';
-
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:amber/utilities/utils.dart';
 import 'package:amber/utilities/constants.dart';
 import 'package:amber/services/image_service.dart';
@@ -60,16 +62,6 @@ class _CollaborativeMashUpScreenState extends State<CollaborativeMashUpScreen> {
   }
 
   @override
-  void dispose() {
-    // String json = jsonEncode(points);
-    // var json = jsonEncode(points.map((e) => e == null ? {} : e.toJson()).toList());
-    // debugPrint(json);
-    // var decoded = jsonDecode(json);
-    // debugPrint('${identical(points, decoded)}');
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -94,8 +86,11 @@ class _CollaborativeMashUpScreenState extends State<CollaborativeMashUpScreen> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>
-                      PublishImageScreen(mashUpDetails: [file.path, widget.username]),
+                  builder: (context) => PublishImageScreen(
+                    mashUpDetails: [file.path, widget.username],
+                    room: widget.mashupDetails!['roomId'],
+                    postId: (widget.mashupDetails!['postId'] as PostModel).id,
+                  ),
                 ),
               );
             },
@@ -104,9 +99,9 @@ class _CollaborativeMashUpScreenState extends State<CollaborativeMashUpScreen> {
       ),
       body: StreamBuilder(
           stream: DatabaseService.roomsRef
-              .doc(widget.mashupDetails!['roomId'])
+              .doc((widget.mashupDetails!['roomId'] as types.Room).id)
               .collection('posts')
-              .doc(widget.mashupDetails!['postId'])
+              .doc((widget.mashupDetails!['postId'] as PostModel).id)
               .snapshots(),
           builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
             if (snapshot.hasData && snapshot.data != null) {
@@ -248,9 +243,11 @@ class _CollaborativeMashUpScreenState extends State<CollaborativeMashUpScreen> {
                                         onPanEnd: (details) {
                                           setState(() => points.add(null));
                                           DatabaseService.roomsRef
-                                              .doc(widget.mashupDetails!['roomId'])
+                                              .doc((widget.mashupDetails!['roomId'] as types.Room)
+                                                  .id)
                                               .collection('posts')
-                                              .doc(widget.mashupDetails!['postId'])
+                                              .doc(
+                                                  (widget.mashupDetails!['postId'] as PostModel).id)
                                               .set(Squiggles(points).toJson());
                                           // points = [];
                                         },

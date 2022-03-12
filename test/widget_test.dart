@@ -5,26 +5,37 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
+import 'package:amber/models/post.dart';
+import 'package:amber/widgets/custom_form_field.dart';
+import 'package:amber/widgets/number_and_label.dart';
+import 'package:amber/widgets/post_widget.dart';
+import 'package:amber/widgets/profile_picture.dart';
+import 'package:amber/widgets/setting_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:amber/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+  testWidgets('setting item', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    await tester.pumpWidget(const SettingItem(title: "t"));
+    final titleFinder = find.text("t");
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    expect(titleFinder, findsOneWidget);
+  });
+  testWidgets('number and label', (WidgetTester tester) async {
+    // Build our app and trigger a frame.
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    await tester.pumpWidget(const NumberAndLabel(
+      label: 'l',
+      number: '1',
+    ));
+    final labelFinder = find.text('l');
+    final numberFinder = find.text('1');
+
+    expect(labelFinder, findsOneWidget);
+    expect(numberFinder, findsOneWidget);
   });
 }
