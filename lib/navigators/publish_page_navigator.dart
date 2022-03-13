@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:amber/screens/create/publish_image.dart';
 import 'package:amber/services/auth_service.dart';
 
+import '../pages/error.dart';
+
 //Creating mutable state for the Publish Page Navigator
 class CreatePageNavigator extends StatefulWidget {
   const CreatePageNavigator({Key? key}) : super(key: key);
@@ -38,7 +40,7 @@ class _CreatePageNavigatorState extends State<CreatePageNavigator> {
               case PublishArticleScreen.id:
                 return const PublishArticleScreen();
               default:
-                return const Create();
+                return const ErrorScreen();
             }
           },
         );

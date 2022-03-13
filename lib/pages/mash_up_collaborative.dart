@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
@@ -8,7 +7,6 @@ import 'package:amber/services/database_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:card_swiper/card_swiper.dart';
-import 'package:flutter_chat_types/src/room.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:amber/utilities/utils.dart';
@@ -19,6 +17,7 @@ import 'package:amber/widgets/widget_to_image.dart';
 import 'package:amber/screens/create/publish_image.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 import '../mash-up/squiggle.dart';
 import '../mash-up/sketcher.dart';
@@ -43,10 +42,8 @@ class _CollaborativeMashUpScreenState extends State<CollaborativeMashUpScreen> {
   int index = 0;
   GlobalKey? _globalKey;
   late Uint8List bytes;
-  List<Squiggle?> points = [];
   Color selectedColor = Colors.black;
   double strokeWidth = 2.0;
-  static int x = 0;
 
   @override
   void initState() {
@@ -63,6 +60,8 @@ class _CollaborativeMashUpScreenState extends State<CollaborativeMashUpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Squiggles squiggles = Provider.of<Squiggles>(context, listen: false);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: kAppColor,
@@ -105,18 +104,8 @@ class _CollaborativeMashUpScreenState extends State<CollaborativeMashUpScreen> {
               .snapshots(),
           builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
             if (snapshot.hasData && snapshot.data != null) {
-              print(x++);
-              // List x = (snapshot.data! as DocumentSnapshot)['squiggles'];
-              // points = (jsonDecode((snapshot.data! as DocumentSnapshot)['points']))
-              //     as List<DrawingArea?>;
-              // final content = Squiggles.fromJson(snapshot.data as Map);
-              // points = content.squiggles;
-              // for (Map<String, dynamic>? y in x) {
-              //   y == null ? points.add(null) : points.add(Squiggle.fromJson(y));
-              // }
-              points = Squiggles.fromJson(snapshot.data?.data() as Map).squiggles;
-              // print(snapshot.data!.runtimeType);
-              // print('data: !$x!');
+              squiggles.setSquiggles =
+                  Squiggles.fromJson(snapshot.data?.data() as Map).getSquiggles;
               return Column(
                 children: [
                   const SizedBox(height: 5),
@@ -191,7 +180,7 @@ class _CollaborativeMashUpScreenState extends State<CollaborativeMashUpScreen> {
                                 IconButton(
                                     icon: const Icon(Icons.layers_clear, color: Colors.black),
                                     onPressed: () {
-                                      setState(() => points.clear());
+                                      // setState(() => squiggles.setSquiggles([]));
                                     }),
                               ],
                             ),
@@ -216,51 +205,58 @@ class _CollaborativeMashUpScreenState extends State<CollaborativeMashUpScreen> {
                                         }
                                       })(),
                                     ),
-                                    SizedBox(
-                                      width: 250,
-                                      height: 250,
-                                      child: GestureDetector(
-                                        onPanDown: (details) {
-                                          // setState(() {
-                                          points.add(Squiggle(
-                                            dx: details.localPosition.dx,
-                                            dy: details.localPosition.dy,
-                                            strokeWidth: strokeWidth,
-                                            color: selectedColor.value,
-                                          ));
-                                          // });
-                                        },
-                                        onPanUpdate: (details) {
-                                          // setState(() {
-                                          points.add(Squiggle(
-                                            dx: details.localPosition.dx,
-                                            dy: details.localPosition.dy,
-                                            strokeWidth: strokeWidth,
-                                            color: selectedColor.value,
-                                          ));
-                                          // });
-                                        },
-                                        onPanEnd: (details) {
-                                          setState(() => points.add(null));
-                                          DatabaseService.roomsRef
-                                              .doc((widget.mashupDetails!['roomId'] as types.Room)
-                                                  .id)
-                                              .collection('posts')
-                                              .doc(
-                                                  (widget.mashupDetails!['postId'] as PostModel).id)
-                                              .set(Squiggles(points).toJson());
-                                          // points = [];
-                                        },
-                                        child: SizedBox.expand(
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                const BorderRadius.all(Radius.circular(20.0)),
-                                            child: CustomPaint(
-                                              painter: Sketcher(points: points),
+                                    Consumer<Squiggles>(
+                                      builder: (context, c, child) {
+                                        return SizedBox(
+                                          width: 250,
+                                          height: 250,
+                                          child: GestureDetector(
+                                            onPanDown: (details) {
+                                              // setState(() {
+                                              squiggles.addSquiggle(Squiggle(
+                                                dx: details.localPosition.dx,
+                                                dy: details.localPosition.dy,
+                                                strokeWidth: strokeWidth,
+                                                color: selectedColor.value,
+                                              ));
+                                              // });
+                                            },
+                                            onPanUpdate: (details) {
+                                              // setState(() {
+                                              squiggles.addSquiggle(Squiggle(
+                                                dx: details.localPosition.dx,
+                                                dy: details.localPosition.dy,
+                                                strokeWidth: strokeWidth,
+                                                color: selectedColor.value,
+                                              ));
+                                              // });
+                                            },
+                                            onPanEnd: (details) {
+                                              // setState(() => points.add(null));
+                                              squiggles.addSquiggle(null);
+                                              DatabaseService.roomsRef
+                                                  .doc((widget.mashupDetails!['roomId']
+                                                          as types.Room)
+                                                      .id)
+                                                  .collection('posts')
+                                                  .doc(
+                                                      (widget.mashupDetails!['postId'] as PostModel)
+                                                          .id)
+                                                  .set(Squiggles(squiggles.getSquiggles).toJson());
+                                              // points = [];
+                                            },
+                                            child: SizedBox.expand(
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    const BorderRadius.all(Radius.circular(20.0)),
+                                                child: CustomPaint(
+                                                  painter: Sketcher(points: squiggles.getSquiggles),
+                                                ),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ),
+                                        );
+                                      },
                                     ),
                                   ],
                                 );

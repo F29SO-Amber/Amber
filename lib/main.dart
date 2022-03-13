@@ -1,3 +1,4 @@
+import 'package:amber/mash-up/squiggles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -8,6 +9,7 @@ import 'package:amber/screens/home.dart';
 import 'package:amber/firebase_options.dart';
 import 'package:amber/screens/auth/login.dart';
 import 'package:amber/pages/mash_up_latest.dart';
+import 'package:provider/provider.dart';
 
 import 'custom_animation.dart';
 
@@ -17,20 +19,6 @@ Future<void> main() async {
   await Hive.initFlutter();
   await Hive.openBox('user');
   runApp(const MyApp());
-  EasyLoading.instance
-    ..displayDuration = const Duration(milliseconds: 2000)
-    ..indicatorType = EasyLoadingIndicatorType.fadingCircle
-    ..loadingStyle = EasyLoadingStyle.dark
-    ..indicatorSize = 45.0
-    ..radius = 10.0
-    ..progressColor = Colors.yellow
-    ..backgroundColor = Colors.green
-    ..indicatorColor = Colors.yellow
-    ..textColor = Colors.yellow
-    ..maskColor = Colors.blue.withOpacity(0.5)
-    ..userInteractions = true
-    ..dismissOnTap = false
-    ..customAnimation = CustomAnimation();
 }
 
 class MyApp extends StatefulWidget {
@@ -63,17 +51,22 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      builder: EasyLoading.init(),
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData.light(),
-      // initialRoute: Hive.box('user').get('status') == 'logged-in' ? HomePage.id : LoginScreen.id,
-      initialRoute: LoginScreen.id,
-      routes: {
-        LoginScreen.id: (context) => const LoginScreen(),
-        HomePage.id: (context) => const HomePage(),
-        MashUpScreen.id: (context) => const MashUpScreen(),
-      },
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => Squiggles([])),
+      ],
+      child: MaterialApp(
+        builder: EasyLoading.init(),
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData.light(),
+        // initialRoute: Hive.box('user').get('status') == 'logged-in' ? HomePage.id : LoginScreen.id,
+        initialRoute: LoginScreen.id,
+        routes: {
+          LoginScreen.id: (context) => const LoginScreen(),
+          HomePage.id: (context) => const HomePage(),
+          MashUpScreen.id: (context) => const MashUpScreen(),
+        },
+      ),
     );
   }
 }

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:amber/screens/profile/profile.dart';
 import 'package:amber/services/auth_service.dart';
 
+import '../pages/error.dart';
+
 //Creating mutable state for the Profile Page Navigator
 class ProfilePageNavigator extends StatefulWidget {
   const ProfilePageNavigator({Key? key}) : super(key: key);
@@ -31,7 +33,7 @@ class _ProfilePageNavigatorState extends State<ProfilePageNavigator> {
               case SettingsPage.id:
                 return const SettingsPage();
               default:
-                return ProfilePage(userUID: AuthService.currentUser.uid);
+                return const ErrorScreen();
             }
           },
         );
