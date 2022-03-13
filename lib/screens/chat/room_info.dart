@@ -106,14 +106,14 @@ class _RoomInfoState extends State<RoomInfo> {
                         leadingIcon: Icons.edit,
                         bgIconColor: Colors.brown,
                         onTap: () async {
-                          final result = await Navigator.of(context).push(
+                          Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (_) => UsersPage(oldMembers: widget.room.users),
+                              builder: (_) => UsersPage(
+                                oldMembers: widget.room.users,
+                                room: widget.room,
+                              ),
                             ),
                           );
-                          await DatabaseService.roomsRef
-                              .doc(widget.room.id)
-                              .update({'userIds': result});
                           setState(() {});
                         },
                       ),

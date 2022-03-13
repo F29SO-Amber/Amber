@@ -5,7 +5,6 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:mailer/mailer.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
@@ -280,38 +279,62 @@ class _UserPostState extends State<UserPost> {
                 ),
               ],
             ),
-            endActionPane: ActionPane(
-              motion: const DrawerMotion(),
-              children: [
-                SlidableAction(
-                  backgroundColor: Colors.deepOrange,
-                  foregroundColor: Colors.white,
-                  icon: Icons.delete,
-                  label: 'Delete',
-                  onPressed: (context) {
-                    DatabaseService.postsRef.doc(widget.post.id).delete();
-                    setState(() {});
-                  },
-                ),
-                SlidableAction(
-                  onPressed: (context) {
-                    Navigator.of(context, rootNavigator: true).push(
-                      MaterialPageRoute(
-                        builder: (context) => CommentsPage(
-                          postID: widget.post.id,
-                          username: widget.post.authorUserName,
-                          profilePhotoURL: widget.post.authorProfilePhotoURL,
-                        ),
+            endActionPane: (widget.post.authorId != UserData.currentUser!.id)
+                ? ActionPane(
+                    extentRatio: 0.25,
+                    motion: const DrawerMotion(),
+                    children: [
+                      SlidableAction(
+                        onPressed: (context) {
+                          Navigator.of(context, rootNavigator: true).push(
+                            MaterialPageRoute(
+                              builder: (context) => CommentsPage(
+                                postID: widget.post.id,
+                                username: widget.post.authorUserName,
+                                profilePhotoURL: widget.post.authorProfilePhotoURL,
+                              ),
+                            ),
+                          );
+                        },
+                        backgroundColor: const Color(0xFF0392CF),
+                        foregroundColor: Colors.white,
+                        icon: Icons.comment,
+                        label: 'Comment',
                       ),
-                    );
-                  },
-                  backgroundColor: const Color(0xFF0392CF),
-                  foregroundColor: Colors.white,
-                  icon: Icons.comment,
-                  label: 'Comment',
-                ),
-              ],
-            ),
+                    ],
+                  )
+                : ActionPane(
+                    motion: const DrawerMotion(),
+                    children: [
+                      SlidableAction(
+                        backgroundColor: Colors.deepOrange,
+                        foregroundColor: Colors.white,
+                        icon: Icons.delete,
+                        label: 'Delete',
+                        onPressed: (context) {
+                          DatabaseService.postsRef.doc(widget.post.id).delete();
+                          setState(() {});
+                        },
+                      ),
+                      SlidableAction(
+                        onPressed: (context) {
+                          Navigator.of(context, rootNavigator: true).push(
+                            MaterialPageRoute(
+                              builder: (context) => CommentsPage(
+                                postID: widget.post.id,
+                                username: widget.post.authorUserName,
+                                profilePhotoURL: widget.post.authorProfilePhotoURL,
+                              ),
+                            ),
+                          );
+                        },
+                        backgroundColor: const Color(0xFF0392CF),
+                        foregroundColor: Colors.white,
+                        icon: Icons.comment,
+                        label: 'Comment',
+                      ),
+                    ],
+                  ),
             child: GestureDetector(
               onDoubleTap: () {
                 if (isLiked != true) {

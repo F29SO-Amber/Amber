@@ -35,17 +35,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     profileNavigatorKey,
   ];
 
-  Future<bool> _systemBackButtonPressed() async {
-    if (_navigatorKeys[_selectedIndex].currentState!.canPop()) {
-      _navigatorKeys[_selectedIndex]
-          .currentState!
-          .pop(_navigatorKeys[_selectedIndex].currentContext);
-    } else {
-      SystemChannels.platform.invokeMethod<void>('SystemNavigator.pop');
-    }
-    throw '';
-  }
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -65,11 +54,11 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         ),
         bottomNavigationBar: ConvexAppBar(
           items: const [
-            TabItem<IconData>(icon: Icons.home),
-            TabItem<IconData>(icon: Icons.search),
-            TabItem<IconData>(icon: Icons.publish),
-            TabItem<IconData>(icon: Icons.message),
-            TabItem<IconData>(icon: Icons.people),
+            TabItem<IconData>(icon: Icons.home, title: 'Home'),
+            TabItem<IconData>(icon: Icons.search, title: 'Discover'),
+            TabItem<IconData>(icon: Icons.publish, title: 'Create'),
+            TabItem<IconData>(icon: Icons.message, title: 'Rooms'),
+            TabItem<IconData>(icon: Icons.people, title: 'Profile'),
           ],
           style: TabStyle.react,
           initialActiveIndex: _selectedIndex,
@@ -81,5 +70,16 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       ),
       onWillPop: _systemBackButtonPressed,
     );
+  }
+
+  Future<bool> _systemBackButtonPressed() async {
+    if (_navigatorKeys[_selectedIndex].currentState!.canPop()) {
+      _navigatorKeys[_selectedIndex]
+          .currentState!
+          .pop(_navigatorKeys[_selectedIndex].currentContext);
+    } else {
+      SystemChannels.platform.invokeMethod<void>('SystemNavigator.pop');
+    }
+    throw 'A Back Button issue occurred';
   }
 }

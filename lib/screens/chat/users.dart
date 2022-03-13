@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
+import '../../services/database_service.dart';
 import '../../utilities/constants.dart';
 import 'chat.dart';
 
 class UsersPage extends StatefulWidget {
   final List<types.User>? oldMembers;
-  const UsersPage({Key? key, this.oldMembers}) : super(key: key);
+  final types.Room? room;
+  const UsersPage({Key? key, this.oldMembers, this.room}) : super(key: key);
 
   @override
   State<UsersPage> createState() => _UsersPageState();
@@ -45,7 +47,10 @@ class _UsersPageState extends State<UsersPage> {
         );
       }
     } else {
-      Navigator.pop(context, users.map((e) => e.id).toList());
+      await DatabaseService.roomsRef
+          .doc(widget.room!.id)
+          .update({'userIds': users.map((e) => e.id).toList()});
+      Navigator.pop(context);
     }
   }
 
