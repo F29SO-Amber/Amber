@@ -14,6 +14,8 @@ import 'package:amber/services/image_service.dart';
 import 'package:amber/services/storage_service.dart';
 import 'package:amber/services/database_service.dart';
 
+import '../../user_data.dart';
+
 class PublishArticleScreen extends StatefulWidget {
   static const id = '/publish_article';
 
@@ -30,6 +32,7 @@ class _PublishArticleScreenState extends State<PublishArticleScreen> {
 
   @override
   void dispose() {
+    _controller.dispose();
     super.dispose();
   }
 
@@ -114,7 +117,6 @@ class _PublishArticleScreenState extends State<PublishArticleScreen> {
     setState(() {
       _file = null;
       _controller.clear();
-      _controller.dispose();
     });
   }
 
@@ -126,9 +128,12 @@ class _PublishArticleScreenState extends State<PublishArticleScreen> {
       map['id'] = articleID;
       map['imageURL'] = await StorageService.uploadImage(articleID, _file!, 'articles');
       map['text'] = jsonEncode(_controller.document.toDelta().toJson());
+      map['likes'] = {};
       map['authorId'] = AuthService.currentUser.uid;
       map['timestamp'] = Timestamp.now();
       map['authorUserName'] = user.username;
+      map['authorName'] = UserData.currentUser!.firstName;
+      map['authorProfilePhotoURL'] = UserData.currentUser!.imageUrl;
       await DatabaseService.articlesRef.doc(articleID).set(map);
     }
   }

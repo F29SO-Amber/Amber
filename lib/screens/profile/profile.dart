@@ -4,12 +4,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:amber/models/user.dart';
 import 'package:amber/pages/settings.dart';
 import 'package:amber/pages/user_list.dart';
-import 'package:amber/screens/profile/edit_profile.dart';
 import 'package:amber/utilities/constants.dart';
 import 'package:amber/services/auth_service.dart';
 import 'package:amber/widgets/profile_picture.dart';
 import 'package:amber/widgets/number_and_label.dart';
 import 'package:amber/services/database_service.dart';
+import 'package:amber/screens/profile/edit_profile.dart';
 import 'package:amber/widgets/custom_outlined_button.dart';
 import 'package:amber/widgets/custom_elevated_button.dart';
 import 'package:amber/screens/profile/user_profile_footer.dart';
@@ -50,7 +50,9 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> unfollowUser() async {
-    setState(() => isFollowing = false);
+    setState(() {
+      isFollowing = false;
+    });
     //remove follower
     DatabaseService.followersRef
         .doc(widget.userUID)
@@ -78,7 +80,9 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> followUser() async {
-    setState(() => isFollowing = true);
+    setState(() {
+      isFollowing = true;
+    });
     //updates the followers collection of the followed user
     DatabaseService.followersRef
         .doc(widget.userUID)

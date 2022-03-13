@@ -192,7 +192,7 @@ class _ArtistFooterState extends State<ArtistFooter> {
                                     onTap: () {
                                       Navigator.of(context, rootNavigator: true).push(
                                         MaterialPageRoute(
-                                          builder: (context) => ArticleScreen(article: article),
+                                          builder: (context) => ArticleScreen(articles: list),
                                         ),
                                       );
                                     },
