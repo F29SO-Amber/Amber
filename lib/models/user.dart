@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserModel {
-  // TODO: Update User Model properly
+  // TODO: Update User Model properly (lastname)
   final String id;
   final String firstName;
   // final String lastName;
@@ -44,13 +44,13 @@ class UserModel {
   List<String> getCurrentUserPostTypes() {
     switch (accountType) {
       case 'Artist':
-        return ['Image', 'Article', 'Community', 'Public Group'];
+        return ['Image', 'Article', 'Community'];
       case 'Brand Marketer':
-        return ['Image', 'Article', 'Event', 'Public Group'];
+        return ['Image', 'Article', 'Event'];
       case 'Content Creator':
-        return ['Image', 'Article', 'Thumbnail', 'Public Group'];
+        return ['Image', 'Article', 'Thumbnail'];
       case 'Student':
-        return ['Image', 'Article', 'Public Group'];
+        return ['Image', 'Article'];
       default:
         return ['Image'];
     }

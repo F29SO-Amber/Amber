@@ -12,11 +12,11 @@ import 'package:amber/services/database_service.dart';
 import 'package:amber/screens/profile/edit_profile.dart';
 import 'package:amber/widgets/custom_outlined_button.dart';
 import 'package:amber/widgets/custom_elevated_button.dart';
-import 'package:amber/screens/profile/user_profile_footer.dart';
-import 'package:amber/screens/profile/artist_profile_footer.dart';
-import 'package:amber/screens/profile/student_profile_footer.dart';
-import 'package:amber/screens/profile/brand_marketer_profile_footer.dart';
-import 'package:amber/screens/profile/content_creator_profile_footer.dart';
+import 'package:amber/screens/profile/profile_footers/user_profile_footer.dart';
+import 'package:amber/screens/profile/profile_footers/artist_profile_footer.dart';
+import 'package:amber/screens/profile/profile_footers/student_profile_footer.dart';
+import 'package:amber/screens/profile/profile_footers/brand_marketer_profile_footer.dart';
+import 'package:amber/screens/profile/profile_footers/content_creator_profile_footer.dart';
 
 class ProfilePage extends StatefulWidget {
   static const id = '/profile';
