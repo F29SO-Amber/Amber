@@ -13,6 +13,8 @@ import '../user_data.dart';
 import '../widgets/profile_picture.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import 'comments.dart';
+
 class ArticleScreen extends StatefulWidget {
   static const id = '/read_article';
   final List articles;
@@ -101,16 +103,16 @@ class _ArticleScreenState extends State<ArticleScreen> {
                                 children: [
                                   CustomImage(
                                     side: 40,
-                                    image: NetworkImage(article.imageURL), // TODO:Wrong url
+                                    image: NetworkImage(article.authorProfilePhotoURL),
                                   ),
-                                  SizedBox(width: 10),
+                                  const SizedBox(width: 10),
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       GestureDetector(
                                         child: Text(
-                                          article.authorUserName, // TODO: Name, not username
+                                          article.authorName,
                                           style:
                                               GoogleFonts.dmSans(fontSize: 17, color: Colors.white),
                                         ),
@@ -132,7 +134,21 @@ class _ArticleScreenState extends State<ArticleScreen> {
                                 ],
                                 // crossAxisAlignment: CrossAxisAlignment.center,
                               ),
+                              GestureDetector(
+                                  child: const Icon(FontAwesomeIcons.comment, color: Colors.white),
+                                  onTap: () {
+                                    Navigator.of(context, rootNavigator: true).push(
+                                      MaterialPageRoute(
+                                        builder: (context) => CommentsPage(
+                                          postID: article.id,
+                                          username: article.authorUserName,
+                                          profilePhotoURL: article.authorProfilePhotoURL,
+                                        ),
+                                      ),
+                                    );
+                                  }),
                               Row(
+                                // TODO: Avoid entire rebuild to manage likes and dislikes
                                 children: [
                                   GestureDetector(
                                     onTap: () {
@@ -149,15 +165,18 @@ class _ArticleScreenState extends State<ArticleScreen> {
                                       child: (isLiked != null && isLiked!)
                                           ? const Icon(FontAwesomeIcons.arrowAltCircleUp,
                                               color: kAppColor)
-                                          : const Icon(FontAwesomeIcons.arrowAltCircleUp),
+                                          : const Icon(FontAwesomeIcons.arrowAltCircleUp,
+                                              color: Colors.white),
                                     ),
                                   ),
                                   Text(
-                                      '${isLiked != null ? (isLiked! ? finalScore + 1 : finalScore - 1) : finalScore}'),
+                                    '${isLiked != null ? (isLiked! ? finalScore + 1 : finalScore - 1) : finalScore}',
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
                                   GestureDetector(
                                     onTap: () {
                                       if (isLiked != false) {
-                                        DatabaseService.postsRef
+                                        DatabaseService.articlesRef
                                             .doc(article.id)
                                             .update({'likes.${UserData.currentUser!.id}': false});
                                         // finalScore -= 1;
@@ -169,7 +188,8 @@ class _ArticleScreenState extends State<ArticleScreen> {
                                       child: (isLiked != null && !(isLiked!))
                                           ? const Icon(FontAwesomeIcons.arrowAltCircleDown,
                                               color: kAppColor)
-                                          : const Icon(FontAwesomeIcons.arrowAltCircleDown),
+                                          : const Icon(FontAwesomeIcons.arrowAltCircleDown,
+                                              color: Colors.white),
                                     ),
                                   ),
                                 ],

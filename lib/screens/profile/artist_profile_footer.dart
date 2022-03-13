@@ -205,7 +205,7 @@ class _ArtistFooterState extends State<ArtistFooter> {
                         },
                       );
               } else {
-                return const Center(child: CircularProgressIndicator());
+                return Container();
               }
             },
           ),
@@ -277,7 +277,7 @@ class _ArtistFooterState extends State<ArtistFooter> {
                         },
                       );
               } else {
-                return const Center(child: CircularProgressIndicator());
+                return Container();
               }
             },
           ),
@@ -351,7 +351,7 @@ class _ArtistFooterState extends State<ArtistFooter> {
                         },
                       );
               } else {
-                return const Center(child: CircularProgressIndicator());
+                return Container();
               }
             },
           ),

@@ -59,6 +59,7 @@ class _PublishArticleScreenState extends State<PublishArticleScreen> {
                 await addUserArticle();
                 EasyLoading.dismiss();
                 _disposeUserArticleChanges();
+                setState(() => _uploadButtonPresent = true);
               },
             ),
           ),
