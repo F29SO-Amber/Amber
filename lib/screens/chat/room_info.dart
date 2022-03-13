@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:amber/screens/chat/mashed_up_posts.dart';
 import 'package:amber/screens/chat/members.dart';
 import 'package:amber/screens/chat/users.dart';
 import 'package:amber/services/auth_service.dart';
 import 'package:amber/services/database_service.dart';
+import 'package:amber/services/image_service.dart';
+import 'package:amber/services/storage_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
@@ -22,6 +26,11 @@ class RoomInfo extends StatefulWidget {
 }
 
 class _RoomInfoState extends State<RoomInfo> {
+  final TextEditingController _textFieldController = TextEditingController();
+  File? profilePic;
+  String? codeDialog;
+  String? valueText;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +47,9 @@ class _RoomInfoState extends State<RoomInfo> {
               const SizedBox(height: 15),
               CustomImage(
                 side: 90,
-                image: NetworkImage('${widget.room.imageUrl}'),
+                image: profilePic == null
+                    ? NetworkImage('${widget.room.imageUrl}')
+                    : FileImage(profilePic!) as ImageProvider,
                 borderRadius: 25,
               ),
               const SizedBox(height: 15),
@@ -50,13 +61,32 @@ class _RoomInfoState extends State<RoomInfo> {
                   children: [
                     if (widget.room.type == types.RoomType.group)
                       SettingItem(
-                        title: "Edit Group Profile",
-                        leadingIcon: Icons.edit_attributes,
-                        bgIconColor: Colors.cyan,
-                        onTap: () {
-                          // Get.toNamed('/space');
+                        title: "Edit Group Profile Picture",
+                        leadingIcon: Icons.image,
+                        bgIconColor: Colors.brown,
+                        onTap: () async {
+                          File? file = await ImageService.chooseFromGallery();
+                          if (file != null) {
+                            setState(() => profilePic = file);
+                            String url = await StorageService.uploadImage(
+                                widget.room.id, file, 'room_profile_pic');
+                            DatabaseService.roomsRef.doc(widget.room.id).update({'imageUrl': url});
+                          }
                         },
                       ),
+                    if (widget.room.type == types.RoomType.group)
+                      SettingItem(
+                          title: "Edit Group Name",
+                          leadingIcon: Icons.edit_attributes,
+                          bgIconColor: Colors.cyan,
+                          onTap: () async {
+                            await _displayTextInputDialog(context);
+                            DatabaseService.roomsRef
+                                .doc(widget.room.id)
+                                .update({'name': codeDialog});
+                            _textFieldController.clear();
+                            setState(() {});
+                          }),
                     SettingItem(
                       title: "Mashed up Posts",
                       leadingIcon: Icons.post_add,
@@ -172,5 +202,45 @@ class _RoomInfoState extends State<RoomInfo> {
             : null,
       ),
     );
+  }
+
+  Future<void> _displayTextInputDialog(BuildContext context) async {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Name your group'),
+            content: TextField(
+              onChanged: (value) {
+                setState(() => valueText = value);
+              },
+              controller: _textFieldController,
+              decoration: const InputDecoration(hintText: "eg: Core Four"),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                color: Colors.red,
+                textColor: Colors.white,
+                child: const Text('CANCEL'),
+                onPressed: () {
+                  setState(() {
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+              FlatButton(
+                color: Colors.green,
+                textColor: Colors.white,
+                child: const Text('OK'),
+                onPressed: () {
+                  setState(() {
+                    codeDialog = valueText;
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+            ],
+          );
+        });
   }
 }
