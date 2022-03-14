@@ -169,8 +169,8 @@ class _SettingsPageState extends State<SettingsPage> {
                 bgIconColor: Colors.grey.shade400,
                 onTap: () async {
                   AuthService.signOutUser();
-                  await Hive.openBox('user');
-                  Hive.box('user').put('status', 'logged-out');
+                  // await Hive.openBox('user');
+                  // Hive.box('user').put('status', 'logged-out');
                   Navigator.of(context, rootNavigator: true).pushReplacement(
                     MaterialPageRoute(builder: (context) => const LoginScreen()),
                   );
