@@ -44,6 +44,7 @@ dependencies:
   scrollable_positioned_list:
   material_floating_search_bar:
   shimmer:
+  sentry_flutter: ^6.3.0
 #  flutter_native_splash: ^1.3.2
 #
 #flutter_native_splash:
