@@ -1,14 +1,13 @@
+import 'package:flutter/material.dart';
+
+import 'package:amber/pages/error.dart';
+import 'package:amber/services/auth_service.dart';
+import 'package:amber/screens/create/create.dart';
+import 'package:amber/screens/create/publish_event.dart';
 import 'package:amber/screens/create/publish_article.dart';
 import 'package:amber/screens/create/publish_community.dart';
-import 'package:amber/screens/create/publish_event.dart';
-import 'package:amber/screens/create/create.dart';
-import 'package:flutter/material.dart';
 import 'package:amber/screens/create/publish_image.dart';
-import 'package:amber/services/auth_service.dart';
 
-import '../pages/error.dart';
-
-//Creating mutable state for the Publish Page Navigator
 class CreatePageNavigator extends StatefulWidget {
   const CreatePageNavigator({Key? key}) : super(key: key);
 

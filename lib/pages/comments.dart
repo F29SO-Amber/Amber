@@ -11,12 +11,9 @@ class CommentsPage extends StatefulWidget {
   final String username;
   final String profilePhotoURL;
 
-  const CommentsPage({
-    Key? key,
-    required this.postID,
-    required this.username,
-    required this.profilePhotoURL,
-  }) : super(key: key);
+  const CommentsPage(
+      {Key? key, required this.postID, required this.username, required this.profilePhotoURL})
+      : super(key: key);
 
   @override
   State<CommentsPage> createState() => _CommentsPageState();

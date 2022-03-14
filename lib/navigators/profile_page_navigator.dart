@@ -1,12 +1,11 @@
-import 'package:amber/screens/auth/login.dart';
-import 'package:amber/pages/settings.dart';
 import 'package:flutter/material.dart';
-import 'package:amber/screens/profile/profile.dart';
+
+import 'package:amber/pages/error.dart';
+import 'package:amber/pages/settings.dart';
+import 'package:amber/screens/auth/login.dart';
 import 'package:amber/services/auth_service.dart';
+import 'package:amber/screens/profile/profile.dart';
 
-import '../pages/error.dart';
-
-//Creating mutable state for the Profile Page Navigator
 class ProfilePageNavigator extends StatefulWidget {
   const ProfilePageNavigator({Key? key}) : super(key: key);
 

@@ -6,7 +6,7 @@ import 'package:amber/widgets/post_type.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../../utilities/constants.dart';
+import 'package:amber/utilities/constants.dart';
 
 class BrandMarketerFooter extends StatefulWidget {
   final String userUID;

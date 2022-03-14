@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:amber/pages/animations.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:amber/utilities/constants.dart';
 import 'package:lottie/lottie.dart';
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import 'package:amber/utilities/constants.dart';
 
 class ErrorScreen extends StatelessWidget {
   const ErrorScreen({Key? key}) : super(key: key);
@@ -63,5 +63,60 @@ class ErrorScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class TopAnime extends StatelessWidget {
+  Widget? child;
+  Curve? curve;
+  int seconds;
+  int topPadding;
+
+  TopAnime(this.seconds, this.topPadding, {Key? key, required this.child, this.curve})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TweenAnimationBuilder(
+        child: child,
+        tween: Tween<double>(begin: 0, end: 1),
+        duration: Duration(seconds: seconds),
+        curve: curve ?? Curves.bounceIn,
+        builder: (BuildContext context, double value, child) {
+          return Opacity(
+            opacity: value,
+            child: Padding(
+              padding: EdgeInsets.only(top: value * topPadding),
+              child: this.child,
+            ),
+          );
+        });
+  }
+}
+
+class BottomAnime extends StatelessWidget {
+  Widget? child;
+  Curve? curve;
+  int seconds;
+  int topPadding;
+
+  BottomAnime(this.seconds, this.topPadding, {required this.child, this.curve});
+
+  @override
+  Widget build(BuildContext context) {
+    return TweenAnimationBuilder(
+        child: child,
+        tween: Tween<double>(begin: 0, end: 1),
+        curve: curve ?? Curves.bounceIn,
+        duration: Duration(seconds: seconds),
+        builder: (BuildContext context, double value, child) {
+          return Opacity(
+            opacity: value,
+            child: Padding(
+              padding: EdgeInsets.only(bottom: value * topPadding),
+              child: this.child,
+            ),
+          );
+        });
   }
 }

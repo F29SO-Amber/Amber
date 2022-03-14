@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import '../../../models/community.dart';
-import '../../../pages/community.dart';
-import '../../../services/database_service.dart';
-import '../../../utilities/constants.dart';
-import '../../../widgets/profile_picture.dart';
+import 'package:amber/models/community.dart';
+import 'package:amber/pages/community.dart';
+import 'package:amber/services/database_service.dart';
+import 'package:amber/utilities/constants.dart';
+import 'package:amber/widgets/profile_picture.dart';
 
 class Communities extends StatelessWidget {
   final String userUID;

@@ -1,26 +1,27 @@
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
-import 'package:amber/mash-up/squiggles.dart';
-import 'package:amber/models/post.dart';
-import 'package:amber/services/database_service.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+
+import 'package:amber/models/post.dart';
 import 'package:amber/utilities/utils.dart';
+import 'package:amber/mash-up/squiggle.dart';
+import 'package:amber/mash-up/sketcher.dart';
+import 'package:amber/mash-up/squiggles.dart';
 import 'package:amber/utilities/constants.dart';
 import 'package:amber/services/image_service.dart';
 import 'package:amber/widgets/profile_picture.dart';
 import 'package:amber/widgets/widget_to_image.dart';
+import 'package:amber/services/database_service.dart';
 import 'package:amber/screens/create/publish_image.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:provider/provider.dart';
-
-import '../mash-up/squiggle.dart';
-import '../mash-up/sketcher.dart';
 
 class CollaborativeMashUpScreen extends StatefulWidget {
   final String? imageURL;
@@ -37,13 +38,13 @@ class CollaborativeMashUpScreen extends StatefulWidget {
 }
 
 class _CollaborativeMashUpScreenState extends State<CollaborativeMashUpScreen> {
-  List images = [const AssetImage("assets/plus.png")];
-  List collageTypes = [];
   int index = 0;
-  GlobalKey? _globalKey;
   late Uint8List bytes;
-  Color selectedColor = Colors.black;
+  GlobalKey? _globalKey;
+  List collageTypes = [];
   double strokeWidth = 2.0;
+  Color selectedColor = Colors.black;
+  List images = [const AssetImage("assets/plus.png")];
 
   @override
   void initState() {
@@ -105,7 +106,7 @@ class _CollaborativeMashUpScreenState extends State<CollaborativeMashUpScreen> {
           builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
             if (snapshot.hasData && snapshot.data != null) {
               squiggles.setSquiggles =
-                  Squiggles.fromJson(snapshot.data?.data() as Map).getSquiggles;
+                  Squiggles.fromJson(snapshot.data!.data() as Map).getSquiggles;
               return Column(
                 children: [
                   const SizedBox(height: 5),
@@ -180,7 +181,12 @@ class _CollaborativeMashUpScreenState extends State<CollaborativeMashUpScreen> {
                                 IconButton(
                                     icon: const Icon(Icons.layers_clear, color: Colors.black),
                                     onPressed: () {
-                                      // setState(() => squiggles.setSquiggles([]));
+                                      DatabaseService.roomsRef
+                                          .doc((widget.mashupDetails!['roomId'] as types.Room).id)
+                                          .collection('posts')
+                                          .doc((widget.mashupDetails!['postId'] as PostModel).id)
+                                          .update({'squiggles': []});
+                                      squiggles.setSquiggles = [];
                                     }),
                               ],
                             ),

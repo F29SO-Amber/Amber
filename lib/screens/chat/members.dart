@@ -5,9 +5,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:amber/screens/chat/rooms.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
-import '../../widgets/setting_item.dart';
-import '../../utilities/constants.dart';
-import '../../widgets/setting_item.dart';
+import 'package:amber/widgets/setting_item.dart';
+import 'package:amber/utilities/constants.dart';
+import 'package:amber/widgets/setting_item.dart';
 
 class Members extends StatefulWidget {
   final types.Room room;

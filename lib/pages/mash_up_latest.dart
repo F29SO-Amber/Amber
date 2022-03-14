@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
@@ -15,8 +14,8 @@ import 'package:amber/screens/create/publish_image.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../mash-up/squiggle.dart';
-import '../mash-up/sketcher.dart';
+import 'package:amber/mash-up/squiggle.dart';
+import 'package:amber/mash-up/sketcher.dart';
 
 class MashUpScreen extends StatefulWidget {
   final String? imageURL;

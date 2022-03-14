@@ -18,8 +18,8 @@ import 'package:amber/services/auth_service.dart';
 import 'package:amber/widgets/profile_picture.dart';
 import 'package:amber/services/database_service.dart';
 
-import '../models/user.dart';
-import '../user_data.dart';
+import 'package:amber/models/user.dart';
+import 'package:amber/user_data.dart';
 
 class UserPost extends StatefulWidget {
   final PostModel post;

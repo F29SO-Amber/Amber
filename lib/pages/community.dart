@@ -1,22 +1,19 @@
-import 'package:amber/pages/user_list.dart';
-import 'package:amber/pages/user_posts.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import 'package:amber/models/post.dart';
+import 'package:amber/pages/user_list.dart';
+import 'package:amber/pages/user_posts.dart';
 import 'package:amber/models/community.dart';
 import 'package:amber/widgets/post_type.dart';
 import 'package:amber/utilities/constants.dart';
+import 'package:amber/services/auth_service.dart';
 import 'package:amber/widgets/profile_picture.dart';
 import 'package:amber/widgets/number_and_label.dart';
 import 'package:amber/services/database_service.dart';
 import 'package:amber/widgets/custom_elevated_button.dart';
 import 'package:amber/widgets/custom_outlined_button.dart';
-
-import '../models/post.dart';
-import '../services/auth_service.dart';
-
-// TODO: Create communities
 
 class CommunityPage extends StatefulWidget {
   static const id = '/community';

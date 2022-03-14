@@ -1,23 +1,22 @@
 import 'dart:convert';
-
-import 'package:amber/models/article.dart';
-import 'package:amber/utilities/constants.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_quill/flutter_quill.dart' hide Text;
 import 'package:google_fonts/google_fonts.dart';
-
-import '../screens/profile/profile.dart';
-import '../services/database_service.dart';
-import '../user_data.dart';
-import '../widgets/profile_picture.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter_quill/flutter_quill.dart' hide Text;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'comments.dart';
+import 'package:amber/user_data.dart';
+import 'package:amber/models/article.dart';
+import 'package:amber/pages/comments.dart';
+import 'package:amber/utilities/constants.dart';
+import 'package:amber/widgets/profile_picture.dart';
+import 'package:amber/screens/profile/profile.dart';
+import 'package:amber/services/database_service.dart';
 
 class ArticleScreen extends StatefulWidget {
   static const id = '/read_article';
   final List articles;
+
   const ArticleScreen({Key? key, required this.articles}) : super(key: key);
 
   @override
@@ -25,22 +24,13 @@ class ArticleScreen extends StatefulWidget {
 }
 
 class _ArticleScreenState extends State<ArticleScreen> {
-  String heading = 'An article';
   late bool? isLiked;
   int finalScore = 0;
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: kAppColor,
-        title: Text(heading, style: const TextStyle(fontSize: 18, color: Colors.white)),
-      ),
+      appBar: kAppBar,
       body: CarouselSlider(
         options: CarouselOptions(
           height: MediaQuery.of(context).size.height,

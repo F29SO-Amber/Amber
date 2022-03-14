@@ -11,9 +11,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'package:amber/screens/chat/rooms.dart';
-import '../../utilities/constants.dart';
-import '../../widgets/profile_picture.dart';
-import '../../widgets/setting_item.dart';
+import 'package:amber/utilities/constants.dart';
+import 'package:amber/widgets/profile_picture.dart';
+import 'package:amber/widgets/setting_item.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 

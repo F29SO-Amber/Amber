@@ -13,7 +13,7 @@ import 'package:mime/mime.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 
-import '../../utilities/constants.dart';
+import 'package:amber/utilities/constants.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({Key? key, required this.room}) : super(key: key);

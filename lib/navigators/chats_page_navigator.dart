@@ -1,5 +1,5 @@
-import 'package:amber/screens/chat/rooms.dart';
 import 'package:flutter/material.dart';
+import 'package:amber/screens/chat/rooms.dart';
 
 class ChatsPageNavigator extends StatefulWidget {
   const ChatsPageNavigator({Key? key}) : super(key: key);

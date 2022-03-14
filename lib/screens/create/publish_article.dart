@@ -14,7 +14,7 @@ import 'package:amber/services/image_service.dart';
 import 'package:amber/services/storage_service.dart';
 import 'package:amber/services/database_service.dart';
 
-import '../../user_data.dart';
+import 'package:amber/user_data.dart';
 
 class PublishArticleScreen extends StatefulWidget {
   static const id = '/publish_article';

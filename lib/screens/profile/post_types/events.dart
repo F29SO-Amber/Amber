@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import '../../../models/event.dart';
-import '../../../services/database_service.dart';
-import '../../../utilities/constants.dart';
-import '../../../widgets/profile_picture.dart';
+import 'package:amber/models/event.dart';
+import 'package:amber/services/database_service.dart';
+import 'package:amber/utilities/constants.dart';
+import 'package:amber/widgets/profile_picture.dart';
 
 class Events extends StatelessWidget {
   final String userUID;

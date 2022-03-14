@@ -3,41 +3,41 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class UserModel {
   // TODO: Update User Model properly (lastname)
   final String id;
-  final String firstName;
-  // final String lastName;
-  final String email;
-  final String username;
   final String dob;
+  // final String role;
+  final String email;
+  final String imageUrl;
+  // final String lastName;
+  final String username;
+  final String firstName;
   final String accountType;
   final Timestamp timeCreated;
-  final String imageUrl;
-  final String role;
 
   const UserModel({
     required this.id,
-    required this.firstName,
-    // required this.lastName,
-    required this.email,
-    required this.username,
     required this.dob,
+    // required this.role,
+    required this.email,
+    required this.imageUrl,
+    // required this.lastName,
+    required this.username,
+    required this.firstName,
     required this.accountType,
     required this.timeCreated,
-    required this.imageUrl,
-    required this.role,
   });
 
   factory UserModel.fromDocument(DocumentSnapshot doc) {
     return UserModel(
       id: doc.id,
-      firstName: doc['firstName'],
-      // lastName: doc['lastName'],
-      email: doc['email'],
-      username: doc['username'],
       dob: doc['dob'],
-      accountType: doc['account_type'],
-      timeCreated: doc['timeCreated'],
+      // role: doc['role'],
+      email: doc['email'],
+      // lastName: doc['lastName'],
+      username: doc['username'],
       imageUrl: doc['imageUrl'],
-      role: doc['role'],
+      firstName: doc['firstName'],
+      timeCreated: doc['timeCreated'],
+      accountType: doc['account_type'],
     );
   }
 

@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import '../../../models/post.dart';
-import '../../../pages/user_posts.dart';
-import '../../../services/database_service.dart';
-import '../profile_footers/artist_profile_footer.dart';
+import 'package:amber/models/post.dart';
+import 'package:amber/pages/user_posts.dart';
+import 'package:amber/services/database_service.dart';
+import 'package:amber/screens/profile/profile_footers/artist_profile_footer.dart';
 
 class Posts extends StatelessWidget {
   final String userUID;

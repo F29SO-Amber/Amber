@@ -4,9 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
-import '../../pages/mash_up_collaborative.dart';
-import '../../services/database_service.dart';
-import '../../widgets/profile_picture.dart';
+import 'package:amber/pages/mash_up_collaborative.dart';
+import 'package:amber/services/database_service.dart';
+import 'package:amber/widgets/profile_picture.dart';
 
 class MashedUpPosts extends StatefulWidget {
   final types.Room room;

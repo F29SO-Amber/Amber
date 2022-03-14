@@ -2,10 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
-import '../../../services/database_service.dart';
-import '../../../user_data.dart';
-import '../../../utilities/constants.dart';
-import '../../../widgets/profile_picture.dart';
+import 'package:amber/services/database_service.dart';
+import 'package:amber/user_data.dart';
+import 'package:amber/utilities/constants.dart';
+import 'package:amber/widgets/profile_picture.dart';
 
 class PublicGroups extends StatelessWidget {
   final String userUID;

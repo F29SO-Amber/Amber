@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
-import '../../services/database_service.dart';
-import '../../utilities/constants.dart';
+import 'package:amber/services/database_service.dart';
+import 'package:amber/utilities/constants.dart';
 import 'chat.dart';
 
 class UsersPage extends StatefulWidget {

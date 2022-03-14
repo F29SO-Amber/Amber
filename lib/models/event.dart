@@ -1,29 +1,29 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class EventModel {
-  String userID;
   String title;
+  String venue;
+  String userID;
   String description;
   String startingTime;
-  String venue;
   String eventPhotoURL;
 
   EventModel({
-    required this.userID,
     required this.title,
+    required this.venue,
+    required this.userID,
     required this.description,
     required this.startingTime,
-    required this.venue,
     required this.eventPhotoURL,
   });
 
   factory EventModel.fromDocument(DocumentSnapshot doc) {
     return EventModel(
-      userID: doc['userID'],
       title: doc['title'],
+      venue: doc['venue'],
+      userID: doc['userID'],
       description: doc['description'],
       startingTime: doc['startingTime'],
-      venue: doc['venue'],
       eventPhotoURL: doc['eventPhotoURL'],
     );
   }
