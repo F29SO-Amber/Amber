@@ -16,8 +16,8 @@ import 'custom_animation.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  // await Hive.initFlutter();
-  // await Hive.openBox('user');
+  await Hive.initFlutter();
+  await Hive.openBox('user');
   runApp(const MyApp());
 }
 

@@ -14,10 +14,10 @@ class AuthService {
         email: data.name,
         password: data.password,
       );
-      // await Hive.openBox('user');
-      // Hive.box('user').put('status', 'logged-in');
-      // Hive.box('user').put('email', data.name);
-      // Hive.box('user').put('password', data.password);
+      await Hive.openBox('user');
+      Hive.box('user').put('status', 'logged-in');
+      Hive.box('user').put('email', data.name);
+      Hive.box('user').put('password', data.password);
       currentUser = authResult.user!;
       UserData.currentUser = await DatabaseService.getUser(currentUser.uid);
       return null;
@@ -34,9 +34,9 @@ class AuthService {
       );
       currentUser = authResult.user!;
       DatabaseService.addUserData(data);
-      // await Hive.openBox('user');
-      // Hive.box('user').put('email', data.name!);
-      // Hive.box('user').put('password', data.password!);
+      await Hive.openBox('user');
+      Hive.box('user').put('email', data.name!);
+      Hive.box('user').put('password', data.password!);
       return null;
     } on FirebaseAuthException catch (e) {
       return e.message;
@@ -56,9 +56,9 @@ class AuthService {
   static Future<String?> signOutUser() async {
     try {
       await _auth.signOut();
-      // await Hive.openBox('user');
-      // Hive.box('user').put('status', 'logged-out');
-      // Hive.close();
+      await Hive.openBox('user');
+      Hive.box('user').put('status', 'logged-out');
+      Hive.close();
       return null;
     } on FirebaseAuthException catch (e) {
       return e.message;
