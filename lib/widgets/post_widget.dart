@@ -341,10 +341,7 @@ class _UserPostState extends State<UserPost> {
                   DatabaseService.postsRef
                       .doc(widget.post.id)
                       .update({'likes.${AuthService.currentUser.uid}': true});
-                  finalScore += 1;
-                  setState(() {
-                    isLiked = true;
-                  });
+                  setState(() => isLiked = true);
                 }
               },
               child: Container(

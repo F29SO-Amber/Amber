@@ -1,3 +1,4 @@
+import 'package:amber/screens/create/publish_thumbnail.dart';
 import 'package:flutter/material.dart';
 
 import 'package:amber/models/user.dart';
@@ -50,6 +51,9 @@ class Create extends StatelessWidget {
                             break;
                           case 'Community':
                             Navigator.pushNamed(context, PublishCommunityScreen.id);
+                            break;
+                          case 'Thumbnail':
+                            Navigator.pushNamed(context, PublishThumbnailScreen.id);
                             break;
                           case 'Article':
                             Navigator.of(context, rootNavigator: true).push(

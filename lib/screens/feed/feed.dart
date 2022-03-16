@@ -20,7 +20,20 @@ class _FeedPageState extends State<FeedPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: kAppBar,
+      appBar: AppBar(
+        backgroundColor: kAppColor,
+        title: const Text(kAppName),
+        titleTextStyle: const TextStyle(color: Colors.white, letterSpacing: 3, fontSize: 25.0),
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.info_outline,
+              size: 30,
+            ),
+            onPressed: () {},
+          )
+        ],
+      ),
       body: StreamBuilder(
         stream: DatabaseService.timelineRef
             .doc(UserData.currentUser!.id)
