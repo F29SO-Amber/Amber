@@ -1,4 +1,3 @@
-import 'package:amber/screens/create/publish_thumbnail.dart';
 import 'package:flutter/material.dart';
 
 import 'package:amber/pages/error.dart';
@@ -32,15 +31,13 @@ class _CreatePageNavigatorState extends State<CreatePageNavigator> {
               case '/':
                 return const Create();
               case PublishImageScreen.id:
-                return const PublishImageScreen();
+                return const PublishImageScreen(mashUpDetails: null);
               case PublishEventScreen.id:
                 return const PublishEventScreen();
               case PublishCommunityScreen.id:
                 return const PublishCommunityScreen();
               case PublishArticleScreen.id:
                 return const PublishArticleScreen();
-              case PublishThumbnailScreen.id:
-                return const PublishThumbnailScreen();
               default:
                 return const ErrorScreen();
             }
