@@ -2,6 +2,8 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:amber/user_data.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:card_swiper/card_swiper.dart';
@@ -41,7 +43,7 @@ class _CollaborativeMashUpScreenState extends State<CollaborativeMashUpScreen> {
   int index = 0;
   late Uint8List bytes;
   GlobalKey? _globalKey;
-  List collageTypes = [];
+  List<Widget> collageTypes = [];
   double strokeWidth = 2.0;
   Color selectedColor = Colors.black;
   List images = [const AssetImage("assets/plus.png")];
@@ -73,35 +75,41 @@ class _CollaborativeMashUpScreenState extends State<CollaborativeMashUpScreen> {
             icon: const Icon(Icons.done),
             color: Colors.white,
             onPressed: () async {
-              final bytes = await Utils.capturePng(_globalKey!);
-              setState(() => this.bytes = bytes);
-              Directory dir;
-              if (Platform.isIOS) {
-                dir = await getApplicationDocumentsDirectory();
-              } else {
-                dir = (await getExternalStorageDirectory())!;
-              }
-              final file = await File('${dir.path}/${Random().nextInt(10000)}.jpg').create();
-              file.writeAsBytesSync(this.bytes);
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PublishImageScreen(
-                    mashUpDetails: [file.path, widget.username],
-                    room: widget.mashupDetails!['roomId'],
-                    postId: (widget.mashupDetails!['postId'] as PostModel).id,
+              if (UserData.currentUser!.id ==
+                  (widget.mashupDetails!['room'] as types.Room).metadata!['createdBy']) {
+                final bytes = await Utils.capturePng(_globalKey!);
+                setState(() => this.bytes = bytes);
+                Directory dir;
+                if (Platform.isIOS) {
+                  dir = await getApplicationDocumentsDirectory();
+                } else {
+                  dir = (await getExternalStorageDirectory())!;
+                }
+                final file = await File('${dir.path}/${Random().nextInt(10000)}.jpg').create();
+                file.writeAsBytesSync(this.bytes);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PublishImageScreen(
+                      mashUpDetails: [file.path, widget.username],
+                      room: widget.mashupDetails!['room'],
+                      postId: (widget.mashupDetails!['post'] as PostModel).id,
+                    ),
                   ),
-                ),
-              );
+                );
+              } else {
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(const SnackBar(content: Text("Only admins can post!")));
+              }
             },
           ),
         ],
       ),
       body: StreamBuilder(
           stream: DatabaseService.roomsRef
-              .doc((widget.mashupDetails!['roomId'] as types.Room).id)
+              .doc((widget.mashupDetails!['room'] as types.Room).id)
               .collection('posts')
-              .doc((widget.mashupDetails!['postId'] as PostModel).id)
+              .doc((widget.mashupDetails!['post'] as PostModel).id)
               .snapshots(),
           builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
             if (snapshot.hasData && snapshot.data != null) {
@@ -182,9 +190,9 @@ class _CollaborativeMashUpScreenState extends State<CollaborativeMashUpScreen> {
                                     icon: const Icon(Icons.layers_clear, color: Colors.black),
                                     onPressed: () {
                                       DatabaseService.roomsRef
-                                          .doc((widget.mashupDetails!['roomId'] as types.Room).id)
+                                          .doc((widget.mashupDetails!['room'] as types.Room).id)
                                           .collection('posts')
-                                          .doc((widget.mashupDetails!['postId'] as PostModel).id)
+                                          .doc((widget.mashupDetails!['post'] as PostModel).id)
                                           .update({'squiggles': []});
                                       squiggles.setSquiggles = [];
                                     }),
@@ -241,13 +249,11 @@ class _CollaborativeMashUpScreenState extends State<CollaborativeMashUpScreen> {
                                               // setState(() => points.add(null));
                                               squiggles.addSquiggle(null);
                                               DatabaseService.roomsRef
-                                                  .doc((widget.mashupDetails!['roomId']
-                                                          as types.Room)
+                                                  .doc((widget.mashupDetails!['room'] as types.Room)
                                                       .id)
                                                   .collection('posts')
-                                                  .doc(
-                                                      (widget.mashupDetails!['postId'] as PostModel)
-                                                          .id)
+                                                  .doc((widget.mashupDetails!['post'] as PostModel)
+                                                      .id)
                                                   .set(Squiggles(squiggles.getSquiggles).toJson());
                                               // points = [];
                                             },
@@ -297,16 +303,14 @@ class _CollaborativeMashUpScreenState extends State<CollaborativeMashUpScreen> {
                         ),
                         SizedBox(
                           height: 120,
-                          child: Swiper(
-                            outer: false,
-                            itemHeight: 120,
-                            itemWidth: 120,
-                            viewportFraction: 0.3,
-                            scale: 0.3,
-                            itemCount: collageTypes.length,
-                            loop: false,
-                            itemBuilder: (c, i) => collageTypes[i],
-                            onIndexChanged: (i) => setState(() => index = i),
+                          child: CarouselSlider(
+                            options: CarouselOptions(
+                                height: 120,
+                                aspectRatio: 1,
+                                viewportFraction: 0.4,
+                                enlargeCenterPage: true,
+                                onPageChanged: (i, _) => setState(() => index = i)),
+                            items: collageTypes.toList(),
                           ),
                         ),
                       ],

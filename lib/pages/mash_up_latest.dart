@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:path_provider/path_provider.dart';
@@ -33,7 +34,7 @@ class MashUpScreen extends StatefulWidget {
 
 class _MashUpScreenState extends State<MashUpScreen> {
   List images = [const AssetImage("assets/plus.png")];
-  List collageTypes = [];
+  List<Widget> collageTypes = [];
   int index = 0;
   GlobalKey? _globalKey;
   late Uint8List bytes;
@@ -270,16 +271,25 @@ class _MashUpScreenState extends State<MashUpScreen> {
                 ),
                 SizedBox(
                   height: 120,
-                  child: Swiper(
-                    outer: false,
-                    itemHeight: 120,
-                    itemWidth: 120,
-                    viewportFraction: 0.3,
-                    scale: 0.3,
-                    itemCount: collageTypes.length,
-                    loop: false,
-                    itemBuilder: (c, i) => collageTypes[i],
-                    onIndexChanged: (i) => setState(() => index = i),
+                  // child: Swiper(
+                  //   outer: false,
+                  //   itemHeight: 120,
+                  //   itemWidth: 120,
+                  //   viewportFraction: 0.3,
+                  //   scale: 0.3,
+                  //   itemCount: collageTypes.length,
+                  //   loop: false,
+                  //   itemBuilder: (c, i) => collageTypes[i],
+                  //   onIndexChanged: (i) => setState(() => index = i),
+                  // ),
+                  child: CarouselSlider(
+                    options: CarouselOptions(
+                        height: 120,
+                        aspectRatio: 1,
+                        viewportFraction: 0.4,
+                        enlargeCenterPage: true,
+                        onPageChanged: (i, _) => setState(() => index = i)),
+                    items: collageTypes.toList(),
                   ),
                 ),
               ],

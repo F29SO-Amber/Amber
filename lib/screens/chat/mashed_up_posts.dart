@@ -55,7 +55,7 @@ class _MashedUpPostsState extends State<MashedUpPosts> {
                               builder: (_) => CollaborativeMashUpScreen(
                                 imageURL: post.imageURL,
                                 username: post.authorUserName,
-                                mashupDetails: {'roomId': widget.room, 'postId': post},
+                                mashupDetails: {'room': widget.room, 'post': post},
                               ),
                             ),
                           );

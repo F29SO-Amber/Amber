@@ -24,9 +24,6 @@ class UserArticles extends StatefulWidget {
 }
 
 class _UserArticlesState extends State<UserArticles> {
-  late bool? isLiked;
-  int finalScore = 0;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +36,9 @@ class _UserArticlesState extends State<UserArticles> {
         ),
         items: widget.articles
             .map((item) => Builder(builder: (context) {
-                  ArticleModel article = ArticleModel.fromDocument(item);
+                  ArticleModel article = widget.articles.length != 1
+                      ? ArticleModel.fromDocument(item)
+                      : widget.articles[0] as ArticleModel;
                   QuillController _controller = QuillController(
                       document: Document.fromJson(jsonDecode(article.text)),
                       selection: const TextSelection.collapsed(offset: 0));
@@ -56,7 +55,7 @@ class _UserArticlesState extends State<UserArticles> {
                                 width: MediaQuery.of(context).size.width,
                                 decoration: BoxDecoration(
                                   image: DecorationImage(
-                                    image: NetworkImage(ArticleModel.fromDocument(item).imageURL),
+                                    image: NetworkImage(article.imageURL),
                                     fit: BoxFit.cover,
                                   ),
                                 ),

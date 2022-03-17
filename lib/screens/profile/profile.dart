@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
 import 'package:amber/models/user.dart';
 import 'package:amber/pages/settings.dart';
@@ -17,6 +18,9 @@ import 'package:amber/screens/profile/profile_footers/artist_profile_footer.dart
 import 'package:amber/screens/profile/profile_footers/student_profile_footer.dart';
 import 'package:amber/screens/profile/profile_footers/brand_marketer_profile_footer.dart';
 import 'package:amber/screens/profile/profile_footers/content_creator_profile_footer.dart';
+import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
+
+import '../chat/chat.dart';
 
 class ProfilePage extends StatefulWidget {
   static const id = '/profile';
@@ -245,8 +249,16 @@ class _ProfilePageState extends State<ProfilePage> {
                             CustomOutlinedButton(
                               buttonText: 'Message',
                               widthFactor: 0.45,
-                              onPress: () {
-                                // TODO: Take the user to the corresponding room
+                              onPress: () async {
+                                List<types.User> users =
+                                    await FirebaseChatCore.instance.users().first;
+                                types.User user =
+                                    users.where((element) => element.id == widget.userUID).first;
+                                final room = await FirebaseChatCore.instance.createRoom(user);
+                                // Navigator.pop(context);
+                                await Navigator.of(context, rootNavigator: true).push(
+                                  MaterialPageRoute(builder: (context) => ChatPage(room: room)),
+                                );
                               },
                             ),
                             (isFollowing) // TODO: Avoid entire widget tree rebuild

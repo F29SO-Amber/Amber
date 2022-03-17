@@ -201,7 +201,7 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
                 children: [
                   GestureDetector(
                     child: Container(
-                      height: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.width * 9 / 16,
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
                         image: DecorationImage(

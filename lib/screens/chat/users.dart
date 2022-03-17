@@ -31,12 +31,12 @@ class _UsersPageState extends State<UsersPage> {
       if (users.length == 1) {
         final room = await FirebaseChatCore.instance.createRoom(users[0]);
         Navigator.pop(context);
-        await Navigator.of(context, rootNavigator: true).push(
-          MaterialPageRoute(builder: (context) => ChatPage(room: room)),
-        );
+        // await Navigator.of(context, rootNavigator: true).push(
+        //   MaterialPageRoute(builder: (context) => ChatPage(room: room)),
+        // );
       } else if (users.length > 1) {
         final room = await FirebaseChatCore.instance.createGroupRoom(
-          name: '${UserData.currentUser!.firstName}\'s Group',
+          name: '${UserData.currentUser!.username}\'s Group',
           users: users,
           imageUrl: 'https://bit.ly/3sB5zcK',
           metadata: {'createdBy': AuthService.currentUser.uid},

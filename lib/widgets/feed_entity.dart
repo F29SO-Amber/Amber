@@ -1,5 +1,6 @@
 import 'package:amber/models/thumbnail.dart';
 import 'package:amber/pages/mash_up_collaborative.dart';
+import 'package:amber/screens/profile/deep_info/user_articles.dart';
 import 'package:amber/screens/profile/profile.dart';
 import 'package:amber/widgets/custom_elevated_button.dart';
 import 'package:amber/widgets/custom_outlined_button.dart';
@@ -148,7 +149,15 @@ class _FeedEntityState extends State<FeedEntity> {
                               widthFactor: 0.2,
                               buttonHeight: 10,
                               buttonText: 'Read',
-                              onPress: () {},
+                              onPress: () {
+                                Navigator.of(context, rootNavigator: true).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => UserArticles(
+                                      articles: [widget.feedEntity],
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
                     )
             ],
@@ -268,8 +277,8 @@ class _FeedEntityState extends State<FeedEntity> {
                                                         imageURL: widget.feedEntity.imageURL,
                                                         username: widget.feedEntity.authorUserName,
                                                         mashupDetails: {
-                                                          'roomId': room,
-                                                          'postId': widget.feedEntity
+                                                          'room': room,
+                                                          'post': widget.feedEntity
                                                         },
                                                       ),
                                                     ),
