@@ -34,7 +34,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     chatsNavigatorKey,
     profileNavigatorKey,
   ];
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(

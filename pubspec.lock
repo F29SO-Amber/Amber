@@ -730,6 +730,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.1"
+  o_popup:
+    dependency: "direct main"
+    description:
+      name: o_popup
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.1"
   open_file:
     dependency: "direct main"
     description:
@@ -1036,6 +1043,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.3.0"
+  styled_text:
+    dependency: "direct main"
+    description:
+      name: styled_text
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "5.0.0+1"
   term_glyph:
     dependency: transitive
     description:
@@ -1232,6 +1246,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.0"
+  xmlstream:
+    dependency: transitive
+    description:
+      name: xmlstream
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   yaml:
     dependency: transitive
     description:
