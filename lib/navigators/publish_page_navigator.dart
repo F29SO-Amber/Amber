@@ -8,6 +8,8 @@ import 'package:amber/screens/create/publish_article.dart';
 import 'package:amber/screens/create/publish_community.dart';
 import 'package:amber/screens/create/publish_image.dart';
 
+import '../screens/create/publish_thumbnail.dart';
+
 class CreatePageNavigator extends StatefulWidget {
   const CreatePageNavigator({Key? key}) : super(key: key);
 
@@ -31,13 +33,15 @@ class _CreatePageNavigatorState extends State<CreatePageNavigator> {
               case '/':
                 return const Create();
               case PublishImageScreen.id:
-                return const PublishImageScreen(mashUpDetails: null);
+                return const PublishImageScreen();
               case PublishEventScreen.id:
                 return const PublishEventScreen();
               case PublishCommunityScreen.id:
                 return const PublishCommunityScreen();
               case PublishArticleScreen.id:
                 return const PublishArticleScreen();
+              case PublishThumbnailScreen.id:
+                return const PublishThumbnailScreen();
               default:
                 return const ErrorScreen();
             }

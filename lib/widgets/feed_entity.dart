@@ -1,5 +1,8 @@
+import 'package:amber/models/thumbnail.dart';
 import 'package:amber/pages/mash_up_collaborative.dart';
 import 'package:amber/screens/profile/profile.dart';
+import 'package:amber/widgets/custom_elevated_button.dart';
+import 'package:amber/widgets/custom_outlined_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
@@ -21,27 +24,29 @@ import 'package:amber/services/database_service.dart';
 import 'package:amber/models/user.dart';
 import 'package:amber/user_data.dart';
 
-class UserPost extends StatefulWidget {
-  final PostModel post;
+class FeedEntity extends StatefulWidget {
+  final dynamic feedEntity;
 
-  const UserPost({Key? key, required this.post}) : super(key: key);
+  const FeedEntity({Key? key, required this.feedEntity}) : super(key: key);
 
   @override
-  State<UserPost> createState() => _UserPostState();
+  State<FeedEntity> createState() => _FeedEntityState();
 }
 
-class _UserPostState extends State<UserPost> {
-  late bool? isLiked;
+class _FeedEntityState extends State<FeedEntity> {
+  late bool? isLiked = false;
   int finalScore = 0;
 
   @override
   void initState() {
     super.initState();
-    isLiked = widget.post.likes.containsKey(AuthService.currentUser.uid)
-        ? widget.post.likes[AuthService.currentUser.uid]
-        : null;
-    finalScore = widget.post.likes.values.toList().where((item) => item == true).length -
-        widget.post.likes.values.toList().where((item) => item == false).length;
+    if (widget.feedEntity is PostModel) {
+      isLiked = widget.feedEntity.likes.containsKey(AuthService.currentUser.uid)
+          ? widget.feedEntity.likes[AuthService.currentUser.uid]
+          : null;
+      finalScore = widget.feedEntity.likes.values.toList().where((item) => item == true).length -
+          widget.feedEntity.likes.values.toList().where((item) => item == false).length;
+    }
   }
 
   @override
@@ -59,7 +64,7 @@ class _UserPostState extends State<UserPost> {
                     padding: const EdgeInsets.all(8.0),
                     child: CustomImage(
                       side: 32,
-                      image: NetworkImage(widget.post.authorProfilePhotoURL),
+                      image: NetworkImage(widget.feedEntity.authorProfilePhotoURL),
                     ),
                   ),
                   Column(
@@ -67,67 +72,85 @@ class _UserPostState extends State<UserPost> {
                     children: [
                       GestureDetector(
                         child: Text(
-                          widget.post.authorName,
+                          widget.feedEntity.authorName,
                           style: GoogleFonts.dmSans(fontSize: 15),
                         ),
                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ProfilePage(userUID: widget.post.authorId),
+                              builder: (context) =>
+                                  ProfilePage(userUID: widget.feedEntity.authorId),
                             ),
                           );
                         },
                       ),
                       Text(
-                          widget.post.location.isEmpty
-                              ? timeago.format(widget.post.timestamp.toDate())
-                              : widget.post.location,
+                          widget.feedEntity.location.isEmpty
+                              ? timeago.format(widget.feedEntity.timestamp.toDate())
+                              : widget.feedEntity.location,
                           style: kLightLabelTextStyle.copyWith(fontSize: 10)),
                     ],
                   ),
                 ],
               ),
-              Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      if (isLiked != true) {
-                        DatabaseService.postsRef
-                            .doc(widget.post.id)
-                            .update({'likes.${AuthService.currentUser.uid}': true});
-                        // finalScore += 1;
-                        setState(() => isLiked = true);
-                      }
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: (isLiked != null && isLiked!)
-                          ? const Icon(FontAwesomeIcons.arrowAltCircleUp, color: kAppColor)
-                          : const Icon(FontAwesomeIcons.arrowAltCircleUp),
-                    ),
-                  ),
-                  Text(
-                      '${isLiked != null ? (isLiked! ? finalScore + 1 : finalScore - 1) : finalScore}'),
-                  GestureDetector(
-                    onTap: () {
-                      if (isLiked != false) {
-                        DatabaseService.postsRef
-                            .doc(widget.post.id)
-                            .update({'likes.${AuthService.currentUser.uid}': false});
-                        // finalScore -= 1;
-                        setState(() => isLiked = false);
-                      }
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: (isLiked != null && !(isLiked!))
-                          ? const Icon(FontAwesomeIcons.arrowAltCircleDown, color: kAppColor)
-                          : const Icon(FontAwesomeIcons.arrowAltCircleDown),
-                    ),
-                  ),
-                ],
-              )
+              (widget.feedEntity is PostModel)
+                  ? Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            if (isLiked != true) {
+                              DatabaseService.postsRef
+                                  .doc(widget.feedEntity.id)
+                                  .update({'likes.${AuthService.currentUser.uid}': true});
+                              // finalScore += 1;
+                              setState(() => isLiked = true);
+                            }
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: (isLiked != null && isLiked!)
+                                ? const Icon(FontAwesomeIcons.arrowAltCircleUp, color: kAppColor)
+                                : const Icon(FontAwesomeIcons.arrowAltCircleUp),
+                          ),
+                        ),
+                        Text(
+                            '${isLiked != null ? (isLiked! ? finalScore + 1 : finalScore - 1) : finalScore}'),
+                        GestureDetector(
+                          onTap: () {
+                            if (isLiked != false) {
+                              DatabaseService.postsRef
+                                  .doc(widget.feedEntity.id)
+                                  .update({'likes.${AuthService.currentUser.uid}': false});
+                              // finalScore -= 1;
+                              setState(() => isLiked = false);
+                            }
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: (isLiked != null && !(isLiked!))
+                                ? const Icon(FontAwesomeIcons.arrowAltCircleDown, color: kAppColor)
+                                : const Icon(FontAwesomeIcons.arrowAltCircleDown),
+                          ),
+                        ),
+                      ],
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.only(right: 5),
+                      child: (widget.feedEntity is ThumbnailModel)
+                          ? CustomElevatedButton(
+                              widthFactor: 0.2,
+                              buttonHeight: 10,
+                              buttonText: 'Watch',
+                              onPress: () {},
+                            )
+                          : CustomElevatedButton(
+                              widthFactor: 0.2,
+                              buttonHeight: 10,
+                              buttonText: 'Read',
+                              onPress: () {},
+                            ),
+                    )
             ],
           ),
           Slidable(
@@ -201,8 +224,8 @@ class _UserPostState extends State<UserPost> {
                                                   Navigator.of(context).push(
                                                     MaterialPageRoute(
                                                       builder: (_) => MashUpScreen(
-                                                        imageURL: widget.post.imageURL,
-                                                        username: widget.post.authorUserName,
+                                                        imageURL: widget.feedEntity.imageURL,
+                                                        username: widget.feedEntity.authorUserName,
                                                       ),
                                                     ),
                                                   );
@@ -230,23 +253,23 @@ class _UserPostState extends State<UserPost> {
                                                   if (!(await DatabaseService.roomsRef
                                                           .doc(room.id)
                                                           .collection('posts')
-                                                          .doc(widget.post.id)
+                                                          .doc(widget.feedEntity.id)
                                                           .get())
                                                       .exists) {
                                                     DatabaseService.roomsRef
                                                         .doc(room.id)
                                                         .collection('posts')
-                                                        .doc(widget.post.id)
+                                                        .doc(widget.feedEntity.id)
                                                         .set({'squiggles': []});
                                                   }
                                                   Navigator.of(context).push(
                                                     MaterialPageRoute(
                                                       builder: (_) => CollaborativeMashUpScreen(
-                                                        imageURL: widget.post.imageURL,
-                                                        username: widget.post.authorUserName,
+                                                        imageURL: widget.feedEntity.imageURL,
+                                                        username: widget.feedEntity.authorUserName,
                                                         mashupDetails: {
                                                           'roomId': room,
-                                                          'postId': widget.post
+                                                          'postId': widget.feedEntity
                                                         },
                                                       ),
                                                     ),
@@ -279,7 +302,7 @@ class _UserPostState extends State<UserPost> {
                 ),
               ],
             ),
-            endActionPane: (widget.post.authorId != UserData.currentUser!.id)
+            endActionPane: (widget.feedEntity.authorId != UserData.currentUser!.id)
                 ? ActionPane(
                     extentRatio: 0.25,
                     motion: const DrawerMotion(),
@@ -289,9 +312,9 @@ class _UserPostState extends State<UserPost> {
                           Navigator.of(context, rootNavigator: true).push(
                             MaterialPageRoute(
                               builder: (context) => CommentsPage(
-                                postID: widget.post.id,
-                                username: widget.post.authorUserName,
-                                profilePhotoURL: widget.post.authorProfilePhotoURL,
+                                postID: widget.feedEntity.id,
+                                username: widget.feedEntity.authorUserName,
+                                profilePhotoURL: widget.feedEntity.authorProfilePhotoURL,
                               ),
                             ),
                           );
@@ -312,7 +335,7 @@ class _UserPostState extends State<UserPost> {
                         icon: Icons.delete,
                         label: 'Delete',
                         onPressed: (context) {
-                          DatabaseService.postsRef.doc(widget.post.id).delete();
+                          DatabaseService.postsRef.doc(widget.feedEntity.id).delete();
                           setState(() {});
                         },
                       ),
@@ -321,9 +344,9 @@ class _UserPostState extends State<UserPost> {
                           Navigator.of(context, rootNavigator: true).push(
                             MaterialPageRoute(
                               builder: (context) => CommentsPage(
-                                postID: widget.post.id,
-                                username: widget.post.authorUserName,
-                                profilePhotoURL: widget.post.authorProfilePhotoURL,
+                                postID: widget.feedEntity.id,
+                                username: widget.feedEntity.authorUserName,
+                                profilePhotoURL: widget.feedEntity.authorProfilePhotoURL,
                               ),
                             ),
                           );
@@ -337,22 +360,23 @@ class _UserPostState extends State<UserPost> {
                   ),
             child: GestureDetector(
               onDoubleTap: () {
-                if (isLiked != true) {
-                  DatabaseService.postsRef
-                      .doc(widget.post.id)
-                      .update({'likes.${AuthService.currentUser.uid}': true});
-                  finalScore += 1;
-                  setState(() {
-                    isLiked = true;
-                  });
+                if (widget.feedEntity is PostModel) {
+                  if (isLiked != true) {
+                    DatabaseService.postsRef
+                        .doc(widget.feedEntity.id)
+                        .update({'likes.${AuthService.currentUser.uid}': true});
+                    setState(() => isLiked = true);
+                  }
                 }
               },
               child: Container(
-                height: MediaQuery.of(context).size.width,
+                height: (widget.feedEntity is PostModel)
+                    ? MediaQuery.of(context).size.width
+                    : MediaQuery.of(context).size.width * 9 / 13,
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: NetworkImage(widget.post.imageURL),
+                    image: NetworkImage(widget.feedEntity.imageURL),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -363,9 +387,9 @@ class _UserPostState extends State<UserPost> {
             padding: const EdgeInsets.all(10.0),
             child: Row(
               children: [
-                Text('${widget.post.authorUserName}  •  ',
+                Text('${widget.feedEntity.authorUserName}  •  ',
                     style: GoogleFonts.dmSans(fontSize: 15, fontWeight: FontWeight.bold)),
-                Text(widget.post.caption, style: GoogleFonts.dmSans()),
+                Text(widget.feedEntity.caption, style: GoogleFonts.dmSans()),
               ],
             ),
           ),

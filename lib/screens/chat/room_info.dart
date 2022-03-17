@@ -81,11 +81,13 @@ class _RoomInfoState extends State<RoomInfo> {
                           bgIconColor: Colors.cyan,
                           onTap: () async {
                             await _displayTextInputDialog(context);
-                            DatabaseService.roomsRef
-                                .doc(widget.room.id)
-                                .update({'name': codeDialog});
-                            _textFieldController.clear();
-                            setState(() {});
+                            if (codeDialog!.isNotEmpty) {
+                              DatabaseService.roomsRef
+                                  .doc(widget.room.id)
+                                  .update({'name': codeDialog});
+                              _textFieldController.clear();
+                              setState(() {});
+                            }
                           }),
                     SettingItem(
                       title: "Mashed up Posts",

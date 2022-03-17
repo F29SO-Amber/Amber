@@ -22,6 +22,16 @@ exports.onCreateFollower = functions.firestore
       .collection("posts")
       .where("authorId", "==", userId);
 
+    const followedUserThumbnailsRef = admin
+      .firestore()
+      .collection("thumbnails")
+      .where("authorId", "==", userId);
+
+    const followedUserArticlesRef = admin
+      .firestore()
+      .collection("articles")
+      .where("authorId", "==", userId);
+
     // 2) Create following user's timeline ref
     const timelinePostsRef = admin
       .firestore()
@@ -29,15 +39,45 @@ exports.onCreateFollower = functions.firestore
       .doc(followerId)
       .collection("timelinePosts");
 
+    const timelineThumbnailsRef = admin
+      .firestore()
+      .collection("timeline")
+      .doc(followerId)
+      .collection("timelineThumbnails");
+
+    const timelineArticlesRef = admin
+      .firestore()
+      .collection("timeline")
+      .doc(followerId)
+      .collection("timelineArticles");
+
     // 3) Get followed users posts
-    const querySnapshot = await followedUserPostsRef.get();
+    const postsQuerySnapshot = await followedUserPostsRef.get();
+    const articlesQuerySnapshot = await followedUserArticlesRef.get();
+    const thumbnailsQuerySnapshot = await followedUserThumbnailsRef.get();
 
     // 4) Add each user post to following user's timeline
-    querySnapshot.forEach(doc => {
+    postsQuerySnapshot.forEach(doc => {
       if (doc.exists) {
         const postId = doc.id;
         const postData = doc.data();
         timelinePostsRef.doc(postId).set(postData);
+      }
+    });
+
+    articlesQuerySnapshot.forEach(doc => {
+      if (doc.exists) {
+        const articleId = doc.id;
+        const articleData = doc.data();
+        timelineArticlesRef.doc(articleId).set(articleData);
+      }
+    });
+
+    thumbnailsQuerySnapshot.forEach(doc => {
+      if (doc.exists) {
+        const thumbnailId = doc.id;
+        const thumbnailData = doc.data();
+        timelineThumbnailsRef.doc(thumbnailId).set(thumbnailData);
       }
     });
   });

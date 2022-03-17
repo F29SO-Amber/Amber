@@ -1,9 +1,11 @@
+import 'package:amber/models/article.dart';
+import 'package:amber/models/thumbnail.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:styled_text/styled_text.dart';
 import 'package:amber/user_data.dart';
 import 'package:amber/models/post.dart';
-import 'package:amber/widgets/post_widget.dart';
+import 'package:amber/widgets/feed_entity.dart';
 import 'package:amber/utilities/constants.dart';
 import 'package:amber/services/database_service.dart';
 
@@ -23,18 +25,17 @@ class _FeedPageState extends State<FeedPage> {
       appBar: AppBar(
         backgroundColor: kAppColor,
         title: const Text(kAppName),
-        titleTextStyle: const TextStyle(
-            color: Colors.white, letterSpacing: 3, fontSize: 25.0),
+        titleTextStyle: const TextStyle(color: Colors.white, letterSpacing: 3, fontSize: 25.0),
         actions: [
           IconButton(
-              icon: const Icon(
-                Icons.info_outline,
-                size: 30,
-              ),
-              onPressed: () {
-                showDialogFunc(context,
-                    "Presenting the Future of Live Collaboration, Amber!");
-              })
+            icon: const Icon(
+              Icons.info_outline,
+              size: 30,
+            ),
+            onPressed: () {
+              showDialogFunc(context, "Presenting the Future of Live Collaboration, Amber!");
+            },
+          )
         ],
       ),
       body: StreamBuilder(
@@ -42,14 +43,45 @@ class _FeedPageState extends State<FeedPage> {
             .doc(UserData.currentUser!.id)
             .collection('timelinePosts')
             .snapshots()
-            .map((snapshot) =>
-                snapshot.docs.map((e) => PostModel.fromDocument(e))),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            List list = (snapshot.data as dynamic).toList() as List;
-            return ListView.builder(
-                itemCount: list.length,
-                itemBuilder: (context, index) => UserPost(post: list[index]));
+            .map((snapshot) => snapshot.docs.map((e) => PostModel.fromDocument(e))),
+        builder: (context, snapshot1) {
+          if (snapshot1.hasData) {
+            return StreamBuilder(
+                stream: DatabaseService.timelineRef
+                    .doc(UserData.currentUser!.id)
+                    .collection('timelineThumbnails')
+                    .snapshots()
+                    .map((snapshot) => snapshot.docs.map((e) => ThumbnailModel.fromDocument(e))),
+                builder: (context, snapshot2) {
+                  if (snapshot2.hasData) {
+                    return StreamBuilder(
+                        stream: DatabaseService.timelineRef
+                            .doc(UserData.currentUser!.id)
+                            .collection('timelineArticles')
+                            .snapshots()
+                            .map((snapshot) =>
+                                snapshot.docs.map((e) => ArticleModel.fromDocument(e))),
+                        builder: (context, snapshot3) {
+                          if (snapshot3.hasData) {
+                            List list = [
+                              ...(snapshot1.data as dynamic).toList(),
+                              ...(snapshot2.data as dynamic).toList(),
+                              ...(snapshot3.data as dynamic).toList()
+                            ];
+                            list.sort((a, b) => a.timestamp.compareTo(b.timestamp));
+                            list = list.reversed.toList();
+                            return ListView.builder(
+                              itemCount: list.length,
+                              itemBuilder: (context, index) => FeedEntity(feedEntity: list[index]),
+                            );
+                          } else {
+                            return Container();
+                          }
+                        });
+                  } else {
+                    return Container();
+                  }
+                });
           } else {
             return SizedBox(
               height: MediaQuery.of(context).size.height,
@@ -179,8 +211,7 @@ upwards gives the post a positive score and the other lowers it by a point.
 
 """,
                       tags: {
-                        'bold': StyledTextTag(
-                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        'bold': StyledTextTag(style: TextStyle(fontWeight: FontWeight.bold)),
                         'head': StyledTextTag(style: TextStyle(fontSize: 20))
                       },
                     )

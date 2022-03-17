@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import 'package:amber/models/article.dart';
-import 'package:amber/pages/article.dart';
+import 'package:amber/screens/profile/deep_info/user_articles.dart';
 import 'package:amber/services/database_service.dart';
 import 'package:amber/utilities/constants.dart';
 import 'package:amber/widgets/profile_picture.dart';
@@ -51,7 +51,7 @@ class Articles extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      article.authorUserName,
+                                      article.caption,
                                       style: const TextStyle(fontSize: 17),
                                     ),
                                     Text(
@@ -67,7 +67,7 @@ class Articles extends StatelessWidget {
                               onTap: () {
                                 Navigator.of(context, rootNavigator: true).push(
                                   MaterialPageRoute(
-                                    builder: (context) => ArticleScreen(articles: list),
+                                    builder: (context) => UserArticles(articles: list),
                                   ),
                                 );
                               },

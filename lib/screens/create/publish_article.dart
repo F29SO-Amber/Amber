@@ -28,11 +28,14 @@ class PublishArticleScreen extends StatefulWidget {
 class _PublishArticleScreenState extends State<PublishArticleScreen> {
   File? _file;
   bool _uploadButtonPresent = true;
+  final _formKey = GlobalKey<FormState>();
+  final _captionController = TextEditingController();
   final QuillController _controller = QuillController.basic();
 
   @override
   void dispose() {
     _controller.dispose();
+    _captionController.dispose();
     super.dispose();
   }
 
@@ -54,62 +57,89 @@ class _PublishArticleScreenState extends State<PublishArticleScreen> {
               icon: const Icon(Icons.publish),
               color: Colors.white,
               onPressed: () async {
-                setState(() => _uploadButtonPresent = false);
-                EasyLoading.show(status: 'Uploading...');
-                await addUserArticle();
-                EasyLoading.dismiss();
-                _disposeUserArticleChanges();
-                setState(() => _uploadButtonPresent = true);
+                if (_formKey.currentState!.validate()) {
+                  setState(() => _uploadButtonPresent = false);
+                  EasyLoading.show(status: 'Uploading...');
+                  await addUserArticle();
+                  EasyLoading.dismiss();
+                  _disposeUserArticleChanges();
+                  setState(() => _uploadButtonPresent = true);
+                }
               },
             ),
           ),
         ],
       ),
-      body: Column(
-        children: [
-          GestureDetector(
-            onTap: () async {
-              _file = await ImageService.chooseFromGallery();
-              if (_file != null) {
-                setState(() {});
-              }
-            },
-            child: Container(
-              height: MediaQuery.of(context).size.width * 9 / 16,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: (_file == null)
-                      ? const AssetImage('assets/taptoselect.png')
-                      : FileImage(_file!) as ImageProvider,
-                  fit: BoxFit.cover,
+      body: Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            GestureDetector(
+              onTap: () async {
+                _file = await ImageService.chooseFromGallery();
+                if (_file != null) {
+                  setState(() {});
+                }
+              },
+              child: Container(
+                height: MediaQuery.of(context).size.width * 9 / 16,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: (_file == null)
+                        ? const AssetImage('assets/taptoselect.png')
+                        : FileImage(_file!) as ImageProvider,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
-          ),
-          Expanded(
-            child: QuillEditor(
-              controller: _controller,
-              readOnly: false,
-              autoFocus: true,
-              expands: false,
-              padding: EdgeInsets.zero,
-              placeholder: 'Start typing...',
-              scrollController: ScrollController(),
-              focusNode: FocusNode(),
-              scrollable: true,
+            Container(
+              width: MediaQuery.of(context).size.width,
+              padding: const EdgeInsets.only(left: 15, top: 20, bottom: 10),
+              child: TextFormField(
+                controller: _captionController,
+                keyboardType: TextInputType.text,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Caption cannot be empty';
+                  } else if (_captionController.text.length > 20) {
+                    return 'Max Caption length is 20';
+                  }
+                  return null;
+                },
+                decoration: const InputDecoration(
+                  hintText: "Write a caption...",
+                  border: InputBorder.none,
+                  prefixIcon: Icon(Icons.create_sharp, color: kAppColor, size: 30),
+                ),
+              ),
             ),
-          ),
-          Container(color: Colors.black, width: double.infinity, height: 1),
-          QuillToolbar.basic(
-            controller: _controller,
-            showImageButton: false,
-            showVideoButton: false,
-            showCameraButton: false,
-            toolbarSectionSpacing: 10,
-          ),
-          const SizedBox(height: 5)
-        ],
+            Container(color: Colors.black, width: double.infinity, height: 0.3),
+            Expanded(
+              child: QuillEditor(
+                controller: _controller,
+                readOnly: false,
+                autoFocus: true,
+                expands: false,
+                padding: EdgeInsets.zero,
+                placeholder: 'Start typing...',
+                scrollController: ScrollController(),
+                focusNode: FocusNode(),
+                scrollable: true,
+              ),
+            ),
+            Container(color: Colors.black, width: double.infinity, height: 1),
+            QuillToolbar.basic(
+              controller: _controller,
+              showImageButton: false,
+              showVideoButton: false,
+              showCameraButton: false,
+              toolbarSectionSpacing: 10,
+            ),
+            const SizedBox(height: 5)
+          ],
+        ),
       ),
     );
   }
@@ -118,21 +148,22 @@ class _PublishArticleScreenState extends State<PublishArticleScreen> {
     setState(() {
       _file = null;
       _controller.clear();
+      _captionController.clear();
     });
   }
 
   Future<void> addUserArticle() async {
-    UserModel user = await DatabaseService.getUser(AuthService.currentUser.uid);
     Map<String, Object?> map = {};
     if (_file != null) {
       String articleID = const Uuid().v4();
       map['id'] = articleID;
       map['imageURL'] = await StorageService.uploadImage(articleID, _file!, 'articles');
       map['text'] = jsonEncode(_controller.document.toDelta().toJson());
-      map['likes'] = {};
+      map['caption'] = _captionController.text;
       map['authorId'] = AuthService.currentUser.uid;
       map['timestamp'] = Timestamp.now();
-      map['authorUserName'] = user.username;
+      map['location'] = '';
+      map['authorUserName'] = UserData.currentUser!.username;
       map['authorName'] = UserData.currentUser!.firstName;
       map['authorProfilePhotoURL'] = UserData.currentUser!.imageUrl;
       await DatabaseService.articlesRef.doc(articleID).set(map);

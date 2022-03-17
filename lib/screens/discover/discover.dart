@@ -12,7 +12,7 @@ import 'package:amber/models/post.dart';
 import 'package:amber/pages/search.dart';
 import 'package:amber/models/hashtag.dart';
 import 'package:amber/screens/profile/profile.dart';
-import 'package:amber/widgets/post_widget.dart';
+import 'package:amber/widgets/feed_entity.dart';
 import 'package:amber/utilities/constants.dart';
 import 'package:amber/widgets/profile_picture.dart';
 import 'package:amber/services/database_service.dart';
@@ -46,7 +46,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
             icon: const Icon(Icons.search),
             color: Colors.white,
             onPressed: () => Navigator.of(context, rootNavigator: true).push(
-              MaterialPageRoute(builder: (context) => ErrorScreen()),
+              MaterialPageRoute(builder: (context) => const ErrorScreen()),
             ),
           ),
         ],
@@ -83,7 +83,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
                                       backgroundColor: Colors.amber, //sets the color to amber
                                       title: const Text(kAppName), //Title of the app
                                     ),
-                                    body: UserPost(post: post),
+                                    body: FeedEntity(feedEntity: post),
                                   );
                                 }));
                               },

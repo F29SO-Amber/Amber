@@ -4,7 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:amber/models/post.dart';
 import 'package:amber/pages/user_list.dart';
-import 'package:amber/pages/user_posts.dart';
+import 'package:amber/screens/profile/deep_info/user_posts.dart';
 import 'package:amber/models/community.dart';
 import 'package:amber/widgets/post_type.dart';
 import 'package:amber/utilities/constants.dart';

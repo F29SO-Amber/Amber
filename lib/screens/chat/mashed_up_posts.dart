@@ -30,58 +30,54 @@ class _MashedUpPostsState extends State<MashedUpPosts> {
         builder: (BuildContext context, snapshot) {
           if (snapshot.hasData) {
             List list = (snapshot.data as dynamic).toList() as List<String>;
-            return ListView.builder(
+            return GridView.builder(
+              padding: const EdgeInsets.all(10).copyWith(top: 40),
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
               itemCount: list.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 20,
+                mainAxisSpacing: 20,
+                childAspectRatio: 1,
+              ),
               itemBuilder: (context, index) {
                 return StreamBuilder(
-                    stream: DatabaseService.postsRef.doc(list[index]).snapshots(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        PostModel post = PostModel.fromDocument(snapshot.data as DocumentSnapshot);
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) => CollaborativeMashUpScreen(
-                                  imageURL: post.imageURL,
-                                  username: post.authorUserName,
-                                  mashupDetails: {'roomId': widget.room, 'postId': post},
-                                ),
+                  stream: DatabaseService.postsRef.doc(list[index]).snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      PostModel post = PostModel.fromDocument(snapshot.data as DocumentSnapshot);
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => CollaborativeMashUpScreen(
+                                imageURL: post.imageURL,
+                                username: post.authorUserName,
+                                mashupDetails: {'roomId': widget.room, 'postId': post},
                               ),
-                            );
-                          },
-                          child: GridView.builder(
-                            padding: const EdgeInsets.all(10).copyWith(top: 40),
-                            scrollDirection: Axis.vertical,
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: list.length,
-                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              crossAxisSpacing: 20,
-                              mainAxisSpacing: 20,
-                              childAspectRatio: 1,
                             ),
-                            itemBuilder: (context, index) {
-                              return Column(
-                                children: [
-                                  CustomImage(
-                                    side: MediaQuery.of(context).size.width * 0.3,
-                                    image: NetworkImage(post.imageURL),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 10.0),
-                                    child: Text(post.authorUserName, style: kLightLabelTextStyle),
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
-                        );
-                      } else {
-                        return const Center(child: CircularProgressIndicator());
-                      }
-                    });
+                          );
+                        },
+                        child: Column(
+                          children: [
+                            CustomImage(
+                              side: MediaQuery.of(context).size.width * 0.3,
+                              image: NetworkImage(post.imageURL),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10.0),
+                              child: Text(post.authorUserName, style: kLightLabelTextStyle),
+                            ),
+                          ],
+                        ),
+                      );
+                    } else {
+                      return Container();
+                    }
+                  },
+                );
               },
             );
           } else {

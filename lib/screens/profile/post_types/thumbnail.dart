@@ -1,3 +1,4 @@
+import 'package:amber/models/thumbnail.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -6,15 +7,15 @@ import 'package:amber/screens/profile/deep_info/user_posts.dart';
 import 'package:amber/services/database_service.dart';
 import 'package:amber/screens/profile/profile_footers/artist_profile_footer.dart';
 
-class Posts extends StatelessWidget {
+class Thumbnails extends StatelessWidget {
   final String userUID;
 
-  const Posts({Key? key, required this.userUID}) : super(key: key);
+  const Thumbnails({Key? key, required this.userUID}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: DatabaseService.postsRef
+      stream: DatabaseService.thumbnailsRef
           .where('authorId', isEqualTo: userUID)
           .orderBy('timestamp', descending: true)
           .snapshots(),
@@ -24,7 +25,7 @@ class Posts extends StatelessWidget {
           return list.isEmpty
               ? const Padding(
                   padding: EdgeInsets.only(top: 120.0),
-                  child: Center(child: Text('No art pieces to display!')),
+                  child: Center(child: Text('No thumbnails to display!')),
                 )
               : GridView.builder(
                   padding: const EdgeInsets.all(10).copyWith(bottom: 30),
@@ -39,12 +40,12 @@ class Posts extends StatelessWidget {
                     childAspectRatio: 1,
                   ),
                   itemBuilder: (context, index) {
-                    PostModel post = PostModel.fromDocument(list[index]);
+                    ThumbnailModel thumbnail = ThumbnailModel.fromDocument(list[index]);
                     return GestureDetector(
                       child: Container(
                         decoration: BoxDecoration(
                           image: DecorationImage(
-                              image: NetworkImage(post.imageURL), fit: BoxFit.cover),
+                              image: NetworkImage(thumbnail.imageURL), fit: BoxFit.cover),
                           shape: BoxShape.rectangle,
                           borderRadius: BorderRadius.circular(11.0),
                         ),

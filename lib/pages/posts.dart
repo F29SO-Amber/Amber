@@ -1,7 +1,7 @@
 // import 'package:amber/models/hashtag.dart';
 // import 'package:amber/models/post.dart';
 // import 'package:amber/services/database_service.dart';
-// import 'package:amber/widgets/post_widget.dart';
+// import 'package:amber/widgets/feed_entity.dart';
 // import 'package:flutter/material.dart';
 // import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 //

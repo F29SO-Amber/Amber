@@ -1,23 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class ArticleModel {
+class ThumbnailModel {
   final String id;
-  final String text;
+  final String link;
   final String caption;
   final String authorId;
-  final String location;
   final String imageURL;
+  final String location;
   final String authorName;
   final Timestamp timestamp;
   final String authorUserName;
   final String authorProfilePhotoURL;
 
-  ArticleModel({
+  ThumbnailModel({
     required this.id,
-    required this.text,
+    required this.link,
     required this.caption,
-    required this.imageURL,
     required this.location,
+    required this.imageURL,
     required this.authorId,
     required this.timestamp,
     required this.authorName,
@@ -25,13 +25,13 @@ class ArticleModel {
     required this.authorProfilePhotoURL,
   });
 
-  factory ArticleModel.fromDocument(DocumentSnapshot doc) {
-    return ArticleModel(
+  factory ThumbnailModel.fromDocument(DocumentSnapshot doc) {
+    return ThumbnailModel(
       id: doc.id,
-      text: doc['text'],
+      link: doc['link'],
       caption: doc['caption'],
-      imageURL: doc['imageURL'],
       location: doc['location'],
+      imageURL: doc['imageURL'],
       authorId: doc['authorId'],
       timestamp: doc['timestamp'],
       authorName: doc['authorName'],

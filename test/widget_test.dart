@@ -8,7 +8,7 @@
 import 'package:amber/models/post.dart';
 import 'package:amber/widgets/custom_form_field.dart';
 import 'package:amber/widgets/number_and_label.dart';
-import 'package:amber/widgets/post_widget.dart';
+import 'package:amber/widgets/feed_entity.dart';
 import 'package:amber/widgets/profile_picture.dart';
 import 'package:amber/widgets/setting_item.dart';
 import 'package:flutter/material.dart';

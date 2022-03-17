@@ -7,7 +7,7 @@ import 'package:amber/screens/auth/login.dart';
 import 'package:amber/services/auth_service.dart';
 import 'package:amber/services/image_service.dart';
 import 'package:amber/services/storage_service.dart';
-import 'package:amber/widgets/post_widget.dart';
+import 'package:amber/widgets/feed_entity.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:uuid/uuid.dart';
@@ -26,6 +26,7 @@ class DatabaseService {
   static final followersRef = _firestore.collection('followers');
   static final followingRef = _firestore.collection('following');
   static final communityRef = _firestore.collection('community');
+  static final thumbnailsRef = _firestore.collection('thumbnails');
 
   static Future<UserModel> getUser(String uid) async {
     return UserModel.fromDocument(await usersRef.doc(uid).get());
@@ -51,8 +52,8 @@ class DatabaseService {
     usersRef.doc(AuthService.currentUser.uid).set(map);
   }
 
-  static Future<List<UserPost>> getUserPosts(String coll, String id) async {
-    List<UserPost> posts = [];
+  static Future<List<FeedEntity>> getUserPosts(String coll, String id) async {
+    List<FeedEntity> posts = [];
     posts.addAll(
       ((await DatabaseService.postsRef
                   .where(coll, isEqualTo: id)
@@ -60,22 +61,37 @@ class DatabaseService {
                   .get())
               .docs)
           .map(
-        (e) => UserPost(post: PostModel.fromDocument(e)),
+        (e) => FeedEntity(feedEntity: PostModel.fromDocument(e)),
       ),
     );
     return posts;
   }
 
-  static Future<List<UserPost>> getUserFeed() async {
+  static Future<List<FeedEntity>> getUserThumbnails(String coll, String id) async {
+    List<FeedEntity> posts = [];
+    posts.addAll(
+      ((await DatabaseService.postsRef
+                  .where(coll, isEqualTo: id)
+                  .orderBy('timestamp', descending: true)
+                  .get())
+              .docs)
+          .map(
+        (e) => FeedEntity(feedEntity: PostModel.fromDocument(e)),
+      ),
+    );
+    return posts;
+  }
+
+  static Future<List<FeedEntity>> getUserFeed() async {
     QuerySnapshot followingUsers =
         await followingRef.doc(AuthService.currentUser.uid).collection('userFollowing').get();
 
-    List<UserPost> posts = [];
+    List<FeedEntity> posts = [];
     List<String> following = followingUsers.docs.map((e) => e.id).toList();
     for (String userID in following) {
       posts.addAll(
         ((await postsRef.where('authorId', isEqualTo: userID).get()).docs).map(
-          (e) => UserPost(post: PostModel.fromDocument(e)),
+          (e) => FeedEntity(feedEntity: PostModel.fromDocument(e)),
         ),
       );
     }

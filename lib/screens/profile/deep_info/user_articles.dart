@@ -13,17 +13,17 @@ import 'package:amber/widgets/profile_picture.dart';
 import 'package:amber/screens/profile/profile.dart';
 import 'package:amber/services/database_service.dart';
 
-class ArticleScreen extends StatefulWidget {
+class UserArticles extends StatefulWidget {
   static const id = '/read_article';
   final List articles;
 
-  const ArticleScreen({Key? key, required this.articles}) : super(key: key);
+  const UserArticles({Key? key, required this.articles}) : super(key: key);
 
   @override
-  _ArticleScreenState createState() => _ArticleScreenState();
+  _UserArticlesState createState() => _UserArticlesState();
 }
 
-class _ArticleScreenState extends State<ArticleScreen> {
+class _UserArticlesState extends State<UserArticles> {
   late bool? isLiked;
   int finalScore = 0;
 
@@ -40,11 +40,6 @@ class _ArticleScreenState extends State<ArticleScreen> {
         items: widget.articles
             .map((item) => Builder(builder: (context) {
                   ArticleModel article = ArticleModel.fromDocument(item);
-                  isLiked = article.likes.containsKey(UserData.currentUser!.id)
-                      ? article.likes[UserData.currentUser!.id]
-                      : null;
-                  finalScore = article.likes.values.toList().where((item) => item == true).length -
-                      article.likes.values.toList().where((item) => item == false).length;
                   QuillController _controller = QuillController(
                       document: Document.fromJson(jsonDecode(article.text)),
                       selection: const TextSelection.collapsed(offset: 0));
@@ -137,53 +132,6 @@ class _ArticleScreenState extends State<ArticleScreen> {
                                       ),
                                     );
                                   }),
-                              Row(
-                                // TODO: Avoid entire rebuild to manage likes and dislikes
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      if (isLiked != true) {
-                                        DatabaseService.articlesRef
-                                            .doc(article.id)
-                                            .update({'likes.${UserData.currentUser!.id}': true});
-                                        // finalScore += 1;
-                                        setState(() => isLiked = true);
-                                      }
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: (isLiked != null && isLiked!)
-                                          ? const Icon(FontAwesomeIcons.arrowAltCircleUp,
-                                              color: kAppColor)
-                                          : const Icon(FontAwesomeIcons.arrowAltCircleUp,
-                                              color: Colors.white),
-                                    ),
-                                  ),
-                                  Text(
-                                    '${isLiked != null ? (isLiked! ? finalScore + 1 : finalScore - 1) : finalScore}',
-                                    style: const TextStyle(color: Colors.white),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      if (isLiked != false) {
-                                        DatabaseService.articlesRef
-                                            .doc(article.id)
-                                            .update({'likes.${UserData.currentUser!.id}': false});
-                                        // finalScore -= 1;
-                                        setState(() => isLiked = false);
-                                      }
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: (isLiked != null && !(isLiked!))
-                                          ? const Icon(FontAwesomeIcons.arrowAltCircleDown,
-                                              color: kAppColor)
-                                          : const Icon(FontAwesomeIcons.arrowAltCircleDown,
-                                              color: Colors.white),
-                                    ),
-                                  ),
-                                ],
-                              )
                             ],
                           ),
                         ),
