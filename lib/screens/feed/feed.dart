@@ -25,7 +25,8 @@ class _FeedPageState extends State<FeedPage> {
       appBar: AppBar(
         backgroundColor: kAppColor,
         title: const Text(kAppName),
-        titleTextStyle: const TextStyle(color: Colors.white, letterSpacing: 3, fontSize: 25.0),
+        titleTextStyle: const TextStyle(
+            color: Colors.white, letterSpacing: 3, fontSize: 25.0),
         actions: [
           IconButton(
             icon: const Icon(
@@ -33,7 +34,8 @@ class _FeedPageState extends State<FeedPage> {
               size: 30,
             ),
             onPressed: () {
-              showDialogFunc(context, "Presenting the Future of Live Collaboration, Amber!");
+              showDialogFunc(context,
+                  "Presenting the Future of Live Collaboration, Amber!");
             },
           )
         ],
@@ -43,7 +45,8 @@ class _FeedPageState extends State<FeedPage> {
             .doc(UserData.currentUser!.id)
             .collection('timelinePosts')
             .snapshots()
-            .map((snapshot) => snapshot.docs.map((e) => PostModel.fromDocument(e))),
+            .map((snapshot) =>
+                snapshot.docs.map((e) => PostModel.fromDocument(e))),
         builder: (context, snapshot1) {
           if (snapshot1.hasData) {
             return StreamBuilder(
@@ -51,7 +54,8 @@ class _FeedPageState extends State<FeedPage> {
                     .doc(UserData.currentUser!.id)
                     .collection('timelineThumbnails')
                     .snapshots()
-                    .map((snapshot) => snapshot.docs.map((e) => ThumbnailModel.fromDocument(e))),
+                    .map((snapshot) => snapshot.docs
+                        .map((e) => ThumbnailModel.fromDocument(e))),
                 builder: (context, snapshot2) {
                   if (snapshot2.hasData) {
                     return StreamBuilder(
@@ -59,8 +63,8 @@ class _FeedPageState extends State<FeedPage> {
                             .doc(UserData.currentUser!.id)
                             .collection('timelineArticles')
                             .snapshots()
-                            .map((snapshot) =>
-                                snapshot.docs.map((e) => ArticleModel.fromDocument(e))),
+                            .map((snapshot) => snapshot.docs
+                                .map((e) => ArticleModel.fromDocument(e))),
                         builder: (context, snapshot3) {
                           if (snapshot3.hasData) {
                             List list = [
@@ -68,11 +72,13 @@ class _FeedPageState extends State<FeedPage> {
                               ...(snapshot2.data as dynamic).toList(),
                               ...(snapshot3.data as dynamic).toList()
                             ];
-                            list.sort((a, b) => a.timestamp.compareTo(b.timestamp));
+                            list.sort(
+                                (a, b) => a.timestamp.compareTo(b.timestamp));
                             list = list.reversed.toList();
                             return ListView.builder(
                               itemCount: list.length,
-                              itemBuilder: (context, index) => FeedEntity(feedEntity: list[index]),
+                              itemBuilder: (context, index) =>
+                                  FeedEntity(feedEntity: list[index]),
                             );
                           } else {
                             return Container();
@@ -199,11 +205,38 @@ Do me a favor and try scrolling Horizontally on one of the Posts you see.
 <upsize>The backbone of Project Amber is the opportunity to MashUp posts from accounts you follow either by yourself,
 or with a group. This allows for seamless and enjoyable artistic ingenuity to flow from
 every user on our platform.</upsize>
+""",
+                      tags: {
+                        'bold': StyledTextTag(
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        'head': StyledTextTag(style: TextStyle(fontSize: 20)),
+                        'upsize': StyledTextTag(style: TextStyle(fontSize: 16))
+                      },
+                    ),
+                    Image(image: new AssetImage('assets/1.gif')),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    StyledText(
+                      text: """
 
 <bold>Scroll a post Left to share your Thoughts!</bold>
 <upsize>Praise and kind words make our day dont they? Send those you follow some words of encouragement by
 commenting on their posts. This allows for feedback and critiques on any posts on the Amber Platform.</upsize>
-
+""",
+                      tags: {
+                        'bold': StyledTextTag(
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        'head': StyledTextTag(style: TextStyle(fontSize: 20)),
+                        'upsize': StyledTextTag(style: TextStyle(fontSize: 16))
+                      },
+                    ),
+                    Image(image: new AssetImage('assets/2.gif')),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    StyledText(
+                      text: """
 <bold>Click the arrows Up/Down!</bold>
 <upsize>These arrows give the Account the general feedback of their work. Clicking the arrow pointing
 upwards gives the post a positive score and the other lowers it by a point.</upsize>
@@ -218,11 +251,12 @@ Look out for the information bar icon (just like the one you stumbled across) fo
 
 """,
                       tags: {
-                        'bold': StyledTextTag(style: TextStyle(fontWeight: FontWeight.bold)),
+                        'bold': StyledTextTag(
+                            style: TextStyle(fontWeight: FontWeight.bold)),
                         'head': StyledTextTag(style: TextStyle(fontSize: 20)),
                         'upsize': StyledTextTag(style: TextStyle(fontSize: 16))
                       },
-                    )
+                    ),
                   ],
                 ),
               )),
