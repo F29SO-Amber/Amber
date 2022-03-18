@@ -24,6 +24,7 @@ import 'package:amber/services/database_service.dart';
 
 import 'package:amber/models/user.dart';
 import 'package:amber/user_data.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class FeedEntity extends StatefulWidget {
   final dynamic feedEntity;
@@ -36,6 +37,7 @@ class FeedEntity extends StatefulWidget {
 
 class _FeedEntityState extends State<FeedEntity> {
   late bool? isLiked = false;
+  Future<void>? _launched;
   int finalScore = 0;
 
   @override
@@ -143,7 +145,9 @@ class _FeedEntityState extends State<FeedEntity> {
                               widthFactor: 0.2,
                               buttonHeight: 10,
                               buttonText: 'Watch',
-                              onPress: () {},
+                              onPress: () {
+                                _launchInBrowser((widget.feedEntity as ThumbnailModel).link);
+                              },
                             )
                           : CustomElevatedButton(
                               widthFactor: 0.2,
@@ -406,5 +410,16 @@ class _FeedEntityState extends State<FeedEntity> {
         ],
       ),
     );
+  }
+
+  Future<void> _launchInBrowser(String url) async {
+    if (!await launch(
+      url,
+      forceSafariVC: false,
+      forceWebView: false,
+      headers: <String, String>{'my_header_key': 'my_header_value'},
+    )) {
+      throw 'Could not launch $url';
+    }
   }
 }
