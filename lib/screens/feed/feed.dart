@@ -177,7 +177,7 @@ showDialogFunc(context, title) {
                     Text(
                       title,
                       style: TextStyle(
-                        fontSize: 25,
+                        fontSize: 40,
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
                       ),
@@ -194,25 +194,33 @@ you will be able to see posts from every Amber account that you Follow.
 Do me a favor and try scrolling Horizontally on one of the Posts you see.
 
 <bold><head>Our main features</head></bold>
+
 <bold>Scroll a post Right to Mash-up!</bold>
-The backbone of Project Amber is the opportunity to MashUp posts from accounts you follow either by yourself,
+<upsize>The backbone of Project Amber is the opportunity to MashUp posts from accounts you follow either by yourself,
 or with a group. This allows for seamless and enjoyable artistic ingenuity to flow from
-every user on our platform.
+every user on our platform.</upsize>
 
 <bold>Scroll a post Left to share your Thoughts!</bold>
-Praise and kind words make our day dont they? Send those you follow some words of encouragement by
-commenting on their posts. This allows for feedback and critiques on your work of art.
+<upsize>Praise and kind words make our day dont they? Send those you follow some words of encouragement by
+commenting on their posts. This allows for feedback and critiques on any posts on the Amber Platform.</upsize>
 
 <bold>Click the arrows Up/Down!</bold>
-These arrows tell the Account the general feedback to their work. Clicking the arrow pointing
-upwards gives the post a positive score and the other lowers it by a point.
+<upsize>These arrows give the Account the general feedback of their work. Clicking the arrow pointing
+upwards gives the post a positive score and the other lowers it by a point.</upsize>
+
+<bold>Use the NavBar down below to continue the Adventure!</bold>
+<upsize>If you thought the feed page was good, have a look at the several other features we at Amber have to offer.
+Look out for the information bar icon (just like the one you stumbled across) for more hints, tips and tricks. This page will be updated with every version update we put out so stay tuned! Oh and before you go, have a look at the "Discover Page" to find some amazing Art Curators. Don't forget to spread the love!</upsize>
+
+
 
 
 
 """,
                       tags: {
                         'bold': StyledTextTag(style: TextStyle(fontWeight: FontWeight.bold)),
-                        'head': StyledTextTag(style: TextStyle(fontSize: 20))
+                        'head': StyledTextTag(style: TextStyle(fontSize: 20)),
+                        'upsize': StyledTextTag(style: TextStyle(fontSize: 16))
                       },
                     )
                   ],
