@@ -194,10 +194,10 @@ showDialogFunc(context, title) {
                     StyledText(
                       text: """
 
-<bold>Let's Get Started</bold>
-The first page you are directed to is known as the "Feed Page". Here
+<bold><head>Let's Get Started</head></bold>
+<upsize>The first page you are directed to is known as the "Feed Page". Here
 you will be able to see posts from every Amber account that you Follow.
-Do me a favor and try scrolling Horizontally on one of the Posts you see.
+Do me a favor and try scrolling Horizontally on one of the Posts you see.</upsize>
 
 <bold><head>Our main features</head></bold>
 
