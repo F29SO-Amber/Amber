@@ -1,5 +1,6 @@
 import 'package:amber/models/article.dart';
 import 'package:amber/models/thumbnail.dart';
+import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:styled_text/styled_text.dart';
@@ -25,8 +26,7 @@ class _FeedPageState extends State<FeedPage> {
       appBar: AppBar(
         backgroundColor: kAppColor,
         title: const Text(kAppName),
-        titleTextStyle: const TextStyle(
-            color: Colors.white, letterSpacing: 3, fontSize: 25.0),
+        titleTextStyle: const TextStyle(color: Colors.white, letterSpacing: 3, fontSize: 25.0),
         actions: [
           IconButton(
             icon: const Icon(
@@ -34,19 +34,20 @@ class _FeedPageState extends State<FeedPage> {
               size: 30,
             ),
             onPressed: () {
-              showDialogFunc(context,
-                  "Presenting the Future of Live Collaboration, Amber!");
+              showDialogFunc(context, "Presenting the Future of Live Collaboration, Amber!");
             },
           )
         ],
       ),
+      // body: MultiProvider(
+      //   providers: [StreamProvider(create: create, initialData: initialData)],
+      // ),
       body: StreamBuilder(
         stream: DatabaseService.timelineRef
             .doc(UserData.currentUser!.id)
             .collection('timelinePosts')
             .snapshots()
-            .map((snapshot) =>
-                snapshot.docs.map((e) => PostModel.fromDocument(e))),
+            .map((snapshot) => snapshot.docs.map((e) => PostModel.fromDocument(e))),
         builder: (context, snapshot1) {
           if (snapshot1.hasData) {
             return StreamBuilder(
@@ -54,8 +55,7 @@ class _FeedPageState extends State<FeedPage> {
                     .doc(UserData.currentUser!.id)
                     .collection('timelineThumbnails')
                     .snapshots()
-                    .map((snapshot) => snapshot.docs
-                        .map((e) => ThumbnailModel.fromDocument(e))),
+                    .map((snapshot) => snapshot.docs.map((e) => ThumbnailModel.fromDocument(e))),
                 builder: (context, snapshot2) {
                   if (snapshot2.hasData) {
                     return StreamBuilder(
@@ -63,8 +63,8 @@ class _FeedPageState extends State<FeedPage> {
                             .doc(UserData.currentUser!.id)
                             .collection('timelineArticles')
                             .snapshots()
-                            .map((snapshot) => snapshot.docs
-                                .map((e) => ArticleModel.fromDocument(e))),
+                            .map((snapshot) =>
+                                snapshot.docs.map((e) => ArticleModel.fromDocument(e))),
                         builder: (context, snapshot3) {
                           if (snapshot3.hasData) {
                             List list = [
@@ -72,13 +72,11 @@ class _FeedPageState extends State<FeedPage> {
                               ...(snapshot2.data as dynamic).toList(),
                               ...(snapshot3.data as dynamic).toList()
                             ];
-                            list.sort(
-                                (a, b) => a.timestamp.compareTo(b.timestamp));
+                            list.sort((a, b) => a.timestamp.compareTo(b.timestamp));
                             list = list.reversed.toList();
                             return ListView.builder(
                               itemCount: list.length,
-                              itemBuilder: (context, index) =>
-                                  FeedEntity(feedEntity: list[index]),
+                              itemBuilder: (context, index) => FeedEntity(feedEntity: list[index]),
                             );
                           } else {
                             return Container();
@@ -207,8 +205,7 @@ or with a group. This allows for seamless and enjoyable artistic ingenuity to fl
 every user on our platform.</upsize>
 """,
                       tags: {
-                        'bold': StyledTextTag(
-                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        'bold': StyledTextTag(style: TextStyle(fontWeight: FontWeight.bold)),
                         'head': StyledTextTag(style: TextStyle(fontSize: 20)),
                         'upsize': StyledTextTag(style: TextStyle(fontSize: 16))
                       },
@@ -225,8 +222,7 @@ every user on our platform.</upsize>
 commenting on their posts. This allows for feedback and critiques on any posts on the Amber Platform.</upsize>
 """,
                       tags: {
-                        'bold': StyledTextTag(
-                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        'bold': StyledTextTag(style: TextStyle(fontWeight: FontWeight.bold)),
                         'head': StyledTextTag(style: TextStyle(fontSize: 20)),
                         'upsize': StyledTextTag(style: TextStyle(fontSize: 16))
                       },
@@ -251,8 +247,7 @@ Look out for the information bar icon (just like the one you stumbled across) fo
 
 """,
                       tags: {
-                        'bold': StyledTextTag(
-                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        'bold': StyledTextTag(style: TextStyle(fontWeight: FontWeight.bold)),
                         'head': StyledTextTag(style: TextStyle(fontSize: 20)),
                         'upsize': StyledTextTag(style: TextStyle(fontSize: 16))
                       },

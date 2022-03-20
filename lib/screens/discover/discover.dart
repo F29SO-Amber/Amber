@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:amber/pages/error.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -96,7 +97,10 @@ class _DiscoverPageState extends State<DiscoverPage> {
                               ),
                             );
                           },
-                          pagination: const SwiperPagination(alignment: Alignment.topCenter),
+                          pagination: const SwiperPagination(
+                            alignment: Alignment.topCenter,
+                            builder: SwiperPagination.rect,
+                          ),
                           itemCount: (snapshot.data! as dynamic).docs.length,
                         ),
                       );
@@ -104,6 +108,10 @@ class _DiscoverPageState extends State<DiscoverPage> {
                       return const Center(child: CircularProgressIndicator());
                     }
                   },
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Explore', style: GoogleFonts.dmSans(fontSize: 20)),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),

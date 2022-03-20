@@ -40,6 +40,7 @@ class Events extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 CustomImage(
                                   image: NetworkImage(event.eventPhotoURL),
@@ -51,13 +52,27 @@ class Events extends StatelessWidget {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      '${event.title} - ${event.startingTime}',
-                                      style: const TextStyle(fontSize: 17),
+                                    Text(event.title, style: const TextStyle(fontSize: 17)),
+                                    Text(event.description, style: kLightLabelTextStyle),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'Starting time:  ',
+                                          style: kLightLabelTextStyle.copyWith(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Text(event.startingTime, style: kLightLabelTextStyle),
+                                      ],
                                     ),
-                                    Text(
-                                      event.description,
-                                      style: kLightLabelTextStyle,
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'Event venue:   ',
+                                          style: kLightLabelTextStyle.copyWith(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Text(event.venue, style: kLightLabelTextStyle),
+                                      ],
                                     ),
                                   ],
                                 ),

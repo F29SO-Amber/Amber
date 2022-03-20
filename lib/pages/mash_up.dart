@@ -41,6 +41,7 @@ class _MashUpScreenState extends State<MashUpScreen> {
   List<Squiggle?> points = [];
   Color selectedColor = Colors.black;
   double strokeWidth = 2.0;
+  final double imageWidthRatio = 0.7;
 
   @override
   void initState() {
@@ -53,16 +54,6 @@ class _MashUpScreenState extends State<MashUpScreen> {
         CustomImage(side: 120, image: AssetImage("assets/layouts/$x.png"), borderRadius: 10),
       );
     }
-  }
-
-  @override
-  void dispose() {
-    // String json = jsonEncode(points);
-    // var json = jsonEncode(points.map((e) => e?.toJson()).toList());
-    // debugPrint(json);
-    // var decoded = jsonDecode(json);
-    // debugPrint('${identical(points, decoded)}');
-    super.dispose();
   }
 
   @override
@@ -106,7 +97,6 @@ class _MashUpScreenState extends State<MashUpScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SizedBox(
-                  height: 110,
                   child: GridView.builder(
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
@@ -146,15 +136,10 @@ class _MashUpScreenState extends State<MashUpScreen> {
                   ),
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Column(
                       children: <Widget>[
-                        IconButton(
-                            icon: Icon(Icons.color_lens, color: selectedColor),
-                            onPressed: () {
-                              selectColor();
-                            }),
                         RotatedBox(
                           quarterTurns: 1,
                           child: Slider(
@@ -168,11 +153,6 @@ class _MashUpScreenState extends State<MashUpScreen> {
                             },
                           ),
                         ),
-                        IconButton(
-                            icon: const Icon(Icons.layers_clear, color: Colors.black),
-                            onPressed: () {
-                              setState(() => points.clear());
-                            }),
                       ],
                     ),
                     WidgetToImage(
@@ -197,8 +177,8 @@ class _MashUpScreenState extends State<MashUpScreen> {
                               })(),
                             ),
                             SizedBox(
-                              width: 250,
-                              height: 250,
+                              width: MediaQuery.of(context).size.width * imageWidthRatio,
+                              height: MediaQuery.of(context).size.width * imageWidthRatio,
                               child: GestureDetector(
                                 onPanDown: (details) {
                                   setState(() {
@@ -218,15 +198,10 @@ class _MashUpScreenState extends State<MashUpScreen> {
                                       strokeWidth: strokeWidth,
                                       color: selectedColor.value,
                                     ));
-                                    // areaPaint: Paint()
-                                    //   ..strokeCap = StrokeCap.round
-                                    //   ..isAntiAlias = true
-                                    //   ..color = selectedColor
-                                    //   ..strokeWidth = strokeWidth));
                                   });
                                 },
                                 onPanEnd: (details) {
-                                  // setState(() => points.add(null));
+                                  setState(() => points.add(null));
                                 },
                                 child: SizedBox.expand(
                                   child: ClipRRect(
@@ -243,45 +218,24 @@ class _MashUpScreenState extends State<MashUpScreen> {
                       },
                     ),
                     Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
                         IconButton(
-                          icon: Icon(FontAwesomeIcons.square, color: selectedColor),
-                          onPressed: () {},
-                        ),
+                            icon: Icon(Icons.color_lens, color: selectedColor),
+                            onPressed: () {
+                              selectColor();
+                            }),
+                        const SizedBox(height: 75),
                         IconButton(
-                          icon: Icon(FontAwesomeIcons.square, color: selectedColor),
-                          onPressed: () {},
-                        ),
-                        IconButton(
-                          icon: Icon(FontAwesomeIcons.square, color: selectedColor),
-                          onPressed: () {},
-                        ),
-                        IconButton(
-                          icon: Icon(FontAwesomeIcons.square, color: selectedColor),
-                          onPressed: () {},
-                        ),
-                        IconButton(
-                          icon: Icon(FontAwesomeIcons.square, color: selectedColor),
-                          onPressed: () {},
-                        ),
+                            icon: const Icon(Icons.layers_clear, color: Colors.black),
+                            onPressed: () {
+                              setState(() => points.clear());
+                            }),
                       ],
                     ),
                   ],
                 ),
                 SizedBox(
                   height: 120,
-                  // child: Swiper(
-                  //   outer: false,
-                  //   itemHeight: 120,
-                  //   itemWidth: 120,
-                  //   viewportFraction: 0.3,
-                  //   scale: 0.3,
-                  //   itemCount: collageTypes.length,
-                  //   loop: false,
-                  //   itemBuilder: (c, i) => collageTypes[i],
-                  //   onIndexChanged: (i) => setState(() => index = i),
-                  // ),
                   child: CarouselSlider(
                     options: CarouselOptions(
                         height: 120,
@@ -327,7 +281,7 @@ class _MashUpScreenState extends State<MashUpScreen> {
   }
 
   Widget get1Layout() {
-    double side = 250;
+    double side = MediaQuery.of(context).size.width * imageWidthRatio;
     return SizedBox(
       height: side,
       width: side,
@@ -341,7 +295,7 @@ class _MashUpScreenState extends State<MashUpScreen> {
   }
 
   Widget get2Layout() {
-    double side = 250;
+    double side = MediaQuery.of(context).size.width * imageWidthRatio;
     return SizedBox(
       height: side,
       width: side,
@@ -365,7 +319,7 @@ class _MashUpScreenState extends State<MashUpScreen> {
   }
 
   Widget get4Layout() {
-    double side = 250;
+    double side = MediaQuery.of(context).size.width * imageWidthRatio;
     return SizedBox(
       height: side,
       width: side,
@@ -409,7 +363,7 @@ class _MashUpScreenState extends State<MashUpScreen> {
   }
 
   Widget get5Layout() {
-    double side = 250;
+    double side = MediaQuery.of(context).size.width * imageWidthRatio;
     return SizedBox(
       height: side,
       width: side,
@@ -465,7 +419,7 @@ class _MashUpScreenState extends State<MashUpScreen> {
   }
 
   Widget get9Layout() {
-    double side = 250;
+    double side = MediaQuery.of(context).size.width * imageWidthRatio;
     return SizedBox(
       height: side,
       width: side,

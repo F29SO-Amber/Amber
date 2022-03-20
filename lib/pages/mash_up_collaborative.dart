@@ -46,6 +46,7 @@ class _CollaborativeMashUpScreenState extends State<CollaborativeMashUpScreen> {
   List<Widget> collageTypes = [];
   double strokeWidth = 2.0;
   Color selectedColor = Colors.black;
+  final double imageWidthRatio = 0.65;
   List images = [const AssetImage("assets/plus.png")];
 
   @override
@@ -115,209 +116,187 @@ class _CollaborativeMashUpScreenState extends State<CollaborativeMashUpScreen> {
             if (snapshot.hasData && snapshot.data != null) {
               squiggles.setSquiggles =
                   Squiggles.fromJson(snapshot.data!.data() as Map).getSquiggles;
-              return Column(
-                children: [
-                  const SizedBox(height: 5),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(
-                          height: 110,
-                          child: GridView.builder(
-                            scrollDirection: Axis.vertical,
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: MediaQuery.of(context).size.width ~/ 55,
-                              crossAxisSpacing: 5,
-                              mainAxisSpacing: 5,
-                              childAspectRatio: 1,
-                            ),
-                            itemCount: images.length,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: const EdgeInsets.only(right: 5.0),
-                                child: GestureDetector(
-                                  child: CustomImage(
-                                    side: 50,
-                                    borderRadius: 10,
-                                    image: images[index],
-                                  ),
-                                  onTap: () async {
-                                    if (index == images.length - 1) {
-                                      File? file = await ImageService.chooseFromGallery();
-                                      if (file != null) {
-                                        setState(() =>
-                                            images.insert(images.length - 1, FileImage(file)));
-                                      }
-                                    } else if (widget.imageURL != null && index != 0) {
-                                      setState(() => images.removeAt(index));
-                                    } else if (index < images.length - 2 && index > 0) {
-                                      setState(() => images.removeAt(index));
-                                    }
-                                  },
-                                ),
-                              );
-                            },
-                          ),
+              return SizedBox(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      child: GridView.builder(
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        padding: const EdgeInsets.all(5.0),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: MediaQuery.of(context).size.width ~/ 55,
+                          crossAxisSpacing: 5,
+                          mainAxisSpacing: 5,
+                          childAspectRatio: 1,
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Column(
-                              children: <Widget>[
-                                IconButton(
-                                    icon: Icon(Icons.color_lens, color: selectedColor),
-                                    onPressed: () {
-                                      selectColor();
-                                    }),
-                                RotatedBox(
-                                  quarterTurns: 1,
-                                  child: Slider(
-                                    min: 1.0,
-                                    max: 10.0,
-                                    label: "Stroke $strokeWidth",
-                                    activeColor: selectedColor,
-                                    value: strokeWidth,
-                                    onChanged: (double value) {
-                                      setState(() => strokeWidth = value);
-                                    },
-                                  ),
-                                ),
-                                IconButton(
-                                    icon: const Icon(Icons.layers_clear, color: Colors.black),
-                                    onPressed: () {
-                                      DatabaseService.roomsRef
-                                          .doc((widget.mashupDetails!['room'] as types.Room).id)
-                                          .collection('posts')
-                                          .doc((widget.mashupDetails!['post'] as PostModel).id)
-                                          .update({'squiggles': []});
-                                      squiggles.setSquiggles = [];
-                                    }),
-                              ],
-                            ),
-                            WidgetToImage(
-                              builder: (key) {
-                                _globalKey = key;
-                                return Stack(
-                                  children: [
-                                    Container(
-                                      // https://stackoverflow.com/questions/49713189
-                                      child: (() {
-                                        if (index == 0) {
-                                          return get1Layout();
-                                        } else if (index == 1) {
-                                          return get2Layout();
-                                        } else if (index == 2) {
-                                          return get4Layout();
-                                        } else if (index == 3) {
-                                          return get5Layout();
-                                        } else if (index == 4) {
-                                          return get9Layout();
-                                        }
-                                      })(),
-                                    ),
-                                    Consumer<Squiggles>(
-                                      builder: (context, c, child) {
-                                        return SizedBox(
-                                          width: 250,
-                                          height: 250,
-                                          child: GestureDetector(
-                                            onPanDown: (details) {
-                                              // setState(() {
-                                              squiggles.addSquiggle(Squiggle(
-                                                dx: details.localPosition.dx,
-                                                dy: details.localPosition.dy,
-                                                strokeWidth: strokeWidth,
-                                                color: selectedColor.value,
-                                              ));
-                                              // });
-                                            },
-                                            onPanUpdate: (details) {
-                                              // setState(() {
-                                              squiggles.addSquiggle(Squiggle(
-                                                dx: details.localPosition.dx,
-                                                dy: details.localPosition.dy,
-                                                strokeWidth: strokeWidth,
-                                                color: selectedColor.value,
-                                              ));
-                                              // });
-                                            },
-                                            onPanEnd: (details) {
-                                              // setState(() => points.add(null));
-                                              squiggles.addSquiggle(null);
-                                              DatabaseService.roomsRef
-                                                  .doc((widget.mashupDetails!['room'] as types.Room)
-                                                      .id)
-                                                  .collection('posts')
-                                                  .doc((widget.mashupDetails!['post'] as PostModel)
-                                                      .id)
-                                                  .set(Squiggles(squiggles.getSquiggles).toJson());
-                                              // points = [];
-                                            },
-                                            child: SizedBox.expand(
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    const BorderRadius.all(Radius.circular(20.0)),
-                                                child: CustomPaint(
-                                                  painter: Sketcher(points: squiggles.getSquiggles),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ],
-                                );
+                        itemCount: images.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.only(right: 5.0),
+                            child: GestureDetector(
+                              child: CustomImage(
+                                side: 50,
+                                borderRadius: 10,
+                                image: images[index],
+                              ),
+                              onTap: () async {
+                                if (index == images.length - 1) {
+                                  File? file = await ImageService.chooseFromGallery();
+                                  if (file != null) {
+                                    setState(
+                                        () => images.insert(images.length - 1, FileImage(file)));
+                                  }
+                                } else if (widget.imageURL != null && index != 0) {
+                                  setState(() => images.removeAt(index));
+                                } else if (index < images.length - 2 && index > 0) {
+                                  setState(() => images.removeAt(index));
+                                }
                               },
                             ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: <Widget>[
-                                IconButton(
-                                  icon: Icon(FontAwesomeIcons.square, color: selectedColor),
-                                  onPressed: () {},
-                                ),
-                                IconButton(
-                                  icon: Icon(FontAwesomeIcons.square, color: selectedColor),
-                                  onPressed: () {},
-                                ),
-                                IconButton(
-                                  icon: Icon(FontAwesomeIcons.square, color: selectedColor),
-                                  onPressed: () {},
-                                ),
-                                IconButton(
-                                  icon: Icon(FontAwesomeIcons.square, color: selectedColor),
-                                  onPressed: () {},
-                                ),
-                                IconButton(
-                                  icon: Icon(FontAwesomeIcons.square, color: selectedColor),
-                                  onPressed: () {},
-                                ),
-                              ],
+                          );
+                        },
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Column(
+                          children: <Widget>[
+                            RotatedBox(
+                              quarterTurns: 1,
+                              child: Slider(
+                                min: 1.0,
+                                max: 10.0,
+                                label: "Stroke $strokeWidth",
+                                activeColor: selectedColor,
+                                value: strokeWidth,
+                                onChanged: (double value) {
+                                  setState(() => strokeWidth = value);
+                                },
+                              ),
                             ),
                           ],
                         ),
-                        SizedBox(
-                          height: 120,
-                          child: CarouselSlider(
-                            options: CarouselOptions(
-                                height: 120,
-                                aspectRatio: 1,
-                                viewportFraction: 0.4,
-                                enlargeCenterPage: true,
-                                onPageChanged: (i, _) => setState(() => index = i)),
-                            items: collageTypes.toList(),
-                          ),
+                        WidgetToImage(
+                          builder: (key) {
+                            _globalKey = key;
+                            return Stack(
+                              children: [
+                                Container(
+                                  // https://stackoverflow.com/questions/49713189
+                                  child: (() {
+                                    if (index == 0) {
+                                      return get1Layout();
+                                    } else if (index == 1) {
+                                      return get2Layout();
+                                    } else if (index == 2) {
+                                      return get4Layout();
+                                    } else if (index == 3) {
+                                      return get5Layout();
+                                    } else if (index == 4) {
+                                      return get9Layout();
+                                    }
+                                  })(),
+                                ),
+                                Consumer<Squiggles>(
+                                  builder: (context, c, child) {
+                                    return SizedBox(
+                                      width: MediaQuery.of(context).size.width * imageWidthRatio,
+                                      height: MediaQuery.of(context).size.width * imageWidthRatio,
+                                      child: GestureDetector(
+                                        onPanDown: (details) {
+                                          // setState(() {
+                                          squiggles.addSquiggle(Squiggle(
+                                            dx: details.localPosition.dx,
+                                            dy: details.localPosition.dy,
+                                            strokeWidth: strokeWidth,
+                                            color: selectedColor.value,
+                                          ));
+                                          // });
+                                        },
+                                        onPanUpdate: (details) {
+                                          // setState(() {
+                                          squiggles.addSquiggle(Squiggle(
+                                            dx: details.localPosition.dx,
+                                            dy: details.localPosition.dy,
+                                            strokeWidth: strokeWidth,
+                                            color: selectedColor.value,
+                                          ));
+                                          // });
+                                        },
+                                        onPanEnd: (details) {
+                                          // setState(() => points.add(null));
+                                          squiggles.addSquiggle(null);
+                                          DatabaseService.roomsRef
+                                              .doc((widget.mashupDetails!['room'] as types.Room).id)
+                                              .collection('posts')
+                                              .doc((widget.mashupDetails!['post'] as PostModel).id)
+                                              .set(Squiggles(squiggles.getSquiggles).toJson());
+                                          // points = [];
+                                        },
+                                        child: SizedBox.expand(
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                const BorderRadius.all(Radius.circular(20.0)),
+                                            child: CustomPaint(
+                                              painter: Sketcher(points: squiggles.getSquiggles),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                        Column(
+                          children: <Widget>[
+                            IconButton(
+                              icon: Icon(Icons.color_lens, color: selectedColor),
+                              onPressed: () {
+                                selectColor();
+                              },
+                            ),
+                            const SizedBox(height: 75),
+                            IconButton(
+                              icon: const Icon(Icons.layers_clear, color: Colors.black),
+                              onPressed: () {
+                                DatabaseService.roomsRef
+                                    .doc((widget.mashupDetails!['room'] as types.Room).id)
+                                    .collection('posts')
+                                    .doc((widget.mashupDetails!['post'] as PostModel).id)
+                                    .update({'squiggles': []});
+                                squiggles.setSquiggles = [];
+                              },
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                ],
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: SizedBox(
+                        height: 120,
+                        child: CarouselSlider(
+                          options: CarouselOptions(
+                              height: 120,
+                              aspectRatio: 1,
+                              viewportFraction: 0.4,
+                              enlargeCenterPage: true,
+                              onPageChanged: (i, _) => setState(() => index = i)),
+                          items: collageTypes.toList(),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               );
             } else {
               return const Center(child: CircularProgressIndicator());
@@ -352,7 +331,7 @@ class _CollaborativeMashUpScreenState extends State<CollaborativeMashUpScreen> {
   }
 
   Widget get1Layout() {
-    double side = 250;
+    double side = MediaQuery.of(context).size.width * imageWidthRatio;
     return SizedBox(
       height: side,
       width: side,
@@ -366,7 +345,7 @@ class _CollaborativeMashUpScreenState extends State<CollaborativeMashUpScreen> {
   }
 
   Widget get2Layout() {
-    double side = 250;
+    double side = MediaQuery.of(context).size.width * imageWidthRatio;
     return SizedBox(
       height: side,
       width: side,
@@ -390,7 +369,7 @@ class _CollaborativeMashUpScreenState extends State<CollaborativeMashUpScreen> {
   }
 
   Widget get4Layout() {
-    double side = 250;
+    double side = MediaQuery.of(context).size.width * imageWidthRatio;
     return SizedBox(
       height: side,
       width: side,
@@ -434,7 +413,7 @@ class _CollaborativeMashUpScreenState extends State<CollaborativeMashUpScreen> {
   }
 
   Widget get5Layout() {
-    double side = 250;
+    double side = MediaQuery.of(context).size.width * imageWidthRatio;
     return SizedBox(
       height: side,
       width: side,
@@ -490,7 +469,7 @@ class _CollaborativeMashUpScreenState extends State<CollaborativeMashUpScreen> {
   }
 
   Widget get9Layout() {
-    double side = 250;
+    double side = MediaQuery.of(context).size.width * imageWidthRatio;
     return SizedBox(
       height: side,
       width: side,

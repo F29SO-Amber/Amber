@@ -8,7 +8,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:amber/screens/home.dart';
 import 'package:amber/firebase_options.dart';
 import 'package:amber/screens/auth/login.dart';
-import 'package:amber/pages/mash_up_latest.dart';
+import 'package:amber/pages/mash_up.dart';
 import 'package:provider/provider.dart';
 
 import 'custom_animation.dart';

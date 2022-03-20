@@ -67,7 +67,7 @@ class Articles extends StatelessWidget {
                               onTap: () {
                                 Navigator.of(context, rootNavigator: true).push(
                                   MaterialPageRoute(
-                                    builder: (context) => UserArticles(articles: list),
+                                    builder: (context) => UserArticles(article: article),
                                   ),
                                 );
                               },

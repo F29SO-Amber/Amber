@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:amber/pages/error.dart';
 import 'package:amber/screens/feed/feed.dart';
-import 'package:amber/pages/mash_up_latest.dart';
+import 'package:amber/pages/mash_up.dart';
 
 class FeedPageNavigator extends StatefulWidget {
   const FeedPageNavigator({Key? key}) : super(key: key);

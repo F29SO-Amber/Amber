@@ -1,8 +1,12 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'package:amber/utilities/constants.dart';
+import 'package:google_fonts/google_fonts.dart';
+import '../../widgets/post_type.dart';
 import 'chat.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'users.dart';
 
 class RoomsPage extends StatefulWidget {
@@ -13,35 +17,10 @@ class RoomsPage extends StatefulWidget {
 }
 
 class _RoomsPageState extends State<RoomsPage> {
-  // bool _error = false;
-  // bool _initialized = false;
-  // User? _user;
-
-  @override
-  void initState() {
-    // checkUserAuthState();
-    super.initState();
-  }
-
-  // void checkUserAuthState() async {
-  //   try {
-  //     FirebaseAuth.instance.authStateChanges().listen((User? user) => setState(() => _user = user));
-  //     setState(() => _initialized = true);
-  //   } catch (e) {
-  //     setState(() => _error = true);
-  //   }
-  // }
+  int selectedTab = 0;
 
   Widget _buildAvatar(types.Room room) {
     var color = Colors.transparent;
-
-    // if (room.type == types.RoomType.direct) {
-    //   try {
-    //     final otherUser = room.users.firstWhere((u) => u.id != _user!.uid);
-    //     color = getUserAvatarNameColor(otherUser);
-    //   } catch (e) {}
-    // }
-
     final hasImage = room.imageUrl != null;
     final name = room.name ?? '';
 
@@ -63,10 +42,6 @@ class _RoomsPageState extends State<RoomsPage> {
 
   @override
   Widget build(BuildContext context) {
-    // if (_error | !_initialized) {
-    //   return Container();
-    // }
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Rooms'),
@@ -77,47 +52,83 @@ class _RoomsPageState extends State<RoomsPage> {
             onPressed: () => Navigator.of(context).push(
               MaterialPageRoute(
                 fullscreenDialog: true,
-                builder: (context) => UsersPage(),
+                builder: (context) => const UsersPage(),
               ),
             ),
           ),
         ],
       ),
-      body: StreamBuilder<List<types.Room>>(
-        stream: FirebaseChatCore.instance.rooms(),
-        initialData: const [],
-        builder: (context, snapshot) {
-          if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Container(
-              alignment: Alignment.center,
-              margin: const EdgeInsets.only(bottom: 200),
-              child: const Text('No rooms'),
-            );
-          }
-          return ListView.builder(
-            itemCount: snapshot.data!.length,
-            itemBuilder: (context, index) {
-              final room = snapshot.data![index];
-
-              return GestureDetector(
-                onTap: () {
-                  Navigator.of(context, rootNavigator: true).push(
-                    MaterialPageRoute(builder: (context) => ChatPage(room: room)),
-                  );
-                },
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  child: Row(
-                    children: [
-                      _buildAvatar(room),
-                      Text(room.name ?? ''),
-                    ],
-                  ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: <Widget>[
+                PostType(
+                  numOfDivisions: 2,
+                  bgColor: Colors.red[100]!,
+                  icon: const Icon(FontAwesomeIcons.userAlt),
+                  index: 0,
+                  currentTab: selectedTab,
+                  onPress: () {
+                    setState(() => selectedTab = 0);
+                  },
                 ),
-              );
-            },
-          );
-        },
+                PostType(
+                  numOfDivisions: 2,
+                  bgColor: Colors.greenAccent[100]!,
+                  icon: const Icon(FontAwesomeIcons.userFriends),
+                  index: 1,
+                  currentTab: selectedTab,
+                  onPress: () {
+                    setState(() => selectedTab = 1);
+                  },
+                ),
+              ],
+            ),
+            StreamBuilder<List<types.Room>>(
+              stream: FirebaseChatCore.instance.rooms(),
+              initialData: const [],
+              builder: (context, snapshot) {
+                if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return Container(
+                    alignment: Alignment.center,
+                    margin: const EdgeInsets.only(bottom: 200),
+                    child: const Text('No rooms'),
+                  );
+                }
+                List<types.Room> list = snapshot.data!
+                    .where((e) =>
+                        e.type ==
+                        ((selectedTab == 0) ? types.RoomType.direct : types.RoomType.group))
+                    .toList();
+                return ListView.builder(
+                  itemCount: list.length,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    final room = list[index];
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.of(context, rootNavigator: true).push(
+                          MaterialPageRoute(builder: (context) => ChatPage(room: room)),
+                        );
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        child: Row(
+                          children: [
+                            _buildAvatar(room),
+                            Text(room.name ?? ''),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

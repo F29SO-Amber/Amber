@@ -44,7 +44,7 @@ class DatabaseService {
       'timeCreated': Timestamp.now(),
       'role': 'user',
       'imageUrl':
-          'https://firebasestorage.googleapis.com/v0/b/f29so-group-5-amber.appspot.com/o/images%2Fsnapchat-bitmoji-featured.jpeg?alt=media&token=99a93201-9511-48c1-9420-0aa3ea6a2cb7',
+          'https://firebasestorage.googleapis.com/v0/b/f29so-group-5-amber.appspot.com/o/turkish-van.png?alt=media&token=6b90c135-6065-4e91-a4da-470a0d889842',
     });
     data.additionalSignupData?.forEach((key, value) {
       map.addAll({key: value});
