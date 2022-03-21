@@ -1,4 +1,5 @@
 import 'package:amber/mash-up/squiggles.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -51,22 +52,45 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => Squiggles([])),
-      ],
-      child: MaterialApp(
-        builder: EasyLoading.init(),
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData.light(),
-        // initialRoute: Hive.box('user').get('status') == 'logged-in' ? HomePage.id : LoginScreen.id,
-        initialRoute: LoginScreen.id,
-        routes: {
-          LoginScreen.id: (context) => const LoginScreen(),
-          HomePage.id: (context) => const HomePage(),
-          MashUpScreen.id: (context) => const MashUpScreen(),
-        },
-      ),
-    );
+    return kIsWeb
+        ? Center(
+            child: SizedBox(
+                width: 600,
+                height: 1200,
+                child: MultiProvider(
+                  providers: [
+                    ChangeNotifierProvider(create: (_) => Squiggles([])),
+                  ],
+                  child: MaterialApp(
+                    builder: EasyLoading.init(),
+                    debugShowCheckedModeBanner: false,
+                    theme: ThemeData.light(),
+                    // initialRoute: Hive.box('user').get('status') == 'logged-in' ? HomePage.id : LoginScreen.id,
+                    initialRoute: LoginScreen.id,
+                    routes: {
+                      LoginScreen.id: (context) => const LoginScreen(),
+                      HomePage.id: (context) => const HomePage(),
+                      MashUpScreen.id: (context) => const MashUpScreen(),
+                    },
+                  ),
+                )),
+          )
+        : MultiProvider(
+            providers: [
+              ChangeNotifierProvider(create: (_) => Squiggles([])),
+            ],
+            child: MaterialApp(
+              builder: EasyLoading.init(),
+              debugShowCheckedModeBanner: false,
+              theme: ThemeData.light(),
+              // initialRoute: Hive.box('user').get('status') == 'logged-in' ? HomePage.id : LoginScreen.id,
+              initialRoute: LoginScreen.id,
+              routes: {
+                LoginScreen.id: (context) => const LoginScreen(),
+                HomePage.id: (context) => const HomePage(),
+                MashUpScreen.id: (context) => const MashUpScreen(),
+              },
+            ),
+          );
   }
 }

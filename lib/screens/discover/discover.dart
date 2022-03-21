@@ -1,6 +1,11 @@
 import 'dart:math';
 
 import 'package:amber/pages/error.dart';
+import 'package:amber/screens/discover/discover_articles.dart';
+import 'package:amber/screens/discover/discover_communities.dart';
+import 'package:amber/screens/discover/discover_events.dart';
+import 'package:amber/screens/discover/discover_images.dart';
+import 'package:amber/screens/discover/discover_thumbnails.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:card_swiper/card_swiper.dart';
@@ -17,6 +22,9 @@ import 'package:amber/widgets/feed_entity.dart';
 import 'package:amber/utilities/constants.dart';
 import 'package:amber/widgets/profile_picture.dart';
 import 'package:amber/services/database_service.dart';
+
+import '../../widgets/explore_entity.dart';
+import 'discover_public_groups.dart';
 // import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
 // TODO: Create search bar
@@ -63,10 +71,10 @@ class _DiscoverPageState extends State<DiscoverPage> {
                   padding: const EdgeInsets.all(20.0),
                   child: Text('Highlights', style: GoogleFonts.dmSans(fontSize: 20)),
                 ),
-                FutureBuilder(
-                  future: DatabaseService.postsRef.get(),
+                StreamBuilder(
+                  stream: DatabaseService.postsRef.snapshots(),
                   builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
+                    if (snapshot.hasData) {
                       return SizedBox(
                         height: ((MediaQuery.of(context).size.width * 0.8) * 9) / 10,
                         child: Swiper(
@@ -112,6 +120,42 @@ class _DiscoverPageState extends State<DiscoverPage> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text('Explore', style: GoogleFonts.dmSans(fontSize: 20)),
+                ),
+                Center(
+                  child: Column(
+                    children: [
+                      ExploreEntity(
+                        title: 'Posts',
+                        imagePath: 'assets/discover/image.png',
+                        onTap: () => Navigator.pushNamed(context, DiscoverImages.id),
+                      ),
+                      ExploreEntity(
+                        title: 'Articles',
+                        imagePath: 'assets/discover/article.png',
+                        onTap: () => Navigator.pushNamed(context, DiscoverArticles.id),
+                      ),
+                      ExploreEntity(
+                        title: 'Communities',
+                        imagePath: 'assets/discover/community.png',
+                        onTap: () => Navigator.pushNamed(context, DiscoverCommunities.id),
+                      ),
+                      ExploreEntity(
+                        title: 'Events',
+                        imagePath: 'assets/discover/event.png',
+                        onTap: () => Navigator.pushNamed(context, DiscoverEvents.id),
+                      ),
+                      ExploreEntity(
+                        title: 'Thumbnails',
+                        imagePath: 'assets/discover/thumbnail.png',
+                        onTap: () => Navigator.pushNamed(context, DiscoverThumbnails.id),
+                      ),
+                      ExploreEntity(
+                        title: 'Public Groups',
+                        imagePath: 'assets/discover/public group.png',
+                        onTap: () => Navigator.pushNamed(context, DiscoverPublicGroups.id),
+                      ),
+                    ],
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),

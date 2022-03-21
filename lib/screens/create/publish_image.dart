@@ -1,6 +1,5 @@
 // Package Imports
 import 'dart:io';
-import 'dart:math';
 import 'package:uuid/uuid.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -43,7 +42,6 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
   final _formKey = GlobalKey<FormState>();
   final _captionController = TextEditingController();
   final _locationController = TextEditingController();
-  int rand = Random().nextInt(1000);
 
   @override
   void initState() {
@@ -207,10 +205,9 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: NetworkImage('https://picsum.photos/300/300?random=$rand'),
-                          // (_file == null)
-                          //     ? const AssetImage('assets/taptoselect.png')
-                          //     : FileImage(_file!) as ImageProvider,
+                          image: (_file == null)
+                              ? const AssetImage('assets/taptoselect.png')
+                              : FileImage(_file!) as ImageProvider,
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -395,8 +392,7 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
           map['location'] = (widget.mashUpDetails != null)
               ? 'Mashed-up from ${widget.mashUpDetails![1]}'
               : _locationController.text;
-          // map['imageURL'] = await StorageService.uploadImage(postId, _file!, 'posts');
-          map['imageURL'] = 'https://picsum.photos/300/300?random=$rand';
+          map['imageURL'] = await StorageService.uploadImage(postId, _file!, 'posts');
           map['caption'] = _captionController.text;
           map['likes'] = {};
           map['authorId'] = user.id;
