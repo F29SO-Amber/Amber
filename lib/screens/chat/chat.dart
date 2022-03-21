@@ -12,7 +12,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
-
+import 'package:amber/screens/chat/calls/calls.dart';
 import '../../utilities/constants.dart';
 
 class ChatPage extends StatefulWidget {
@@ -55,7 +55,9 @@ class _ChatPageState extends State<ChatPage> {
               if (widget.room.type == types.RoomType.direct)
                 IconButton(
                   icon: const Icon(Icons.call),
-                  onPressed: () {},
+                  onPressed: ()  async {
+                    notificationAndVideoCall(userData[index]);
+                  },
                 )
             ],
           ),
@@ -238,4 +240,5 @@ class _ChatPageState extends State<ChatPage> {
       _isAttachmentUploading = uploading;
     });
   }
+
 }
