@@ -27,9 +27,6 @@ import '../../widgets/explore_entity.dart';
 import 'discover_public_groups.dart';
 // import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
-// TODO: Create search bar
-// TODO: Create discover algorithms
-
 class DiscoverPage extends StatefulWidget {
   static const id = '/discover';
 
@@ -55,7 +52,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
             icon: const Icon(Icons.search),
             color: Colors.white,
             onPressed: () => Navigator.of(context, rootNavigator: true).push(
-              MaterialPageRoute(builder: (context) => const ErrorScreen()),
+              MaterialPageRoute(builder: (context) => Search()),
             ),
           ),
         ],

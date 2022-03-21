@@ -43,6 +43,7 @@ dependencies:
   scrollable_positioned_list: ^0.2.3
   shimmer: ^2.0.0
   sentry_flutter: ^6.3.0
+  cached_network_image:
   card_swiper:
   o_popup: ^1.0.1
   styled_text:
