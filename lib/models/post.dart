@@ -11,6 +11,7 @@ class PostModel {
   final Timestamp timestamp;
   final String forCommunity;
   final String authorUserName;
+  final List hashtags;
   final String authorProfilePhotoURL;
 
   PostModel({
@@ -20,6 +21,7 @@ class PostModel {
     required this.location,
     required this.imageURL,
     required this.authorId,
+    required this.hashtags,
     required this.timestamp,
     required this.authorName,
     required this.forCommunity,
@@ -35,6 +37,7 @@ class PostModel {
       location: doc['location'],
       imageURL: doc['imageURL'],
       authorId: doc['authorId'],
+      hashtags: doc['hashtags'],
       timestamp: doc['timestamp'],
       authorName: doc['authorName'],
       forCommunity: doc['forCommunity'],

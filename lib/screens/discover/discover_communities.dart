@@ -19,120 +19,125 @@ class DiscoverCommunities extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: kAppBar,
-      body: StreamBuilder(
-        stream: DatabaseService.communityRef
-            // .where('ownerID', isNotEqualTo: UserData.currentUser!.id)
-            .snapshots()
-            .map((snapshot) => snapshot.docs.map((e) => CommunityModel.fromDocument(e))),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            List list = (snapshot.data as dynamic).toList();
-            return ListView.builder(
-              padding: const EdgeInsets.all(10).copyWith(bottom: 30),
-              itemCount: list.length,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                CommunityModel community = list[index];
-                return Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
+      body: SingleChildScrollView(
+        child: StreamBuilder(
+          stream: DatabaseService.communityRef
+              // .where('ownerID', isNotEqualTo: UserData.currentUser!.id)
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              var list = (snapshot.data as QuerySnapshot).docs.toList();
+              return list.isEmpty
+                  ? const Padding(
+                      padding: EdgeInsets.only(top: 120.0),
+                      child: Center(child: Text('No communities to display!')),
+                    )
+                  : ListView.builder(
+                      itemCount: list.length,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        CommunityModel community = CommunityModel.fromDocument(list[index]);
+                        return Column(
                           children: [
-                            CustomImage(
-                              image: NetworkImage(community.communityPhotoURL),
-                              height: 50,
-                              width: 50,
-                              borderRadius: 5,
-                            ),
-                            const SizedBox(width: 10),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  community.name,
-                                  style: const TextStyle(fontSize: 17),
-                                ),
-                                Text(
-                                  community.description,
-                                  style: kLightLabelTextStyle,
-                                ),
                                 Row(
                                   children: [
-                                    Text(
-                                      'No. of posts:      ',
-                                      style: kLightLabelTextStyle.copyWith(
-                                          fontWeight: FontWeight.bold),
+                                    CustomImage(
+                                      image: NetworkImage(community.communityPhotoURL),
+                                      height: 50,
+                                      width: 50,
+                                      borderRadius: 5,
                                     ),
-                                    StreamBuilder(
-                                      stream: DatabaseService.postsRef
-                                          .where('forCommunity', isEqualTo: community.id)
-                                          .snapshots(),
-                                      builder: (context, snapshot) {
-                                        if (snapshot.hasData) {
-                                          return Text(
-                                              '${(snapshot.data as QuerySnapshot).docs.length}',
-                                              style: kLightLabelTextStyle);
-                                        } else {
-                                          return Text('0', style: kLightLabelTextStyle);
-                                        }
-                                      },
+                                    const SizedBox(width: 10),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          community.name,
+                                          style: const TextStyle(fontSize: 17),
+                                        ),
+                                        Text(
+                                          community.description,
+                                          style: kLightLabelTextStyle,
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'No. of posts:      ',
+                                              style: kLightLabelTextStyle.copyWith(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            StreamBuilder(
+                                              stream: DatabaseService.postsRef
+                                                  .where('forCommunity', isEqualTo: community.id)
+                                                  .snapshots(),
+                                              builder: (context, snapshot) {
+                                                if (snapshot.hasData) {
+                                                  return Text(
+                                                      '${(snapshot.data as QuerySnapshot).docs.length}',
+                                                      style: kLightLabelTextStyle);
+                                                } else {
+                                                  return Text('0', style: kLightLabelTextStyle);
+                                                }
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'Total Followers:  ',
+                                              style: kLightLabelTextStyle.copyWith(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            StreamBuilder(
+                                              stream: DatabaseService.followersRef
+                                                  .doc(community.id)
+                                                  .collection('communityFollowers')
+                                                  .snapshots(),
+                                              builder: (context, snapshot) {
+                                                if (snapshot.hasData) {
+                                                  return Text(
+                                                      '${(snapshot.data as QuerySnapshot).docs.length}',
+                                                      style: kLightLabelTextStyle);
+                                                } else {
+                                                  return Text('0', style: kLightLabelTextStyle);
+                                                }
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      'Total Followers:  ',
-                                      style: kLightLabelTextStyle.copyWith(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    StreamBuilder(
-                                      stream: DatabaseService.followersRef
-                                          .doc(community.id)
-                                          .collection('communityFollowers')
-                                          .snapshots(),
-                                      builder: (context, snapshot) {
-                                        if (snapshot.hasData) {
-                                          return Text(
-                                              '${(snapshot.data as QuerySnapshot).docs.length}',
-                                              style: kLightLabelTextStyle);
-                                        } else {
-                                          return Text('0', style: kLightLabelTextStyle);
-                                        }
-                                      },
-                                    ),
-                                  ],
+                                GestureDetector(
+                                  child: const Icon(Icons.add_circle, size: 30),
+                                  onTap: () {
+                                    Navigator.of(context, rootNavigator: true).push(
+                                      MaterialPageRoute(
+                                        builder: (context) => CommunityPage(
+                                          communityID: list[index].id,
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 ),
                               ],
                             ),
+                            const Divider(),
                           ],
-                        ),
-                        GestureDetector(
-                          child: const Icon(Icons.add_circle, size: 30),
-                          onTap: () {
-                            Navigator.of(context, rootNavigator: true).push(
-                              MaterialPageRoute(
-                                builder: (context) => CommunityPage(
-                                  communityID: list[index].id,
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                    const Divider(),
-                  ],
-                );
-              },
-            );
-          } else {
-            return Container();
-          }
-        },
+                        );
+                      },
+                    );
+            } else {
+              return Container();
+            }
+          },
+        ),
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:amber/screens/discover/discover_articles.dart';
 import 'package:amber/screens/discover/discover_communities.dart';
 import 'package:amber/screens/discover/discover_events.dart';
+import 'package:amber/screens/discover/discover_hashtags.dart';
 import 'package:amber/screens/discover/discover_images.dart';
 import 'package:amber/screens/discover/discover_public_groups.dart';
 import 'package:amber/screens/discover/discover_thumbnails.dart';

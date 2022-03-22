@@ -4,6 +4,7 @@ import 'package:amber/pages/error.dart';
 import 'package:amber/screens/discover/discover_articles.dart';
 import 'package:amber/screens/discover/discover_communities.dart';
 import 'package:amber/screens/discover/discover_events.dart';
+import 'package:amber/screens/discover/discover_hashtags.dart';
 import 'package:amber/screens/discover/discover_images.dart';
 import 'package:amber/screens/discover/discover_thumbnails.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -243,6 +244,13 @@ class _DiscoverPageState extends State<DiscoverPage> {
                           Text(tag.name, style: const TextStyle(color: Colors.white, fontSize: 15)),
                         ],
                       ),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => DiscoverHashtags(hashtag: tag.name),
+                          ),
+                        );
+                      },
                     );
                   },
                 ),
