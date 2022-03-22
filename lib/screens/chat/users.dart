@@ -8,7 +8,10 @@ import 'chat.dart';
 
 class UsersPage extends StatefulWidget {
   final List<types.User>? oldMembers;
+
+
   const UsersPage({Key? key, this.oldMembers}) : super(key: key);
+
 
   @override
   State<UsersPage> createState() => _UsersPageState();
@@ -29,7 +32,7 @@ class _UsersPageState extends State<UsersPage> {
         final room = await FirebaseChatCore.instance.createRoom(users[0]);
         Navigator.pop(context);
         await Navigator.of(context, rootNavigator: true).push(
-          MaterialPageRoute(builder: (context) => ChatPage(room: room)),
+          MaterialPageRoute(builder: (context) => ChatPage(room: room,)),
         );
       } else if (users.length > 1) {
         final room = await FirebaseChatCore.instance.createGroupRoom(

@@ -4,10 +4,10 @@ import 'package:amber/screens/chat/calls/model/userModel.dart';
 import 'package:http/http.dart' as http;
 import 'dart:developer' as developer;
 
-var url = "https://fcm.googleapis.com/fcm/send";
+
 
 Future<void> sendNotification(String token, String clientName) async {
-  UserModel userModel = new UserModel();
+  UserModel userModel = new UserModel(canonical_ids: '', multicast_id: '', failure: '', results: [], success: '');
 
   final body = {
     "registration_ids": ["$token"],
@@ -30,6 +30,8 @@ Future<void> sendNotification(String token, String clientName) async {
   };
 
   try {
+
+    Uri url= "https://fcm.googleapis.com/fcm/send" as Uri;
     final responce = await http.post(
       url,
       headers: header,

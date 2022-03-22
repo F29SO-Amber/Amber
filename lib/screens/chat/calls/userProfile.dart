@@ -3,10 +3,8 @@ import 'package:flutter/material.dart';
 // ignore: must_be_immutable
 class UserProfile extends StatefulWidget {
   String name;
-  String email;
-  String image;
 
-  UserProfile({Key? key, required this.name, required this.email, required this.image}) : super(key: key);
+  UserProfile({Key? key, required this.name}) : super(key: key);
 
   @override
   _UserProfileState createState() => _UserProfileState();
@@ -29,13 +27,6 @@ class _UserProfileState extends State<UserProfile> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
-              height: 130.0,
-              width: 130.0,
-              child: CircleAvatar(
-                backgroundImage: NetworkImage(widget.image),
-              ),
-            ),
             SizedBox(
               height: 10.0,
             ),
@@ -51,16 +42,6 @@ class _UserProfileState extends State<UserProfile> {
             ),
             SizedBox(
               height: 5.0,
-            ),
-            Container(
-              child: Text(
-                widget.email,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.grey,
-                  fontSize: 16.0,
-                ),
-              ),
             ),
           ],
         ),

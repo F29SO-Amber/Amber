@@ -40,9 +40,7 @@ class Results {
 
 class UserData {
   String name;
-  String email;
-  String image;
   String token;
 
-  UserData({required this.name, required this.email, required this.image, required this.token});
+  UserData({required this.name, required this.token});
 }

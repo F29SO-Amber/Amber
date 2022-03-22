@@ -62,7 +62,7 @@ class _CallPageState extends State<CallPage> {
     await _engine.setVideoEncoderConfiguration(configuration);
     // App Id & Channel name & Token ID should be same to join to video calling
     await _engine.joinChannel(Token,
-        widget.channelName == null ? "hello" : widget.channelName, null, 0);
+        widget.channelName == null ? "amber" : widget.channelName, null, 0);
   }
 
   /// Create agora sdk instance and initialize

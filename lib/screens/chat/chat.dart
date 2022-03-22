@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:amber/screens/chat/room_info.dart';
 import 'package:amber/widgets/profile_picture.dart';
 import 'package:file_picker/file_picker.dart';
@@ -12,13 +13,14 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:amber/screens/chat/calls/calls.dart';
+import 'calls/calls.dart';
 import '../../utilities/constants.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({Key? key, required this.room}) : super(key: key);
 
   final types.Room room;
+
 
   @override
   _ChatPageState createState() => _ChatPageState();
@@ -29,6 +31,7 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
+
     return StreamBuilder<types.Room>(
       initialData: widget.room,
       stream: FirebaseChatCore.instance.room(widget.room.id),
@@ -50,13 +53,16 @@ class _ChatPageState extends State<ChatPage> {
                 ),
               ],
             ),
+
             backgroundColor: kAppColor,
+
             actions: [
               if (widget.room.type == types.RoomType.direct)
+
                 IconButton(
                   icon: const Icon(Icons.call),
                   onPressed: ()  async {
-                    notificationAndVideoCall(userData[index]);
+                    CallPage(role: ClientRole.Broadcaster, channelName: 'amber',);
                   },
                 )
             ],

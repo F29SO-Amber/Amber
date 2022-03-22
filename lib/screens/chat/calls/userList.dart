@@ -1,7 +1,6 @@
 import 'package:amber/screens/chat/calls/repository/sendNotificationCall.dart';
 import 'package:amber/screens/chat/calls/utils/settings.dart';
 import 'package:amber/screens/chat/calls/calls.dart';
-import 'package:AgoraDemo/main.dart';
 import 'package:amber/screens/chat/calls/userProfile.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -10,10 +9,17 @@ import 'dart:developer' as developer;
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'model/userModel.dart';
+import 'package:amber/screens/chat/calls/model/userModel.dart';
+import 'package:amber/screens/chat/rooms.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:amber/services/auth_service.dart';
 
 class UserList extends StatefulWidget {
-  UserList({Key? key}) : super(key: key);
+
+
+  const UserList({Key? key, required this.room}) : super(key: key);
+
+  final types.Room room;
 
   @override
   _UserListState createState() => _UserListState();
@@ -23,7 +29,6 @@ class _UserListState extends State<UserList> {
   DatabaseReference datebaseReference = FirebaseDatabase.instance.reference();
 
   List<UserData> userData = [];
-  UserData currentUser = userData;
   bool isLoading = true;
   TextEditingController _channelController = TextEditingController();
   late SharedPreferences prefs;
@@ -54,19 +59,7 @@ class _UserListState extends State<UserList> {
             ),
             onPressed: () async {
               // User Profile Screen with current user data
-              Navigator.push(context, MaterialPageRoute(
-                builder: (context) {
-                  return UserProfile(
-                    name: currentUser.name == null
-                        ? "Not Available"
-                        : currentUser.name,
-                    email: currentUser.email == null
-                        ? "Not Available"
-                        : currentUser.email,
-                    image: currentUser.image,
-                  );
-                },
-              ));
+              Navigator.push;
               print("UserProfile");
             },
           ),
@@ -78,13 +71,11 @@ class _UserListState extends State<UserList> {
             onPressed: () async {
               prefs = await SharedPreferences.getInstance();
               prefs.setInt("isLogin", 0);
-              await _googleSignIn.signOut().whenComplete(() {
                 Navigator.pushReplacement(context, MaterialPageRoute(
                   builder: (context) {
-                    return MyHomePage();
+                    return RoomsPage();
                   },
                 ));
-              });
               developer.log("Sign Out");
             },
           ),
@@ -168,12 +159,7 @@ class _UserListState extends State<UserList> {
                     onTap: () async {
                       notificationAndVideoCall(userData[index]);
                     },
-                    leading: CircleAvatar(
-                      backgroundImage:
-                      NetworkImage(userData[index].image),
-                    ),
                     title: Text(userData[index].name),
-                    subtitle: Text(userData[index].email),
                     trailing: Icon(
                       Icons.call,
                       color: Colors.green,
@@ -194,14 +180,6 @@ class _UserListState extends State<UserList> {
     await Permission.microphone.request();
 
     // Get User's data from database
-    datebaseReference.once().then((DataSnapshot snapshot) {
-      Map<dynamic, dynamic> map = snapshot.value;
-      convertDataToUsable(map.values.toList());
-    }).whenComplete(() {
-      setState(() {
-        isLoading = false;
-      });
-    });
   }
 
   convertDataToUsable(List listJson) async {
@@ -214,20 +192,10 @@ class _UserListState extends State<UserList> {
       if (email != listJson[i]['email'].toString()) {
         temp.add(new UserData(
           name: listJson[i]['name'].toString(),
-          email: listJson[i]['email'].toString(),
-          image: listJson[i]['image'].toString(),
           token: listJson[i]['token'].toString(),
         ));
       } else {
         // Current User Data
-        setState(() {
-          currentUser = new UserData(
-            name: listJson[i]['name'].toString(),
-            email: listJson[i]['email'].toString(),
-            image: listJson[i]['image'].toString(),
-            token: listJson[i]['token'].toString(),
-          );
-        });
         // continue;
       }
     }
