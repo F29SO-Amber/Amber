@@ -402,10 +402,12 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
               forCommunity ? 'Collaboratively with ${widget.room!.name}' : user.firstName;
           map['authorUserName'] = user.firstName;
           map['authorProfilePhotoURL'] = user.imageUrl;
-          await DatabaseService.postsRef.doc(postId).set(map);
+          List<String> tags = [];
           for (Hashtag tag in _selectedHashtags) {
-            _addPostHashtag(postId, tag.name);
+            tags.add(tag.name);
           }
+          map['hashtags'] = tags;
+          await DatabaseService.postsRef.doc(postId).set(map);
           if (forCommunity) {
             break;
           }
@@ -429,19 +431,14 @@ class _PublishImageScreenState extends State<PublishImageScreen> {
         map['authorName'] = UserData.currentUser!.firstName;
         map['authorUserName'] = UserData.currentUser!.username;
         map['authorProfilePhotoURL'] = UserData.currentUser!.imageUrl;
-        await DatabaseService.postsRef.doc(postId).set(map);
+        List<String> tags = [];
         for (Hashtag tag in _selectedHashtags) {
-          _addPostHashtag(postId, tag.name);
+          tags.add(tag.name);
         }
+        map['hashtags'] = tags;
+        await DatabaseService.postsRef.doc(postId).set(map);
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Image Posted!")));
       }
     }
-  }
-
-  Future<void> _addPostHashtag(postId, hashtag) async {
-    Map<String, Object?> map = {};
-    map['post_id'] = postId;
-    map['hashtag'] = hashtag;
-    await DatabaseService.hashtagsRef.doc().set(map);
   }
 }
