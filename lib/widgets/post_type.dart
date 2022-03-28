@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 
 class PostType extends StatelessWidget {
+  final int numOfDivisions;
+  final int currentTab;
+  final int index;
+  final Icon icon;
+  final Color bgColor;
+  final VoidCallback onPress;
+
   const PostType({
     Key? key,
     required this.numOfDivisions,
@@ -10,13 +17,6 @@ class PostType extends StatelessWidget {
     required this.index,
     required this.onPress,
   }) : super(key: key);
-
-  final int numOfDivisions;
-  final int currentTab;
-  final int index;
-  final Icon icon;
-  final Color bgColor;
-  final VoidCallback onPress;
 
   @override
   Widget build(BuildContext context) {

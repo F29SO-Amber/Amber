@@ -19,33 +19,21 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  int _selectedIndex = 4;
+  int _selectedIndex = 0; // TODO: Research the auto change navigator issue
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 5, vsync: this);
+    _tabController = TabController(length: 6, vsync: this);
   }
 
   final List<GlobalKey<NavigatorState>> _navigatorKeys = [
     homePageNavigatorKey,
     discoverNavigatorKey,
-    postNavigatorKey,
+    createNavigatorKey,
     chatsNavigatorKey,
     profileNavigatorKey,
   ];
-
-  Future<bool> _systemBackButtonPressed() async {
-    if (_navigatorKeys[_selectedIndex].currentState!.canPop()) {
-      _navigatorKeys[_selectedIndex]
-          .currentState!
-          .pop(_navigatorKeys[_selectedIndex].currentContext);
-    } else {
-      SystemChannels.platform.invokeMethod<void>('SystemNavigator.pop');
-    }
-    throw '';
-  }
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -57,7 +45,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             children: const <Widget>[
               FeedPageNavigator(),
               DiscoverPageNavigator(),
-              PublishPageNavigator(),
+              CreatePageNavigator(),
               ChatsPageNavigator(),
               ProfilePageNavigator(),
             ],
@@ -66,9 +54,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         bottomNavigationBar: ConvexAppBar(
           items: const [
             TabItem<IconData>(icon: Icons.home, title: 'Home'),
-            TabItem<IconData>(icon: Icons.map, title: "Discovery"),
-            TabItem<IconData>(icon: Icons.publish, title: "Publish"),
-            TabItem<IconData>(icon: Icons.message, title: 'Message'),
+            TabItem<IconData>(icon: Icons.search, title: 'Discover'),
+            TabItem<IconData>(icon: Icons.publish, title: 'Create'),
+            TabItem<IconData>(icon: Icons.message, title: 'Rooms'),
             TabItem<IconData>(icon: Icons.people, title: 'Profile'),
           ],
           style: TabStyle.react,
@@ -81,5 +69,16 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       ),
       onWillPop: _systemBackButtonPressed,
     );
+  }
+
+  Future<bool> _systemBackButtonPressed() async {
+    if (_navigatorKeys[_selectedIndex].currentState!.canPop()) {
+      _navigatorKeys[_selectedIndex]
+          .currentState!
+          .pop(_navigatorKeys[_selectedIndex].currentContext);
+    } else {
+      SystemChannels.platform.invokeMethod<void>('SystemNavigator.pop');
+    }
+    throw 'A Back Button issue occurred';
   }
 }

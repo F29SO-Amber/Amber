@@ -1,20 +1,18 @@
 import 'dart:io';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
 class ImageService {
   final apiKey = 'm9invNolYWWbS1oLMBYmRvNgt0SDq49P';
   final picPurifyURL = 'https://www.picpurify.com/analyse/1.1';
 
-  static Future<File> chooseFromGallery() async {
+  static Future<File?> chooseFromGallery() async {
     XFile? xFile = await ImagePicker().pickImage(source: ImageSource.gallery);
-    return File('${xFile?.path}');
+    return (xFile != null) ? File(xFile.path) : null;
   }
 
-  static Future<void> chooseFromCamera(File file) async {
+  static Future<File?> chooseFromCamera() async {
     XFile? xFile = await ImagePicker().pickImage(source: ImageSource.camera);
-    file = File('${xFile?.path}');
+    return (xFile != null) ? File(xFile.path) : null;
   }
 
   // Future<dynamic> getData(String url) async {

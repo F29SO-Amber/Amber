@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class UserCard extends StatelessWidget {
+  final UserModel user;
+  final VoidCallback onPress;
+
   const UserCard({
     Key? key,
     required this.user,
     required this.onPress,
   }) : super(key: key);
-
-  final UserModel user;
-  final VoidCallback onPress;
 
   @override
   Widget build(BuildContext context) {
@@ -32,14 +32,14 @@ class UserCard extends StatelessWidget {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(left: 8.0, right: 15.0),
-                        child: ProfilePicture(side: 40, image: NetworkImage(user.profilePhotoURL)),
+                        child: CustomImage(side: 40, image: NetworkImage(user.imageUrl)),
                       ),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            user.name,
+                            user.firstName,
                             style: GoogleFonts.dmSans(
                               fontSize: 15,
                               fontWeight: FontWeight.w500,
@@ -58,16 +58,10 @@ class UserCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  // const Padding(
-                  //   padding: EdgeInsets.only(right: 15.0),
-                  //   // child: Icon(Icons.person_add),
-                  // ),
                 ],
               ),
             ),
-            const Divider(
-              height: 3,
-            ),
+            const Divider(height: 3),
           ],
         ),
       ),

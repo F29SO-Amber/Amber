@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:amber/screens/profile.dart';
-import 'package:amber/services/auth_service.dart';
 
-//Creating mutable state for the Profile Page Navigator
+import 'package:amber/pages/error.dart';
+import 'package:amber/pages/settings.dart';
+import 'package:amber/screens/auth/login.dart';
+import 'package:amber/services/auth_service.dart';
+import 'package:amber/screens/profile/profile.dart';
+
 class ProfilePageNavigator extends StatefulWidget {
   const ProfilePageNavigator({Key? key}) : super(key: key);
 
@@ -20,7 +23,18 @@ class _ProfilePageNavigatorState extends State<ProfilePageNavigator> {
       onGenerateRoute: (RouteSettings settings) {
         return MaterialPageRoute(
           settings: settings,
-          builder: (_) => ProfilePage(userUID: AuthService.currentUser.uid),
+          builder: (_) {
+            switch (settings.name) {
+              case '/':
+                return ProfilePage(userUID: AuthService.currentUser.uid);
+              case LoginScreen.id:
+                return const LoginScreen();
+              case SettingsPage.id:
+                return const SettingsPage();
+              default:
+                return const ErrorScreen();
+            }
+          },
         );
       },
     );

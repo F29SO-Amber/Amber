@@ -15,8 +15,8 @@ class CommentModel {
 
   factory CommentModel.fromDocument(DocumentSnapshot doc) {
     return CommentModel(
-      username: doc['username'],
       comment: doc['text'],
+      username: doc['username'],
       timestamp: doc['timestamp'],
       profilePhotoURL: doc['profilePhotoURL'],
     );

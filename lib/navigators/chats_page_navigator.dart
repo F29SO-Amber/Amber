@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'package:amber/screens/chats.dart';
-import 'package:amber/screens/chat.dart';
-import 'package:amber/services/auth_service.dart';
+import 'package:amber/screens/chat/rooms.dart';
 
 class ChatsPageNavigator extends StatefulWidget {
   const ChatsPageNavigator({Key? key}) : super(key: key);
@@ -19,7 +16,7 @@ class _ChatsPageNavigatorState extends State<ChatsPageNavigator> {
     return Navigator(
       key: chatsNavigatorKey,
       onGenerateRoute: (RouteSettings settings) {
-        return MaterialPageRoute(settings: settings, builder: (_) => const ChatsPage());
+        return MaterialPageRoute(settings: settings, builder: (_) => const RoomsPage());
       },
     );
   }
